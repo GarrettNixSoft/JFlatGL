@@ -1,0 +1,13 @@
+#version 140
+
+in vec2 pass_textureCoords;
+
+out vec4 out_color;
+
+uniform sampler2D tileTexture;
+
+void main(void) {
+
+	out_color = texture(tileTexture, pass_textureCoords);
+
+}

@@ -1,0 +1,12 @@
+{
+	"textures": {
+		"default": "default.png",
+		"default2": "default2.png"
+	},
+	"texture_atlases": {
+		"default": {
+			"path": "default.png",
+			"rows": 1
+		}
+	}
+}
