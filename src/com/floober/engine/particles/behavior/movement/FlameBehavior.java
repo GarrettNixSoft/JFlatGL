@@ -16,6 +16,11 @@ public class FlameBehavior extends MovementBehavior {
 	}
 
 	@Override
+	public void initParticle(Particle particle) {
+		//
+	}
+
+	@Override
 	public void updateParticle(Particle particle) {
 		//
 	}

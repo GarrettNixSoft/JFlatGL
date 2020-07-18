@@ -2,6 +2,7 @@ package com.floober.engine.particles.behavior.appearance;
 
 import com.floober.engine.particles.Particle;
 import com.floober.engine.util.math.MathUtil;
+import com.floober.engine.util.math.RandomUtil;
 
 public class FadeOutBehavior extends AppearanceBehavior {
 
@@ -15,6 +16,7 @@ public class FadeOutBehavior extends AppearanceBehavior {
 	@Override
 	public void initParticle(Particle particle) {
 		particle.setAlpha(initialAlpha);
+		setParticleColor(particle);
 	}
 
 	@Override

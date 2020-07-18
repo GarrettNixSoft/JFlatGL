@@ -35,11 +35,18 @@ public class Particle implements Comparable<Particle> {
 	private float rotationSpeed;
 	private boolean fadeOut;
 
-	private final float lifeLength;
+	private float lifeLength;
 	private float elapsedTime;
 
 	// CONTROL
 	private final ParticleBehavior behavior;
+
+	public Particle(ParticleBehavior behavior, ParticleTexture texture) {
+		this.behavior = behavior;
+		this.texture = texture;
+		this.startAlpha = 1;
+		this.lifeLength = 1;
+	}
 
 	public Particle(ParticleBehavior behavior, ParticleTexture texture, Vector4f color, Vector3f position, float width, float height, Vector2f velocity, float lifeLength, float initialRotation, float rotationSpeed, boolean fadeOut) {
 		this.behavior = behavior;
@@ -49,7 +56,7 @@ public class Particle implements Comparable<Particle> {
 		this.x = position.x();
 		this.y = position.y();
 		this.z = position.z();
-		this.initialPosition.set(x, y, z);
+		this.initialPosition.set(position);
 		this.width = width;
 		this.height = height;
 		this.velocity.set(velocity);
@@ -155,15 +162,33 @@ public class Particle implements Comparable<Particle> {
 	public void setRotation(float rotation) {
 		this.rotation = rotation;
 	}
+
+	/**
+	 * Set the rotation speed of this particle.
+	 * @param rotationSpeed The rotation speed, in degrees per second.
+	 */
 	public void setRotationSpeed(float rotationSpeed) {
 		this.rotationSpeed = rotationSpeed;
 	}
+
 	public void setFadeOut(boolean fadeOut) {
 		this.fadeOut = fadeOut;
 	}
+	public void setLifeLength(float lifeLength) {
+		this.lifeLength = lifeLength;
+	}
+	public void setInitialPosition(float x, float y, float z) {
+		this.initialPosition.set(x, y, z);
+	}
+	public void setInitialPosition(Vector3f position) {
+		this.initialPosition.set(position);
+	}
+	public void setSize(float size) {
+		this.width = this.height = size;
+	}
 
 	// UPDATING THE PARTICLE
-	private void convertScreenPosition() {
+	public void convertScreenPosition() {
 		position.set(Display.convertToDisplayPosition(x, y, z, width, height, true));
 		scaleVec.set(Display.convertToDisplayScale(width, height));
 	}

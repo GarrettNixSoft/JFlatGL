@@ -8,7 +8,6 @@ import com.floober.engine.fonts.fontMeshCreator.GUIText;
 import com.floober.engine.fonts.fontRendering.TextMaster;
 import com.floober.engine.loaders.ImageLoader;
 import com.floober.engine.loaders.Loader;
-import com.floober.engine.particles.ParticleFactory;
 import com.floober.engine.particles.ParticleMaster;
 import com.floober.engine.particles.ParticleSource;
 import com.floober.engine.particles.ParticleTexture;
@@ -39,7 +38,7 @@ public class ParticleTest {
 
 	// generating particles
 	static ParticleSource particleSource;
-	static ParticleFactory particleFactory;
+	static ParticleBehavior particleBehavior;
 	static boolean useExplosionTexture;
 	// particle textures
 	static ParticleTexture explosionParticleTex;
@@ -123,18 +122,19 @@ public class ParticleTest {
 
 		explosionParticleTex = new ParticleTexture(ImageLoader.loadTexture("textures/particles/explosion.png").getId(), 4, true);
 		glowParticleTex = new ParticleTexture(ImageLoader.loadTexture("textures/particles/glow.png").getId(), 1, true);
-		MovementBehavior movementBehavior = new ConstantVelocityBehavior();
+		MovementBehavior movementBehavior = new ConstantVelocityBehavior(0, 360);
 		AppearanceBehavior appearanceBehavior = new FadeOutBehavior(1, 0);
-		ParticleBehavior behavior = new ParticleBehavior(movementBehavior, appearanceBehavior);
-		particleFactory = new ParticleFactory(glowParticleTex, new Vector4f(1));
-		particleSource = new ParticleSource(new Vector3f(), behavior, particleFactory);
+		particleBehavior = new ParticleBehavior(movementBehavior, appearanceBehavior);
+		particleSource = new ParticleSource(new Vector3f(), particleBehavior);
 
 		// particle settings
-		particleFactory.initSize(6, 64);
-		particleFactory.initSpeed(5, 200);
-		particleFactory.initLife(0.5f, 1f);
-		particleFactory.initPositionDelta(0, 0);
-		particleFactory.setBoxMode(false);
+		particleBehavior.getAppearanceBehavior().initSize(6, 64);
+		particleBehavior.getMovementBehavior().setParticleSpeedMin(6);
+		particleBehavior.getMovementBehavior().setParticleSpeedMax(64);
+		particleBehavior.getMovementBehavior().initSpeed(5, 200);
+		particleBehavior.initLife(0.5f, 1f);
+		particleSource.initPositionDelta(0, 0);
+		particleSource.setBoxMode(false);
 		// END_TEST
 
 		// Run the game loop!
@@ -190,76 +190,76 @@ public class ParticleTest {
 
 	private static void runParticleTest() {
 		// color selection
-		if (KeyInput.isPressed(KeyInput.KEY_1)) 	 particleFactory.setParticleColor(Colors.PARTICLE_RED);
-		else if (KeyInput.isPressed(KeyInput.KEY_2)) particleFactory.setParticleColor(Colors.PARTICLE_ORANGE);
-		else if (KeyInput.isPressed(KeyInput.KEY_3)) particleFactory.setParticleColor(Colors.PARTICLE_YELLOW);
-		else if (KeyInput.isPressed(KeyInput.KEY_4)) particleFactory.setParticleColor(Colors.PARTICLE_GREEN);
-		else if (KeyInput.isPressed(KeyInput.KEY_5)) particleFactory.setParticleColor(Colors.DARK_GREEN);
-		else if (KeyInput.isPressed(KeyInput.KEY_6)) particleFactory.setParticleColor(Colors.PARTICLE_CYAN);
-		else if (KeyInput.isPressed(KeyInput.KEY_7)) particleFactory.setParticleColor(Colors.PARTICLE_BLUE);
-		else if (KeyInput.isPressed(KeyInput.KEY_8)) particleFactory.setParticleColor(Colors.PARTICLE_PURPLE);
-		else if (KeyInput.isPressed(KeyInput.KEY_9)) particleFactory.setParticleColor(Colors.PARTICLE_MAGENTA);
-		else if (KeyInput.isPressed(KeyInput.KEY_0)) particleFactory.setParticleColor(Colors.WHITE);
-		else if (KeyInput.isPressed(KeyInput.ESC)) particleFactory.setRandomColor(true);
+		if (KeyInput.isPressed(KeyInput.KEY_1)) 	 particleBehavior.getAppearanceBehavior().setParticleColor(Colors.PARTICLE_RED);
+		else if (KeyInput.isPressed(KeyInput.KEY_2)) particleBehavior.getAppearanceBehavior().setParticleColor(Colors.PARTICLE_ORANGE);
+		else if (KeyInput.isPressed(KeyInput.KEY_3)) particleBehavior.getAppearanceBehavior().setParticleColor(Colors.PARTICLE_YELLOW);
+		else if (KeyInput.isPressed(KeyInput.KEY_4)) particleBehavior.getAppearanceBehavior().setParticleColor(Colors.PARTICLE_GREEN);
+		else if (KeyInput.isPressed(KeyInput.KEY_5)) particleBehavior.getAppearanceBehavior().setParticleColor(Colors.DARK_GREEN);
+		else if (KeyInput.isPressed(KeyInput.KEY_6)) particleBehavior.getAppearanceBehavior().setParticleColor(Colors.PARTICLE_CYAN);
+		else if (KeyInput.isPressed(KeyInput.KEY_7)) particleBehavior.getAppearanceBehavior().setParticleColor(Colors.PARTICLE_BLUE);
+		else if (KeyInput.isPressed(KeyInput.KEY_8)) particleBehavior.getAppearanceBehavior().setParticleColor(Colors.PARTICLE_PURPLE);
+		else if (KeyInput.isPressed(KeyInput.KEY_9)) particleBehavior.getAppearanceBehavior().setParticleColor(Colors.PARTICLE_MAGENTA);
+		else if (KeyInput.isPressed(KeyInput.KEY_0)) particleBehavior.getAppearanceBehavior().setParticleColor(Colors.WHITE);
+		else if (KeyInput.isPressed(KeyInput.ESC)) particleBehavior.getAppearanceBehavior().setRandomColor(true);
 
 		if (KeyInput.isPressed(KeyInput.SPACE)){
 			useExplosionTexture = !useExplosionTexture;
-			particleFactory.setParticleTexture(useExplosionTexture ? explosionParticleTex : glowParticleTex);
+			particleSource.setParticleTexture(useExplosionTexture ? explosionParticleTex : glowParticleTex);
 		}
 
 		// ADJUSTING PARTICLE SETTINGS
 		// UP and DOWN arrows to increase/decrease particle size
 		if (KeyInput.isDown(KeyInput.UP)) {
 			if (KeyInput.isShift())
-				particleFactory.setParticleSizeMin(particleFactory.getParticleSizeMin() + 1);
+				particleBehavior.getAppearanceBehavior().setParticleSizeMin(particleBehavior.getAppearanceBehavior().getParticleSizeMin() + 1);
 			else
-				particleFactory.setParticleSizeMax(particleFactory.getParticleSizeMax() + 1);
+				particleBehavior.getAppearanceBehavior().setParticleSizeMax(particleBehavior.getAppearanceBehavior().getParticleSizeMax() + 1);
 		}
 		if (KeyInput.isDown(KeyInput.DOWN)) {
 			if (KeyInput.isShift())
-				particleFactory.setParticleSizeMin(particleFactory.getParticleSizeMin() - 1);
+				particleBehavior.getAppearanceBehavior().setParticleSizeMin(particleBehavior.getAppearanceBehavior().getParticleSizeMin() - 1);
 			else
-				particleFactory.setParticleSizeMax(particleFactory.getParticleSizeMax() - 1);
+				particleBehavior.getAppearanceBehavior().setParticleSizeMax(particleBehavior.getAppearanceBehavior().getParticleSizeMax() - 1);
 		}
 		// LEFT and RIGHT keys to increase/decrease speed
 		if (KeyInput.isDown(KeyInput.RIGHT)) {
 			if (KeyInput.isShift())
-				particleFactory.setParticleSpeedMin(particleFactory.getParticleSpeedMin() + 1);
+				particleBehavior.getMovementBehavior().setParticleSpeedMin(particleBehavior.getMovementBehavior().getParticleSpeedMin() + 1);
 			else
-				particleFactory.setParticleSpeedMax(particleFactory.getParticleSpeedMax() + 1);
+				particleBehavior.getMovementBehavior().setParticleSpeedMax(particleBehavior.getMovementBehavior().getParticleSpeedMax() + 1);
 		}
 		if (KeyInput.isDown(KeyInput.LEFT)) {
 			if (KeyInput.isShift())
-				particleFactory.setParticleSpeedMin(particleFactory.getParticleSpeedMin() - 1);
+				particleBehavior.getMovementBehavior().setParticleSpeedMin(particleBehavior.getMovementBehavior().getParticleSpeedMin() - 1);
 			else
-				particleFactory.setParticleSpeedMax(particleFactory.getParticleSpeedMax() - 1);
+				particleBehavior.getMovementBehavior().setParticleSpeedMax(particleBehavior.getMovementBehavior().getParticleSpeedMax() - 1);
 		}
 		// SCROLL WHEEL to increase/decrease life duration
 		if (MouseInput.WHEEL_UP) {
 			if (KeyInput.isShift())
-				particleFactory.setParticleLifeMin(particleFactory.getParticleLifeMin() + 0.1f);
+				particleBehavior.setParticleLifeMin(particleBehavior.getParticleLifeMin() + 0.1f);
 			else
-				particleFactory.setParticleLifeMax(particleFactory.getParticleLifeMax() + 0.1f);
+				particleBehavior.setParticleLifeMax(particleBehavior.getParticleLifeMax() + 0.1f);
 		}
 		else if (MouseInput.WHEEL_DOWN) {
 			if (KeyInput.isShift())
-				particleFactory.setParticleLifeMin(particleFactory.getParticleLifeMin() - 0.1f);
+				particleBehavior.setParticleLifeMin(particleBehavior.getParticleLifeMin() - 0.1f);
 			else
-				particleFactory.setParticleLifeMax(particleFactory.getParticleLifeMax() - 0.1f);
+				particleBehavior.setParticleLifeMax(particleBehavior.getParticleLifeMax() - 0.1f);
 		}
 		// RIGHT CLICK to increase/decrease starting position delta
 		if (MouseInput.isPressed(MouseInput.RIGHT)) {
 			if (KeyInput.isCtrl()) {
 				if (KeyInput.isShift())
-					particleFactory.setPositionDeltaMin(particleFactory.getPositionDeltaMin() - 1);
+					particleSource.setPositionDeltaMin(particleSource.getPositionDeltaMin() - 1);
 				else
-					particleFactory.setPositionDeltaMax(particleFactory.getPositionDeltaMax() - 1);
+					particleSource.setPositionDeltaMax(particleSource.getPositionDeltaMax() - 1);
 			}
 			else {
 				if (KeyInput.isShift())
-					particleFactory.setPositionDeltaMin(particleFactory.getPositionDeltaMin() + 1);
+					particleSource.setPositionDeltaMin(particleSource.getPositionDeltaMin() + 1);
 				else
-					particleFactory.setPositionDeltaMax(particleFactory.getPositionDeltaMax() + 1);
+					particleSource.setPositionDeltaMax(particleSource.getPositionDeltaMax() + 1);
 			}
 
 		}
@@ -276,19 +276,19 @@ public class ParticleTest {
 		// updating GUI display
 		performanceDisplay.updateText("Tick: " + DisplayManager.getCurrentFrameDeltaRaw() + "ms            FPS: " + (1.0f / DisplayManager.getFrameTimeRaw()));
 		mousePositionDisplay.updateText("Mouse position: (" + MouseInput.getX() + ", " + MouseInput.getY() + ") - Scaling: [" + MouseInput.xPosRatio + ", " + MouseInput.yPosRatio + "]");
-		Vector4f color = particleFactory.getParticleColor();
+		Vector4f color = particleBehavior.getAppearanceBehavior().getParticleColor();
 		colorDisplay.setColor(color.x(), color.y(), color.z(), color.w());
-		colorDisplay.updateText(particleFactory.isRandomColor() ? "Random" : "Color");
+		colorDisplay.updateText(particleBehavior.getAppearanceBehavior().isRandomColor() ? "Random" : "Color");
 		particleCountDisplay.updateText("Particles: " + ParticleMaster.getParticleCount());
 		particleSettingsDisplay.updateText("Particle Settings:\n"
-				+ "Min. Size: " + particleFactory.getParticleSizeMin() + "\n"
-				+ "Max. Size: " + particleFactory.getParticleSizeMax() + "\n"
-				+ "Min. Life: " + particleFactory.getParticleLifeMin() + "\n"
-				+ "Max. Life: " + particleFactory.getParticleLifeMax() + "\n"
-				+ "Min. Speed: " + particleFactory.getParticleSpeedMin() + "\n"
-				+ "Max. Speed: " + particleFactory.getParticleSpeedMax() + "\n"
-				+ "Min. Delta: " + particleFactory.getPositionDeltaMin() + "\n"
-				+ "Max. Delta: " + particleFactory.getPositionDeltaMax()
+				+ "Min. Size: " + particleBehavior.getAppearanceBehavior().getParticleSizeMin() + "\n"
+				+ "Max. Size: " + particleBehavior.getAppearanceBehavior().getParticleSizeMax() + "\n"
+				+ "Min. Life: " + particleBehavior.getParticleLifeMin() + "\n"
+				+ "Max. Life: " + particleBehavior.getParticleLifeMax() + "\n"
+				+ "Min. Speed: " + particleBehavior.getMovementBehavior().getParticleSpeedMin() + "\n"
+				+ "Max. Speed: " + particleBehavior.getMovementBehavior().getParticleSpeedMax() + "\n"
+				+ "Min. Delta: " + particleSource.getPositionDeltaMin() + "\n"
+				+ "Max. Delta: " + particleSource.getPositionDeltaMax()
 		);
 	}
 
