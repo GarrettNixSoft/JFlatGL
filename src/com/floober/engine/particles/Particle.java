@@ -41,11 +41,16 @@ public class Particle implements Comparable<Particle> {
 	// CONTROL
 	private final ParticleBehavior behavior;
 
-	public Particle(ParticleBehavior behavior, ParticleTexture texture) {
+	public Particle(ParticleBehavior behavior, ParticleTexture texture, Vector3f position) {
 		this.behavior = behavior;
 		this.texture = texture;
+		this.x = position.x();
+		this.y = position.y();
+		this.z = position.z();
+		this.initialPosition.set(position);
 		this.startAlpha = 1;
 		this.lifeLength = 1;
+		ParticleMaster.addParticle(this);
 	}
 
 	public Particle(ParticleBehavior behavior, ParticleTexture texture, Vector4f color, Vector3f position, float width, float height, Vector2f velocity, float lifeLength, float initialRotation, float rotationSpeed, boolean fadeOut) {

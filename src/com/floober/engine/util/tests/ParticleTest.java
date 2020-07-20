@@ -15,6 +15,7 @@ import com.floober.engine.particles.behavior.*;
 import com.floober.engine.particles.behavior.appearance.AppearanceBehavior;
 import com.floober.engine.particles.behavior.appearance.FadeOutBehavior;
 import com.floober.engine.particles.behavior.movement.ConstantVelocityBehavior;
+import com.floober.engine.particles.behavior.movement.FlameBehavior;
 import com.floober.engine.particles.behavior.movement.MovementBehavior;
 import com.floober.engine.renderEngine.MasterRenderer;
 import com.floober.engine.util.Colors;
@@ -122,19 +123,18 @@ public class ParticleTest {
 
 		explosionParticleTex = new ParticleTexture(ImageLoader.loadTexture("textures/particles/explosion.png").getId(), 4, true);
 		glowParticleTex = new ParticleTexture(ImageLoader.loadTexture("textures/particles/glow.png").getId(), 1, true);
-		MovementBehavior movementBehavior = new ConstantVelocityBehavior(0, 360);
 		AppearanceBehavior appearanceBehavior = new FadeOutBehavior(1, 0);
-		particleBehavior = new ParticleBehavior(movementBehavior, appearanceBehavior);
-		particleSource = new ParticleSource(new Vector3f(), particleBehavior);
+		FlameBehavior flameBehavior = new FlameBehavior(-90, 15);
+		particleBehavior = new ParticleBehavior(flameBehavior, appearanceBehavior);
+		particleSource = new ParticleSource(new Vector3f(), glowParticleTex, particleBehavior);
 
 		// particle settings
-		particleBehavior.getAppearanceBehavior().initSize(6, 64);
-		particleBehavior.getMovementBehavior().setParticleSpeedMin(6);
-		particleBehavior.getMovementBehavior().setParticleSpeedMax(64);
-		particleBehavior.getMovementBehavior().initSpeed(5, 200);
-		particleBehavior.initLife(0.5f, 1f);
+		particleBehavior.getAppearanceBehavior().initSize(6, 200);
+		particleBehavior.getMovementBehavior().initSpeed(100, 120);
+		particleBehavior.initLife(0.3f, 0.8f);
 		particleSource.initPositionDelta(0, 0);
 		particleSource.setBoxMode(false);
+		particleBehavior.getAppearanceBehavior().setParticleColor(Colors.PARTICLE_ORANGE);
 		// END_TEST
 
 		// Run the game loop!
@@ -190,7 +190,7 @@ public class ParticleTest {
 
 	private static void runParticleTest() {
 		// color selection
-		if (KeyInput.isPressed(KeyInput.KEY_1)) 	 particleBehavior.getAppearanceBehavior().setParticleColor(Colors.PARTICLE_RED);
+		if (KeyInput.isPressed(KeyInput.KEY_1)) 	particleBehavior.getAppearanceBehavior().setParticleColor(Colors.PARTICLE_RED);
 		else if (KeyInput.isPressed(KeyInput.KEY_2)) particleBehavior.getAppearanceBehavior().setParticleColor(Colors.PARTICLE_ORANGE);
 		else if (KeyInput.isPressed(KeyInput.KEY_3)) particleBehavior.getAppearanceBehavior().setParticleColor(Colors.PARTICLE_YELLOW);
 		else if (KeyInput.isPressed(KeyInput.KEY_4)) particleBehavior.getAppearanceBehavior().setParticleColor(Colors.PARTICLE_GREEN);

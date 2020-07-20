@@ -18,8 +18,9 @@ public class ParticleSource {
 	// particle settings
 	private float positionDeltaMin, positionDeltaMax;
 
-	public ParticleSource(Vector3f position, ParticleBehavior particleBehavior) {
+	public ParticleSource(Vector3f position, ParticleTexture particleTexture, ParticleBehavior particleBehavior) {
 		this.position = position;
+		this.particleTexture = particleTexture;
 		this.particleBehavior = particleBehavior;
 	}
 
@@ -137,18 +138,18 @@ public class ParticleSource {
 	 * of this source and the particle behavior.
 	 */
 	public void generateParticle() {
+		// get a position for the particle
+		Vector3f particlePosition = generatePositionVector();
 		// create the particle
-		Particle particle = new Particle(particleBehavior, particleTexture);
+		Particle particle = new Particle(particleBehavior, particleTexture, particlePosition);
 		// configure its appearance and movement
 		particleBehavior.initParticle(particle);
-		// generate a starting position
-		particle.setInitialPosition(generatePositionVector(particle));
 		// tell the particle to convert to screen position
 		particle.convertScreenPosition();
 		// done!
 	}
 
-	private Vector3f generatePositionVector(Particle particle) {
+	private Vector3f generatePositionVector() {
 		// calculate starting position
 		Vector3f startingPosition = new Vector3f();
 		if (boxMode) {
@@ -156,11 +157,12 @@ public class ParticleSource {
 			float yPos = RandomUtil.getFloat(positionDeltaMin, positionDeltaMax);
 			if (RandomUtil.getBoolean()) xPos = -xPos;
 			if (RandomUtil.getBoolean()) yPos = -yPos;
-			startingPosition.set(xPos, yPos, 0);
+			startingPosition.set(xPos, yPos, position.z());
 		}
 		else {
 			float distance = RandomUtil.getFloat(positionDeltaMin, positionDeltaMax);
-			startingPosition.set(MathUtil.getCartesian(distance, particle.getRotation()), 0); // use the angle of the velocity; this ensures than particles always move away from the center
+			startingPosition.set(MathUtil.getCartesian(distance, 0), position.z());
+			// use the angle of the velocity; this ensures than particles always move away from the center
 		}
 		return new Vector3f(position).add(startingPosition);
 	}

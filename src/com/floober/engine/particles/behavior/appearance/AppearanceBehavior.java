@@ -1,6 +1,7 @@
 package com.floober.engine.particles.behavior.appearance;
 
 import com.floober.engine.particles.Particle;
+import com.floober.engine.util.Logger;
 import com.floober.engine.util.math.RandomUtil;
 import org.joml.Vector4f;
 
@@ -14,7 +15,7 @@ public abstract class AppearanceBehavior {
 	public abstract void initParticle(Particle particle);
 	public abstract void updateParticle(Particle particle);
 
-	protected void setParticleColor(Particle particle) {
+	public void setParticleColor(Particle particle) {
 		if (randomColor) {
 			float r = RandomUtil.getFloat();
 			float g = RandomUtil.getFloat();

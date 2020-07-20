@@ -82,6 +82,9 @@ public class ParticleBehavior {
 
 	// GENERATING PARTICLES
 	public void initParticle(Particle particle) {
+		// run universal initializers
+		appearanceBehavior.setParticleSize(particle);
+		appearanceBehavior.setParticleColor(particle);
 		// run the sub-initializers
 		movementBehavior.initParticle(particle);
 		appearanceBehavior.initParticle(particle);

@@ -3,6 +3,7 @@ package com.floober.engine.particles;
 import com.floober.engine.renderEngine.ParticleRenderer;
 import com.floober.engine.util.Logger;
 import com.floober.engine.util.Sorting;
+import org.joml.Vector4f;
 
 import java.util.*;
 
@@ -78,6 +79,14 @@ public class ParticleMaster {
 			total += particles.get(particleTexture).size();
 		}
 		return total;
+	}
+
+	// ACTIONS
+	public static void setColorForAllParticlesOfType(ParticleTexture key, Vector4f color) {
+		List<Particle> particleList = particles.get(key);
+		for (Particle particle : particleList) {
+			particle.setColor(color.x(), color.y(), color.z(), particle.getColor().w());
+		}
 	}
 
 }
