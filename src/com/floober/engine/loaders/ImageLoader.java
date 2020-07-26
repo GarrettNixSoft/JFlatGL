@@ -2,6 +2,7 @@ package com.floober.engine.loaders;
 
 import com.floober.engine.textures.RawTextureData;
 import com.floober.engine.textures.Texture;
+import com.floober.engine.textures.TextureAtlas;
 import com.floober.engine.util.Logger;
 import com.floober.engine.util.file.ResourceLoader;
 import org.lwjgl.BufferUtils;

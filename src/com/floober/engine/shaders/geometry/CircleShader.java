@@ -1,15 +1,14 @@
 package com.floober.engine.shaders.geometry;
 
 import com.floober.engine.shaders.ShaderProgram;
-import com.floober.engine.util.math.MathUtil;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
 public class CircleShader extends ShaderProgram {
 
-	private static final String VERTEX_FILE = "/com/floober/engine/shaders/shadercode/circleVertex";
-	private static final String FRAGMENT_FILE = "/com/floober/engine/shaders/shadercode/circleFragment";
+	private static final String VERTEX_FILE = "/com/floober/engine/shaders/shadercode/geometry/circleVertex";
+	private static final String FRAGMENT_FILE = "/com/floober/engine/shaders/shadercode/geometry/circleFragment";
 
 	private int location_color;
 	private int location_transformationMatrix;

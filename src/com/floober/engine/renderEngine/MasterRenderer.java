@@ -9,6 +9,7 @@ import com.floober.engine.renderEngine.elements.geometry.OutlineElement;
 import com.floober.engine.renderEngine.elements.geometry.RectElement;
 import com.floober.engine.textures.Texture;
 import com.floober.engine.textures.TextureAtlas;
+import com.floober.engine.util.Logger;
 
 import java.util.*;
 
@@ -76,6 +77,15 @@ public class MasterRenderer {
 			textureElements.add(textureElement);
 	}
 
+	/**
+	 * Add a Tile element to the scene to be rendered.
+	 * There is no limit to tile instances, for two reasons:
+	 * 1) the number will always be less than or equal to a
+	 * full tile map, which depends only on the default internal
+	 * resolution and the tile size, and
+	 * 2) tiles are instance rendered, making them much more efficient to draw.
+	 * @param tileElement The TileElement to render.
+	 */
 	public void addTileElement(TileElement tileElement) {
 		List<TileElement> elementList = tileElements.computeIfAbsent(tileElement.getTextureAtlas(), k -> new ArrayList<>());
 		elementList.add(tileElement);
@@ -124,7 +134,7 @@ public class MasterRenderer {
 	// RENDERING
 	public void prepare() {
 		glClearColor(0, 0, 0, 1);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 	}
 
 	/**

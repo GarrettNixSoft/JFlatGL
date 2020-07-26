@@ -5,6 +5,7 @@ import com.floober.engine.models.QuadModel;
 import com.floober.engine.renderEngine.elements.TileElement;
 import com.floober.engine.shaders.TileShader;
 import com.floober.engine.textures.TextureAtlas;
+import com.floober.engine.util.Logger;
 import com.floober.engine.util.math.MathUtil;
 import com.floober.engine.util.math.MatrixUtils;
 import org.joml.Matrix4f;
@@ -26,8 +27,8 @@ import static org.lwjgl.opengl.GL31.glDrawArraysInstanced;
 
 public class TileRenderer {
 
-	private static final float[] positions = {-1, 1, 1, -1, -1, 1, 1, 1, 1, 1, -1, 1};
-	private static final int MAX_INSTANCES = 5000;
+	private static final float[] positions = {-1, 1, -1, -1, 1, 1, 1, -1};
+	private static final int MAX_INSTANCES = 1000;
 	private static final int INSTANCE_DATA_LENGTH = 18; // TRNSFM_MTRX (16), TEX COORDS (2)
 
 	private static final FloatBuffer buffer = BufferUtils.createFloatBuffer(INSTANCE_DATA_LENGTH * MAX_INSTANCES);
@@ -38,15 +39,19 @@ public class TileRenderer {
 	private final int vbo;
 	private int pointer = 0;
 
+	/**
+	 * Create a new TileRenderer, which automatically allocates a VAO and
+	 * VBOs for instanced rendering, and generates the Tile Shader.
+	 */
 	public TileRenderer() {
 		this.vbo = ModelLoader.createEmptyVBO(INSTANCE_DATA_LENGTH * MAX_INSTANCES);
-		quad = ModelLoader.loadToVAO(positions, 3);
+		quad = ModelLoader.loadToVAO(positions, 2);
 		int vaoID = quad.getVaoID();
 		ModelLoader.addInstancedAttribute(vaoID, vbo, 1, 4, INSTANCE_DATA_LENGTH, 0);  // Transformation col 1
 		ModelLoader.addInstancedAttribute(vaoID, vbo, 2, 4, INSTANCE_DATA_LENGTH, 4);  // Transformation col 2
 		ModelLoader.addInstancedAttribute(vaoID, vbo, 3, 4, INSTANCE_DATA_LENGTH, 8);  // Transformation col 3
 		ModelLoader.addInstancedAttribute(vaoID, vbo, 4, 4, INSTANCE_DATA_LENGTH, 12); // Transformation col 4
-		ModelLoader.addInstancedAttribute(vaoID, vbo, 4, 2, INSTANCE_DATA_LENGTH, 14); // Tex Coords
+		ModelLoader.addInstancedAttribute(vaoID, vbo, 5, 2, INSTANCE_DATA_LENGTH, 16); // Tex Coords
 		shader = new TileShader();
 	}
 
@@ -87,18 +92,33 @@ public class TileRenderer {
 
 	}
 
+	/**
+	 * Bind the TextureAtlas that will be used for this Tile batch.
+	 * This will generally be called only once per tilemap, and so
+	 * once per frame.
+	 * @param textureAtlas The TextureAtlas to bind for the shaders.
+	 */
 	private void bindTexture(TextureAtlas textureAtlas) {
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, textureAtlas.getTextureID());
+		glBindTexture(GL_TEXTURE_2D, textureAtlas.getId());
 		shader.loadNumRows(textureAtlas.getNumRows());
 	}
 
+	/**
+	 * Write the element for this tile instance to the float array that will
+	 * be passed to the shaders.
+	 * @param position The position of this tile instance.
+	 * @param scale The scale of this tile instance.
+	 * @param texOffsets The texture offsets of this tile instance.
+	 * @param vboData The float array to store the data in.
+	 */
 	private void updateElementData(Vector3f position, Vector2f scale, Vector2f texOffsets, float[] vboData) {
 		Matrix4f matrix = MathUtil.createTransformationMatrix(position, scale, 0);
 		pointer = MatrixUtils.storeMatrixData(matrix, vboData, pointer);
 		vboData[pointer++] = texOffsets.x;
 		vboData[pointer++] = texOffsets.y;
+//		Logger.log("Texture offsets: (" + texOffsets.x + ", " + texOffsets.y + ")");
 	}
 
 	/**
@@ -134,6 +154,9 @@ public class TileRenderer {
 		shader.stop();
 	}
 
+	/**
+	 * Delete the Tile Shader.
+	 */
 	public void cleanUp() {
 		shader.cleanUp();
 	}

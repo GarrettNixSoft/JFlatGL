@@ -5,27 +5,31 @@ import com.floober.engine.display.Display;
 import com.floober.engine.display.DisplayManager;
 import com.floober.engine.display.GameWindow;
 import com.floober.engine.fonts.fontRendering.TextMaster;
-import com.floober.engine.main.Game;
 import com.floober.engine.loaders.Loader;
+import com.floober.engine.loaders.level.TileMapLoader;
+import com.floober.engine.main.Game;
 import com.floober.engine.particles.ParticleMaster;
 import com.floober.engine.renderEngine.MasterRenderer;
 import com.floober.engine.renderEngine.Render;
 import com.floober.engine.renderEngine.elements.TextureElement;
+import com.floober.engine.renderEngine.elements.TileElement;
 import com.floober.engine.textures.Texture;
-import com.floober.engine.util.Colors;
-import com.floober.engine.util.time.Sync;
+import com.floober.engine.textures.TextureAtlas;
+import com.floober.engine.tiles.TileMap;
 import com.floober.engine.util.Logger;
 import com.floober.engine.util.input.KeyInput;
 import com.floober.engine.util.input.MouseInput;
-import org.joml.Vector4f;
+import com.floober.engine.util.time.Sync;
 import org.lwjgl.glfw.Callbacks;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 import static com.floober.engine.display.GameWindow.windowID;
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.glfw.GLFW.glfwSetErrorCallback;
 
-public class RenderingTest {
+public class TileMapTest {
 
 	public static void main(String[] args) {
 
@@ -35,33 +39,32 @@ public class RenderingTest {
 		// Create the window and set up OpenGL and GLFW.
 		GameWindow.initGame();
 
+		// Set up OpenAL.
 		AudioMaster.init();
 		AudioMaster.setListenerData(0, 0, 0);
+
+		// Set up the frame limiter.
+		Sync sync = new Sync();
 
 		// Initialize the game.
 		Game game = new Game();
 		Loader loader = new Loader();
 		game.init(loader);
-		// game components
-		Sync sync = new Sync();
+
+		TileMapLoader.game = game;
+
+		// Create the renderer.
 		MasterRenderer masterRenderer = new MasterRenderer();
 		Render.renderer = masterRenderer;
-		// master components
+
+		// initialize master components
 		TextMaster.init();
 		ParticleMaster.init();
 
 		// TEST
 
-		Texture texture = game.getTexture("default");
-		Texture texture2 = game.getTexture("default2");
-		TextureElement element1 = new TextureElement(texture, 0, 0, 15, false);
-		TextureElement element2 = new TextureElement(texture, 32, 0, 0, false);
-		TextureElement element3 = new TextureElement(texture, 0, 32, 0, false);
-		TextureElement element4 = new TextureElement(texture, 32, 32, 0, false);
-		TextureElement testStackElement = new TextureElement(texture2, 0, 0, 10, false);
-
-		TextureElement testCropElement = new TextureElement(texture, Display.WIDTH / 2f, Display.HEIGHT / 2f, 0, 64, 64, true);
-		testCropElement.setTextureOffset(new Vector4f(0.25f, 0.25f, 0.75f, 0.75f));
+		TextureAtlas tileset = game.getTextureAtlas("test_tilemap");
+		TileMap tileMap = TileMapLoader.loadTileMap("sample.map", new ArrayList<>());
 
 		// END_TEST
 
@@ -77,22 +80,17 @@ public class RenderingTest {
 			DisplayManager.checkToggleFullscreen();
 
 			// run game logic
-			game.update();
-			ParticleMaster.update();
+			//game.update();
 
 			// render game internally
-			game.render();
-			masterRenderer.addTextureElement(element1);
-			masterRenderer.addTextureElement(element2);
-			masterRenderer.addTextureElement(element3);
-			masterRenderer.addTextureElement(element4);
-			masterRenderer.addTextureElement(testStackElement);
-			masterRenderer.addTextureElement(testCropElement);
+//			game.render();
+
+			// TEST
+			tileMap.render();
+			// END_TEST
 
 			// render to the screen
 			masterRenderer.render();
-			ParticleMaster.renderParticles();
-			TextMaster.render();
 
 			// update display and poll events
 			DisplayManager.updateDisplay();

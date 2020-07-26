@@ -2,6 +2,8 @@
 
 in vec2 pass_textureCoords;
 
+in vec2 pass_offsets;
+
 out vec4 out_color;
 
 uniform sampler2D tileTexture;

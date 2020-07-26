@@ -109,6 +109,8 @@ public class GameWindow {
 		glDepthFunc(GL_LEQUAL);
 		glDepthRange(0, 1000000);
 
+		glEnable(GL_STENCIL_TEST);
+
 		GLUtil.setupDebugMessageCallback();
 		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, (IntBuffer) null, false);
 

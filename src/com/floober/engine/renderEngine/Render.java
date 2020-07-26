@@ -1,11 +1,15 @@
 package com.floober.engine.renderEngine;
 
 import com.floober.engine.display.Display;
+import com.floober.engine.renderEngine.elements.TileElement;
 import com.floober.engine.renderEngine.elements.geometry.CircleElement;
 import com.floober.engine.renderEngine.elements.geometry.LineElement;
 import com.floober.engine.renderEngine.elements.geometry.OutlineElement;
 import com.floober.engine.renderEngine.elements.geometry.RectElement;
+import com.floober.engine.util.Logger;
 import org.joml.Vector4f;
+
+import javax.naming.directory.SchemaViolationException;
 
 /**
  * This Render class is left over from the way my old engine worked.
@@ -17,6 +21,38 @@ public class Render {
 
 	// reference to the MasterRenderer to add elements
 	public static MasterRenderer renderer;
+
+	// MAIN RENDER METHODS
+
+	public static void drawTile(TileElement tileElement) {
+		renderer.addTileElement(tileElement);
+	}
+
+	public static void drawRect(RectElement rectElement) {
+		renderer.addRectElement(rectElement);
+	}
+
+	public static void drawCircle(CircleElement circleElement) {
+		renderer.addCircleElement(circleElement);
+	}
+
+	public static void drawLine(LineElement lineElement) {
+		renderer.addLineElement(lineElement);
+	}
+
+	public void drawOutline(OutlineElement outlineElement) {
+		renderer.addOutlineElement(outlineElement);
+	}
+
+
+	/*
+	 * The following section contains utility functions for generating
+	 * elements to render on the fly and passing them to the MasterRenderer
+	 * to be rendered. These should only be used for testing, or for
+	 * convenience, but only sparingly; these objects will be held in collections
+	 * by the MasterRenderer until the frame is complete, so they will (probably)
+	 * not enjoy the benefits of short-lived object performance.
+	 */
 
 	// RECTANGLES
 
@@ -36,7 +72,7 @@ public class Render {
 
 	/**
 	 * Cover the screen with the specified color.
-	 * @param color
+	 * @param color The color to fill.
 	 */
 	public static void fillScreen(Vector4f color) {
 		renderer.addRectElement(new RectElement(color, 0, 0, 0, Display.WIDTH, Display.HEIGHT, false));
@@ -139,7 +175,5 @@ public class Render {
 	public static void drawOutline(Vector4f color, float x, float y, float z, float width, float height, float lineWidth, boolean centered) {
 		renderer.addOutlineElement(new OutlineElement(color, x, y, z, width, height, lineWidth, centered));
 	}
-
-	// draw tile
 
 }

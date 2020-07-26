@@ -56,6 +56,8 @@ public class TextureLoader extends AssetLoader {
 			Logger.logLoad("Loading texture: " + path);
 			// load the file at that location
 			Texture texture = loader.loadTexture(path);
+			// warn if it's null
+			if (texture == null) Logger.logError("Texture [id=" + key + "] returned null!");
 			// add it to the game
 			game.getTextures().addTexture(key, texture);
 			// done
@@ -75,8 +77,11 @@ public class TextureLoader extends AssetLoader {
 			int numRows = atlasObject.getInt("rows");
 			// load the atlas
 			Texture texture = loader.loadTexture(path);
+			// warn if it's null
+			if (texture == null) Logger.logError("Texture [id=" + key + "] returned null!");
 			// convert it to an atlas
-			TextureAtlas textureAtlas = new TextureAtlas(texture.getId(), numRows);
+			assert texture != null; // shut up, compiler
+			TextureAtlas textureAtlas = new TextureAtlas(texture.getId(), texture.getWidth(), texture.getHeight(), numRows);
 			// add it to the game
 			game.getTextures().addTextureAtlas(key, textureAtlas);
 			// done

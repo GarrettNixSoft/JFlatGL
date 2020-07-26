@@ -18,6 +18,7 @@ import com.floober.engine.particles.behavior.movement.ConstantVelocityBehavior;
 import com.floober.engine.particles.behavior.movement.FlameBehavior;
 import com.floober.engine.particles.behavior.movement.MovementBehavior;
 import com.floober.engine.renderEngine.MasterRenderer;
+import com.floober.engine.textures.Texture;
 import com.floober.engine.util.Colors;
 import com.floober.engine.util.Logger;
 import com.floober.engine.util.data.Config;
@@ -121,8 +122,11 @@ public class ParticleTest {
 
 		// Particles
 
-		explosionParticleTex = new ParticleTexture(ImageLoader.loadTexture("textures/particles/explosion.png").getId(), 4, true);
-		glowParticleTex = new ParticleTexture(ImageLoader.loadTexture("textures/particles/glow.png").getId(), 1, true);
+		Texture explosionTexture = ImageLoader.loadTexture("textures/particles/explosion.png");
+		Texture glowTexture = ImageLoader.loadTexture("textures/particles/glow.png");
+
+		explosionParticleTex = new ParticleTexture(explosionTexture.getId(), explosionTexture.getWidth(), explosionTexture.getHeight(), 4, true);
+		glowParticleTex = new ParticleTexture(glowTexture.getId(), glowTexture.getWidth(), glowTexture.getHeight(), 1, true);
 		AppearanceBehavior appearanceBehavior = new FadeOutBehavior(1, 0);
 		FlameBehavior flameBehavior = new FlameBehavior(-90, 15);
 		particleBehavior = new ParticleBehavior(flameBehavior, appearanceBehavior);

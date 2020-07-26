@@ -95,7 +95,7 @@ public class ParticleRenderer {
 		else
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, particleTexture.getTextureID());
+		glBindTexture(GL_TEXTURE_2D, particleTexture.getId());
 		shader.loadNumRows(particleTexture.getNumRows());
 	}
 

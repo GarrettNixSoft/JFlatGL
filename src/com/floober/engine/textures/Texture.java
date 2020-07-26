@@ -1,10 +1,12 @@
 package com.floober.engine.textures;
 
+import org.joml.Vector4f;
+
 public class Texture {
 	
-	private final int id;
-	private final int width;
-	private final int height;
+	protected final int id;
+	protected final int width;
+	protected final int height;
 
 	public Texture(int id, int width, int height) {
 		this.id = id;

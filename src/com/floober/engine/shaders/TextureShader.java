@@ -1,6 +1,7 @@
 package com.floober.engine.shaders;
 
 import org.joml.Matrix4f;
+import org.joml.Vector4f;
 
 public class TextureShader extends ShaderProgram {
 
@@ -8,6 +9,7 @@ public class TextureShader extends ShaderProgram {
 	private static final String FRAGMENT_FILE = "/com/floober/engine/shaders/shadercode/textureFragment";
 
 	private int location_transformationMatrix;
+	private int location_textureOffset;
 
 	public TextureShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);
@@ -16,6 +18,7 @@ public class TextureShader extends ShaderProgram {
 	@Override
 	protected void getAllUniformLocations() {
 		location_transformationMatrix = super.getUniformLocation("transformationMatrix");
+		location_textureOffset = super.getUniformLocation("textureOffset");
 	}
 
 	@Override
@@ -25,6 +28,10 @@ public class TextureShader extends ShaderProgram {
 
 	public void loadTransformationMatrix(Matrix4f transformationMatrix) {
 		super.loadMatrix(location_transformationMatrix, transformationMatrix);
+	}
+
+	public void loadTextureOffset(Vector4f textureOffset) {
+		super.loadVector(location_textureOffset, textureOffset);
 	}
 
 }
