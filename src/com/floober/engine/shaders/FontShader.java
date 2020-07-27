@@ -1,13 +1,12 @@
 package com.floober.engine.shaders;
 
 import org.joml.Vector2f;
-import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 public class FontShader extends ShaderProgram{
 
-	private static final String VERTEX_FILE = "/com/floober/engine/shaders/shadercode/fontVertex";
-	private static final String FRAGMENT_FILE = "/com/floober/engine/shaders/shadercode/fontFragment";
+	private static final String VERTEX_FILE = "/com/floober/engine/shaders/shadercode/fontVertex.glsl";
+	private static final String FRAGMENT_FILE = "/com/floober/engine/shaders/shadercode/fontFragment.glsl";
 
 	private int location_color;
 	private int location_translation;

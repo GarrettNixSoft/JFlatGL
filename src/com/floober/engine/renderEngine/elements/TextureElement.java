@@ -7,6 +7,7 @@ public class TextureElement extends RenderElement {
 
 	private final Texture texture;
 	private Vector4f textureOffset;
+	private boolean doLighting;
 
 	public TextureElement(Texture texture, float x, float y, float z, float width, float height, boolean centered) {
 		super(x, y, z);
@@ -29,9 +30,11 @@ public class TextureElement extends RenderElement {
 	public void setTextureOffset(Vector4f textureOffset) {
 		this.textureOffset = textureOffset;
 	}
+	public void setDoLighting(boolean doLighting) { this.doLighting = doLighting; }
 
 	public Texture getTexture() {
 		return texture;
 	}
 	public Vector4f getTextureOffset() { return textureOffset; }
+	public boolean doLighting() { return doLighting; }
 }

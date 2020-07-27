@@ -1,5 +1,7 @@
 package com.floober.engine.renderEngine;
 
+import com.floober.engine.display.Display;
+import com.floober.engine.lights.LightMaster;
 import com.floober.engine.models.ModelLoader;
 import com.floober.engine.models.QuadModel;
 import com.floober.engine.renderEngine.elements.TextureElement;
@@ -45,11 +47,24 @@ public class TextureRenderer {
 		prepare();
 
 		for (TextureElement element : textureElements) {
+
+			// bind the current texture
 			bindTexture(element.getTexture());
+
+			// send the light information to the shaders
+			shader.loadScreenRatio(Display.SCREEN_RATIO);
+			shader.loadAmbientLight(LightMaster.getAmbientLight());
+			shader.loadLights(LightMaster.getSceneLights());
+
+			// bind this element's data
 			Matrix4f matrix = MathUtil.createTransformationMatrix(element.getPosition(), element.getScale());
 			shader.loadTransformationMatrix(matrix);
 			shader.loadTextureOffset(element.getTextureOffset());
+			//
+
+			// draw the element
 			glDrawArrays(GL_TRIANGLE_STRIP, 0, quad.getVertexCount());
+
 		}
 
 		finishRendering();

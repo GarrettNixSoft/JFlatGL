@@ -1,11 +1,12 @@
 package com.floober.engine.renderEngine;
 
+import com.floober.engine.display.Display;
+import com.floober.engine.lights.LightMaster;
 import com.floober.engine.models.ModelLoader;
 import com.floober.engine.models.QuadModel;
 import com.floober.engine.renderEngine.elements.TileElement;
 import com.floober.engine.shaders.TileShader;
 import com.floober.engine.textures.TextureAtlas;
-import com.floober.engine.util.Logger;
 import com.floober.engine.util.math.MathUtil;
 import com.floober.engine.util.math.MatrixUtils;
 import org.joml.Matrix4f;
@@ -67,6 +68,11 @@ public class TileRenderer {
 
 			// bind the texture used for this batch
 			bindTexture(textureAtlas);
+
+			// send the light information to the shaders
+			shader.loadScreenRatio(Display.SCREEN_RATIO);
+			shader.loadAmbientLight(LightMaster.getAmbientLight());
+			shader.loadLights(LightMaster.getSceneLights());
 
 			// get this batch of texture elements
 			List<TileElement> elementList = textureElements.get(textureAtlas);

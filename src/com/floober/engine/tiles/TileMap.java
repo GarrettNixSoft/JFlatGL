@@ -16,23 +16,27 @@ public class TileMap {
 	// raw map data
 	private byte[][] map;
 	private boolean[][] blocked;
-	private int numRows, numCols;
+	private final int numRows;
+	private final int numCols;
 
 	// dimensions
 	private final int tileSize = 60;
 	private final int width, height;
 
 	// position
-	private float x, y, z = 50;
+	private float x;
+	private float y;
+	private final float z = 50;
 	private float xmin, ymin;
 	private float followStrength;
 
 	// rendering
 	private TextureAtlas tileset;
-	private TileElement[][] screenTiles;
-	private int rowsToDraw, colsToDraw;
+	private final TileElement[][] screenTiles;
+	private final int rowsToDraw;
+	private final int colsToDraw;
 	private int rowOffset, colOffset;
-	private int tilePad = 2;
+	private final int tilePad = 2;
 
 	public TileMap(int numRows, int numCols) {
 		this.numRows = numRows;

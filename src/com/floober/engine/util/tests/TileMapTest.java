@@ -5,6 +5,8 @@ import com.floober.engine.display.Display;
 import com.floober.engine.display.DisplayManager;
 import com.floober.engine.display.GameWindow;
 import com.floober.engine.fonts.fontRendering.TextMaster;
+import com.floober.engine.lights.Light;
+import com.floober.engine.lights.LightMaster;
 import com.floober.engine.loaders.Loader;
 import com.floober.engine.loaders.level.TileMapLoader;
 import com.floober.engine.main.Game;
@@ -20,6 +22,8 @@ import com.floober.engine.util.Logger;
 import com.floober.engine.util.input.KeyInput;
 import com.floober.engine.util.input.MouseInput;
 import com.floober.engine.util.time.Sync;
+import org.joml.Vector2f;
+import org.joml.Vector4f;
 import org.lwjgl.glfw.Callbacks;
 
 import java.util.ArrayList;
@@ -63,8 +67,9 @@ public class TileMapTest {
 
 		// TEST
 
-		TextureAtlas tileset = game.getTextureAtlas("test_tilemap");
 		TileMap tileMap = TileMapLoader.loadTileMap("sample.map", new ArrayList<>());
+		Light mouseLight = new Light(new Vector2f(0, 0), new Vector4f(1), 2f, 40, 100, 10000);
+		LightMaster.addLight(mouseLight);
 
 		// END_TEST
 
@@ -86,6 +91,8 @@ public class TileMapTest {
 //			game.render();
 
 			// TEST
+			mouseLight.setPosition(MouseInput.getMousePosF());
+			System.out.print("\rLight position: " + mouseLight.getPosition());
 			tileMap.render();
 			// END_TEST
 

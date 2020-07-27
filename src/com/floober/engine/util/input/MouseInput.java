@@ -1,7 +1,9 @@
 package com.floober.engine.util.input;
 
+import com.floober.engine.display.Display;
 import com.floober.engine.display.GameWindow;
 import com.floober.engine.util.data.Config;
+import org.joml.Vector2f;
 import org.joml.Vector2i;
 import org.lwjgl.BufferUtils;
 
@@ -53,6 +55,7 @@ public class MouseInput {
 	public static void updateRatio(double width, double height) {
 		xPosRatio = Config.DEFAULT_RESOLUTION_WIDTH / width;
 		yPosRatio = Config.DEFAULT_RESOLUTION_HEIGHT / height;
+		Display.SCREEN_RATIO.set(xPosRatio, yPosRatio);
 	}
 	
 	public static boolean isPressed(int button) {
@@ -70,6 +73,10 @@ public class MouseInput {
 
 	public static Vector2i getMousePos() {
 		return mouseLocation;
+	}
+
+	public static Vector2f getMousePosF() {
+		return new Vector2f(mouseLocation);
 	}
 	
 	public static int getX() { return mouseLocation.x(); }

@@ -11,6 +11,8 @@ public class Display {
 	public static int HEIGHT = Config.DEFAULT_RESOLUTION_HEIGHT;
 	public static int FPS_CAP = 144;
 
+	public static final Vector2f SCREEN_RATIO = new Vector2f();
+
 	public static boolean fullscreen = false;
 
 	public static Vector3f convertToDisplayPosition(float x, float y, float z, float width, float height, boolean centered) {
