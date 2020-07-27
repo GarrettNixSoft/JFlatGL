@@ -1,5 +1,7 @@
 package com.floober.engine.util.time;
 
+import com.floober.engine.util.Logger;
+
 /*
 	@author Floober101
 	A simple Timer. Start it, then call it at any time to check
@@ -7,34 +9,94 @@ package com.floober.engine.util.time;
  */
 public class Timer {
 
-	protected final float time;
-	protected long start;
+	protected float time;
+	protected long start = -1;
 
+	/**
+	 * Create a new timer.
+	 * @param time The target duration, in seconds.
+	 */
 	public Timer(float time) {
 		this.time = time;
 	}
 
 	// ACTIONS
+	/**
+	 * Start this timer. If it is already running, this call is ignored
+	 * and a warning will be printed in the error log.
+	 */
 	public void start() {
-		start = System.nanoTime();
+		if (start != -1) {
+			Logger.logError("Tried to start a timer in progress!");
+		}
+		else {
+			start = System.nanoTime();
+		}
 	}
 
+	/**
+	 * Stop the timer and reset it. This returns the timer to a state
+	 * where it can be started again at any time.
+	 */
 	public void reset() {
-		start();
+		start = -1;
 	}
 
 	// GETTERS
+
+	/**
+	 * Get the target duration of this timer.
+	 * @return The target duration, in seconds.
+	 */
 	public float getTime() {
 		return time;
 	}
-	public long getTimeElapsed() { return TimeScale.getScaledTime(start); }
-	public float getTimeElapsedPercentage() {
-		return (float) (TimeScale.getScaledTime(start) / (time * 1000.0));
+
+	/**
+	 * Get the time elapsed since this timer was started.
+	 * @return The time elapsed, in milliseconds.
+	 */
+	public long getTimeElapsed() {
+		return TimeScale.getRawTime(start);
 	}
 
+	/**
+	 * Get the progress of this timer.
+	 * @return The current progress as a percentage of the target duration elapsed.
+	 */
+	public float getProgress() {
+		return (float) (TimeScale.getRawTime(start) / (time * 1000.0));
+	}
+
+	/**
+	 * Check if the timer is in progress.
+	 * @return True if the timer has been started.
+	 */
+	public boolean started() {
+		return start != -1;
+	}
+
+	/**
+	 * Check if the timer is finished.
+	 * @return True if the set duration of time has passed since the timer was started.
+	 */
 	public boolean finished() {
 		if (time == -1) return false; // -1 sets a perpetual timer
-		else return TimeScale.getScaledTime(start) > time * 1000;
+		else return TimeScale.getRawTime(start) > time * 1000;
+	}
+
+	// SETTERS
+	/**
+	 * Set the duration of this timer. Fails if the timer is in progress.
+	 * @param time The new target duration.
+	 */
+	public void setTime(float time) {
+		if (start != -1) {
+			Logger.logError("Tried to modify duration of timer in progress!");
+		}
+		else {
+			this.time = time;
+		}
 	}
 
 }

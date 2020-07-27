@@ -32,7 +32,7 @@ public class ScaledTimer extends Timer {
 		return elapsed;
 	}
 
-	public float getTimeElapsedPercentage() {
+	public float getProgress() {
 		return (float) (elapsed / (time * 1000.0));
 	}
 

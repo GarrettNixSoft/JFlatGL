@@ -31,11 +31,11 @@ public class TimeScale {
 
     // GET SCALED TIME
     public static long getScaledTime(long start) {
-        return (long) ((System.nanoTime() - start) / 1000000 * getTimeScale());
+        return (long) ((System.nanoTime() - start) / 1_000_000 * getTimeScale());
     }
 
     public static long getRawTime(long start) {
-        return (System.nanoTime() - start) / 1000000;
+        return (System.nanoTime() - start) / 1_000_000;
     }
 
     // set instant time scale
@@ -47,8 +47,8 @@ public class TimeScale {
     public static void setTimeScaleTransition(float target, long targetTimeMillis) {
         // time
         startTime = System.nanoTime();
-        endTime = startTime + (targetTimeMillis * 1000000);
-        period = targetTimeMillis * 1000000;
+        endTime = startTime + (targetTimeMillis * 1_000_000);
+        period = targetTimeMillis * 1_000_000;
         // scale
         startScale = TIME_SCALE;
         targetScale = target;

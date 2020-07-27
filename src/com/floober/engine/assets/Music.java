@@ -1,5 +1,6 @@
 package com.floober.engine.assets;
 
+import com.floober.engine.audio.MusicChannel;
 import com.floober.engine.audio.Sound;
 import com.floober.engine.audio.Source;
 
@@ -8,17 +9,20 @@ import java.util.Map;
 
 public class Music {
 
+	// STORING MUSIC
+	private final Map<String, Sound> music = new HashMap<>();
+
+	// Music tracks
+	private final MusicChannel[] CHANNELS;
+
 	// Constructor initializes channel sources
 	public Music() {
 		int NUM_CHANNELS = 4;
-		CHANNELS = new Source[NUM_CHANNELS];
+		CHANNELS = new MusicChannel[NUM_CHANNELS];
 		for (int i = 0; i < CHANNELS.length; ++i) {
-			CHANNELS[i] = new Source();
+			CHANNELS[i] = new MusicChannel(new Source());
 		}
 	}
-
-	// STORING MUSIC
-	private final Map<String, Sound> music = new HashMap<>();
 
 	// LOADING MUSIC
 
@@ -42,9 +46,6 @@ public class Music {
 		return music.get(key);
 	}
 
-	// Music tracks
-	private final Source[] CHANNELS;
-
 	// MUSIC CONTROL
 
 	/**
@@ -67,7 +68,7 @@ public class Music {
 	 */
 	public boolean playMusic(int channel, String key) {
 		if (!CHANNELS[channel].isPlaying()) {
-			CHANNELS[channel].play(music.get(key).getBufferID());
+			CHANNELS[channel].playMusic(music.get(key));
 			return true;
 		}
 		else return false;
@@ -77,8 +78,8 @@ public class Music {
 	 * Resume playing the track on the specified channel.
 	 * @param channel The channel to resume playing on.
 	 */
-	public void play(int channel) {
-		CHANNELS[channel].resume();
+	public boolean resume(int channel) {
+		return CHANNELS[channel].resume();
 	}
 
 	/**
@@ -96,11 +97,23 @@ public class Music {
 	 * @return True if the channel was playing and is now paused, or false otherwise.
 	 */
 	public boolean pauseTrack(int channel) {
-		if (CHANNELS[channel].isPlaying()) {
-			CHANNELS[channel].pause();
-			return true;
+		return CHANNELS[channel].pause();
+	}
+
+	// MODIFYING CHANNELS
+	public void setVolume(int channel, float volume, float time) {
+		CHANNELS[channel].tweenVolume(volume, time);
+	}
+
+	public void setPitch(int channel, float pitch, float time) {
+		CHANNELS[channel].tweenPitch(pitch, time);
+	}
+
+	// UPDATING
+	public void update() {
+		for (MusicChannel channel : CHANNELS) {
+			channel.update();
 		}
-		else return false;
 	}
 
 

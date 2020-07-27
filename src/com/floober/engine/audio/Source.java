@@ -15,38 +15,37 @@ public class Source {
 		alSourcef(sourceID, AL_MAX_DISTANCE, 50);
 	}
 
-	public void setVolume(float gain) {
-		alSourcef(sourceID, AL_GAIN, gain);
+	// GETTERS
+	public boolean isPlaying() {
+		return alGetSourcei(sourceID, AL_SOURCE_STATE) == AL_PLAYING;
+	}
+
+	// SETTERS
+	public void setPosition(Vector3f position) {
+		alSource3f(sourceID, AL_POSITION, position.x, position.y, position.z);
+	}
+	public void setPosition(float x, float y, float z) {
+		alSource3f(sourceID, AL_POSITION, x, y, z);
+	}
+	public void setVelocity(Vector3f velocity) {
+		alSource3f(sourceID, AL_VELOCITY, velocity.x, velocity.y, velocity.z);
+	}
+	public void setVelocity(float x, float y, float z) {
+		alSource3f(sourceID, AL_VELOCITY, x, y, z);
+	}
+	public void setLooping(boolean loop) {
+		alSourcei(sourceID, AL_LOOPING, loop ? AL_TRUE : AL_FALSE);
+	}
+
+	public void setVolume(float volume) {
+		alSourcef(sourceID, AL_GAIN, volume);
 	}
 
 	public void setPitch(float pitch) {
 		alSourcef(sourceID, AL_PITCH, pitch);
 	}
 
-	public void setPosition(Vector3f position) {
-		alSource3f(sourceID, AL_POSITION, position.x, position.y, position.z);
-	}
-
-	public void setPosition(float x, float y, float z) {
-		alSource3f(sourceID, AL_POSITION, x, y, z);
-	}
-
-	public void setVelocity(Vector3f velocity) {
-		alSource3f(sourceID, AL_VELOCITY, velocity.x, velocity.y, velocity.z);
-	}
-
-	public void setVelocity(float x, float y, float z) {
-		alSource3f(sourceID, AL_VELOCITY, x, y, z);
-	}
-
-	public void setLooping(boolean loop) {
-		alSourcei(sourceID, AL_LOOPING, loop ? AL_TRUE : AL_FALSE);
-	}
-
-	public boolean isPlaying() {
-		return alGetSourcei(sourceID, AL_SOURCE_STATE) == AL_PLAYING;
-	}
-
+	// ACTIONS
 	public void play(int buffer) {
 		stop();
 		alSourcei(sourceID, AL_BUFFER, buffer);

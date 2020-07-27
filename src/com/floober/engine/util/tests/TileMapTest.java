@@ -71,6 +71,10 @@ public class TileMapTest {
 		Light mouseLight = new Light(new Vector2f(0, 0), new Vector4f(1), 2f, 40, 100, 10000);
 		LightMaster.addLight(mouseLight);
 
+		Texture texture = game.getTexture("default");
+		TextureElement testLightElement = new TextureElement(texture, Display.WIDTH / 2f, Display.HEIGHT / 2f, 0, 64, 64, true);
+		testLightElement.setDoLighting(true);
+
 		// END_TEST
 
 		// Run the game loop!
@@ -89,10 +93,10 @@ public class TileMapTest {
 
 			// render game internally
 //			game.render();
+			masterRenderer.addTextureElement(testLightElement);
 
 			// TEST
 			mouseLight.setPosition(MouseInput.getMousePosF());
-			System.out.print("\rLight position: " + mouseLight.getPosition());
 			tileMap.render();
 			// END_TEST
 

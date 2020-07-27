@@ -60,7 +60,7 @@ public class TextureRenderer {
 			Matrix4f matrix = MathUtil.createTransformationMatrix(element.getPosition(), element.getScale());
 			shader.loadTransformationMatrix(matrix);
 			shader.loadTextureOffset(element.getTextureOffset());
-			//
+			shader.loadDoLighting(element.doLighting());
 
 			// draw the element
 			glDrawArrays(GL_TRIANGLE_STRIP, 0, quad.getVertexCount());
