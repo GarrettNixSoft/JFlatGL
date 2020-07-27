@@ -1,3 +1,4 @@
+![GitHub Logo](/res/icon/repo_image.png)
 # FlooberEngine
 A basic 2D game engine in Java, built using LWJGL 3. I use this engine for my personal projects.
 
