@@ -5,3 +5,5 @@ Current features:
 - Basic 2D rendering capabilities (quads, textured quads, circles)
 - Simple particle system with configurable particle behaviors
 - Configurable loaders to load assets on game startup
+- Simple audio system
+- TileMaps and basic lighting for tiles and textured quads
