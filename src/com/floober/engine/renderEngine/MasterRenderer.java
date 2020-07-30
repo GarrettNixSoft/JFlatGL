@@ -174,6 +174,7 @@ public class MasterRenderer {
 	public void cleanUp() {
 		textureRenderer.cleanUp();
 		geometryRenderer.cleanUp();
+		tileRenderer.cleanUp();
 	}
 
 }

@@ -43,6 +43,17 @@ public class RandomUtil {
 	}
 
 	/**
+	 * Get a random float from {@code min} to {@code max}.
+	 * @param min The lower bound.
+	 * @param max The upper bound.
+	 * @return A random float from {@code min} to {@code max}.
+	 */
+	public static float getFloat(double min, double max) {
+		double delta = max - min;
+		return (float) (random.nextFloat() * delta + min);
+	}
+
+	/**
 	 * Get a random float, ranging + or - {@code variation} from {@code average}.
 	 * @param average The average value, treated as the center of the range of possible return values.
 	 * @param variation The allowed variation from the average, in both the positive and negative directions.
@@ -58,7 +69,7 @@ public class RandomUtil {
 	 * @return A random int from 0 to {@code max}.
 	 */
 	public static int getInt(int max) {
-		return random.nextInt() * max;
+		return random.nextInt(max);
 	}
 
 	/**
@@ -69,7 +80,7 @@ public class RandomUtil {
 	 */
 	public static int getInt(int min, int max) {
 		int delta = max - min;
-		return random.nextInt() * delta + min;
+		return random.nextInt(delta) + min;
 	}
 
 	/**

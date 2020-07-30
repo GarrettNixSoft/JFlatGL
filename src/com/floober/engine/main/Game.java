@@ -44,6 +44,7 @@ public class Game {
 	// RUN GAME LOGIC
 	public void update() {
 		gsm.update();
+		music.update();
 	}
 
 	// RENDER GAME INTERNALLY
