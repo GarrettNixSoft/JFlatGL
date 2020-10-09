@@ -1,7 +1,7 @@
 package com.floober.engine.assets;
 
-import com.floober.engine.textures.Texture;
-import com.floober.engine.textures.TextureAtlas;
+import com.floober.engine.renderEngine.textures.Texture;
+import com.floober.engine.renderEngine.textures.TextureAtlas;
 
 import java.util.HashMap;
 import java.util.Map;

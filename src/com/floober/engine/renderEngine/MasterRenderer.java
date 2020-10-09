@@ -1,15 +1,15 @@
 package com.floober.engine.renderEngine;
 
-import com.floober.engine.models.ModelLoader;
 import com.floober.engine.renderEngine.elements.TextureElement;
 import com.floober.engine.renderEngine.elements.TileElement;
 import com.floober.engine.renderEngine.elements.geometry.CircleElement;
 import com.floober.engine.renderEngine.elements.geometry.LineElement;
 import com.floober.engine.renderEngine.elements.geometry.OutlineElement;
 import com.floober.engine.renderEngine.elements.geometry.RectElement;
-import com.floober.engine.textures.Texture;
-import com.floober.engine.textures.TextureAtlas;
-import com.floober.engine.util.Logger;
+import com.floober.engine.renderEngine.renderers.GeometryRenderer;
+import com.floober.engine.renderEngine.renderers.TextureRenderer;
+import com.floober.engine.renderEngine.renderers.TileRenderer;
+import com.floober.engine.renderEngine.textures.TextureAtlas;
 
 import java.util.*;
 

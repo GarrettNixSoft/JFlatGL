@@ -1,7 +1,7 @@
 package com.floober.engine.display;
 
 import com.floober.engine.loaders.ImageLoader;
-import com.floober.engine.textures.RawTextureData;
+import com.floober.engine.renderEngine.textures.RawTextureData;
 import com.floober.engine.util.data.Config;
 import com.floober.engine.util.input.MouseInput;
 import org.lwjgl.glfw.GLFWErrorCallback;

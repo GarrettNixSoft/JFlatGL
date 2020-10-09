@@ -1,6 +1,6 @@
 package com.floober.engine.renderEngine.elements;
 
-import com.floober.engine.textures.Texture;
+import com.floober.engine.renderEngine.textures.Texture;
 import org.joml.Vector4f;
 
 public class TextureElement extends RenderElement {

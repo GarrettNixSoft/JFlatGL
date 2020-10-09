@@ -1,12 +1,9 @@
 package com.floober.engine.tiles;
 
 import com.floober.engine.display.Display;
-import com.floober.engine.display.DisplayManager;
-import com.floober.engine.renderEngine.MasterRenderer;
 import com.floober.engine.renderEngine.Render;
 import com.floober.engine.renderEngine.elements.TileElement;
-import com.floober.engine.textures.Texture;
-import com.floober.engine.textures.TextureAtlas;
+import com.floober.engine.renderEngine.textures.TextureAtlas;
 import com.floober.engine.util.Logger;
 import com.floober.engine.util.data.Config;
 import org.joml.Vector2f;

@@ -2,10 +2,8 @@ package com.floober.engine.loaders;
 
 import com.floober.engine.audio.AudioMaster;
 import com.floober.engine.audio.Sound;
-import com.floober.engine.fonts.fontMeshCreator.FontType;
-import com.floober.engine.main.Game;
-import com.floober.engine.textures.Texture;
-import com.floober.engine.textures.TextureAtlas;
+import com.floober.engine.renderEngine.fonts.fontMeshCreator.FontType;
+import com.floober.engine.renderEngine.textures.Texture;
 import com.floober.engine.util.conversion.StringConverter;
 import com.floober.engine.util.file.FileUtil;
 import org.json.JSONObject;

@@ -1,6 +1,6 @@
 package com.floober.engine.assets;
 
-import com.floober.engine.fonts.fontMeshCreator.FontType;
+import com.floober.engine.renderEngine.fonts.fontMeshCreator.FontType;
 
 import java.util.HashMap;
 import java.util.Map;

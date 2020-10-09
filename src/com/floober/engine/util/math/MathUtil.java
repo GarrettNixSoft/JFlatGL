@@ -55,7 +55,8 @@ public class MathUtil {
 		else {
 			float delta = max - min;
 			float pos = value - min;
-			return pos / delta;
+			float val = Math.max(0, Math.min(1, pos / delta));
+			return val * val * (3.0f - 2.0f * val);
 		}
 	}
 

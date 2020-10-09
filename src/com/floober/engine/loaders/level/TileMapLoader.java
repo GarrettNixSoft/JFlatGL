@@ -1,7 +1,7 @@
 package com.floober.engine.loaders.level;
 
 import com.floober.engine.main.Game;
-import com.floober.engine.textures.TextureAtlas;
+import com.floober.engine.renderEngine.textures.TextureAtlas;
 import com.floober.engine.tiles.TileMap;
 import com.floober.engine.util.file.FileUtil;
 

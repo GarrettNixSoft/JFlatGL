@@ -1,7 +1,6 @@
 package com.floober.engine.renderEngine.elements;
 
-import com.floober.engine.textures.TextureAtlas;
-import com.floober.engine.util.Logger;
+import com.floober.engine.renderEngine.textures.TextureAtlas;
 import org.joml.Vector2f;
 
 public class TileElement extends TextureElement {

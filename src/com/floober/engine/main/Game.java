@@ -5,13 +5,12 @@ import com.floober.engine.assets.Music;
 import com.floober.engine.assets.Sfx;
 import com.floober.engine.assets.Textures;
 import com.floober.engine.audio.Sound;
-import com.floober.engine.fonts.fontMeshCreator.FontType;
+import com.floober.engine.renderEngine.fonts.fontMeshCreator.FontType;
 import com.floober.engine.gameState.GameStateManager;
 import com.floober.engine.loaders.GameLoader;
 import com.floober.engine.loaders.Loader;
-import com.floober.engine.loaders.assets.*;
-import com.floober.engine.textures.Texture;
-import com.floober.engine.textures.TextureAtlas;
+import com.floober.engine.renderEngine.textures.Texture;
+import com.floober.engine.renderEngine.textures.TextureAtlas;
 
 public class Game {
 
