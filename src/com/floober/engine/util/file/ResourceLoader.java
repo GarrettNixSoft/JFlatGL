@@ -36,8 +36,7 @@ public class ResourceLoader {
 	public static InputStream getResourceAsStream(String ref) {
 		InputStream in = null;
 
-		for(int i = 0; i < locations.size(); ++i) {
-			ResourceLocation location = (ResourceLocation)locations.get(i);
+		for (ResourceLocation location : locations) {
 			in = location.getResourceAsStream(ref);
 			if (in != null) {
 				break;
@@ -52,10 +51,9 @@ public class ResourceLoader {
 	}
 
 	public static boolean resourceExists(String ref) {
-		URL url = null;
+		URL url;
 
-		for(int i = 0; i < locations.size(); ++i) {
-			ResourceLocation location = (ResourceLocation)locations.get(i);
+		for (ResourceLocation location : locations) {
 			url = location.getResource(ref);
 			if (url != null) {
 				return true;
@@ -68,8 +66,7 @@ public class ResourceLoader {
 	public static URL getResource(String ref) {
 		URL url = null;
 
-		for(int i = 0; i < locations.size(); ++i) {
-			ResourceLocation location = (ResourceLocation)locations.get(i);
+		for (ResourceLocation location : locations) {
 			url = location.getResource(ref);
 			if (url != null) {
 				break;

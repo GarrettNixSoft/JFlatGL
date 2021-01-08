@@ -1,13 +1,14 @@
 package com.floober.engine.renderEngine.particles.behavior.movement;
 
-import com.floober.engine.renderEngine.particles.types.Particle;
+import com.floober.engine.renderEngine.particles.types.EmitterParticle;
+import org.lwjgl.vulkan.EXTFullScreenExclusive;
 
-public abstract class MovementBehavior {
+public abstract class MovementBehavior implements Cloneable {
 
 	protected float particleSpeedMin, particleSpeedMax;
 
-	public abstract void initParticle(Particle particle);
-	public abstract void updateParticle(Particle particle);
+	public abstract void initParticle(EmitterParticle particle);
+	public abstract void updateParticle(EmitterParticle particle);
 
 	// INITIALIZERS
 
@@ -60,6 +61,15 @@ public abstract class MovementBehavior {
 	public void setParticleSpeedMax(float particleSpeedMax) {
 		if (particleSpeedMax >= particleSpeedMin)
 			this.particleSpeedMax = particleSpeedMax;
+	}
+
+	public MovementBehavior clone() {
+		try {
+			return (MovementBehavior) super.clone();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

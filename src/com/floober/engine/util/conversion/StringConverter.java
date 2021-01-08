@@ -1,6 +1,5 @@
 package com.floober.engine.util.conversion;
 
-import com.floober.engine.util.Logger;
 import org.joml.Vector2f;
 
 import java.util.List;
@@ -27,27 +26,39 @@ public class StringConverter {
 		return result.toString();
 	}
 
-	public static Vector2f parseCoords(String coordStr) {
-		try {
-			// strip leading non-digits
-			while (!Character.isDigit(coordStr.charAt(0))) {
-				coordStr = coordStr.substring(1);
-			}
-			// strip trailing non-digits
-			while (!Character.isDigit(coordStr.charAt(coordStr.length() - 1))) {
-				coordStr = coordStr.substring(0, coordStr.length() - 1);
-			}
-			// split values
-			String[] tokens = coordStr.split(",");
-			// get values
-			float x = Float.parseFloat(tokens[0]);
-			float y = Float.parseFloat(tokens[1]);
-			// return vector
-			return new Vector2f(x, y);
-		} catch (Exception e) {
-			Logger.logError("Error occurred while parsing coordinate string " + coordStr + ": " + e.getMessage());
-			return new Vector2f();
+	public static String listToString(List<?> list) {
+		StringBuilder result = new StringBuilder();
+		result.append("List[");
+		for (Object o : list) {
+			result.append(o);
+			result.append(" ");
 		}
+		// remove last space
+		result.deleteCharAt(result.length() - 1);
+		result.append("]");
+		return result.toString();
+	}
+
+	/**
+	 * Get a pair of floats representing a range of values.
+	 * @param rangeStr The range, formatted as "value1->value2" where value1 and value2 are float values.
+	 * @return A Vector2f containing the range values.
+	 */
+	public static Vector2f getFloatRange(String rangeStr) {
+		String[] tokens = rangeStr.split("->");
+		if (tokens.length != 2) throw new NumberFormatException("Too many values in range (expected 2, found " + tokens.length + ")");
+		return new Vector2f(Float.parseFloat(tokens[0]), Float.parseFloat(tokens[1]));
+	}
+
+	/**
+	 * Get the value from a string formatted as follows:
+	 * {@code *=*}, where {@code *} is any sequence of characters.
+	 * Returns the right value.
+	 * @param valueStr The string to extract a value from.
+	 * @return The value represented on the right side of the equals character.
+	 */
+	public static String getValue(String valueStr) {
+		return valueStr.substring(valueStr.indexOf("=") + 1);
 	}
 	
 }

@@ -25,7 +25,7 @@ public class ScaledTimer extends Timer {
 	}
 
 	public void update() {
-		elapsed += DisplayManager.getCurrentFrameDelta();
+		elapsed += DisplayManager.getCurrentFrameDeltaLong();
 	}
 
 	public long getTimeElapsed() {

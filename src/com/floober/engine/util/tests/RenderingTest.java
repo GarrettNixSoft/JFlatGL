@@ -4,18 +4,17 @@ import com.floober.engine.audio.AudioMaster;
 import com.floober.engine.display.Display;
 import com.floober.engine.display.DisplayManager;
 import com.floober.engine.display.GameWindow;
-import com.floober.engine.renderEngine.fonts.fontRendering.TextMaster;
-import com.floober.engine.main.Game;
+import com.floober.engine.game.Game;
 import com.floober.engine.loaders.Loader;
-import com.floober.engine.renderEngine.particles.ParticleMaster;
-import com.floober.engine.renderEngine.MasterRenderer;
-import com.floober.engine.renderEngine.Render;
 import com.floober.engine.renderEngine.elements.TextureElement;
+import com.floober.engine.renderEngine.fonts.fontRendering.TextMaster;
+import com.floober.engine.renderEngine.particles.ParticleMaster;
+import com.floober.engine.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.renderEngine.textures.Texture;
-import com.floober.engine.util.time.Sync;
 import com.floober.engine.util.Logger;
 import com.floober.engine.util.input.KeyInput;
 import com.floober.engine.util.input.MouseInput;
+import com.floober.engine.util.time.Sync;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.Callbacks;
 
@@ -39,12 +38,10 @@ public class RenderingTest {
 
 		// Initialize the game.
 		Game game = new Game();
-		Loader loader = new Loader();
-		game.init(loader);
+		game.init();
 		// game components
 		Sync sync = new Sync();
 		MasterRenderer masterRenderer = new MasterRenderer();
-		Render.renderer = masterRenderer;
 		// master components
 		TextMaster.init();
 		ParticleMaster.init();
@@ -90,8 +87,6 @@ public class RenderingTest {
 
 			// render to the screen
 			masterRenderer.render();
-			ParticleMaster.renderParticles();
-			TextMaster.render();
 
 			// update display and poll events
 			DisplayManager.updateDisplay();
@@ -101,9 +96,7 @@ public class RenderingTest {
 		}
 
 		// Clean up when done.
-
-		// game.cleanUp();
-		loader.cleanUp();
+		Loader.cleanUp();
 		masterRenderer.cleanUp();
 		TextMaster.cleanUp();
 		ParticleMaster.cleanUp();

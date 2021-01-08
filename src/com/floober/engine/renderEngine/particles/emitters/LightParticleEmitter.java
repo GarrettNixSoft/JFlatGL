@@ -11,7 +11,7 @@ public class LightParticleEmitter extends ParticleEmitter {
 
 	private float minInnerRadius, maxInnerRadius;
 	private float minOuterRadius, maxOuterRadius;
-	private Vector3f lightColor;
+	private final Vector3f lightColor = new Vector3f();
 	private int lightMode;
 	private float minLightIntensity, maxLightIntensity;
 	private float minLightRadius, maxLightRadius;
@@ -87,7 +87,7 @@ public class LightParticleEmitter extends ParticleEmitter {
 		this.maxOuterRadius = maxOuterRadius;
 	}
 	public void setLightColor(Vector3f lightColor) {
-		this.lightColor = lightColor;
+		this.lightColor.set(lightColor);
 	}
 	public void setLightMode(int lightMode) {
 		this.lightMode = lightMode;
@@ -106,27 +106,31 @@ public class LightParticleEmitter extends ParticleEmitter {
 	}
 
 	@Override
-	public void generateParticle() {
-		// get a position for the particle
-		Vector3f particlePosition = generatePositionVector();
-		// get the light particle values
-		float innerRadius = RandomUtil.getFloat(minInnerRadius, maxInnerRadius);
-		float outerRadius = innerRadius + RandomUtil.getFloat(minOuterRadius, maxOuterRadius);
-		float lightIntensity = RandomUtil.getFloat(minLightIntensity, maxLightIntensity);
-		float lightRadius = RandomUtil.getFloat(minLightRadius, maxLightRadius);
-		// convert to relative values
-		float fixedInnerRad = innerRadius / lightRadius;
-		float fixedOuterRad = outerRadius / lightRadius;
-		// generate the particle
-		LightParticle particle = new LightParticle(getParticleBehavior(), getParticleTexture(),
-				getParticleBehavior().getAppearanceBehavior().getParticleColor(), particlePosition,
-				lightRadius * 2, lightRadius * 2, new Vector2f(), fixedInnerRad, fixedOuterRad, lightMode, lightColor,
-				lightIntensity, lightRadius, 1, true);
-		// init the particle
-		getParticleBehavior().initParticle(particle);
-		// tell the particle to convert to screen position
-		particle.convertScreenPosition();
-		// done!
+	public void generateParticles() {
+		// generate a particle batch
+		int particleCount = RandomUtil.getIntAverage(batchCount, batchVariation);
+		for (int i = 0; i < particleCount; ++i) {
+			// get a position for the particle
+			Vector3f particlePosition = generatePositionVector();
+			// get the light particle values
+			float innerRadius = RandomUtil.getFloat(minInnerRadius, maxInnerRadius);
+			float outerRadius = innerRadius + RandomUtil.getFloat(minOuterRadius, maxOuterRadius);
+			float lightIntensity = RandomUtil.getFloat(minLightIntensity, maxLightIntensity);
+			float lightRadius = RandomUtil.getFloat(minLightRadius, maxLightRadius);
+			// convert to relative values
+			float fixedInnerRad = innerRadius / lightRadius;
+			float fixedOuterRad = outerRadius / lightRadius;
+			// generate the particle
+			LightParticle particle = new LightParticle(getParticleBehavior(), getParticleTexture(),
+					getParticleBehavior().getAppearanceBehavior().getParticleColor(), particlePosition,
+					lightRadius * 2, lightRadius * 2, new Vector2f(), fixedInnerRad, fixedOuterRad, lightMode, lightColor,
+					lightIntensity, lightRadius, 1, true);
+			// init the particle
+			getParticleBehavior().initParticle(particle);
+			// tell the particle to convert to screen position
+			particle.convertScreenPosition();
+			// done!
+		}
 	}
 
 }

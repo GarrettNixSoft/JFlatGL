@@ -1,9 +1,9 @@
 package com.floober.engine.display;
 
-import com.floober.engine.util.data.Config;
+import com.floober.engine.util.Logger;
+import com.floober.engine.util.configuration.Config;
 import com.floober.engine.util.input.KeyInput;
 import com.floober.engine.util.time.TimeScale;
-import com.floober.engine.util.Logger;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.system.MemoryUtil;
 
@@ -17,6 +17,10 @@ public class DisplayManager {
 	private static long currentFrameDelta;
 	private static float delta;
 	private static long gameStartTime;
+
+	public static void start() {
+		gameStartTime = System.nanoTime();
+	}
 
 	public static void updateDisplay() {
 		glfwSwapBuffers(windowID);
@@ -51,26 +55,36 @@ public class DisplayManager {
 	}
 
 	// TIME METHODS
-	// frame time in seconds
+	/**
+	 * Get the time since the last frame completion in seconds.
+	 * @return The frame time, scaled by the current value in {@code TimeScale}.
+	 */
 	public static float getFrameTimeSeconds() {
 		return delta * TimeScale.getTimeScale();
 	}
+
 	public static float getFrameTimeRaw() {
 		return delta;
 	}
 
 	// frame time in nanoseconds
-	public static long getCurrentFrameDelta() {
-		return (long) (currentFrameDelta * TimeScale.getTimeScale());
-	}
-	public static float getCurrentFrameDeltaFloat() {
+	public static float getCurrentFrameDelta() {
 		return currentFrameDelta * TimeScale.getTimeScale();
+	}
+	public static long getCurrentFrameDeltaLong() {
+		return (long) (currentFrameDelta * TimeScale.getTimeScale());
 	}
 	public static long getCurrentFrameDeltaRaw() {
 		return currentFrameDelta;
 	}
 
-	public static long getGameRunningTimeMS() { return (System.nanoTime() - gameStartTime) / 1000000; }
+	public static float getGameTime() {
+		return (System.nanoTime() - gameStartTime) / 1_000_000f / 1000f;
+	}
+
+	public static long getGameTimeMS() {
+		return (System.nanoTime() - gameStartTime) / 1_000_000;
+	}
 
 	// used as timer
 	public static long getCurrentTime() {

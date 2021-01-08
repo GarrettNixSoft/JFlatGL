@@ -22,6 +22,7 @@ public class AudioMaster {
 	public static long context;
 
 	private static final List<Integer> buffers = new ArrayList<>();
+	private static final List<Source> sources = new ArrayList<>();
 
 	/**
 	 * Initialize OpenAL for the current context.
@@ -49,17 +50,26 @@ public class AudioMaster {
 		int buffer = alGenBuffers();
 		buffers.add(buffer);
 		WaveData waveFile = WaveData.create(file);
-		alBufferData(buffer, waveFile.format, waveFile.data, waveFile.samplerate);
-		Sound sound = new Sound(buffer, waveFile.stereo);
+		alBufferData(buffer, waveFile.format(), waveFile.data(), waveFile.samplerate());
+		Sound sound = new Sound(buffer, waveFile.stereo());
 		waveFile.dispose();
 		long elapsed = (System.nanoTime() - start) / 1_000_000;
 		Logger.logLoad("Loaded sound file in " + elapsed + "ms");
 		return sound;
 	}
 
+	public static Source generateSource() {
+		Source source = new Source();
+		sources.add(source);
+		return source;
+	}
+
 	public static void cleanUp() {
 		for (int buffer : buffers) {
 			alDeleteBuffers(buffer);
+		}
+		for (Source source : sources) {
+			source.delete();
 		}
 		ALC10.alcMakeContextCurrent(0);
 		ALC10.alcDestroyContext(context);

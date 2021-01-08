@@ -23,7 +23,7 @@ void main(void) {
 	textureCoords2 = textureCoords + texOffsets.zw;
 	blend = blendFactor;
 
-	gl_Position = transformationMatrix * vec4(position, 1.0, 1.0);
+	gl_Position = transformationMatrix * vec4(position, 0.0, 1.0);
 	pass_color = color;
 
 }

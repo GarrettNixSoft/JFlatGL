@@ -1,6 +1,6 @@
 package com.floober.engine.renderEngine.particles.behavior.appearance;
 
-import com.floober.engine.renderEngine.particles.types.Particle;
+import com.floober.engine.renderEngine.particles.types.EmitterParticle;
 import com.floober.engine.util.math.MathUtil;
 
 public class FadeOutBehavior extends AppearanceBehavior {
@@ -13,17 +13,17 @@ public class FadeOutBehavior extends AppearanceBehavior {
 	}
 
 	@Override
-	public void initParticle(Particle particle) {
+	public void initParticle(EmitterParticle particle) {
 		particle.setAlpha(initialAlpha);
 	}
 
 	@Override
-	public void updateParticle(Particle particle) {
+	public void updateParticle(EmitterParticle particle) {
 		float time = particle.getElapsedTime();
 		if (time > fadeDelay) {
 			float life = particle.getLifeLength();
 			float progress = (time - fadeDelay) / (life - fadeDelay);
-			float percentage = initialAlpha - MathUtil.smoothstep(0, initialAlpha, progress);
+			float percentage = initialAlpha - MathUtil.interpolateBounded(0, initialAlpha, progress);
 			particle.setAlpha(initialAlpha * percentage);
 		}
 	}

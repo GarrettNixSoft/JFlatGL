@@ -84,6 +84,17 @@ public class RandomUtil {
 	}
 
 	/**
+	 * Get a random int, ranging + or - {@code variation} from {@code average}.
+	 * @param average The average value, treated as the center of the range of possible return values.
+	 * @param variation The allowed variation from the average, in both the positive and negative directions.
+	 * @return A random value in the range [{@code average - variation}, {@code average + variation}]
+	 */
+	public static int getIntAverage(int average, int variation) {
+		if (variation == 0) return average;
+		else return getInt(average - variation, average + variation);
+	}
+
+	/**
 	 * Get a random boolean value.
 	 * @return A random boolean value.
 	 */

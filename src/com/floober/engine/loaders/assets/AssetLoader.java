@@ -1,7 +1,6 @@
 package com.floober.engine.loaders.assets;
 
-import com.floober.engine.main.Game;
-import com.floober.engine.loaders.Loader;
+import com.floober.engine.game.Game;
 import org.json.JSONObject;
 
 public abstract class AssetLoader {
@@ -21,15 +20,8 @@ public abstract class AssetLoader {
 		RECURSIVE, DIRECTORY
 	}
 
-	protected Game game;
-	protected Loader loader;
 	protected Mode mode;
 	protected JSONObject directory;
-
-	public AssetLoader(Game game, Loader loader) {
-		this.game = game;
-		this.loader = loader;
-	}
 
 	// set the loader's mode (set before calling load()!)
 	public void setMode(Mode mode) {

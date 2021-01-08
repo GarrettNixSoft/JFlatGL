@@ -6,10 +6,17 @@ public class Logger {
 	
 	// print stream
 	public static PrintStream outStream = System.out;
+
+	// error severity levels
+	public static final int LOW = 0;
+	public static final int MEDIUM = 1;
+	public static final int HIGH = 2;
+	public static final int CRITICAL = 3;
 	
 	// SETTINGS
-	// main
+	// game
 	public static boolean logAnything;
+	public static boolean logWarnings;
 	public static boolean logErrors;
 	// startup
 	public static boolean logLoaders;
@@ -30,20 +37,21 @@ public class Logger {
 	public static boolean logCutscenes;
 
 	public static void setLoggerConfig() {
-		// main
+		// game
 		Logger.logAnything = true;
+		Logger.logWarnings = false;
 		Logger.logErrors = true;
 		// startup
-		Logger.logLoaders = true;
-		Logger.logLoadSuccess = true;
+		Logger.logLoaders = false;
+		Logger.logLoadSuccess = false;
 		Logger.logLoadErrors = true;
-		Logger.logLoadGeneral = true;
+		Logger.logLoadGeneral = false;
 		// in-game
 		Logger.logEntityDebug = true;
 		Logger.logEnemyDebug = false;
 		Logger.logPlayerDebug = true;
 		// event
-		Logger.logEvents = true;
+		Logger.logEvents = false;
 		Logger.logCutscenes = true;
 		// UI
 		Logger.logUIEvents = true;
@@ -72,11 +80,44 @@ public class Logger {
 		if (!logAudioStart) return;
 		outStream.println("[AUDIO] " + message);
 	}
+
+	// warning print
+	public static void logWarning(String warning) {
+		if (!logWarnings) return;
+		outStream.println("[WARNING] " + warning);
+	}
 	
 	// error print
 	public static void logError(String error) {
 		if (!logErrors) return;
-		outStream.println("*** [ERROR] " + error);
+		outStream.println("*** [ERROR] (No severity specified) " + error);
+	}
+
+	/**
+	 * Log an error.
+	 * @param error The error message.
+	 * @param severity The severity level of the error.
+	 *                 <br>
+	 *                 <br>
+	 *                 LOW - Essentially a warning
+	 *                 <br>
+	 *                 MEDIUM - Not something that needs to be fixed immediately, but should be fixed in any release builds
+	 *                 <br>
+	 *                 HIGH - Should be dealt with immediately.
+	 *                 <br>
+	 *                 CRITICAL - The highest severity errors that prevent the game from running. Raising a Critical Error message will terminate the game immediately.
+	 */
+	public static void logError(String error, int severity) {
+		if (!logErrors && severity != CRITICAL) return;
+		String message = "*** [ERROR] (Severity: ";
+		switch (severity) {
+			case LOW -> message = message + " LOW) ";
+			case MEDIUM -> message = message + " MEDIUM) ";
+			case HIGH -> message = message + " HIGH) ";
+			case CRITICAL -> message = "*** [CRITICAL ERROR] ";
+		}
+		outStream.println(message + error);
+		if (severity == CRITICAL) System.exit(-1); // Critical errors force crashes.
 	}
 	
 	public static void logLoadComplete(String message) {

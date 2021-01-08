@@ -4,7 +4,7 @@ import com.floober.engine.renderEngine.models.ModelLoader;
 import com.floober.engine.renderEngine.models.QuadModel;
 import com.floober.engine.renderEngine.particles.ParticleTexture;
 import com.floober.engine.renderEngine.particles.types.TexturedParticle;
-import com.floober.engine.renderEngine.shaders.ParticleTexturedShader;
+import com.floober.engine.renderEngine.shaders.particles.ParticleTexturedShader;
 import com.floober.engine.util.math.MathUtil;
 import com.floober.engine.util.math.MatrixUtils;
 import org.joml.Matrix4f;
@@ -40,7 +40,7 @@ public class ParticleTexturedRenderer {
 	public ParticleTexturedRenderer() {
 		this.vbo = ModelLoader.createEmptyVBO(INSTANCE_DATA_LENGTH * MAX_INSTANCES);
 		quad = ModelLoader.loadToVAO(VERTICES);
-		int vaoID = quad.getVaoID();
+		int vaoID = quad.vaoID();
 		ModelLoader.addInstancedAttribute(vaoID, vbo, 1, 4, INSTANCE_DATA_LENGTH, 0);  // Transformation col 1
 		ModelLoader.addInstancedAttribute(vaoID, vbo, 2, 4, INSTANCE_DATA_LENGTH, 4);  // Transformation col 2
 		ModelLoader.addInstancedAttribute(vaoID, vbo, 3, 4, INSTANCE_DATA_LENGTH, 8);  // Transformation col 3
@@ -83,7 +83,7 @@ public class ParticleTexturedRenderer {
 			ModelLoader.updateVBO(vbo, vboData, buffer);
 
 			// render all particles in this batch in one go!
-			glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, quad.getVertexCount(), particleList.size());
+			glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, quad.vertexCount(), particleList.size());
 
 		}
 
@@ -96,7 +96,7 @@ public class ParticleTexturedRenderer {
 		else
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, particleTexture.getId());
+		glBindTexture(GL_TEXTURE_2D, particleTexture.id());
 	}
 
 	private void updateParticleData(Vector3f particlePosition, Vector2f particleScale, float particleRotation, float[] vboData) {
@@ -114,7 +114,7 @@ public class ParticleTexturedRenderer {
 
 	private void prepare() {
 		shader.start();
-		glBindVertexArray(quad.getVaoID());
+		glBindVertexArray(quad.vaoID());
 		for (int i = 0; i <= 6; ++i) {
 			glEnableVertexAttribArray(i);
 		}

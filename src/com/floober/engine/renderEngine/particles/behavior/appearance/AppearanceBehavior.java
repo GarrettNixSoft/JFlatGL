@@ -1,21 +1,21 @@
 package com.floober.engine.renderEngine.particles.behavior.appearance;
 
+import com.floober.engine.renderEngine.particles.types.EmitterParticle;
 import com.floober.engine.renderEngine.particles.types.LightParticle;
-import com.floober.engine.renderEngine.particles.types.Particle;
 import com.floober.engine.util.math.RandomUtil;
 import org.joml.Vector4f;
 
-public abstract class AppearanceBehavior {
+public abstract class AppearanceBehavior implements Cloneable {
 
 	protected final Vector4f particleColor = new Vector4f(1);
 	protected boolean randomColor;
 	protected float particleSizeMin, particleSizeMax;
 
 	// methods to override
-	public abstract void initParticle(Particle particle);
-	public abstract void updateParticle(Particle particle);
+	public abstract void initParticle(EmitterParticle particle);
+	public abstract void updateParticle(EmitterParticle particle);
 
-	public void setParticleColor(Particle particle) {
+	public void setParticleColor(EmitterParticle particle) {
 		if (randomColor) {
 			float r = RandomUtil.getFloat();
 			float g = RandomUtil.getFloat();
@@ -96,7 +96,7 @@ public abstract class AppearanceBehavior {
 	 * Initialize a new particle's size based on the current size settings.
 	 * @param particle The particle to initialize.
 	 */
-	public void setParticleSize(Particle particle) {
+	public void setParticleSize(EmitterParticle particle) {
 		if (particle instanceof LightParticle) return; // DON'T MESS WITH LIGHT PARTICLES
 		float size = RandomUtil.getFloat(particleSizeMin, particleSizeMax);
 		particle.setSize(size);
@@ -121,6 +121,15 @@ public abstract class AppearanceBehavior {
 	 */
 	public void setRandomColor(boolean randomColor) {
 		this.randomColor = randomColor;
+	}
+
+	public AppearanceBehavior clone() {
+		try {
+			return (AppearanceBehavior) super.clone();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

@@ -2,13 +2,13 @@ package com.floober.engine.renderEngine.fonts.fontMeshCreator;
 
 import com.floober.engine.renderEngine.fonts.fontRendering.TextMaster;
 import com.floober.engine.renderEngine.models.ModelLoader;
+import com.floober.engine.util.Logger;
 import org.joml.Vector2f;
+import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
 
 /**
  * Represents a piece of text in the game.
@@ -19,20 +19,25 @@ import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
 public class GUIText {
 
 	private String textString;
-	private final float fontSize;
+	private float fontSize;
+	
+	private int firstCharVisible;
+	private int lastCharVisible;
+
+	private TextMeshData textMeshData;
 
 	private int textMeshVao;
 	private final List<Integer> textMeshVbos = new ArrayList<>();
 	private int vertexCount;
 	private final Vector4f color = new Vector4f(0f, 0f, 0f, 1f);
 
-	private Vector2f position;
+	private final Vector3f position;
 	private float lineMaxSize;
 	private int numberOfLines;
 
 	private FontType font;
 
-	private boolean centerText = false;
+	private final boolean centerText;
 
 	private float width;
 	private float edge;
@@ -42,40 +47,38 @@ public class GUIText {
 	private final Vector2f shadowOffset;
 	private final Vector4f outlineColor;
 
+	private boolean hidden;
+	private boolean processed;
 	private boolean needsReload;
 
 	/**
 	 * Creates a new text, loads the text's quads into a VAO, and adds the text
 	 * to the screen.
 	 * 
-	 * @param text
-	 *            - the text.
-	 * @param fontSize
-	 *            - the font size of the text, where a font size of 1 is the
+	 * @param text Tthe text.
+	 * @param fontSize The font size of the text, where a font size of 1 is the
 	 *            default size.
-	 * @param font
-	 *            - the font that this text should use.
-	 * @param position
-	 *            - the position on the screen where the top left corner of the
+	 * @param font The font that this text should use.
+	 * @param position The position on the screen where the top left corner of the
 	 *            text should be rendered. The top left corner of the screen is
 	 *            (0, 0) and the bottom right is (1, 1).
-	 * @param maxLineLength
-	 *            - basically the width of the virtual page in terms of screen
+	 * @param maxLineLength Basically the width of the virtual page in terms of screen
 	 *            width (1 is full screen width, 0.5 is half the width of the
 	 *            screen, etc.) Text cannot go off the edge of the page, so if
 	 *            the text is longer than this length it will go onto the next
 	 *            line. When text is centered it is centered into the middle of
 	 *            the line, based on this line length value.
-	 * @param centered
-	 *            - whether the text should be centered or not.
+	 * @param centered Whether the text should be centered or not.
 	 */
-	public GUIText(String text, float fontSize, FontType font, Vector2f position, float maxLineLength, boolean centered) {
+	public GUIText(String text, float fontSize, FontType font, Vector3f position, float maxLineLength, boolean centered) {
 		this.textString = text;
 		this.fontSize = fontSize;
 		this.font = font;
 		this.position = position;
 		this.lineMaxSize = maxLineLength;
 		this.centerText = centered;
+		this.firstCharVisible = 0;
+		this.lastCharVisible = textString.length();
 		// default values
 		this.width = 0.5f;
 		this.edge = 0.01f;
@@ -83,33 +86,9 @@ public class GUIText {
 		this.borderEdge = 0.1f;
 		this.shadowOffset = new Vector2f(0, 0);
 		this.outlineColor = new Vector4f(0, 0, 0, 1);
-		// load text
-		TextMaster.loadText(this);
-	}
-
-	// ADDING METHODS
-
-	/**
-	 * This should be called each frame, after any modifications are made.
-	 * If this GUIText has been modified in a way that requires rebuilding
-	 * its mesh data, this method will do so, then reset the flag.
-	 */
-	public void update() {
-		if (needsReload) {
-			reload();
-			needsReload = false;
-		}
-	}
-
-	private void reload() {
-		// remove old version
-		remove();
-		// replace with new version
-		TextMaster.loadText(this);
-	}
-
-	public void addVbo(int vbo) {
-		textMeshVbos.add(vbo);
+		this.hidden = true;
+		// create mesh data
+		TextMaster.processText(this);
 	}
 
 	// GETTERS
@@ -131,34 +110,25 @@ public class GUIText {
 	public Vector2f getShadowOffset() {
 		return shadowOffset;
 	}
+	public int getFirstCharVisible() {
+		return firstCharVisible;
+	}
+	public int getLastCharVisible() {
+		return lastCharVisible;
+	}
+
+	public int getNumVisibleChars() {
+		return lastCharVisible - firstCharVisible;
+	}
+
+	public boolean isProcessed() { return processed; }
 
 	// SETTERS
-	public void updateText(String newText) {
-		// update string
-		this.textString = newText;
-		// mark needs reload
-		needsReload = true;
-	}
 
-	public void setFont(FontType font) {
-		this.font = font;
-		needsReload = true;
+	// Category 1: Free Setters (no need to update vertex data)
+	public void setPosition(Vector3f position) {
+		this.position.set(position);
 	}
-
-	public void setWidth(float width) {
-		this.width = width;
-		if (this.width < 0) this.width = 0;
-	}
-
-	public void setEdge(float edge) {
-		this.edge = edge;
-		if (this.edge < 0.001) this.edge = 0.001f;
-	}
-
-	public void setPosition(Vector2f position) {
-		this.position = position;
-	}
-
 	public void setBorderWidth(float borderWidth) {
 		this.borderWidth = borderWidth;
 	}
@@ -174,24 +144,55 @@ public class GUIText {
 	public void setOutlineColor(Vector4f color) {
 		setOutlineColor(color.x(), color.y(), color.z(), color.w());
 	}
+	public void setTextMeshData(TextMeshData textMeshData) {
+		this.textMeshData = textMeshData;
+	}
+	public void setFirstCharVisible(int firstCharVisible) {
+		this.firstCharVisible = firstCharVisible;
+	}
+	public void setLastCharVisible(int lastCharVisible) {
+		this.lastCharVisible = lastCharVisible;
+	}
+	public void setProcessed(boolean processed) { this.processed = processed; }
+
+	public void revealNextChar() {
+		lastCharVisible++;
+	}
+
+	// Category 2: Damaging Setters (vertex data must be updated)
+	public void replaceText(String newText) {
+		// update string
+		this.textString = newText;
+		this.lastCharVisible = textString.length();
+		// mark needs reload
+		processed = false;
+		needsReload = true;
+	}
+
+	public void setFont(FontType font) {
+		FontType oldFont = this.font;
+		this.font = font;
+		reload(oldFont); // try this immediately
+	}
+
+	public void setFontSize(float size) {
+		this.fontSize = size;
+		needsReload = true;
+	}
+
+	public void setWidth(float width) {
+		this.width = width;
+		if (this.width < 0) this.width = 0;
+	}
+
+	public void setEdge(float edge) {
+		this.edge = edge;
+		if (this.edge < 0.001) this.edge = 0.001f;
+	}
 
 	public void setLineMaxSize(float lineMaxSize) {
 		this.lineMaxSize = lineMaxSize;
 		needsReload = true;
-	}
-
-	// END_ADDING_METHODS
-
-	/**
-	 * Remove the text from the screen.
-	 */
-	public void remove() {
-		TextMaster.removeText(this);
-		ModelLoader.deleteVAO(textMeshVao);
-		for (int vbo : textMeshVbos) {
-			ModelLoader.deleteVBO(vbo);
-		}
-		textMeshVbos.clear();
 	}
 
 	/**
@@ -202,14 +203,11 @@ public class GUIText {
 	}
 
 	/**
-	 * Set the colour of the text.
+	 * Set the color of the text.
 	 * 
-	 * @param r
-	 *            - red value, between 0 and 1.
-	 * @param g
-	 *            - green value, between 0 and 1.
-	 * @param b
-	 *            - blue value, between 0 and 1.
+	 * @param r Red value, between 0 and 1.
+	 * @param g Green value, between 0 and 1.
+	 * @param b Blue value, between 0 and 1.
 	 */
 	public void setColor(float r, float g, float b, float a) {
 		color.set(r, g, b, a);
@@ -240,7 +238,7 @@ public class GUIText {
 	 *         (0, 0) is the top left corner of the screen, (1, 1) is the bottom
 	 *         right.
 	 */
-	public Vector2f getPosition() {
+	public Vector3f getPosition() {
 		return position;
 	}
 
@@ -284,7 +282,7 @@ public class GUIText {
 	 * Sets the number of lines that this text covers (method used only in
 	 * loading).
 	 * 
-	 * @param number
+	 * @param number The number of lines.
 	 */
 	protected void setNumberOfLines(int number) {
 		this.numberOfLines = number;
@@ -309,6 +307,114 @@ public class GUIText {
 	 */
 	public String getTextString() {
 		return textString;
+	}
+
+	public boolean isOnScreen() {
+		return !hidden;
+	}
+
+	// ACTIONS
+	/**
+	 * Show the text on the screen. If it is already shown, it will be removed first.
+	 */
+	public void show() {
+		if (!hidden) remove();
+		TextMaster.loadText(this);
+		hidden = false;
+	}
+
+	/**
+	 * Remove the text from the screen.
+	 */
+	public void hide() {
+		TextMaster.removeText(this);
+		hidden = true;
+	}
+
+	/**
+	 * Remove the text from the screen and delete it.
+	 */
+	public void remove() {
+		TextMaster.removeText(this);
+		delete();
+	}
+
+	private void remove(FontType oldFont) {
+		TextMaster.removeText(this, oldFont);
+		delete();
+	}
+
+	/**
+	 * Delete this text's vertex data. This should only be called
+	 * if this text object is guaranteed not to be rendered again.
+	 * (i.e. if the TextMaster has been cleared and this object
+	 * will soon be GC'd)
+	 */
+	public void delete() {
+		ModelLoader.deleteVAO(textMeshVao);
+		for (int vbo : textMeshVbos) {
+			ModelLoader.deleteVBO(vbo);
+		}
+		textMeshVbos.clear();
+	}
+
+	/**
+	 * This should be called each frame, after any modifications are made.
+	 * If this GUIText has been modified in a way that requires rebuilding
+	 * its mesh data, this method will do so, then reset the flag.
+	 *
+	 * @return {@code true} if this text was reloaded.
+	 */
+	public boolean update() {
+		if (needsReload) {
+			reload();
+			needsReload = false;
+			return true;
+		}
+		return false;
+	}
+
+	private void reload() {
+		// remove old version
+		remove();
+		// replace with new version
+		TextMaster.loadText(this);
+	}
+
+	private void reload(FontType oldFont) {
+		// remove old version
+		remove(oldFont);
+		// replace with new version
+		TextMaster.loadText(this);
+	}
+
+	/**
+	 * Center the text horizontally on its current position.
+	 * Should only be called once per position change.
+	 */
+	public void center() {
+		if (centerText) {
+			// x is easy
+			position.x -= lineMaxSize / 2;
+			// y is also easy, now
+			try {
+				float textHeight = textMeshData.textHeight();
+				position.y -= textHeight / 2;
+			} catch (Exception e) {
+				// guess we're not ready for that yet
+				Logger.logWarning("Maybe don't center this text yet, if you can help it");
+			}
+			// mark for reloading
+			needsReload = true;
+		}
+	}
+
+	/**
+	 * Add a vbo to the vbo list. I don't remember why I needed to add this, but apparently I did.
+	 * @param vbo The ID of the vbo to add.
+	 */
+	public void addVbo(int vbo) {
+		textMeshVbos.add(vbo);
 	}
 
 }

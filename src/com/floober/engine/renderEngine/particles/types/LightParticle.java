@@ -6,7 +6,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
-public class LightParticle extends Particle {
+public class LightParticle extends EmitterParticle {
 
 	// size of the actual particle
 	private final float innerRadius; // radius to keep at full color
@@ -15,7 +15,7 @@ public class LightParticle extends Particle {
 	// light
 	public static final int LINEAR = 0, SMOOTH = 1;
 	private final int lightMode; // 0 = Linear, 1 = Smooth
-	private final Vector3f lightColor;
+	private final Vector3f lightColor = new Vector3f();
 	private final float lightIntensity;
 	private final float lightRadius;
 
@@ -27,7 +27,7 @@ public class LightParticle extends Particle {
 		this.innerRadius = innerRadius;
 		this.outerRadius = outerRadius;
 		this.lightMode = lightMode;
-		this.lightColor = new Vector3f(lightColor);
+		this.lightColor.set(lightColor);
 		this.lightIntensity = lightIntensity;
 		this.lightRadius = lightRadius;
 	}

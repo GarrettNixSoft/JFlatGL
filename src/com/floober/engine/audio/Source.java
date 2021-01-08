@@ -1,12 +1,16 @@
 package com.floober.engine.audio;
 
 import org.joml.Vector3f;
+import org.lwjgl.openal.AL10;
+import org.lwjgl.openal.AL11;
 
 import static org.lwjgl.openal.AL10.*;
 
 public class Source {
 
 	private final int sourceID;
+
+	private Sound currentSound;
 
 	public Source() {
 		sourceID = alGenSources();
@@ -18,6 +22,10 @@ public class Source {
 	// GETTERS
 	public boolean isPlaying() {
 		return alGetSourcei(sourceID, AL_SOURCE_STATE) == AL_PLAYING;
+	}
+
+	public Sound getCurrentSound() {
+		return currentSound;
 	}
 
 	// SETTERS
@@ -46,9 +54,10 @@ public class Source {
 	}
 
 	// ACTIONS
-	public void play(int buffer) {
+	public void play(Sound sound) {
 		stop();
-		alSourcei(sourceID, AL_BUFFER, buffer);
+		this.currentSound = sound;
+		alSourcei(sourceID, AL_BUFFER, sound.getBufferID());
 		alSourcePlay(sourceID);
 	}
 
@@ -64,9 +73,23 @@ public class Source {
 		alSourceStop(sourceID);
 	}
 
+	public boolean setPosition(float position) {
+		position %= currentSound.getLength();
+		AL10.alSourcef(sourceID, AL11.AL_SEC_OFFSET, position);
+		return AL10.alGetError() == 0;
+	}
+
 	public void delete() {
 		stop();
 		alDeleteSources(sourceID);
+	}
+
+	// updating
+	public void update() {
+		// null out currentSound if no sound is playing
+		if (currentSound != null) {
+			if (!isPlaying()) currentSound = null;
+		}
 	}
 
 }

@@ -2,9 +2,10 @@ package com.floober.engine.renderEngine.particles.emitters;
 
 import com.floober.engine.renderEngine.particles.ParticleTexture;
 import com.floober.engine.renderEngine.particles.behavior.ParticleBehavior;
-import com.floober.engine.renderEngine.particles.types.Particle;
+import com.floober.engine.renderEngine.particles.types.EmitterParticle;
 import com.floober.engine.util.math.MathUtil;
 import com.floober.engine.util.math.RandomUtil;
+import com.floober.engine.util.time.ScaledTimer;
 import org.joml.Vector3f;
 
 public class ParticleEmitter {
@@ -16,12 +17,36 @@ public class ParticleEmitter {
 
 	// particle settings
 	private float positionDeltaMin, positionDeltaMax;
+	private final ScaledTimer particleTimer;
 
+	protected int batchCount = 1;
+	protected int batchVariation;
+
+	// CONSTRUCTOR(S)
+
+	/**
+	 * Create a particle emitter.
+	 * @param position The initial position.
+	 * @param particleTexture The texture to use for particles generated.
+	 * @param particleBehavior The defined behavior to control the particles.
+	 */
 	public ParticleEmitter(Vector3f position, ParticleTexture particleTexture, ParticleBehavior particleBehavior) {
 		this.position = position;
 		this.particleTexture = particleTexture;
 		this.particleBehavior = particleBehavior;
+		particleTimer = new ScaledTimer();
 	}
+
+	// USING THE EMITTER
+	public void update() {
+		particleTimer.update();
+		// generate particles every so often as specified
+		if (particleTimer.finished()) {
+			generateParticles();
+			particleTimer.restart();
+		}
+	}
+
 
 	// INITIALIZERS
 
@@ -90,6 +115,10 @@ public class ParticleEmitter {
 		this.position.set(position);
 	}
 
+	public void setPosition(float x, float y, float z) {
+		this.position.set(x, y, z);
+	}
+
 	public void setParticleBehavior(ParticleBehavior particleBehavior) {
 		this.particleBehavior = particleBehavior;
 	}
@@ -123,7 +152,7 @@ public class ParticleEmitter {
 	/**
 	 * Set whether initial position bounds are treated as a bounding square or a circle.
 	 * If true, the min/max distances are treated as horizontal and vertical ranges. If
-	 * false, the min/max distances are treated as radii at a random angle from the source
+	 * false, the min/max distances are treated as radii at a random rotation from the source
 	 * position.
 	 * @param boxMode Whether to use box mode.
 	 */
@@ -131,21 +160,47 @@ public class ParticleEmitter {
 		this.boxMode = boxMode;
 	}
 
+	/**
+	 * Set the number of particles generated per batch.
+	 * @param batchCount The batch size.
+	 */
+	public void setBatchCount(int batchCount) {
+		this.batchCount = batchCount;
+	}
+
+	/**
+	 * Set the amount from which the actual batch size may vary
+	 * (less than or greater than) from the batch size.
+	 * @param batchVariation The allowed variation.
+	 */
+	public void setBatchVariation(int batchVariation) {
+		this.batchVariation = batchVariation;
+	}
+
+	public void setParticleDelay(float particleDelay) {
+		particleTimer.reset();
+		particleTimer.setTime(particleDelay);
+	}
+
 	// GENERATING PARTICLES
 	/**
 	 * Generate a particle at this source's position, using the current settings
 	 * of this source and the particle behavior.
 	 */
-	public void generateParticle() {
-		// get a position for the particle
-		Vector3f particlePosition = generatePositionVector();
-		// create the particle
-		Particle particle = new Particle(particleBehavior, particleTexture, particlePosition);
-		// configure its appearance and movement
-		particleBehavior.initParticle(particle);
-		// tell the particle to convert to screen position
-		particle.convertScreenPosition();
-		// done!
+	public void generateParticles() {
+		// generate a particle batch
+		int particleCount = RandomUtil.getIntAverage(batchCount, batchVariation);
+		for (int i = 0; i < particleCount; ++i) {
+			// get a position for the particle
+			Vector3f particlePosition = generatePositionVector();
+			// create the particle
+			EmitterParticle particle = new EmitterParticle(particleBehavior, particleTexture, particlePosition);
+			// configure its appearance and movement
+			particleBehavior.initParticle(particle);
+			// tell the particle to convert to screen position
+			particle.convertScreenPosition();
+			// done!
+		}
 	}
 
 	/**
@@ -165,7 +220,7 @@ public class ParticleEmitter {
 		else {
 			float distance = RandomUtil.getFloat(positionDeltaMin, positionDeltaMax);
 			startingPosition.set(MathUtil.getCartesian(distance, 0), position.z());
-			// use the angle of the velocity; this ensures than particles always move away from the center
+			// use the rotation of the velocity; this ensures than particles always move away from the center
 		}
 		return new Vector3f(position).add(startingPosition);
 	}

@@ -1,17 +1,20 @@
 package com.floober.engine.loaders.assets;
 
 import com.floober.engine.audio.Sound;
-import com.floober.engine.main.Game;
+import com.floober.engine.game.Game;
+import com.floober.engine.game.RunGame;
 import com.floober.engine.loaders.Loader;
+import com.floober.engine.renderEngine.renderers.LoadRenderer;
+import com.floober.engine.util.Globals;
 import com.floober.engine.util.Logger;
 
 import java.io.File;
 
 public class SfxLoader extends AssetLoader {
 
-	public SfxLoader(Game game, Loader loader) {
-		super(game, loader);
-		directory = loader.getJSON("/assets/sfx_directory.json");
+	public SfxLoader() {
+		super();
+		directory = Loader.getJSON("/assets/sfx_directory.json");
 	}
 
 	@Override
@@ -29,24 +32,32 @@ public class SfxLoader extends AssetLoader {
 			}
 			else if (file.getName().toLowerCase().endsWith(".wav")) {
 				String key = file.getName().substring(0, file.getName().lastIndexOf('.'));
-				Sound sound = loader.loadMusic(file.getPath());
-				game.getMusic().addMusic(key, sound);
+				Sound sound = Loader.loadMusic(file.getPath());
+				Game.getMusic().addMusic(key, sound);
 			}
 		}
 	}
 
 	@Override
 	protected void loadDirectory() {
+		Globals.sfxTotal = directory.keySet().size();
+		Globals.LOAD_STAGE = LoadRenderer.SFX;
 		// iterate over the directory's key set
 		for (String key : directory.keySet()) {
+			// report current asset
+			LoadRenderer.reportCurrentAsset(key);
 			// get the path for this file
 			String path = directory.getString(key);
 			// Report the load attempt
 			Logger.logLoad("Loading sfx: " + path);
 			// load this sound file
-			Sound sound = loader.loadSfx(path);
+			Sound sound = Loader.loadSfx(path);
 			// add it to the game
-			game.getSfx().addSfx(key, sound);
+			Game.getSfx().addSfx(key, sound);
+			// report load count
+			Globals.sfxCount++;
+			// render load screen
+//			RunGame.loadRenderer.render();
 			// done
 		}
 	}

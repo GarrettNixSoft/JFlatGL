@@ -2,6 +2,7 @@
 
 in vec2 textureCoords;
 in vec4 pass_color;
+
 out vec4 out_color;
 
 in vec2 textureCoords1;

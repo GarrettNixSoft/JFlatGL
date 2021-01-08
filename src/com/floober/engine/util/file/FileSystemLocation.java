@@ -9,16 +9,10 @@ import java.net.URL;
 /*
 	Copied from the Slick2D library.
 
-	Only change: made 'root' final.
+	Only change: made ita Record.
 	IntelliJ warned me. I dislike warnings.
  */
-public class FileSystemLocation implements ResourceLocation {
-
-	private final File root;
-
-	public FileSystemLocation(File root) {
-		this.root = root;
-	}
+public record FileSystemLocation(File root) implements ResourceLocation {
 
 	public URL getResource(String ref) {
 		try {

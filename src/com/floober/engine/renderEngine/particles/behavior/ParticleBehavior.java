@@ -1,15 +1,15 @@
 package com.floober.engine.renderEngine.particles.behavior;
 
-import com.floober.engine.renderEngine.particles.types.Particle;
 import com.floober.engine.renderEngine.particles.behavior.appearance.AppearanceBehavior;
 import com.floober.engine.renderEngine.particles.behavior.movement.MovementBehavior;
+import com.floober.engine.renderEngine.particles.types.EmitterParticle;
 import com.floober.engine.util.math.RandomUtil;
 
-public class ParticleBehavior {
+public class ParticleBehavior implements Cloneable {
 
 	// sub-managers
-	private final MovementBehavior movementBehavior;
-	private final AppearanceBehavior appearanceBehavior;
+	private MovementBehavior movementBehavior;
+	private AppearanceBehavior appearanceBehavior;
 
 	// general settings
 	private float particleLifeMin, particleLifeMax;
@@ -81,7 +81,7 @@ public class ParticleBehavior {
 	}
 
 	// GENERATING PARTICLES
-	public void initParticle(Particle particle) {
+	public void initParticle(EmitterParticle particle) {
 		// run universal initializers
 		appearanceBehavior.setParticleSize(particle);
 		appearanceBehavior.setParticleColor(particle);
@@ -92,15 +92,28 @@ public class ParticleBehavior {
 		setParticleLifeSpan(particle);
 	}
 
-	private void setParticleLifeSpan(Particle particle) {
+	private void setParticleLifeSpan(EmitterParticle particle) {
 		float lifeSpan = RandomUtil.getFloat(particleLifeMin, particleLifeMax);
 		particle.setLifeLength(lifeSpan);
 	}
 
 	// UPDATE
-	public void updateParticle(Particle particle) {
+	public void updateParticle(EmitterParticle particle) {
 		movementBehavior.updateParticle(particle);
 		appearanceBehavior.updateParticle(particle);
+	}
+
+	// COPY THIS OBJECT
+	public ParticleBehavior clone() {
+		try {
+			ParticleBehavior copy = (ParticleBehavior) super.clone();
+			copy.appearanceBehavior = appearanceBehavior.clone();
+			copy.movementBehavior = movementBehavior.clone();
+			return copy;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

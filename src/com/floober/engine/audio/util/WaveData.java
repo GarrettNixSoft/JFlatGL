@@ -6,7 +6,7 @@ package com.floober.engine.audio.util;
 //
 
 // Copied from an LWJGL 2.9.something project.
-// Modified slightly to include a boolean for whether the com.floober.ddpc2.audio is stereo or mono.
+// Modified slightly to include a boolean for whether the audio is stereo or mono.
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
@@ -20,19 +20,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.ShortBuffer;
 
-public class WaveData {
-
-	public final ByteBuffer data;
-	public final int format;
-	public final int samplerate;
-	public final boolean stereo;
-
-	private WaveData(ByteBuffer data, int format, int samplerate, boolean stereo) {
-		this.data = data;
-		this.format = format;
-		this.samplerate = samplerate;
-		this.stereo = stereo;
-	}
+public record WaveData(ByteBuffer data, int format, int samplerate, boolean stereo) {
 
 	public void dispose() {
 		this.data.clear();
@@ -77,7 +65,8 @@ public class WaveData {
 			byte[] bytes;
 			if (buffer.hasArray()) {
 				bytes = buffer.array();
-			} else {
+			}
+			else {
 				bytes = new byte[buffer.capacity()];
 				buffer.get(bytes);
 			}
@@ -97,7 +86,8 @@ public class WaveData {
 		if (audioformat.getChannels() == 1) {
 			if (audioformat.getSampleSizeInBits() == 8) {
 				channels = 4352;
-			} else {
+			}
+			else {
 				if (audioformat.getSampleSizeInBits() != 16) {
 					throw new RuntimeException("Illegal sample size");
 				}
@@ -105,7 +95,8 @@ public class WaveData {
 				channels = 4353;
 			}
 			stereo = false;
-		} else {
+		}
+		else {
 			if (audioformat.getChannels() != 2) {
 				throw new RuntimeException("Only mono or stereo is supported");
 			}
@@ -113,7 +104,8 @@ public class WaveData {
 
 			if (audioformat.getSampleSizeInBits() == 8) {
 				channels = 4354;
-			} else {
+			}
+			else {
 				if (audioformat.getSampleSizeInBits() != 16) {
 					throw new RuntimeException("Illegal sample size");
 				}
@@ -122,13 +114,13 @@ public class WaveData {
 			}
 		}
 
-		byte[] buf = new byte[audioformat.getChannels() * (int)ais.getFrameLength() * audioformat.getSampleSizeInBits() / 8];
+		byte[] buf = new byte[audioformat.getChannels() * (int) ais.getFrameLength() * audioformat.getSampleSizeInBits() / 8];
 //		int read = false;
 		int total = 0;
 
 		int read;
 		try {
-			while((read = ais.read(buf, total, buf.length - total)) != -1 && total < buf.length) {
+			while ((read = ais.read(buf, total, buf.length - total)) != -1 && total < buf.length) {
 				total += read;
 			}
 		} catch (IOException var10) {
@@ -136,11 +128,12 @@ public class WaveData {
 		}
 
 		ByteBuffer buffer = convertAudioBytes(buf, audioformat.getSampleSizeInBits() == 16);
-		WaveData wavedata = new WaveData(buffer, channels, (int)audioformat.getSampleRate(), stereo);
+		WaveData wavedata = new WaveData(buffer, channels, (int) audioformat.getSampleRate(), stereo);
 
 		try {
 			ais.close();
 		} catch (IOException var9) {
+			var9.printStackTrace();
 		}
 
 		return wavedata;
@@ -155,11 +148,12 @@ public class WaveData {
 			ShortBuffer dest_short = dest.asShortBuffer();
 			ShortBuffer src_short = src.asShortBuffer();
 
-			while(src_short.hasRemaining()) {
+			while (src_short.hasRemaining()) {
 				dest_short.put(src_short.get());
 			}
-		} else {
-			while(src.hasRemaining()) {
+		}
+		else {
+			while (src.hasRemaining()) {
 				dest.put(src.get());
 			}
 		}

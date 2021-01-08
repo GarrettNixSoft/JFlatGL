@@ -1,7 +1,7 @@
 package com.floober.engine.util.tests;
 
+import com.floober.engine.audio.AudioChannel;
 import com.floober.engine.audio.AudioMaster;
-import com.floober.engine.audio.MusicChannel;
 import com.floober.engine.audio.Sound;
 import com.floober.engine.audio.Source;
 
@@ -15,11 +15,11 @@ public class AudioTest {
 		AudioMaster.setListenerData(0, 0, 0);
 		alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
 
-		Source source = new Source();
+		Source source = AudioMaster.generateSource();
 		source.setLooping(true);
-		MusicChannel channel = new MusicChannel(source);
+		AudioChannel channel = new AudioChannel(source);
 		Sound sound = AudioMaster.loadSound("sfx/jump_1.wav");
-		channel.playMusic(sound);
+		channel.playAudio(sound);
 
 		float zPos = 0;
 		source.setPosition(0, 0, 0);
@@ -38,7 +38,6 @@ public class AudioTest {
 			Thread.sleep(10);
 		}
 
-		source.delete();
 		AudioMaster.cleanUp();
 	}
 

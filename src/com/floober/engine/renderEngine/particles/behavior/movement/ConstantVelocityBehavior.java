@@ -1,7 +1,7 @@
 package com.floober.engine.renderEngine.particles.behavior.movement;
 
-import com.floober.engine.display.Display;
-import com.floober.engine.renderEngine.particles.types.Particle;
+import com.floober.engine.display.DisplayManager;
+import com.floober.engine.renderEngine.particles.types.EmitterParticle;
 import com.floober.engine.util.math.MathUtil;
 import com.floober.engine.util.math.RandomUtil;
 import org.joml.Vector2f;
@@ -9,7 +9,7 @@ import org.joml.Vector3f;
 
 public class ConstantVelocityBehavior extends MovementBehavior {
 
-	private final float minAngle, maxAngle;
+	protected final float minAngle, maxAngle;
 
 	public ConstantVelocityBehavior(float minAngle, float maxAngle) {
 		this.minAngle = minAngle;
@@ -17,7 +17,7 @@ public class ConstantVelocityBehavior extends MovementBehavior {
 	}
 
 	@Override
-	public void initParticle(Particle particle) {
+	public void initParticle(EmitterParticle particle) {
 		float speed = RandomUtil.getFloat(particleSpeedMin, particleSpeedMax);
 		float angle = RandomUtil.getFloat(minAngle, maxAngle);
 		particle.setVelocity(MathUtil.getCartesian(speed, angle));
@@ -28,15 +28,15 @@ public class ConstantVelocityBehavior extends MovementBehavior {
 	}
 
 	@Override
-	public void updateParticle(Particle particle) {
+	public void updateParticle(EmitterParticle particle) {
 		Vector2f velocity = particle.getVelocity();
-		Vector3f initialPosition = particle.getInitialPosition();
-		float time = particle.getElapsedTime();
+		Vector3f position = particle.getPosition();
+		float time = DisplayManager.getFrameTimeSeconds();
 		float dx = velocity.x() * time;
 		float dy = velocity.y() * time;
-		float xPos = initialPosition.x() + dx;
-		float yPos = initialPosition.y() + dy;
+		float xPos = position.x() + dx;
+		float yPos = position.y() + dy;
 		// set map position
-		particle.setPosition(Display.convertToDisplayPosition(xPos, yPos, particle.getZ(), particle.getWidth(), particle.getHeight(), true));
+		particle.setPosition(xPos, yPos, particle.getZ());
 	}
 }

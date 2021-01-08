@@ -2,7 +2,7 @@ package com.floober.engine.util.input;
 
 import com.floober.engine.display.Display;
 import com.floober.engine.display.GameWindow;
-import com.floober.engine.util.data.Config;
+import com.floober.engine.util.configuration.Config;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
 import org.lwjgl.BufferUtils;
@@ -18,7 +18,7 @@ public class MouseInput {
 
 	public static boolean[] buttonState = new boolean[NUM_BUTTONS];
 	public static boolean[] prevButtonState = new boolean[NUM_BUTTONS];
-	public static Vector2i mouseLocation;
+	public static Vector2i mouseLocation = new Vector2i(), prevLocation = new Vector2i();
 	
 	public static final int LEFT = 0;
 	public static final int RIGHT = 1;
@@ -29,6 +29,8 @@ public class MouseInput {
 
 	public static double xPosRatio = 1;
 	public static double yPosRatio = 1;
+	public static int xOffset = 0;
+	public static int yOffset = 0;
 
 //	private static int DX, DY;
 	
@@ -39,9 +41,18 @@ public class MouseInput {
 		DoubleBuffer xBuffer = BufferUtils.createDoubleBuffer(1);
 		DoubleBuffer yBuffer = BufferUtils.createDoubleBuffer(1);
 		glfwGetCursorPos(GameWindow.windowID, xBuffer, yBuffer);
-		double xPos = xBuffer.get() * xPosRatio;
-		double yPos = yBuffer.get() * yPosRatio;
+		double xPos = (xBuffer.get() + xOffset) * xPosRatio;
+		double yPos = (yBuffer.get() + yOffset) * yPosRatio;
+		prevLocation = mouseLocation;
 		mouseLocation = new Vector2i((int) xPos, (int) yPos);
+		// TEST
+//		if (leftClick()) {
+//			xBuffer = BufferUtils.createDoubleBuffer(1);
+//			yBuffer = BufferUtils.createDoubleBuffer(1);
+//			glfwGetCursorPos(GameWindow.windowID, xBuffer, yBuffer);
+//			System.out.println("Raw position: (" + xBuffer.get() + ", " + yBuffer.get() + "); Adjusted position: (" + xPos + ", " + yPos + ")");
+//		}
+		// END_TEST
 		WHEEL_UP = WHEEL > 0;
 		WHEEL_DOWN = WHEEL < 0;
 		WHEEL = 0;
@@ -57,6 +68,11 @@ public class MouseInput {
 		yPosRatio = Config.DEFAULT_RESOLUTION_HEIGHT / height;
 		Display.SCREEN_RATIO.set(xPosRatio, yPosRatio);
 	}
+
+	public static void setOffset(int x, int y) {
+		xOffset = x;
+		yOffset = y;
+	}
 	
 	public static boolean isPressed(int button) {
 		return buttonState[button];
@@ -71,21 +87,20 @@ public class MouseInput {
 		return buttonState[RIGHT] && !prevButtonState[RIGHT];
 	}
 
-	public static Vector2i getMousePos() {
+	public static Vector2i getMousePosi() {
 		return mouseLocation;
 	}
+	public static Vector2i getPrevPosi() { return prevLocation; }
 
-	public static Vector2f getMousePosF() {
+	public static Vector2f getMousePos() {
 		return new Vector2f(mouseLocation);
 	}
+	public static Vector2f getPrevPos() { return new Vector2f(prevLocation); }
 	
 	public static int getX() { return mouseLocation.x(); }
 	public static int getY() {
 		return mouseLocation.y();
 	}
-
-//	public static int getDX() { return DX; }
-//	public static int getDY() { return DY; }
 	
 	public static boolean mouseOver(Rectangle rect) {
 		return rect.contains(new Point(mouseLocation.x, mouseLocation.y));

@@ -3,7 +3,6 @@ package com.floober.engine.renderEngine.particles.emitters;
 import com.floober.engine.renderEngine.particles.ParticleTexture;
 import com.floober.engine.renderEngine.particles.behavior.ParticleBehavior;
 import com.floober.engine.renderEngine.particles.types.TexturedParticle;
-import com.floober.engine.util.math.MathUtil;
 import com.floober.engine.util.math.RandomUtil;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -118,7 +117,7 @@ public class TexturedParticleEmitter extends ParticleEmitter {
 	}
 
 	@Override
-	public void generateParticle() {
+	public void generateParticles() {
 		// get a position for the particle
 		Vector3f particlePosition = generatePositionVector();
 		// get the texture offset values

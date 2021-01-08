@@ -3,6 +3,9 @@
 		"default": "default.png",
 		"default2": "default2.png"
 	},
+	"texture_arrays": {
+
+	},
 	"texture_atlases": {
 		"default": {
 			"path": "default.png",

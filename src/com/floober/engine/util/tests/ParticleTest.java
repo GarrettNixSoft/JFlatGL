@@ -3,52 +3,41 @@ package com.floober.engine.util.tests;
 import com.floober.engine.display.Display;
 import com.floober.engine.display.DisplayManager;
 import com.floober.engine.display.GameWindow;
+import com.floober.engine.loaders.ImageLoader;
+import com.floober.engine.loaders.Loader;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.FontType;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.floober.engine.renderEngine.fonts.fontRendering.TextMaster;
-import com.floober.engine.loaders.ImageLoader;
-import com.floober.engine.loaders.Loader;
-import com.floober.engine.renderEngine.particles.emitters.LightParticleEmitter;
 import com.floober.engine.renderEngine.particles.ParticleMaster;
-import com.floober.engine.renderEngine.particles.emitters.ParticleEmitter;
 import com.floober.engine.renderEngine.particles.ParticleTexture;
 import com.floober.engine.renderEngine.particles.behavior.*;
 import com.floober.engine.renderEngine.particles.behavior.appearance.AppearanceBehavior;
 import com.floober.engine.renderEngine.particles.behavior.appearance.FadeOutBehavior;
-import com.floober.engine.renderEngine.particles.behavior.movement.ConstantVelocityBehavior;
 import com.floober.engine.renderEngine.particles.behavior.movement.FlameBehavior;
-import com.floober.engine.renderEngine.MasterRenderer;
-import com.floober.engine.renderEngine.particles.behavior.movement.MovementBehavior;
-import com.floober.engine.renderEngine.particles.emitters.TexturedParticleEmitter;
-import com.floober.engine.renderEngine.particles.types.LightParticle;
+import com.floober.engine.renderEngine.particles.emitters.ParticleEmitter;
+import com.floober.engine.renderEngine.ppfx.PostProcessing;
+import com.floober.engine.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.renderEngine.textures.Texture;
-import com.floober.engine.util.Colors;
 import com.floober.engine.util.Logger;
-import com.floober.engine.util.data.Config;
+import com.floober.engine.util.color.Colors;
+import com.floober.engine.util.configuration.Config;
 import com.floober.engine.util.input.KeyInput;
 import com.floober.engine.util.input.MouseInput;
 import com.floober.engine.util.time.Sync;
-import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.Callbacks;
-import org.lwjgl.system.CallbackI;
 
 import java.util.Objects;
 
 import static com.floober.engine.display.GameWindow.windowID;
-import static com.floober.engine.util.input.KeyInput.S;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.glfw.GLFW.glfwSetErrorCallback;
 
 public class ParticleTest {
 
 	// generating particles
-	static ParticleEmitter particleEmitter;
-	static ParticleEmitter particleEmitter1;
-	static ParticleEmitter particleEmitter2;
-	static ParticleEmitter particleEmitter3;
-	static int sourceSwitch;
+	static ParticleEmitter particleSource;
+	static ParticleEmitter lightParticleSource;
 	static ParticleBehavior particleBehavior;
 	static boolean useExplosionTexture;
 	// particle textures
@@ -75,20 +64,19 @@ public class ParticleTest {
 		// Initialize the game.
 		// game.init();
 		// game components
-		Loader loader = new Loader();
 		Sync sync = new Sync();
 		MasterRenderer masterRenderer = new MasterRenderer();
 		// master components
 		TextMaster.init();
 		ParticleMaster.init();
+		PostProcessing.init();
 
 		// TEST
 		// Use a GUIText to display the number of particles currently in existence.
-//		FontType guiFont = new FontType(loader.loadFontAtlas("aller/aller.png"), StringConverter.combineAll(FileUtil.getFileData("/fonts/aller/aller.fnt")));
-		guiFont = loader.loadFont("aller");
+		guiFont = Loader.loadFont("aller");
 		Vector4f textColor = new Vector4f(1);
 		Vector4f shadowColor = new Vector4f(0);
-		particleCountDisplay = new GUIText("Particles: 0", 1.5f, guiFont, new Vector2f(0, 0f), 1, false);
+		particleCountDisplay = new GUIText("Particles: 0", 1.5f, guiFont, new Vector3f(0), 1, false);
 		particleCountDisplay.setColor(textColor);
 		particleCountDisplay.setWidth(0.5f);
 		particleCountDisplay.setEdge(0.2f);
@@ -96,7 +84,7 @@ public class ParticleTest {
 		particleCountDisplay.setBorderWidth(0.7f);
 		particleCountDisplay.setBorderEdge(0.08f);
 		particleCountDisplay.setShadowOffset(0.007f, 0.007f);
-		performanceDisplay = new GUIText("Tick: ... Frame: ...", 1f, guiFont, new Vector2f(0, 0.05f), 0.12f, false);
+		performanceDisplay = new GUIText("Tick: ... Frame: ...", 1f, guiFont, new Vector3f(0, 0.05f, 0), 0.12f, false);
 		performanceDisplay.setColor(textColor);
 		performanceDisplay.setWidth(0.5f);
 		performanceDisplay.setEdge(0.1f);
@@ -104,7 +92,7 @@ public class ParticleTest {
 		performanceDisplay.setBorderWidth(0.7f);
 		performanceDisplay.setBorderEdge(0.08f);
 		performanceDisplay.setShadowOffset(0.007f, 0.007f);
-		mousePositionDisplay = new GUIText("Mouse position: (...)", 1f, guiFont, new Vector2f(0, 0.11f), 0.35f, false);
+		mousePositionDisplay = new GUIText("Mouse position: (...)", 1f, guiFont, new Vector3f(0, 0.11f, 0), 0.35f, false);
 		mousePositionDisplay.setColor(textColor);
 		mousePositionDisplay.setWidth(0.5f);
 		mousePositionDisplay.setEdge(0.1f);
@@ -112,7 +100,7 @@ public class ParticleTest {
 		mousePositionDisplay.setBorderWidth(0.7f);
 		mousePositionDisplay.setBorderEdge(0.08f);
 		mousePositionDisplay.setShadowOffset(0.007f, 0.007f);
-		colorDisplay = new GUIText("Color", 1f, guiFont, new Vector2f(0, 0.17f), 0.2f, false);
+		colorDisplay = new GUIText("Color", 1f, guiFont, new Vector3f(0, 0.17f, 0), 0.2f, false);
 		colorDisplay.setColor(textColor);
 		colorDisplay.setWidth(0.5f);
 		colorDisplay.setEdge(0.1f);
@@ -120,7 +108,7 @@ public class ParticleTest {
 		colorDisplay.setBorderWidth(0.7f);
 		colorDisplay.setBorderEdge(0.08f);
 		colorDisplay.setShadowOffset(0.007f, 0.007f);
-		particleSettingsDisplay = new GUIText("Particle Settings: ...", 1f, guiFont, new Vector2f(0, 0.25f), 0.3f, false);
+		particleSettingsDisplay = new GUIText("Particle Settings: ...", 1f, guiFont, new Vector3f(0, 0.25f, 0), 0.3f, false);
 		particleSettingsDisplay.setColor(textColor);
 		particleSettingsDisplay.setWidth(0.5f);
 		particleSettingsDisplay.setEdge(0.1f);
@@ -133,57 +121,21 @@ public class ParticleTest {
 
 		Texture explosionTexture = ImageLoader.loadTexture("textures/particles/explosion.png");
 		Texture glowTexture = ImageLoader.loadTexture("textures/particles/glow.png");
-		Texture defaultTex = ImageLoader.loadTexture("textures/complex_sample.png");
 
-		explosionParticleTex = new ParticleTexture(explosionTexture.getId(), explosionTexture.getWidth(), explosionTexture.getHeight(), 4, true);
-		glowParticleTex = new ParticleTexture(glowTexture.getId(), glowTexture.getWidth(), glowTexture.getHeight(), 1, true);
-		ParticleTexture particleTex = new ParticleTexture(defaultTex.getId(), defaultTex.getWidth(), defaultTex.getHeight(), 1, false);
+		explosionParticleTex = new ParticleTexture(explosionTexture, 4, true);
+		glowParticleTex = new ParticleTexture(glowTexture, 1, true);
+		AppearanceBehavior appearanceBehavior = new FadeOutBehavior(1, 0);
+		FlameBehavior flameBehavior = new FlameBehavior(-90, 15);
+		particleBehavior = new ParticleBehavior(flameBehavior, appearanceBehavior);
+		particleSource = new ParticleEmitter(new Vector3f(), glowParticleTex, particleBehavior);
 
-		AppearanceBehavior fadeOutBehavior = new FadeOutBehavior(1, 1.5f);
-		MovementBehavior flameBehavior = new FlameBehavior(-90, 15);
-		MovementBehavior constantVelocity = new ConstantVelocityBehavior(0, 360);
-		particleBehavior = new ParticleBehavior(constantVelocity, fadeOutBehavior);
+		// particle settings
 		particleBehavior.getAppearanceBehavior().initSize(6, 200);
 		particleBehavior.getMovementBehavior().initSpeed(100, 120);
-		particleBehavior.initLife(2f, 4f);
-		particleBehavior.getAppearanceBehavior().setParticleColor(Colors.PARTICLE_YELLOW);
-
-		AppearanceBehavior appearanceBehavior2 = new FadeOutBehavior(1, 1.5f);
-		appearanceBehavior2.setParticleColor(new Vector4f(0, 0, 0, 1));
-		ParticleBehavior particleBehavior2 = new ParticleBehavior(constantVelocity, appearanceBehavior2);
-		particleBehavior2.getAppearanceBehavior().initSize(6, 200);
-		particleBehavior2.getMovementBehavior().initSpeed(100, 120);
-		particleBehavior2.initLife(2f, 4f);
-		particleBehavior2.getAppearanceBehavior().setParticleColor(Colors.PARTICLE_YELLOW);
-
-		particleEmitter1 = new ParticleEmitter(new Vector3f(), glowParticleTex, particleBehavior);
-		particleEmitter2 = new LightParticleEmitter(new Vector3f(), glowParticleTex, particleBehavior);
-		particleEmitter3 = new TexturedParticleEmitter(new Vector3f(), particleTex, particleBehavior2);
-
-		particleEmitter1.initPositionDelta(0, 0);
-		particleEmitter1.setBoxMode(false);
-		particleEmitter2.initPositionDelta(0, 0);
-		particleEmitter2.setBoxMode(false);
-		particleEmitter3.initPositionDelta(0, 0);
-		particleEmitter3.setBoxMode(false);
-
-		particleEmitter = particleEmitter1;
-
-
-		// LIGHT SOURCE TEST
-		if (particleEmitter2 instanceof LightParticleEmitter lightEmitter) {
-			lightEmitter.initInnerRadius(2, 25);
-			lightEmitter.initOuterRadius(5, 30);
-			lightEmitter.initLightIntensity(0.1f, 0.4f);
-			lightEmitter.initLightRadius(90, 250);
-			lightEmitter.setLightMode(LightParticle.SMOOTH);
-			lightEmitter.setLightColor(Colors.YELLOW_3);
-		}
-		if (particleEmitter3 instanceof TexturedParticleEmitter texturedEmitter) {
-			texturedEmitter.initStartOffset(0, 0, 0.5f, 0.5f);
-			texturedEmitter.initEndOffset(0.25f, 0.25f, 0.5f, 0.5f);
-//			texturedEmitter.getParticleBehavior().getAppearanceBehavior().setParticleColor(new Vector4f(0, 0, 0, 1));
-		}
+		particleBehavior.initLife(0.3f, 0.8f);
+		particleSource.initPositionDelta(0, 0);
+		particleSource.setBoxMode(false);
+		particleBehavior.getAppearanceBehavior().setParticleColor(Colors.PARTICLE_ORANGE);
 		// END_TEST
 
 		// Run the game loop!
@@ -210,8 +162,6 @@ public class ParticleTest {
 
 			// render to the screen
 			masterRenderer.render();
-			ParticleMaster.renderParticles();
-			TextMaster.render();
 
 			// update display and poll events
 			DisplayManager.updateDisplay();
@@ -223,7 +173,7 @@ public class ParticleTest {
 		// Clean up when done.
 
 		// game.cleanUp();
-		loader.cleanUp();
+		Loader.cleanUp();
 		masterRenderer.cleanUp();
 		TextMaster.cleanUp();
 		ParticleMaster.cleanUp();
@@ -253,40 +203,31 @@ public class ParticleTest {
 
 		if (KeyInput.isPressed(KeyInput.SPACE)){
 			useExplosionTexture = !useExplosionTexture;
-			particleEmitter.setParticleTexture(useExplosionTexture ? explosionParticleTex : glowParticleTex);
-		}
-
-		if (KeyInput.isPressed(S)) {
-			sourceSwitch = ++sourceSwitch % 3;
-			switch (sourceSwitch) {
-				case 0 -> particleEmitter = particleEmitter1;
-				case 1 -> particleEmitter = particleEmitter2;
-				case 2 -> particleEmitter = particleEmitter3;
-			}
+			particleSource.setParticleTexture(useExplosionTexture ? explosionParticleTex : glowParticleTex);
 		}
 
 		// ADJUSTING PARTICLE SETTINGS
 		// UP and DOWN arrows to increase/decrease particle size
-		if (KeyInput.isDown(KeyInput.UP)) {
+		if (KeyInput.isHeld(KeyInput.UP)) {
 			if (KeyInput.isShift())
 				particleBehavior.getAppearanceBehavior().setParticleSizeMin(particleBehavior.getAppearanceBehavior().getParticleSizeMin() + 1);
 			else
 				particleBehavior.getAppearanceBehavior().setParticleSizeMax(particleBehavior.getAppearanceBehavior().getParticleSizeMax() + 1);
 		}
-		if (KeyInput.isDown(KeyInput.DOWN)) {
+		if (KeyInput.isHeld(KeyInput.DOWN)) {
 			if (KeyInput.isShift())
 				particleBehavior.getAppearanceBehavior().setParticleSizeMin(particleBehavior.getAppearanceBehavior().getParticleSizeMin() - 1);
 			else
 				particleBehavior.getAppearanceBehavior().setParticleSizeMax(particleBehavior.getAppearanceBehavior().getParticleSizeMax() - 1);
 		}
 		// LEFT and RIGHT keys to increase/decrease speed
-		if (KeyInput.isDown(KeyInput.RIGHT)) {
+		if (KeyInput.isHeld(KeyInput.RIGHT)) {
 			if (KeyInput.isShift())
 				particleBehavior.getMovementBehavior().setParticleSpeedMin(particleBehavior.getMovementBehavior().getParticleSpeedMin() + 1);
 			else
 				particleBehavior.getMovementBehavior().setParticleSpeedMax(particleBehavior.getMovementBehavior().getParticleSpeedMax() + 1);
 		}
-		if (KeyInput.isDown(KeyInput.LEFT)) {
+		if (KeyInput.isHeld(KeyInput.LEFT)) {
 			if (KeyInput.isShift())
 				particleBehavior.getMovementBehavior().setParticleSpeedMin(particleBehavior.getMovementBehavior().getParticleSpeedMin() - 1);
 			else
@@ -309,44 +250,44 @@ public class ParticleTest {
 		if (MouseInput.isPressed(MouseInput.RIGHT)) {
 			if (KeyInput.isCtrl()) {
 				if (KeyInput.isShift())
-					particleEmitter.setPositionDeltaMin(particleEmitter.getPositionDeltaMin() - 1);
+					particleSource.setPositionDeltaMin(particleSource.getPositionDeltaMin() - 1);
 				else
-					particleEmitter.setPositionDeltaMax(particleEmitter.getPositionDeltaMax() - 1);
+					particleSource.setPositionDeltaMax(particleSource.getPositionDeltaMax() - 1);
 			}
 			else {
 				if (KeyInput.isShift())
-					particleEmitter.setPositionDeltaMin(particleEmitter.getPositionDeltaMin() + 1);
+					particleSource.setPositionDeltaMin(particleSource.getPositionDeltaMin() + 1);
 				else
-					particleEmitter.setPositionDeltaMax(particleEmitter.getPositionDeltaMax() + 1);
+					particleSource.setPositionDeltaMax(particleSource.getPositionDeltaMax() + 1);
 			}
 
 		}
 
 		// generating particles
 		if (MouseInput.isPressed(MouseInput.LEFT)) {
-			particleEmitter.setPosition(new Vector3f(MouseInput.getMousePos(), 0));
-			int particleBatchCount = 1;
+			particleSource.setPosition(new Vector3f(MouseInput.getMousePosi(), 0));
+			int particleBatchCount = 4;
 			for (int i = 0; i < particleBatchCount; ++i) {
-				particleEmitter.generateParticle();
+				particleSource.generateParticles();
 			}
 		}
 
 		// updating GUI display
-		performanceDisplay.updateText("Tick: " + DisplayManager.getCurrentFrameDeltaRaw() + "ms            FPS: " + (1.0f / DisplayManager.getFrameTimeRaw()));
-		mousePositionDisplay.updateText("Mouse position: (" + MouseInput.getX() + ", " + MouseInput.getY() + ") - Scaling: [" + MouseInput.xPosRatio + ", " + MouseInput.yPosRatio + "]");
+		performanceDisplay.replaceText("Tick: " + DisplayManager.getCurrentFrameDeltaRaw() + "ms            FPS: " + (1.0f / DisplayManager.getFrameTimeRaw()));
+		mousePositionDisplay.replaceText("Mouse position: (" + MouseInput.getX() + ", " + MouseInput.getY() + ") - Scaling: [" + MouseInput.xPosRatio + ", " + MouseInput.yPosRatio + "]");
 		Vector4f color = particleBehavior.getAppearanceBehavior().getParticleColor();
 		colorDisplay.setColor(color.x(), color.y(), color.z(), color.w());
-		colorDisplay.updateText(particleBehavior.getAppearanceBehavior().isRandomColor() ? "Random" : "Color");
-		particleCountDisplay.updateText("Particles: " + ParticleMaster.getParticleCount());
-		particleSettingsDisplay.updateText("Particle Settings:\n"
+		colorDisplay.replaceText(particleBehavior.getAppearanceBehavior().isRandomColor() ? "Random" : "Color");
+		particleCountDisplay.replaceText("Particles: " + ParticleMaster.getParticleCount());
+		particleSettingsDisplay.replaceText("Particle Settings:\n"
 				+ "Min. Size: " + particleBehavior.getAppearanceBehavior().getParticleSizeMin() + "\n"
 				+ "Max. Size: " + particleBehavior.getAppearanceBehavior().getParticleSizeMax() + "\n"
 				+ "Min. Life: " + particleBehavior.getParticleLifeMin() + "\n"
 				+ "Max. Life: " + particleBehavior.getParticleLifeMax() + "\n"
 				+ "Min. Speed: " + particleBehavior.getMovementBehavior().getParticleSpeedMin() + "\n"
 				+ "Max. Speed: " + particleBehavior.getMovementBehavior().getParticleSpeedMax() + "\n"
-				+ "Min. Delta: " + particleEmitter.getPositionDeltaMin() + "\n"
-				+ "Max. Delta: " + particleEmitter.getPositionDeltaMax()
+				+ "Min. Delta: " + particleSource.getPositionDeltaMin() + "\n"
+				+ "Max. Delta: " + particleSource.getPositionDeltaMax()
 		);
 	}
 

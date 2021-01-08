@@ -1,15 +1,12 @@
 package com.floober.engine.renderEngine;
 
 import com.floober.engine.display.Display;
-import com.floober.engine.renderEngine.elements.TileElement;
-import com.floober.engine.renderEngine.elements.geometry.CircleElement;
-import com.floober.engine.renderEngine.elements.geometry.LineElement;
-import com.floober.engine.renderEngine.elements.geometry.OutlineElement;
-import com.floober.engine.renderEngine.elements.geometry.RectElement;
-import com.floober.engine.util.Logger;
+import com.floober.engine.renderEngine.elements.TextureElement;
+import com.floober.engine.renderEngine.elements.geometry.*;
+import com.floober.engine.renderEngine.fonts.fontMeshCreator.GUIText;
+import com.floober.engine.renderEngine.renderers.MasterRenderer;
+import com.floober.engine.util.configuration.Config;
 import org.joml.Vector4f;
-
-import javax.naming.directory.SchemaViolationException;
 
 /**
  * This Render class is left over from the way my old engine worked.
@@ -19,29 +16,30 @@ import javax.naming.directory.SchemaViolationException;
  */
 public class Render {
 
-	// reference to the MasterRenderer to add elements
-	public static MasterRenderer renderer;
-
 	// MAIN RENDER METHODS
 
-	public static void drawTile(TileElement tileElement) {
-		renderer.addTileElement(tileElement);
+	public static void drawImage(TextureElement textureElement) {
+		MasterRenderer.addTextureElement(textureElement);
 	}
+
+	public static void drawText(GUIText text) { MasterRenderer.addTextElement(text); }
 
 	public static void drawRect(RectElement rectElement) {
-		renderer.addRectElement(rectElement);
+		MasterRenderer.addRectElement(rectElement);
 	}
 
+	public static void drawLightRect(RectElementLight element) { MasterRenderer.addRectLightElement(element); }
+
 	public static void drawCircle(CircleElement circleElement) {
-		renderer.addCircleElement(circleElement);
+		MasterRenderer.addCircleElement(circleElement);
 	}
 
 	public static void drawLine(LineElement lineElement) {
-		renderer.addLineElement(lineElement);
+		MasterRenderer.addLineElement(lineElement);
 	}
 
-	public void drawOutline(OutlineElement outlineElement) {
-		renderer.addOutlineElement(outlineElement);
+	public static void drawOutline(OutlineElement outlineElement) {
+		MasterRenderer.addOutlineElement(outlineElement);
 	}
 
 
@@ -61,21 +59,29 @@ public class Render {
 	 * @param color The color of the rectangle (RGBA).
 	 * @param x The x coordinate of the rectangle.
 	 * @param y The y coordinate of the rectangle.
-	 * @param z The z coordinate of the rectangle.
+	 * @param layer The z coordinate of the rectangle.
 	 * @param width The width of the rectangle.
 	 * @param height The height of the rectangle.
 	 * @param centered Whether to center the rectangle on (x,y). If false, (x,y) will be treated as the top-left corner.
 	 */
-	public static void drawRect(Vector4f color, float x, float y, float z, float width, float height, boolean centered) {
-		renderer.addRectElement(new RectElement(color, x, y, z, width, height, centered));
+	public static void drawRect(Vector4f color, float x, float y, int layer, float width, float height, boolean centered) {
+		MasterRenderer.addRectElement(new RectElement(color, x, y, layer, width, height, centered));
 	}
 
 	/**
-	 * Cover the screen with the specified color.
+	 * Cover the screen with the specified color, placed at the back of the scene.
 	 * @param color The color to fill.
 	 */
 	public static void fillScreen(Vector4f color) {
-		renderer.addRectElement(new RectElement(color, 0, 0, 0, Display.WIDTH, Display.HEIGHT, false));
+		MasterRenderer.addRectElement(new RectElement(color, 0, 0, MasterRenderer.TOP_LAYER, Display.WIDTH, Display.HEIGHT, false));
+	}
+
+	/**
+	 * Cover the screen with the specified color, placed at the specified z distance.
+	 * @param color The color to fill.
+	 */
+	public static void fillScreen(Vector4f color, int layer) {
+		MasterRenderer.addRectElement(new RectElement(color, 0, 0, layer, Display.WIDTH, Display.HEIGHT, false));
 	}
 
 	// CIRCLES
@@ -85,11 +91,11 @@ public class Render {
 	 * @param color The color of the circle (RGBA).
 	 * @param x The x coordinate of the circle.
 	 * @param y The y coordinate of the circle.
-	 * @param z The z coordinate of the circle.
+	 * @param layer The z coordinate of the circle.
 	 * @param radius The radius of the circle.
 	 */
-	public static void drawCircle(Vector4f color, float x, float y, float z, float radius) {
-		renderer.addCircleElement(new CircleElement(color, x, y, z, radius));
+	public static void drawCircle(Vector4f color, float x, float y, int layer, float radius) {
+		MasterRenderer.addCircleElement(new CircleElement(color, x, y, layer, radius));
 	}
 
 	/**
@@ -97,12 +103,12 @@ public class Render {
 	 * @param color The color of the circle (RGBA).
 	 * @param x The x coordinate of the circle.
 	 * @param y The y coordinate of the circle.
-	 * @param z The z coordinate of the circle.
+	 * @param layer The z coordinate of the circle.
 	 * @param innerRadius The inner radius of the circle.
 	 * @param outerRadius The outer radius of the circle.
 	 */
-	public static void drawCircle(Vector4f color, float x, float y, float z, float innerRadius, float outerRadius) {
-		renderer.addCircleElement(new CircleElement(color, x, y, z, innerRadius, outerRadius));
+	public static void drawCircle(Vector4f color, float x, float y, int layer, float innerRadius, float outerRadius) {
+		MasterRenderer.addCircleElement(new CircleElement(color, x, y, layer, innerRadius, outerRadius));
 	}
 
 	/**
@@ -110,14 +116,14 @@ public class Render {
 	 * @param color The color of the circle (RGBA).
 	 * @param x The x coordinate of the circle.
 	 * @param y The y coordinate of the circle.
-	 * @param z The z coordinate of the circle.
+	 * @param layer The z coordinate of the circle.
 	 * @param innerRadius The inner radius of the circle.
 	 * @param outerRadius The outer radius of the circle.
 	 * @param portion The percentage of the circle to draw.
 	 * @param offset The offset from which to begin drawing. An offset of 0 indicates drawing starting from the top; a positive offset moves the starting position clockwise, in degrees.
 	 */
-	public static void drawCircle(Vector4f color, float x, float y, float z, float innerRadius, float outerRadius, float portion, float offset) {
-		renderer.addCircleElement(new CircleElement(color, x, y, z, innerRadius, outerRadius, portion, offset));
+	public static void drawCircle(Vector4f color, float x, float y, int layer, float innerRadius, float outerRadius, float portion, float offset) {
+		MasterRenderer.addCircleElement(new CircleElement(color, x, y, layer, innerRadius, outerRadius, portion, offset));
 	}
 
 	/**
@@ -127,10 +133,10 @@ public class Render {
 	 * @param y1 The starting y coordinate of the line.
 	 * @param x2 The ending x coordinate of the line.
 	 * @param y2 The ending y coordinate of the line.
-	 * @param z The z coordinate of the line.
+	 * @param layer The z coordinate of the line.
 	 */
-	public static void drawLine(Vector4f color, float x1, float y1, float x2, float y2, float z) {
-		renderer.addLineElement(new LineElement(color, x1, y1, x2, y2, z, 1));
+	public static void drawLine(Vector4f color, float x1, float y1, float x2, float y2, int layer) {
+		MasterRenderer.addLineElement(new LineElement(color, x1, y1, x2, y2, layer, 1));
 	}
 
 	/**
@@ -140,11 +146,11 @@ public class Render {
 	 * @param y1 The starting y coordinate of the line.
 	 * @param x2 The ending x coordinate of the line.
 	 * @param y2 The ending y coordinate of the line.
-	 * @param z The z coordinate of the line.
+	 * @param layer The z coordinate of the line.
 	 * @param lineWidth The width of the line.
 	 */
-	public static void drawLine(Vector4f color, float x1, float y1, float x2, float y2, float z, float lineWidth) {
-		renderer.addLineElement(new LineElement(color, x1, y1, x2, y2, z, lineWidth));
+	public static void drawLine(Vector4f color, float x1, float y1, float x2, float y2, int layer, float lineWidth) {
+		MasterRenderer.addLineElement(new LineElement(color, x1, y1, x2, y2, layer, lineWidth));
 	}
 
 	/**
@@ -152,13 +158,13 @@ public class Render {
 	 * @param color The color of the outline.
 	 * @param x The x coordinate of the outline.
 	 * @param y The y coordinate of the outline.
-	 * @param z The z coordinate of the outline.
+	 * @param layer The z coordinate of the outline.
 	 * @param width The width of the outline.
 	 * @param height The height of the outline.
 	 * @param centered Whether the (x, y) position should be treated as the center of the outline. If false, it will be treated as the top-left corner.
 	 */
-	public static void drawOutline(Vector4f color, float x, float y, float z, float width, float height, boolean centered) {
-		renderer.addOutlineElement(new OutlineElement(color, x, y, z, width, height, 1, centered));
+	public static void drawOutline(Vector4f color, float x, float y, int layer, float width, float height, boolean centered) {
+		MasterRenderer.addOutlineElement(new OutlineElement(color, x, y, layer, width, height, 1, centered));
 	}
 
 	/**
@@ -166,14 +172,14 @@ public class Render {
 	 * @param color The color of the outline.
 	 * @param x The x coordinate of the outline.
 	 * @param y The y coordinate of the outline.
-	 * @param z The z coordinate of the outline.
+	 * @param layer The z coordinate of the outline.
 	 * @param width The width of the outline.
 	 * @param height The height of the outline.
 	 * @param lineWidth The width of the lines that make up the outline.
 	 * @param centered Whether the (x, y) position should be treated as the center of the outline. If false, it will be treated as the top-left corner.
 	 */
-	public static void drawOutline(Vector4f color, float x, float y, float z, float width, float height, float lineWidth, boolean centered) {
-		renderer.addOutlineElement(new OutlineElement(color, x, y, z, width, height, lineWidth, centered));
+	public static void drawOutline(Vector4f color, float x, float y, int layer, float width, float height, float lineWidth, boolean centered) {
+		MasterRenderer.addOutlineElement(new OutlineElement(color, x, y, layer, width, height, lineWidth, centered));
 	}
 
 }

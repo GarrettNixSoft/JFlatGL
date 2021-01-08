@@ -13,6 +13,8 @@ public class FileUtil {
 		ArrayList<String> data = new ArrayList<>();
 		try {
 			InputStream in = FileUtil.class.getResourceAsStream(path);
+			if (in == null)
+				in = ResourceLoader.getResourceAsStream(path);
 			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
 			while (true) {
 				String line = reader.readLine();

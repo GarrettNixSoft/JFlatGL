@@ -2,7 +2,8 @@ package com.floober.engine.display;
 
 import com.floober.engine.loaders.ImageLoader;
 import com.floober.engine.renderEngine.textures.RawTextureData;
-import com.floober.engine.util.data.Config;
+import com.floober.engine.util.Logger;
+import com.floober.engine.util.configuration.Config;
 import com.floober.engine.util.input.MouseInput;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWImage;
@@ -93,11 +94,31 @@ public class GameWindow {
 		windowResizeCallback = new GLFWWindowSizeCallback() {
 			@Override
 			public void invoke(long window, int width, int height) {
-				// resize code goes here!
-//				Display.WIDTH = width;
-//				Display.HEIGHT = height;
-				MouseInput.updateRatio(width, height);
-				glViewport(0, 0, width, height);
+//				// log it
+				float scaleToFitWidth = (float) width / Config.DEFAULT_RESOLUTION_WIDTH;
+				float scaleToFitHeight = (float) height / Config.DEFAULT_RESOLUTION_HEIGHT;
+				Display.WINDOW_WIDTH = width;
+				Display.WINDOW_HEIGHT = height;
+				if (scaleToFitWidth < scaleToFitHeight) {
+					// scale to fit width
+					float ratio16x9 = 9.0f / 16.0f;
+					int topY = (int) ((height - width * ratio16x9) / 2);
+					Display.setViewport(0, topY, width, (int) (width * ratio16x9));
+//					glViewport(0, topY, width, (int) (width * ratio16x9));
+					MouseInput.updateRatio(width, width * ratio16x9);
+					MouseInput.setOffset(0, -topY);
+					Logger.log("Window resized to [" + width + " x " + height + "]; Viewport is now [" + width + " x " + (int) (width * ratio16x9) + "], Mouse Offset is now (0, " + (-topY / 2) + "); Scale used was width: " + scaleToFitWidth);
+				}
+				else {
+					// scale to fit height
+					float ratio16x9 = 16.0f / 9.0f;
+					int leftX = (int) ((width - height * ratio16x9) / 2);
+					Display.setViewport(leftX, 0, (int) (height * ratio16x9), height);
+//					glViewport(leftX, 0, (int) (height * ratio16x9), height);
+					MouseInput.updateRatio(height * ratio16x9, height);
+					MouseInput.setOffset(-leftX, 0);
+					Logger.log("Window resized to [" + width + " x " + height + "]; Viewport is now [" + (int) (height * ratio16x9) + " x " + height + "], Mouse Offset is now (" + -leftX + ", 0); Scale used was height: " + scaleToFitHeight);
+				}
 			}
 		};
 
@@ -109,7 +130,8 @@ public class GameWindow {
 		glDepthFunc(GL_LEQUAL);
 		glDepthRange(0, 1000000);
 
-		glEnable(GL_STENCIL_TEST);
+		glClearColor(0, 0, 0, 1);
+		glClearDepth(1);
 
 		GLUtil.setupDebugMessageCallback();
 		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, (IntBuffer) null, false);
@@ -119,8 +141,15 @@ public class GameWindow {
 		windowResizeCallback.invoke(windowID, Config.DEFAULT_WIDTH, Config.DEFAULT_HEIGHT);
 		DisplayManager.centerWindow();
 
+		// Step 9.5: Fill the window with the starting load color
+//		glClearColor(1, 1, 1, 1);
+//		glClear(GL_COLOR_BUFFER_BIT);
+
 		// Step 10: Make the window visible!
 		glfwShowWindow(windowID);
+
+		// Step 11: Start the game time
+		DisplayManager.start();
 
 		// Done!
 	}

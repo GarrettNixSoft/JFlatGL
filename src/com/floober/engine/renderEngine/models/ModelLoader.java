@@ -50,9 +50,10 @@ public class ModelLoader {
 	}
 
 	// Special method specifically for GUIText instances, allowing them to delete all their old vertex data when they generate new data.
+	// THANK YOU PAST ME FOR MAKING THIS EASY (I needed to add z positions to text coords without affecting other types of coordinate data) - 9.28.20 Me
 	public static int loadToVAO(float[] positions, float[] textureCoords, GUIText guiText) {
 		int vaoID = createVAO();
-		guiText.addVbo(storeDataInAttributeList(0, 2, positions));
+		guiText.addVbo(storeDataInAttributeList(0, 3, positions));
 		guiText.addVbo(storeDataInAttributeList(1, 2, textureCoords));
 		unbindVAO();
 		return vaoID;

@@ -1,4 +1,5 @@
 {
 	"menu": "aller",
-	"debug": "arial"
+	"debug": "arial",
+	"default": "aller"
 }

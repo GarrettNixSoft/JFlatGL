@@ -43,14 +43,22 @@ public class Line {
 	 */
 	protected boolean attemptToAddWord(Word word) {
 		double additionalLength = word.getWordWidth();
-		additionalLength += !words.isEmpty() ? spaceSize : 0;
-		if (currentLineLength + additionalLength <= maxLength) {
-			words.add(word);
-			currentLineLength += additionalLength;
-			return true;
-		} else {
-			return false;
-		}
+		// always add the word if it's the first word in the line, regardless of length; otherwise it gets stuck in a loop of trying to add lines
+//		if (currentLineLength == 0) {
+//			words.add(word);
+//			currentLineLength += additionalLength;
+//			return true;
+//		}
+
+			additionalLength += !words.isEmpty() ? spaceSize : 0;
+			if (currentLineLength + additionalLength <= maxLength) {
+				words.add(word);
+				currentLineLength += additionalLength;
+				return true;
+			}
+			else {
+				return false;
+			}
 	}
 
 	/**

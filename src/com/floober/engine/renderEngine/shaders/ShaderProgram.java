@@ -11,6 +11,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.lwjgl.opengl.GL20.*;
@@ -18,22 +19,42 @@ import static org.lwjgl.opengl.GL20.*;
 public abstract class ShaderProgram {
 	
 	private final int programID;
-	private final int vertexShaderID;
-	private final int fragmentShaderID;
+	private final Integer[] vertexShaderIDs;
+	private final Integer[] fragmentShaderIDs;
 
 	private static FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
 
 	public ShaderProgram(String vertexFile, String fragmentFile) {
-		vertexShaderID = loadShader(vertexFile, GL_VERTEX_SHADER);
-		fragmentShaderID = loadShader(fragmentFile, GL_FRAGMENT_SHADER);
+		vertexShaderIDs = new Integer[1];
+		vertexShaderIDs[0] = loadShader(vertexFile, GL_VERTEX_SHADER);
+		fragmentShaderIDs = new Integer[1];
+		fragmentShaderIDs[0] = loadShader(fragmentFile, GL_FRAGMENT_SHADER);
 		programID = glCreateProgram();
-		glAttachShader(programID, vertexShaderID);
-		glAttachShader(programID, fragmentShaderID);
+		glAttachShader(programID, vertexShaderIDs[0]);
+		glAttachShader(programID, fragmentShaderIDs[0]);
 		bindAttributes();
 		glLinkProgram(programID);
 		glValidateProgram(programID);
 		getAllUniformLocations();
-		// Don't run if shaders don't link
+	}
+
+	public ShaderProgram(ShaderCode... shaders) {
+		programID = glCreateProgram();
+		List<Integer> vertexShaders = new ArrayList<>();
+		List<Integer> fragmentShaders = new ArrayList<>();
+		for (ShaderCode shaderCode : shaders) {
+			List<Integer> targetList = shaderCode.shaderType() == GL_VERTEX_SHADER ? vertexShaders : fragmentShaders;
+			int shaderID = loadShader(shaderCode.shaderFile(), shaderCode.shaderType());
+			glAttachShader(programID, shaderID);
+			targetList.add(shaderID);
+		}
+		vertexShaderIDs = vertexShaders.toArray(new Integer[]{});
+		fragmentShaderIDs = fragmentShaders.toArray(new Integer[]{});
+		bindAttributes();
+		glLinkProgram(programID);
+		glValidateProgram(programID);
+		getAllUniformLocations();
+		
 		int result = glGetProgrami(programID, GL_LINK_STATUS);
 		if (result == GL_FALSE) {
 			Logger.logError("Shader program linking failed.");
@@ -57,10 +78,14 @@ public abstract class ShaderProgram {
 	
 	public void cleanUp() {
 		stop();
-		glDetachShader(programID, vertexShaderID);
-		glDetachShader(programID, fragmentShaderID);
-		glDeleteShader(vertexShaderID);
-		glDeleteShader(fragmentShaderID);
+		for (int vertexShaderID : vertexShaderIDs) {
+			glDetachShader(programID, vertexShaderID);
+			glDeleteShader(vertexShaderID);
+		}
+		for (int fragmentShaderID : fragmentShaderIDs) {
+			glDetachShader(programID, fragmentShaderID);
+			glDeleteShader(fragmentShaderID);
+		}
 		glDeleteProgram(programID);
 	}
 	
@@ -74,6 +99,8 @@ public abstract class ShaderProgram {
 		glUniform1f(location, value);
 	}
 
+	protected void loadInt(int location, int value) { glUniform1i(location, value); }
+
 	protected void loadVector(int location, Vector4f vector) { glUniform4f(location, vector.x, vector.y, vector.z, vector.w); }
 
 	protected void loadVector(int location, Vector3f vector) {
@@ -82,6 +109,10 @@ public abstract class ShaderProgram {
 
 	protected void loadVector(int location, Vector2f vector) {
 		glUniform2f(location, vector.x, vector.y);
+	}
+
+	protected void loadFloat2(int location, float f1, float f2) {
+		glUniform2f(location, f1, f2);
 	}
 
 	protected void loadBoolean(int location, boolean value) {

@@ -4,6 +4,8 @@ import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
+import java.awt.*;
+
 /*
 	For utility functions.
  */
@@ -49,20 +51,75 @@ public class MathUtil {
 		return matrix;
 	}
 
-	public static float smoothstep(float min, float max, float value) {
+	public static float interpolateBounded(float min, float max, float value) {
 		if (value < min) return 0;
 		else if (value > max) return 1;
 		else {
 			float delta = max - min;
 			float pos = value - min;
-			float val = Math.max(0, Math.min(1, pos / delta));
-			return val * val * (3.0f - 2.0f * val);
+			return pos / delta;
 		}
 	}
 
 	public static float boundedSmoothstep(float min, float max, float lowBound, float highBound, float value) {
 		float boundDelta = highBound - lowBound;
-		return lowBound + smoothstep(min, max, value) * boundDelta;
+		return lowBound + interpolateBounded(min, max, value) * boundDelta;
+	}
+
+	/**
+	 * Get a linerarly interpolated value between two given bounds.
+	 * Note that the minimum bound may be greater than the maximum,
+	 * and the results will still be valid in that case; the names
+	 * are just to give an idea of how this method might be used.
+	 * @param min The minimum bound.
+	 * @param max The maximum bound.
+	 * @param percent The relative position between the two bounds.
+	 * @return The interpolated value.
+	 */
+	public static float interpolate(float min, float max, float percent) {
+		return min + (max - min) * percent;
+	}
+
+	/**
+	 * Get the distance between two points.
+	 * @param x1 The x-coordinate of Point 1
+	 * @param y1 The y-coordinate of Point 1
+	 * @param x2 The x-coordinate of Point 2
+	 * @param y2 The y-coordinate of Point 2
+	 * @return The Euclidean distance between the points.
+	 */
+	public static float distance(float x1, float y1, float x2, float y2) {
+		return (float) (Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)));
+	}
+
+	/**
+	 * Get the distance between two points.
+	 * @param v1 Point 1
+	 * @param v2 Point 2
+	 * @return The Euclidean distance between the points.
+	 */
+	public static float distance(Vector2f v1, Vector2f v2) {
+		double x1 = v1.x();
+		double y1 = v1.y();
+		double x2 = v2.x();
+		double y2 = v2.y();
+		float xDelta = (float) Math.abs(x1 - x2);
+		float yDelta = (float) Math.abs(y1 - y2);
+		return (float) Math.sqrt(Math.pow(xDelta, 2) + Math.pow(yDelta, 2));
+	}
+
+	/**
+	 * Get a position along the line between two points that is
+	 * {@code progress}% of the length of the line away from Point 1.
+	 * @param start Point 1
+	 * @param finish Point 2
+	 * @param progress How far along the line from Point 1 to calculate
+	 * @return A point on the line
+	 */
+	public static Vector2f positionBetween(Vector2f start, Vector2f finish, float progress) {
+		float dx = (finish.x - start.x) * progress;
+		float dy = (finish.y - start.y) * progress;
+		return new Vector2f(start.x + dx, start.y + dy);
 	}
 
 	/**
@@ -78,7 +135,7 @@ public class MathUtil {
 	/**
 	 * Return a Vector2f containing a cartesian representation of the given polar coordinates.
 	 * @param magnitude The length of the polar coordinate.
-	 * @param angle The angle of the polar coordinate.
+	 * @param angle The rotation of the polar coordinate.
 	 * @return A cartesian representation of the given polar coordinate.
 	 */
 	public static Vector2f getCartesian(float magnitude, float angle) {
@@ -104,7 +161,7 @@ public class MathUtil {
 	 * @return A polar vector representation of the Cartesian vector.
 	 */
 	public static Vector2f getPolar(float dx, float dy) {
-		// get angle (range -pi to pi)
+		// get rotation (range -pi to pi)
 		float angleRad = (float) Math.atan2(dy, dx);
 		// convert to degrees
 		float angleDeg = (float) Math.toDegrees(angleRad);
@@ -127,6 +184,15 @@ public class MathUtil {
 	 */
 	public static Vector2f getPolar(Vector2f cartesian) {
 		return getPolar(cartesian.x(), cartesian.y());
+	}
+
+	/**
+	 * Get a Vector2f representing the center point of this Rectangle.
+	 * @param r The rectangle to get the center of.
+	 * @return A Vector2f representing the center.
+	 */
+	public static Vector2f center(Rectangle r) {
+		return new Vector2f((float) (r.getX() + (r.getWidth() / 2.0)), (float) (r.getY() + (r.getHeight() / 2.0)));
 	}
 
 }

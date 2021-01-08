@@ -9,7 +9,7 @@ import org.joml.Vector4f;
  * A TexturedParticle is a particle that displays a fragment
  * of a texture on its quad.
  */
-public class TexturedParticle extends Particle {
+public class TexturedParticle extends EmitterParticle {
 
 	private final Vector4f textureCoords = new Vector4f();
 

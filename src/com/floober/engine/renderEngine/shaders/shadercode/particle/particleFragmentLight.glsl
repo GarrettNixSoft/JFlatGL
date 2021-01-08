@@ -47,4 +47,5 @@ void main() {
 
 	// final color
 	out_color = lightColor + particleColor;
+
 }

@@ -1,15 +1,18 @@
 package com.floober.engine.loaders.assets;
 
-import com.floober.engine.renderEngine.fonts.fontMeshCreator.FontType;
-import com.floober.engine.main.Game;
+import com.floober.engine.game.Game;
+import com.floober.engine.game.RunGame;
 import com.floober.engine.loaders.Loader;
+import com.floober.engine.renderEngine.fonts.fontMeshCreator.FontType;
+import com.floober.engine.renderEngine.renderers.LoadRenderer;
+import com.floober.engine.util.Globals;
 import com.floober.engine.util.Logger;
 
 public class FontLoader extends AssetLoader {
 
-	public FontLoader(Game game, Loader loader) {
-		super(game, loader);
-		directory = loader.getJSON("/assets/fonts_directory.json");
+	public FontLoader() {
+		super();
+		directory = Loader.getJSON("/assets/fonts_directory.json");
 	}
 
 	@Override
@@ -19,16 +22,24 @@ public class FontLoader extends AssetLoader {
 
 	@Override
 	protected void loadDirectory() {
+		Globals.fontTotal = directory.keySet().size();
+		Globals.LOAD_STAGE = LoadRenderer.FONTS;
 		// iterate over the directory's key set
 		for (String key : directory.keySet()) {
+			// report current asset
+			LoadRenderer.reportCurrentAsset(key);
 			// get the path for this file
 			String path = directory.getString(key);
 			// Report the load attempt
 			Logger.logLoad("Loading font: " + path);
 			// load this sound file
-			FontType font = loader.loadFont(path);
+			FontType font = Loader.loadFont(path);
 			// add it to the game
-			game.getFonts().addFont(key, font);
+			Game.getFonts().addFont(key, font);
+			// report the load count
+			Globals.fontCount++;
+			// render the loading screen
+//			RunGame.loadRenderer.render();
 			// done
 		}
 	}

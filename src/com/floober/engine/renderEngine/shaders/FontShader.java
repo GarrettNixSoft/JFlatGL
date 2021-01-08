@@ -1,6 +1,8 @@
 package com.floober.engine.renderEngine.shaders;
 
+import com.floober.engine.util.Logger;
 import org.joml.Vector2f;
+import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 public class FontShader extends ShaderProgram{
@@ -8,6 +10,7 @@ public class FontShader extends ShaderProgram{
 	private static final String VERTEX_FILE = "/com/floober/engine/renderEngine/shaders/shadercode/fontVertex.glsl";
 	private static final String FRAGMENT_FILE = "/com/floober/engine/renderEngine/shaders/shadercode/fontFragment.glsl";
 
+	// standard font settings
 	private int location_color;
 	private int location_translation;
 	private int location_width;
@@ -23,6 +26,7 @@ public class FontShader extends ShaderProgram{
 
 	@Override
 	protected void getAllUniformLocations() {
+		// standard font uniforms
 		location_color = super.getUniformLocation("color");
 		location_translation = super.getUniformLocation("translation");
 		location_width = super.getUniformLocation("width");
@@ -42,7 +46,7 @@ public class FontShader extends ShaderProgram{
 	public void loadColor(Vector4f color) {
 		super.loadVector(location_color, color);
 	}
-	public void loadTranslation(Vector2f translation) {
+	public void loadTranslation(Vector3f translation) {
 		super.loadVector(location_translation, translation);
 	}
 	public void loadWidth(float width) {

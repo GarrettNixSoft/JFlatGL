@@ -142,12 +142,12 @@ public class KeyInput {
 		keyState[KP_ENTER] = glfwGetKey(GameWindow.windowID, GLFW_KEY_KP_ENTER) == GLFW_PRESS;
 	}
 
-	// CHECK IF A KEY IS DOWN
-	public static boolean isDown(int key) {
+	// CHECK IF A KEY IS HELD DOWN
+	public static boolean isHeld(int key) {
 		return keyState[key];
 	}
 
-	public static boolean isDown(int... keys) {
+	public static boolean isHeld(int... keys) {
 		for (int i : keys) {
 			if (keyState[i]) return true;
 		}

@@ -3,7 +3,7 @@ package com.floober.engine.renderEngine.renderers;
 import com.floober.engine.renderEngine.models.ModelLoader;
 import com.floober.engine.renderEngine.models.QuadModel;
 import com.floober.engine.renderEngine.particles.types.LightParticle;
-import com.floober.engine.renderEngine.shaders.ParticleLightShader;
+import com.floober.engine.renderEngine.shaders.particles.ParticleLightShader;
 import com.floober.engine.util.math.MathUtil;
 import com.floober.engine.util.math.MatrixUtils;
 import org.joml.Matrix4f;
@@ -13,7 +13,6 @@ import java.nio.FloatBuffer;
 import java.util.List;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.GL_BLEND;
 import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
@@ -35,7 +34,7 @@ public class ParticleLightRenderer {
 	public ParticleLightRenderer() {
 		this.vbo = ModelLoader.createEmptyVBO(INSTANCE_DATA_LENGTH * MAX_INSTANCES);
 		quad = ModelLoader.loadToVAO(VERTICES);
-		int vaoID = quad.getVaoID();
+		int vaoID = quad.vaoID();
 		ModelLoader.addInstancedAttribute(vaoID, vbo, 1, 4, INSTANCE_DATA_LENGTH, 0);  // Transformation col 1
 		ModelLoader.addInstancedAttribute(vaoID, vbo, 2, 4, INSTANCE_DATA_LENGTH, 4);  // Transformation col 2
 		ModelLoader.addInstancedAttribute(vaoID, vbo, 3, 4, INSTANCE_DATA_LENGTH, 8);  // Transformation col 3
@@ -78,7 +77,7 @@ public class ParticleLightRenderer {
 //		}
 
 		// render all particles in this batch in one go!
-		glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, quad.getVertexCount(), particles.size());
+		glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, quad.vertexCount(), particles.size());
 
 		// finish this render call
 		finishRendering();
@@ -86,7 +85,7 @@ public class ParticleLightRenderer {
 	}
 
 	private void updateParticleData(LightParticle particle, float[] vboData) {
-		Matrix4f matrix = MathUtil.createTransformationMatrix(particle.getPosition(), particle.getScaleVec(), particle.getRotation());
+		Matrix4f matrix = MathUtil.createTransformationMatrix(particle.getScreenPosition(), particle.getScaleVec(), particle.getRotation());
 		pointer = MatrixUtils.storeMatrixData(matrix, vboData, pointer);
 		vboData[pointer++] = particle.getColor().x();		// Color R
 		vboData[pointer++] = particle.getColor().y();		// Color G
@@ -103,7 +102,7 @@ public class ParticleLightRenderer {
 
 	private void prepare() {
 		shader.start();
-		glBindVertexArray(quad.getVaoID());
+		glBindVertexArray(quad.vaoID());
 		for (int i = 0; i <= 10; ++i) {
 			glEnableVertexAttribArray(i);
 		}

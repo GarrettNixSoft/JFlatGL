@@ -3,6 +3,8 @@ package com.floober.engine.renderEngine.fonts.fontRendering;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.FontType;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.floober.engine.renderEngine.shaders.FontShader;
+import com.floober.engine.util.Logger;
+import com.floober.engine.util.input.KeyInput;
 
 import java.util.List;
 import java.util.Map;
@@ -28,6 +30,7 @@ public class FontRenderer {
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, fontType.getTextureAtlas());
 			for (GUIText text : texts.get(fontType)) {
+				if (KeyInput.isPressed(KeyInput.P)) Logger.log("Text at z = " + text.getPosition().z());
 				renderText(text);
 			}
 		}
@@ -39,10 +42,11 @@ public class FontRenderer {
 	}
 	
 	private void prepare() {
+		shader.start();
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glDisable(GL_DEPTH_TEST);
-		shader.start();
+		glEnable(GL_DEPTH_TEST);
+		glDepthMask(false);
 	}
 	
 	private void renderText(GUIText text) {
@@ -57,7 +61,7 @@ public class FontRenderer {
 		shader.loadBorderEdge(text.getBorderEdge());
 		shader.loadShadowOffset(text.getShadowOffset());
 		shader.loadOutlineColor(text.getOutlineColor());
-		glDrawArrays(GL_TRIANGLES, 0, text.getVertexCount());
+		glDrawArrays(GL_TRIANGLES, text.getFirstCharVisible() * 6, text.getNumVisibleChars() * 6);
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
 		glBindVertexArray(0);
@@ -66,7 +70,8 @@ public class FontRenderer {
 	private void endRendering() {
 		shader.stop();
 		glDisable(GL_BLEND);
-		glEnable(GL_DEPTH_TEST);
+		glDisable(GL_DEPTH_TEST);
+		glDepthMask(true);
 	}
 
 }

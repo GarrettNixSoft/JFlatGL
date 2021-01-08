@@ -77,12 +77,12 @@ public class TextureShader extends ShaderProgram {
 		int size = lights.size();
 		for (int i = 0; i < LightMaster.MAX_LIGHTS; ++i) {
 			if (i < size) {
-				super.loadVector(location_lightPositions[i], lights.get(i).getPosition());
-				super.loadVector(location_lightColors[i], lights.get(i).getColor());
-				super.loadFloat(location_lightIntensities[i], lights.get(i).getIntensity());
-				super.loadFloat(location_lightInnerRadii[i], lights.get(i).getInnerRadius());
-				super.loadFloat(location_lightOuterRadii[i], lights.get(i).getOuterRadius());
-				super.loadFloat(location_lightMaxRadii[i], lights.get(i).getMaxRadius());
+				super.loadVector(location_lightPositions[i], lights.get(i).position());
+				super.loadVector(location_lightColors[i], lights.get(i).color());
+				super.loadFloat(location_lightIntensities[i], lights.get(i).intensity());
+				super.loadFloat(location_lightInnerRadii[i], lights.get(i).innerRadius());
+				super.loadFloat(location_lightOuterRadii[i], lights.get(i).outerRadius());
+				super.loadFloat(location_lightMaxRadii[i], lights.get(i).maxRadius());
 			}
 			else {
 				super.loadVector(location_lightPositions[i], new Vector2f(0));

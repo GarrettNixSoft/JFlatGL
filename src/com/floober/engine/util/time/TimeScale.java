@@ -34,6 +34,11 @@ public class TimeScale {
         return (long) ((System.nanoTime() - start) / 1_000_000 * getTimeScale());
     }
 
+    /**
+     * Get the time since the given start time in milliseconds.
+     * @param start The origin point to measure from, in nanoseconds.
+     * @return The time since {@code start} in milliseconds.
+     */
     public static long getRawTime(long start) {
         return (System.nanoTime() - start) / 1_000_000;
     }

@@ -16,6 +16,7 @@ public class CircleShader extends ShaderProgram {
 	private int location_innerRadius;
 	private int location_outerRadius;
 	private int location_portion;
+	private int location_smoothness;
 
 	public CircleShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);
@@ -29,6 +30,7 @@ public class CircleShader extends ShaderProgram {
 		location_innerRadius = super.getUniformLocation("innerRadius");
 		location_outerRadius = super.getUniformLocation("outerRadius");
 		location_portion = super.getUniformLocation("portion");
+		location_smoothness = super.getUniformLocation("smoothness");
 	}
 
 	@Override
@@ -58,6 +60,10 @@ public class CircleShader extends ShaderProgram {
 
 	public void loadPortion(Vector2f portion) {
 		super.loadVector(location_portion, portion);
+	}
+
+	public void loadSmoothness(float smoothness) {
+		super.loadFloat(location_smoothness, smoothness);
 	}
 
 }

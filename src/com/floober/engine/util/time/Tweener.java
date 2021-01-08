@@ -37,7 +37,6 @@ public class Tweener extends Timer {
 
 	public float getValue() {
 		float delta = endingValue - startingValue;
-		Logger.log("" + startingValue + getProgress() * delta);
 		return startingValue + getProgress() * delta;
 	}
 

@@ -36,10 +36,30 @@ public class Timer {
 
 	/**
 	 * Stop the timer and reset it. This returns the timer to a state
-	 * where it can be started again at any time.
+	 * where it can be started again at any time. Subsequent calls to
+	 * {@code started()} will return false until {@code start()} is
+	 * called again.
 	 */
 	public void reset() {
 		start = -1;
+	}
+
+	/**
+	 * Restart the timer. Calls {@code reset()} and {@code restart()}.
+	 */
+	public void restart() {
+		reset();
+		start();
+	}
+
+	/**
+	 * Restart the timer with a new time target. Calls {@code reset()}, {@code setTime()} and {@code start()}.
+	 * @param time The new duration.
+	 */
+	public void restart(float time) {
+		reset();
+		setTime(time);
+		start();
 	}
 
 	// GETTERS
@@ -70,7 +90,7 @@ public class Timer {
 
 	/**
 	 * Check if the timer is in progress.
-	 * @return True if the timer has been started.
+	 * @return {@code true} if the timer has been started.
 	 */
 	public boolean started() {
 		return start != -1;
@@ -78,7 +98,7 @@ public class Timer {
 
 	/**
 	 * Check if the timer is finished.
-	 * @return True if the set duration of time has passed since the timer was started.
+	 * @return {@code true} if the set duration of time has passed since the timer was started.
 	 */
 	public boolean finished() {
 		if (time == -1) return false; // -1 sets a perpetual timer

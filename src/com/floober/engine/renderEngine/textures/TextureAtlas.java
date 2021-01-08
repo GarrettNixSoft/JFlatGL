@@ -9,18 +9,9 @@ import org.joml.Vector4f;
  * texture from the atlas, just request the offset vector for that texture's
  * index, and pass that vector to the shader to use as texture coordinates.
  */
-public class TextureAtlas extends Texture {
+public record TextureAtlas(int textureID, int width, int height, int numRows) {
 
-	private final int numRows;
-
-	public TextureAtlas(int textureID, int width, int height, int numRows) {
-		super(textureID, width, height);
-		this.numRows = numRows;
-	}
-
-	public int getNumRows() {
-		return numRows;
-	}
+	public int getNumTextures() { return numRows * numRows; }
 
 	public Vector4f getTextureOffset(int index) {
 		float xPerIndex = (float) width / numRows;

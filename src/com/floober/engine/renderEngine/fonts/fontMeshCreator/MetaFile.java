@@ -2,7 +2,9 @@ package com.floober.engine.renderEngine.fonts.fontMeshCreator;
 
 import com.floober.engine.display.Display;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -179,7 +181,7 @@ public class MetaFile {
 		while (processNextLine()) {
 			Character c = loadCharacter(imageWidth);
 			if (c != null) {
-				metaData.put(c.getId(), c);
+				metaData.put(c.id(), c);
 			}
 		}
 	}
