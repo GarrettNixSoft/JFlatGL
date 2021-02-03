@@ -32,7 +32,7 @@ public class TextMaster {
 
 	public static void loadText(GUIText text) {
 		if (!text.isProcessed()) processText(text);
-		int layer = MasterRenderer.getLayerByZ(text.getPosition().z());
+		int layer = (int) text.getPosition().z();
 		FontType fontType = text.getFont();
 		List<GUIText> textBatch = texts[layer].computeIfAbsent(fontType, k -> new ArrayList<>());
 		textBatch.add(text);

@@ -2,8 +2,11 @@ package com.floober.engine.gui.component;
 
 import com.floober.engine.event.MultiEventQueue;
 import com.floober.engine.gui.GUIAction;
+import com.floober.engine.gui.event.ClosedEvent;
 import com.floober.engine.gui.event.GUIEvent;
+import com.floober.engine.gui.event.ReadyEvent;
 import com.floober.engine.util.Collisions;
+import com.floober.engine.util.Logger;
 import com.floober.engine.util.input.MouseInput;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -29,17 +32,19 @@ public abstract class GUIComponent {
 	private final MultiEventQueue<GUIEvent> eventQueue = new MultiEventQueue<>();
 
 	// interactions
-	private final GUIAction[] actions = new GUIAction[6];
-	public static final int ON_OPEN = 0;
-	public static final int ON_CLOSE = 1;
-	public static final int ON_MOUSE_OVER = 2;
-	public static final int ON_MOUSE_EXIT = 3;
-	public static final int ON_LEFT_CLICK = 4;
-	public static final int ON_RIGHT_CLICK = 5;
+	protected final GUIAction[] actions = new GUIAction[8];
+	protected static final int ON_OPEN = 0;
+	protected static final int ON_OPEN_COMPLETE = 1;
+	protected static final int ON_CLOSE = 2;
+	protected static final int ON_CLOSE_COMPLETE = 3;
+	protected static final int ON_MOUSE_OVER = 4;
+	protected static final int ON_MOUSE_EXIT = 5;
+	protected static final int ON_LEFT_CLICK = 6;
+	protected static final int ON_RIGHT_CLICK = 7;
 
 	// enter/exit
-	private boolean ready;
-	private boolean closed;
+	private boolean active;
+	private boolean locked;
 
 	/**
 	 * Construct a GUIComponent. All GUIComponents must
@@ -48,6 +53,8 @@ public abstract class GUIComponent {
 	 */
 	public GUIComponent(String componentID) {
 		this.componentID = componentID;
+		onOpen(new GUIAction());
+		onClose(new GUIAction());
 	}
 
 	// CONSTRUCTING GUI ELEMENTS
@@ -56,8 +63,8 @@ public abstract class GUIComponent {
 		return this;
 	}
 
-	public GUIComponent location(Vector2f location, float z) {
-		setPosition(location, z);
+	public GUIComponent location(Vector2f location, int layer) {
+		setPosition(location, layer);
 		return this;
 	}
 
@@ -92,12 +99,22 @@ public abstract class GUIComponent {
 	}
 
 	public GUIComponent onOpen(GUIAction action) {
-		actions[ON_OPEN] = action;
+		actions[ON_OPEN] = action.addPerformActionOnTrigger(() -> queueEvent(new ReadyEvent(this)));
+		return this;
+	}
+
+	public GUIComponent onOpenComplete(GUIAction action) {
+		actions[ON_OPEN_COMPLETE] = action;
 		return this;
 	}
 
 	public GUIComponent onClose(GUIAction action) {
-		actions[ON_CLOSE] = action;
+		actions[ON_CLOSE] = action.addPerformActionOnTrigger(() -> queueEvent(new ClosedEvent(this)));
+		return this;
+	}
+
+	public GUIComponent onCloseComplete(GUIAction action) {
+		actions[ON_CLOSE_COMPLETE] = action;
 		return this;
 	}
 
@@ -126,9 +143,19 @@ public abstract class GUIComponent {
 		return componentID;
 	}
 
-	public boolean isReady() { return ready; }
+	public boolean isActive() { return active; }
 
-	public boolean isClosed() { return closed; }
+	public boolean isLocked() {
+		return locked;
+	}
+
+	public boolean isClosed() {
+		return !active && eventQueue.isEmpty();
+	}
+
+	public boolean hasPendingEvents() {
+		return !eventQueue.isEmpty();
+	}
 
 	public Vector3f getPosition() {
 		return new Vector3f(position);
@@ -168,6 +195,109 @@ public abstract class GUIComponent {
 		Vector2f scaledSize = getSize().mul(scale);
 		return Collisions.createCollisionBox(position, scaledSize);
 	}
+
+	// SETTERS
+	public void setActive(boolean active) {
+		this.active = active;
+		if (active) {
+			Logger.log("Component " + componentID + " is now active");
+			trigger(ON_OPEN_COMPLETE);
+		}
+		else {
+			Logger.log("Component " + componentID + " is no longer active");
+			trigger(ON_CLOSE_COMPLETE);
+		}
+	}
+
+	public void lock() {
+		locked = true;
+		Logger.log("Component " + componentID + " locked");
+	}
+
+	public void unlock() {
+		locked = false;
+	}
+
+	public void setPosition(Vector3f position) {
+		this.position.set(position);
+	}
+
+	public void setPosition(Vector2f position, float z) {
+		this.position.set(position, z);
+	}
+
+	public void setSize(Vector2f size) {
+		this.size.set(size);
+	}
+
+	public void setScale(float scale) {
+		this.scale = scale;
+	}
+
+	public void setPrimaryColor(Vector4f primaryColor) {
+		this.primaryColor.set(primaryColor);
+	}
+
+	public void setSecondaryColor(Vector4f secondaryColor) {
+		this.secondaryColor.set(secondaryColor);
+	}
+
+	public void setTertiaryColor(Vector4f tertiaryColor) {
+		this.tertiaryColor.set(tertiaryColor);
+	}
+
+	public void setOpacity(float opacity) {
+		this.opacity = opacity;
+	}
+
+	// ACTIONS
+	public void queueEvent(GUIEvent event) {
+		eventQueue.queueEvent(event);
+	}
+
+	public void updateEvents() {
+		eventQueue.update();
+	}
+
+	public void open() {
+		if (isActive()) {
+			Logger.log("Open failed; " + componentID + " is already active");
+			return;
+		}
+		Logger.log(componentID + " open called");
+		trigger(ON_OPEN);
+	}
+
+	public void close() {
+		if (isClosed()) return;
+//		Logger.log(componentID + " close succeeded");
+		trigger(ON_CLOSE);
+	}
+
+	public void checkInput() {
+		if (mouseOver()) {
+			trigger(ON_MOUSE_OVER);
+		}
+		else if (mouseExit()) {
+			trigger(ON_MOUSE_EXIT);
+		}
+		if (leftClick()) {
+			trigger(ON_LEFT_CLICK);
+		}
+		if (rightClick()) {
+			trigger(ON_RIGHT_CLICK);
+		}
+	}
+
+	private void trigger(int actionID) {
+		if (actions[actionID] != null) actions[actionID].trigger();
+	}
+
+	// ABSTRACT METHODS
+
+	public abstract void update();
+	public abstract void doTransform();
+	public abstract void render();
 
 	/**
 	 * Check if the mouse has entered this component's
@@ -214,86 +344,5 @@ public abstract class GUIComponent {
 	private boolean rightClick() {
 		return MouseInput.rightClick() && Collisions.contains(getCollisionBox(), MouseInput.getMousePos());
 	}
-
-	// SETTERS
-	public void setReady() { ready = true; }
-
-	public void unready() { ready = false; }
-
-	public void setClosed() { closed = true; }
-
-	public void setPosition(Vector3f position) {
-		this.position.set(position);
-	}
-
-	public void setPosition(Vector2f position, float z) {
-		this.position.set(position, z);
-	}
-
-	public void setSize(Vector2f size) {
-		this.size.set(size);
-	}
-
-	public void setScale(float scale) {
-		this.scale = scale;
-	}
-
-	public void setPrimaryColor(Vector4f primaryColor) {
-		this.primaryColor.set(primaryColor);
-	}
-
-	public void setSecondaryColor(Vector4f secondaryColor) {
-		this.secondaryColor.set(secondaryColor);
-	}
-
-	public void setTertiaryColor(Vector4f tertiaryColor) {
-		this.tertiaryColor.set(tertiaryColor);
-	}
-
-	public void setOpacity(float opacity) {
-		this.opacity = opacity;
-	}
-
-	// ACTIONS
-	public void queueEvent(GUIEvent event) {
-		eventQueue.queueEvent(event);
-	}
-
-	public void updateEvents() {
-		eventQueue.update();
-	}
-
-	public void open() {
-		trigger(ON_OPEN);
-	}
-
-	public void close() {
-		trigger(ON_CLOSE);
-	}
-
-	public void checkInput() {
-		if (mouseOver()) {
-			trigger(ON_MOUSE_OVER);
-		}
-		else if (mouseExit()) {
-			trigger(ON_MOUSE_EXIT);
-		}
-		if (leftClick()) {
-			trigger(ON_LEFT_CLICK);
-		}
-		if (rightClick()) {
-			trigger(ON_RIGHT_CLICK);
-		}
-	}
-
-	private void trigger(int actionID) {
-		if (actions[actionID] != null) actions[actionID].trigger();
-	}
-
-	// ABSTRACT METHODS
-
-	public abstract void update();
-	public abstract void doTransform();
-	public abstract void render();
 
 }

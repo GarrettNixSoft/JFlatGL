@@ -41,6 +41,9 @@ public class TextureRenderer {
 	private final QuadModel quad;
 	private final Texture glitchNoise;
 
+	// debug
+	public static int ELEMENT_COUNT = 0;
+
 	public TextureRenderer() {
 		quad = ModelLoader.loadToVAO(positions);
 		shader = new TextureShader();
@@ -61,6 +64,8 @@ public class TextureRenderer {
 	 * @param textureElements A list containing lists of texture elements that all use one texture per list.
 	 */
 	public void render(List<TextureElement> textureElements, boolean depthWritingEnabled) {
+
+		ELEMENT_COUNT += textureElements.size();
 
 		prepare(depthWritingEnabled);
 

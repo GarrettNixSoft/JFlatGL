@@ -8,11 +8,8 @@ import com.floober.engine.renderEngine.fonts.fontMeshCreator.FontType;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.floober.engine.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.util.Logger;
-import com.floober.engine.util.configuration.Config;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-import org.joml.Vector4d;
-import org.joml.Vector4f;
 
 public class Button extends GUIComponent {
 

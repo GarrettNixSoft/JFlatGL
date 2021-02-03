@@ -6,6 +6,7 @@ public abstract class QueuedEvent {
 	protected boolean complete;
 
 	private final boolean blocking;
+	private boolean mustWait = false;
 
 	public QueuedEvent(boolean blocking) {
 		this.blocking = blocking;
@@ -18,6 +19,19 @@ public abstract class QueuedEvent {
 	 */
 	public boolean isBlocking() {
 		return blocking;
+	}
+
+	/**
+	 * Check whether this event is allowed to
+	 * begin while other events are being processed.
+	 * @return true if this event must wait for an empty queue
+	 */
+	public boolean mustWait() {
+		return mustWait;
+	}
+
+	public void setMustWait(boolean mustWait) {
+		this.mustWait = mustWait;
 	}
 
 	/**

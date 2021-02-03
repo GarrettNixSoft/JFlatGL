@@ -11,13 +11,17 @@ import com.floober.engine.gui.GUIAction;
 import com.floober.engine.gui.GUIManager;
 import com.floober.engine.gui.component.Button;
 import com.floober.engine.gui.component.GUILayer;
-import com.floober.engine.gui.component.GUIPanel;
+import com.floober.engine.gui.component.TabbedPanel;
 import com.floober.engine.gui.event.*;
 import com.floober.engine.loaders.Loader;
+import com.floober.engine.renderEngine.fonts.fontMeshCreator.GUIText;
+import com.floober.engine.renderEngine.fonts.fontRendering.FontRenderer;
 import com.floober.engine.renderEngine.fonts.fontRendering.TextMaster;
 import com.floober.engine.renderEngine.particles.ParticleMaster;
 import com.floober.engine.renderEngine.ppfx.PostProcessing;
+import com.floober.engine.renderEngine.renderers.GeometryRenderer;
 import com.floober.engine.renderEngine.renderers.MasterRenderer;
+import com.floober.engine.renderEngine.renderers.TextureRenderer;
 import com.floober.engine.util.Logger;
 import com.floober.engine.util.color.Colors;
 import com.floober.engine.util.configuration.Settings;
@@ -38,6 +42,8 @@ import static org.lwjgl.glfw.GLFW.glfwSetErrorCallback;
 
 public class GUITest {
 
+	private static GUIText fpsDisplay;
+
 	public static void main(String[] args) throws GUIException {
 
 		// Load user preferences/settings and game flags
@@ -50,73 +56,130 @@ public class GUITest {
 		// Create the window and set up OpenGL and GLFW.
 		GameWindow.initGame();
 
+		// Audio master has to be initialized before game loads
 		AudioMaster.init();
 
-		// Initialize the game.
+		// Initialize the game. (Also loads assets)
 		Game.init();
+
 		// game components
-		Sync sync = new Sync();
-		// master components
 		TextMaster.init();
 		ParticleMaster.init();
 		PostProcessing.init();
+		Sync sync = new Sync();
+
+		// SET UP DEBUG TEXT
+		fpsDisplay = new GUIText("FPS: ", 0.5f, Game.getFont("menu"),
+				new Vector3f(0, 0, 1), 1, false);
+		fpsDisplay.setColor(Colors.GREEN);
+		fpsDisplay.setWidth(0.5f);
+		fpsDisplay.setEdge(0.2f);
+		fpsDisplay.show();
 
 		// TEST GUI CODE
 
 		GUI gui = new GUI("test_gui");
-		GUIPanel panel = new GUIPanel("test_panel");
-		gui.addPanel(panel);
-
 		GUILayer layer = new GUILayer("test_layer");
-		panel.addLayer(layer);
+
+		TabbedPanel tabbedPanel = new TabbedPanel("tabbed_panel_test");
+		tabbedPanel.listPosition(TabbedPanel.ListPosition.LEFT).borderPadding(10)
+				.buttonSize(new Vector2f(120, 120)).buttonSpacing(50)
+				.closeTime(0.3f)
+				.location(new Vector3f(Display.center(), MasterRenderer.TOP_LAYER))
+				.primaryColor(Colors.WHITE).secondaryColor(Colors.RED)
+				.onClose(new GUIAction()
+						.addPerformActionOnTrigger(() -> tabbedPanel.queueEvent(new FadeComponentEvent(tabbedPanel, 0, 0.2f)))
+						.addPerformActionOnTrigger(() -> tabbedPanel.queueEvent(new ScaleEvent(tabbedPanel, -0.2f, 0.2f))));
+
+		layer.addPanel(tabbedPanel);
+		gui.addLayer(layer);
+
+		// create main test tab
+		TabbedPanel.TabContentPanel tab = tabbedPanel.generateTab("tab_1", Game.getTexture("default"));
+
+		// create second test tab
+		TabbedPanel.TabContentPanel tab2 = tabbedPanel.generateTab("tab_2", Game.getTexture("default2"));
+
+		// finalize the panel's layout
+		tabbedPanel.finalizeLayout();
 
 		// create the button
-		Button button = new Button("test_button");
+		Button button = new Button("quit_button");
 		// set the button's parameters
 		button.label("Quit").rounded(0.15f).textSize(1.2f)
-				.location(Display.center(), MasterRenderer.TOP_LAYER).size(new Vector2f(250, 100))
-				.primaryColor(Colors.WHITE).secondaryColor(Colors.BLACK)
+				.location(new Vector3f(Display.centerX(), Display.centerY() + 120, MasterRenderer.TOP_LAYER))
+				.size(new Vector2f(250, 100)).primaryColor(Colors.WHITE).secondaryColor(Colors.BLACK)
 				.onOpen(new GUIAction()
-						.addPerformActionOnTrigger(() -> button.queueEvent(new ReadyEvent(button))))
+						.addPerformActionOnTrigger(() -> button.queueEvent(new RestoreOpacityEvent(button, 0.05f)))
+						.addPerformActionOnTrigger(() -> button.queueEvent(new RestoreScaleEvent(button, 0.05f))))
 				.onClose(new GUIAction()
 						.addPerformActionOnTrigger(() -> button.queueEvent(new FadeComponentEvent(button, 0, 0.2f)))
-						.addPerformActionOnTrigger(() -> button.queueEvent(new BlockingDelayEvent(0.2f)))
-						.addPerformActionOnTrigger(() -> button.queueEvent(new PerformActionEvent(
-								new GUIAction().addPerformActionOnTrigger(Game::quit)))))
+						.addPerformActionOnTrigger(() -> button.queueEvent(new ScaleEvent(button, -0.2f, 0.2f))))
 				.onMouseOver(new GUIAction()
-						.addPerformActionOnTrigger(() -> Game.playSfx("hover")) // play the hover sound
-						.addPerformActionOnTrigger(() -> button.queueEvent(new GrowEvent(button, 0.1f, 0.05f))) // grow by 10% over 50ms
+						.addPerformActionOnTrigger(() -> Game.playSfx("hover2")) // play the hover sound
+						.addPerformActionOnTrigger(() -> button.queueEvent(new ScaleEvent(button, 0.1f, 0.05f))) // grow by 10% over 50ms
 						.addPerformActionOnTrigger(() -> button.setPrimaryColor(new Vector4f(1, 0.9f, 0.7f, 1))))
 				.onMouseExit(new GUIAction()
 						.addPerformActionOnTrigger(() -> button.queueEvent(new RestoreScaleEvent(button, 0.05f))) // return to normal size
 						.addPerformActionOnTrigger(() -> button.setPrimaryColor(Colors.WHITE)))
 				.onLeftClick(new GUIAction()
-						.addPerformActionOnTrigger(GUIManager::closeGUI));
+						.addPerformActionOnTrigger(() -> Game.playSfx("select"))
+						.addPerformActionOnTrigger(GUIManager::closeGUI)
+						.addPerformActionOnTrigger(tabbedPanel::resetCloseAction)
+						.addPerformActionOnTrigger(() -> button.queueEvent(new BlockingDelayEvent(0.3f)))
+						.addPerformActionOnTrigger(() -> button.queueEvent(new PerformActionEvent(
+								new GUIAction().addPerformActionOnTrigger(Game::quit)))));
 
 		// add the button to the GUI panel
-		layer.addComponent(button);
+		tab.addComponent(button);
 
-		Button otherButton = new Button("test_button_2");
-		otherButton.label("Jump!").rounded(0.15f).textSize(1.2f)
-				.location(new Vector3f(Display.centerX(), Display.centerY() + 120, MasterRenderer.TOP_LAYER))
-				.size(new Vector2f(250, 100)).primaryColor(Colors.WHITE).secondaryColor(Colors.BLACK)
+		Button otherButton = new Button("click_button");
+		otherButton.label("Click").rounded(0.15f).textSize(1.2f)
+				.location(Display.center(), MasterRenderer.TOP_LAYER).size(new Vector2f(250, 100))
+				.primaryColor(Colors.WHITE).secondaryColor(Colors.BLACK)
 				.onOpen(new GUIAction()
-						.addPerformActionOnTrigger(() -> otherButton.queueEvent(new ReadyEvent(otherButton))))
+						.addPerformActionOnTrigger(() -> otherButton.queueEvent(new RestoreOpacityEvent(otherButton, 0.05f)))
+						.addPerformActionOnTrigger(() -> otherButton.queueEvent(new RestoreScaleEvent(otherButton, 0.05f))))
 				.onClose(new GUIAction()
-								.addPerformActionOnTrigger(() -> otherButton.queueEvent(new FadeComponentEvent(otherButton, 0, 0.2f))))
+								.addPerformActionOnTrigger(() -> otherButton.queueEvent(new FadeComponentEvent(otherButton, 0, 0.2f)))
+								.addPerformActionOnTrigger(() -> otherButton.queueEvent(new ScaleEvent(otherButton, -0.2f, 0.2f))))
 				.onMouseOver(new GUIAction()
-						.addPerformActionOnTrigger(() -> Game.playSfx("hover")) // play the hover sound
-						.addPerformActionOnTrigger(() -> otherButton.queueEvent(new GrowEvent(otherButton, 0.1f, 0.05f))) // grow by 10% over 50ms
+						.addPerformActionOnTrigger(() -> Game.playSfx("hover2")) // play the hover sound
+						.addPerformActionOnTrigger(() -> otherButton.queueEvent(new ScaleEvent(otherButton, 0.1f, 0.05f))) // grow by 10% over 50ms
 						.addPerformActionOnTrigger(() -> otherButton.setPrimaryColor(new Vector4f(1, 0.9f, 0.7f, 1))))
 				.onMouseExit(new GUIAction()
 						.addPerformActionOnTrigger(() -> otherButton.queueEvent(new RestoreScaleEvent(otherButton, 0.05f))) // return to normal size
 						.addPerformActionOnTrigger(() -> otherButton.setPrimaryColor(Colors.WHITE)))
 				.onLeftClick(new GUIAction()
-						.addPerformActionOnTrigger(() -> Game.playSfx("jump")));
+						.addPerformActionOnTrigger(() -> Game.playSfx("select")));
 
-		layer.addComponent(otherButton);
+		tab.addComponent(otherButton);
+
+		// create a sample button for the second test tab
+		Button testButton = new Button("test_button");
+		testButton.label("Test").rounded(0.15f).textSize(1.2f)
+				.location(Display.center().add(300, 0), MasterRenderer.TOP_LAYER).size(new Vector2f(250, 100))
+				.primaryColor(Colors.WHITE).secondaryColor(Colors.BLACK)
+				.onOpen(new GUIAction()
+						.addPerformActionOnTrigger(() -> testButton.queueEvent(new RestoreScaleEvent(testButton, 0.05f)))
+						.addPerformActionOnTrigger(() -> testButton.queueEvent(new RestoreOpacityEvent(testButton, 0.05f))))
+				.onClose(new GUIAction()
+						.addPerformActionOnTrigger(() -> testButton.queueEvent(new FadeComponentEvent(testButton, 0, 0.2f)))
+						.addPerformActionOnTrigger(() -> testButton.queueEvent(new ScaleEvent(testButton, -0.2f, 0.2f))))
+				.onMouseOver(new GUIAction()
+						.addPerformActionOnTrigger(() -> Game.playSfx("hover2")) // play the hover sound
+						.addPerformActionOnTrigger(() -> testButton.queueEvent(new ScaleEvent(testButton, 0.1f, 0.05f))) // grow by 10% over 50ms
+						.addPerformActionOnTrigger(() -> testButton.setPrimaryColor(new Vector4f(1, 0.9f, 0.7f, 1))))
+				.onMouseExit(new GUIAction()
+						.addPerformActionOnTrigger(() -> testButton.queueEvent(new RestoreScaleEvent(testButton, 0.05f))) // return to normal size
+						.addPerformActionOnTrigger(() -> testButton.setPrimaryColor(Colors.WHITE)))
+				.onLeftClick(new GUIAction()
+						.addPerformActionOnTrigger(() -> Game.playSfx("select")));
+
+		tab2.addComponent(testButton);
 
 
+		// activate the GUI
 		GUIManager.setActiveGUI(gui);
 
 		// END_TEST
@@ -140,6 +203,13 @@ public class GUITest {
 			Game.render();
 			GUIManager.render();
 
+			// Debug!
+			float fps = 1.0f / DisplayManager.getFrameTimeRaw();
+			fpsDisplay.replaceText("FPS: " + fps +
+					"\nGeom: " + GeometryRenderer.ELEMENT_COUNT +
+					"\nTxtr: " + TextureRenderer.ELEMENT_COUNT +
+					"\nText: " + FontRenderer.ELEMENT_COUNT);
+
 			// render to the screen
 			MasterRenderer.render();
 
@@ -150,7 +220,7 @@ public class GUITest {
 			DisplayManager.updateDisplay();
 
 			// sync time
-			sync.sync(Display.FPS_CAP);
+//			sync.sync(Display.FPS_CAP);
 
 		}
 

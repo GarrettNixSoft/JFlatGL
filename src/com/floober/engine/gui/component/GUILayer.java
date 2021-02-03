@@ -7,64 +7,82 @@ import java.util.List;
 
 public class GUILayer extends GUIComponent {
 
-	private final List<GUIComponent> components = new ArrayList<>();
+	private final List<GUIPanel> panels = new ArrayList<>();
 
 	public GUILayer(String componentID) {
 		super(componentID);
 	}
 
-	public void addComponent(GUIComponent component) {
-		components.add(component);
+	public void addPanel(GUIPanel panel) {
+		panels.add(panel);
 	}
 
 	@Override
 	public boolean isClosed() {
-		for (GUIComponent component : components) {
-			if (!component.isClosed()) return false;
+		for (GUIPanel panel : panels) {
+			if (!panel.isClosed()) return false;
 		}
 		return true;
 	}
 
 	@Override
 	public void open() {
-		super.open();
 		Logger.log("Opening GUILayer");
-		for (GUIComponent component : components) {
-			component.open();
+		super.open();
+		for (GUIPanel panel : panels) {
+			panel.open();
 		}
 	}
 
 	@Override
 	public void close() {
-		for (GUIComponent component : components) {
-			component.close();
+		Logger.log("Layer close called");
+		super.close();
+		for (GUIPanel panel : panels) {
+			panel.close();
+		}
+	}
+
+	@Override
+	public void lock() {
+		super.lock();
+		for (GUIPanel panel : panels) {
+			panel.lock();
+		}
+	}
+
+	@Override
+	public void unlock() {
+		super.unlock();
+		for (GUIPanel panel : panels) {
+			panel.unlock();
 		}
 	}
 
 	@Override
 	public void update() {
-		for (GUIComponent component : components) {
-			component.updateEvents();
-			if (!component.isReady()) {
-				Logger.log("Component " + component + " is not ready, skipping");
+		for (GUIPanel panel : panels) {
+			panel.updateEvents();
+			if (!panel.isActive() || panel.isLocked()) {
+				Logger.log("Panel " + panel.getComponentID() + " skipped; ready? " + panel.isActive() + " | locked? " + panel.isLocked());
 				continue;
 			}
-			component.checkInput();
-			component.update();
+			panel.checkInput();
+			panel.update();
 		}
 	}
 
 	@Override
 	public void doTransform() {
-		for (GUIComponent component : components) {
-			component.doTransform();
+		for (GUIPanel panel : panels) {
+			panel.doTransform();
 		}
 	}
 
 	@Override
 	public void render() {
-		for (GUIComponent component : components) {
-			component.render();
+		for (GUIPanel panel : panels) {
+			panel.render();
 		}
 	}
 }

@@ -7,7 +7,7 @@ package com.floober.engine.util.configuration;
  */
 public class Config {
 
-	public static String WINDOW_TITLE = "DDPC 2!";
+	public static String WINDOW_TITLE = "FlooberEngine Development Version";
 
 	// 3 image files for the game window icons
 	public static final String ICON_PATH_64 = "icon/icon64.png";

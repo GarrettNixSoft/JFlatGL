@@ -42,4 +42,8 @@ public abstract class GUIEvent extends QueuedEvent {
 		this.targetComponent = targetComponent;
 	}
 
+	public String toString() {
+		return this.getClass().getSimpleName();
+	}
+
 }

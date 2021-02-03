@@ -4,6 +4,7 @@ import com.floober.engine.loaders.GameLoader;
 import com.floober.engine.renderEngine.RenderLayer;
 import com.floober.engine.renderEngine.elements.geometry.*;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.GUIText;
+import com.floober.engine.renderEngine.fonts.fontRendering.FontRenderer;
 import com.floober.engine.renderEngine.fonts.fontRendering.TextMaster;
 import com.floober.engine.renderEngine.framebuffers.FrameBuffer;
 import com.floober.engine.renderEngine.particles.ParticleMaster;
@@ -185,6 +186,11 @@ public class MasterRenderer {
 
 	public static void render() {
 
+		// clear element counts
+		GeometryRenderer.ELEMENT_COUNT = 0;
+		TextureRenderer.ELEMENT_COUNT = 0;
+		FontRenderer.ELEMENT_COUNT = 0;
+
 		// render to scene buffer
 		if (GameLoader.LOAD_COMPLETE) instance.sceneBuffer.bindFrameBuffer();
 
@@ -198,7 +204,6 @@ public class MasterRenderer {
 		}
 		// render transparent layers, back to front
 		for (int i = 0; i < NUM_LAYERS; ++i) {
-			if (KeyInput.isPressed(KeyInput.P)) Logger.log("Rendering layer " + i);
 			instance.renderLayerTransparent(instance.layers[i]);
 			ParticleMaster.renderParticles(i);
 			TextMaster.render(i);

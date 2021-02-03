@@ -14,6 +14,7 @@ public class BlockingDelayEvent extends GUIEvent {
 
 	@Override
 	public void onStart() {
+		Logger.log("Blocking for " + timer.getTime() + "s");
 		timer.start();
 	}
 

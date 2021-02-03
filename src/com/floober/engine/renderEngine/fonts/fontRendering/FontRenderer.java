@@ -20,21 +20,31 @@ public class FontRenderer {
 
 	private final FontShader shader;
 
+	public static int ELEMENT_COUNT = 0;
+
 	public FontRenderer() {
 		shader = new FontShader();
 	}
 
 	public void render(Map<FontType, List<GUIText>> texts) {
+
 		prepare();
+
 		for (FontType fontType : texts.keySet()) {
+
+			ELEMENT_COUNT += texts.get(fontType).size();
+
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, fontType.getTextureAtlas());
+
 			for (GUIText text : texts.get(fontType)) {
 				if (KeyInput.isPressed(KeyInput.P)) Logger.log("Text at z = " + text.getPosition().z());
 				renderText(text);
 			}
 		}
+
 		endRendering();
+
 	}
 
 	public void cleanUp(){

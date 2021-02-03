@@ -25,6 +25,7 @@ public class GUIManager {
 	}
 
 	public static void render() {
+		activeGUI.doTransform();
 		activeGUI.render();
 	}
 

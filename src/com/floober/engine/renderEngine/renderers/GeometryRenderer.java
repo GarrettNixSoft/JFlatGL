@@ -35,6 +35,9 @@ public class GeometryRenderer {
 	private final RectLightShader rectLightShader;
 	private final CircleShader circleShader;
 
+	// debug
+	public static int ELEMENT_COUNT = 0;
+
 	public GeometryRenderer() {
 		quad = ModelLoader.loadToVAO(positions);
 		lineVAO = ModelLoader.createVAO();
@@ -46,6 +49,8 @@ public class GeometryRenderer {
 
 	// RENDER METHODS
 	public void renderRectangles(List<RectElement> rectangles, boolean depthWritingEnabled) {
+
+		ELEMENT_COUNT += rectangles.size();
 
 		prepareRectangles(depthWritingEnabled);
 
@@ -66,6 +71,8 @@ public class GeometryRenderer {
 	}
 
 	public void renderLightRectangles(List<RectElementLight> elements) {
+
+		ELEMENT_COUNT += elements.size();
 
 		prepareLightRectangles(false);
 
@@ -89,6 +96,8 @@ public class GeometryRenderer {
 
 	public void renderCircles(List<CircleElement> circles, boolean depthWritingEnabled) {
 
+		ELEMENT_COUNT += circles.size();
+
 		prepareCircles(depthWritingEnabled);
 
 		for (CircleElement circleElement : circles) {
@@ -111,6 +120,8 @@ public class GeometryRenderer {
 
 	public void renderLines(List<LineElement> lines, boolean depthWritingEnabled) {
 
+		ELEMENT_COUNT += lines.size();
+
 		prepareRectangles(depthWritingEnabled);
 
 		for (LineElement lineElement : lines) {
@@ -122,6 +133,8 @@ public class GeometryRenderer {
 	}
 
 	public void renderOutlines(List<OutlineElement> outlines, boolean depthWritingEnabled) {
+
+		ELEMENT_COUNT += outlines.size() * 4;
 
 		prepareRectangles(depthWritingEnabled);
 

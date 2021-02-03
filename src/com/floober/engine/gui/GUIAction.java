@@ -24,6 +24,15 @@ public class GUIAction {
 		return this;
 	}
 
+	/**
+	 * Add an action to this GUIAction.
+	 * @param action the action to be performed
+	 */
+	public GUIAction addPerformActionOnTrigger(Action action, int index) {
+		actions.add(index, action);
+		return this;
+	}
+
 	public GUIAction addSendEventOnTrigger(GUIEvent event) {
 		events.add(event);
 		return this;
@@ -42,6 +51,22 @@ public class GUIAction {
 		for (GUIEvent event : events) {
 			GUIEventsHandler.sendEvent(event);
 		}
+	}
+
+	public int getActionCount() {
+		return actions.size();
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("GUIAction (").append(actions.size()).append(" events):\n");
+		for (Action action : actions) {
+			builder.append(action);
+			builder.append('\n');
+		}
+		builder.setLength(builder.length() - 1);
+		return builder.toString();
 	}
 
 }
