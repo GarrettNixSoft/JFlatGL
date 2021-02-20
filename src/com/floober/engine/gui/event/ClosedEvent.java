@@ -13,7 +13,6 @@ public class ClosedEvent extends GUIEvent {
 	@Override
 	public void onStart() {
 		// nothing
-		Logger.log("ClosedEvent targeting component " + targetComponent.getComponentID() + " has been started");
 	}
 
 	@Override
@@ -22,9 +21,7 @@ public class ClosedEvent extends GUIEvent {
 		if (!targetComponent.hasPendingEvents()) {
 			targetComponent.setActive(false);
 			complete = true;
-			Logger.log("Component " + targetComponent.getComponentID() + " close complete triggered via " + this);
 		}
-		else Logger.log("Cannot close, events still being processed");
 	}
 
 	@Override

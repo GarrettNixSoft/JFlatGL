@@ -12,13 +12,15 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+import java.util.HashMap;
+
 public abstract class GUIComponent {
 
 	// addressing this component
 	private final String componentID;
 
 	// location on screen
-	private final Vector3f position = new Vector3f();
+	private final Vector3f position = new Vector3f(), originalPosition = new Vector3f();
 	private final Vector2f size = new Vector2f();
 	private float scale = 1;
 
@@ -30,6 +32,9 @@ public abstract class GUIComponent {
 
 	// events to process
 	private final MultiEventQueue<GUIEvent> eventQueue = new MultiEventQueue<>();
+
+	// transition configurations
+	private final HashMap<String, GUIAction> transitions = new HashMap<>();
 
 	// interactions
 	protected final GUIAction[] actions = new GUIAction[8];
@@ -161,6 +166,13 @@ public abstract class GUIComponent {
 		return new Vector3f(position);
 	}
 
+	public Vector3f getOriginalPosition() { return new Vector3f(originalPosition); }
+
+	public Vector2f getOffset() {
+		Vector3f offset3 = getPosition().sub(getOriginalPosition());
+		return new Vector2f(offset3.x, offset3.y);
+	}
+
 	public Vector2f getSize() {
 		return new Vector2f(size);
 	}
@@ -200,11 +212,9 @@ public abstract class GUIComponent {
 	public void setActive(boolean active) {
 		this.active = active;
 		if (active) {
-			Logger.log("Component " + componentID + " is now active");
 			trigger(ON_OPEN_COMPLETE);
 		}
 		else {
-			Logger.log("Component " + componentID + " is no longer active");
 			trigger(ON_CLOSE_COMPLETE);
 		}
 	}
@@ -216,14 +226,29 @@ public abstract class GUIComponent {
 
 	public void unlock() {
 		locked = false;
+		Logger.log("Component " + componentID + " unlocked");
 	}
 
 	public void setPosition(Vector3f position) {
 		this.position.set(position);
+		this.originalPosition.set(position);
 	}
 
 	public void setPosition(Vector2f position, float z) {
 		this.position.set(position, z);
+		this.originalPosition.set(position, z);
+	}
+
+	public void setOffsetPosition(Vector2f offsetPosition) {
+		this.position.set(getOriginalPosition().add(offsetPosition.x, offsetPosition.y, 0));
+	}
+
+	public void offsetPositionBy(Vector2f offset) {
+		this.position.add(offset.x, offset.y, 0);
+	}
+
+	public void resetPosition() {
+		this.position.set(originalPosition);
 	}
 
 	public void setSize(Vector2f size) {
@@ -264,13 +289,11 @@ public abstract class GUIComponent {
 			Logger.log("Open failed; " + componentID + " is already active");
 			return;
 		}
-		Logger.log(componentID + " open called");
 		trigger(ON_OPEN);
 	}
 
 	public void close() {
 		if (isClosed()) return;
-//		Logger.log(componentID + " close succeeded");
 		trigger(ON_CLOSE);
 	}
 

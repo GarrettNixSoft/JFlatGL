@@ -15,7 +15,6 @@ import com.floober.engine.renderEngine.particles.behavior.ParticleBehavior;
 import com.floober.engine.renderEngine.particles.behavior.appearance.AppearanceBehavior;
 import com.floober.engine.renderEngine.particles.behavior.appearance.FadeOutBehavior;
 import com.floober.engine.renderEngine.particles.behavior.movement.ConstantVelocityBehavior;
-import com.floober.engine.renderEngine.particles.behavior.movement.FlameBehavior;
 import com.floober.engine.renderEngine.particles.behavior.movement.MovementBehavior;
 import com.floober.engine.renderEngine.particles.emitters.LightParticleEmitter;
 import com.floober.engine.renderEngine.particles.emitters.ParticleEmitter;
@@ -24,8 +23,8 @@ import com.floober.engine.renderEngine.particles.types.LightParticle;
 import com.floober.engine.renderEngine.ppfx.PostProcessing;
 import com.floober.engine.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.renderEngine.textures.Texture;
-import com.floober.engine.util.color.Colors;
 import com.floober.engine.util.Logger;
+import com.floober.engine.util.color.Colors;
 import com.floober.engine.util.configuration.Config;
 import com.floober.engine.util.input.KeyInput;
 import com.floober.engine.util.input.MouseInput;
@@ -75,7 +74,6 @@ public class ParticleTest {
 		// game.init();
 		// game components
 		Sync sync = new Sync();
-		MasterRenderer masterRenderer = new MasterRenderer();
 		// master components
 		TextMaster.init();
 		ParticleMaster.init();
@@ -144,7 +142,7 @@ public class ParticleTest {
 		ParticleTexture particleTex = new ParticleTexture(defaultTex, 1, false);
 
 		AppearanceBehavior fadeOutBehavior = new FadeOutBehavior(1, 0);
-		MovementBehavior flameBehavior = new FlameBehavior(-90, 15);
+//		MovementBehavior flameBehavior = new FlameBehavior(-90, 15);
 		MovementBehavior constantVelocity = new ConstantVelocityBehavior(0, 360);
 		particleBehavior = new ParticleBehavior(constantVelocity, fadeOutBehavior);
 		particleBehavior.getAppearanceBehavior().initSize(6, 200);
@@ -195,7 +193,7 @@ public class ParticleTest {
 		// Run the game loop!
 		while (!glfwWindowShouldClose(windowID)) {
 			// clear window
-			masterRenderer.prepare();
+			MasterRenderer.prepare();
 
 			// poll input
 			KeyInput.update();
@@ -211,10 +209,10 @@ public class ParticleTest {
 			runParticleTest();
 
 			// render to the screen
-			masterRenderer.render();
+			MasterRenderer.render();
 
 			// Do post-processing
-			PostProcessing.doPostProcessing(masterRenderer.getSceneBuffer().getColorTexture());
+			PostProcessing.doPostProcessing(MasterRenderer.getSceneBuffer().getColorTexture());
 
 			// update display and poll events
 			DisplayManager.updateDisplay();
@@ -227,7 +225,7 @@ public class ParticleTest {
 
 		// game.cleanUp();
 		Loader.cleanUp();
-		masterRenderer.cleanUp();
+		MasterRenderer.cleanUp();
 		TextMaster.cleanUp();
 		ParticleMaster.cleanUp();
 

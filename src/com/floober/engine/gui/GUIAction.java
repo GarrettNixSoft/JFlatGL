@@ -1,7 +1,6 @@
 package com.floober.engine.gui;
 
 import com.floober.engine.gui.event.GUIEvent;
-import com.floober.engine.util.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +41,6 @@ public class GUIAction {
 	 * Trigger all actions and events associated with this GUIAction.
 	 */
 	public void trigger() {
-//		Logger.log("Triggered (timestamp = " + System.nanoTime() + ")");
 		// perform all actions
 		for (Action action : actions) {
 			action.onTrigger();

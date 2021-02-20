@@ -16,6 +16,10 @@ public class Settings {
 
 	// display
 	public static boolean fullscreen;
+	public static boolean capFramerate;
+	public static int maxFramerateIndex;
+
+	public static final int[] fpsOptions = {30, 60, 90, 120, 144, 165, 240};
 
 	// dialogue
 	public static int dialogueCharDelay; // default: 25
@@ -35,6 +39,8 @@ public class Settings {
 	private static final String sfxVolKey = "sfx_vol";
 	// display
 	private static final String fullscreenKey = "fullscreen";
+	private static final String capFramerateKey = "cap_framerate";
+	private static final String maxFramerateIndexKey = "max_framerate_index";
 	// dialogue
 	private static final String dialogueCharDelayKey = "dialogue_char_delay";
 	// debug
@@ -62,6 +68,8 @@ public class Settings {
 		dialogueCharDelay = prefs.getInt(dialogueCharDelayKey, 25);
 		// display
 		fullscreen = prefs.getBoolean(fullscreenKey, false);
+		capFramerate = prefs.getBoolean(capFramerateKey, true);
+		maxFramerateIndex = prefs.getInt(maxFramerateIndexKey, 1);
 		// debug
 		debugMode = prefs.getBoolean(debugModeKey, false);
 		showFps = prefs.getBoolean(showFpsKey, false);

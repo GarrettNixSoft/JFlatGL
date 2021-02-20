@@ -148,6 +148,15 @@ public class TabbedPanel extends GUIPanel {
 	}
 
 	/**
+	 * Get the list of tab buttons. Use this to iterate over
+	 * the list and assign actions to button interactions.
+	 * @return the list of all TabButtons for the tabs in thiss panel
+	 */
+	public List<TabButton> getTabButtons() {
+		return tabButtons;
+	}
+
+	/**
 	 * Finalize the layout of the TabbedPanel. This should
 	 * be called once the creator is finished adding tabs and
 	 * has set the desired list position. The buttons for each
@@ -297,7 +306,7 @@ public class TabbedPanel extends GUIPanel {
 		}
 	}
 
-	private static class TabButton extends GUIComponent {
+	public static class TabButton extends GUIComponent {
 
 		private final TextureElement iconTexture;
 		private final GUIText label;

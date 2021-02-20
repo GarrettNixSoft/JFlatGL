@@ -82,7 +82,7 @@ public class GUITest {
 		GUILayer layer = new GUILayer("test_layer");
 
 		TabbedPanel tabbedPanel = new TabbedPanel("tabbed_panel_test");
-		tabbedPanel.listPosition(TabbedPanel.ListPosition.LEFT).borderPadding(10)
+		tabbedPanel.listPosition(TabbedPanel.ListPosition.TOP).borderPadding(10)
 				.buttonSize(new Vector2f(120, 120)).buttonSpacing(50)
 				.closeTime(0.3f)
 				.location(new Vector3f(Display.center(), MasterRenderer.TOP_LAYER))
@@ -117,11 +117,13 @@ public class GUITest {
 						.addPerformActionOnTrigger(() -> button.queueEvent(new ScaleEvent(button, -0.2f, 0.2f))))
 				.onMouseOver(new GUIAction()
 						.addPerformActionOnTrigger(() -> Game.playSfx("hover2")) // play the hover sound
-						.addPerformActionOnTrigger(() -> button.queueEvent(new ScaleEvent(button, 0.1f, 0.05f))) // grow by 10% over 50ms
-						.addPerformActionOnTrigger(() -> button.setPrimaryColor(new Vector4f(1, 0.9f, 0.7f, 1))))
+//						.addPerformActionOnTrigger(() -> button.queueEvent(new ScaleEvent(button, 0.1f, 0.05f))) // grow by 10% over 50ms
+						.addPerformActionOnTrigger(() -> button.setPrimaryColor(new Vector4f(1, 0.9f, 0.7f, 1)))
+						.addPerformActionOnTrigger(() -> button.queueEvent(new OffsetPositionEvent(button, new Vector2f(30, 0), 0.05f))))
 				.onMouseExit(new GUIAction()
-						.addPerformActionOnTrigger(() -> button.queueEvent(new RestoreScaleEvent(button, 0.05f))) // return to normal size
-						.addPerformActionOnTrigger(() -> button.setPrimaryColor(Colors.WHITE)))
+//						.addPerformActionOnTrigger(() -> button.queueEvent(new RestoreScaleEvent(button, 0.05f))) // return to normal size
+						.addPerformActionOnTrigger(() -> button.setPrimaryColor(Colors.WHITE))
+						.addPerformActionOnTrigger(() -> button.queueEvent(new RestoreOffsetEvent(button, 0.05f))))
 				.onLeftClick(new GUIAction()
 						.addPerformActionOnTrigger(() -> Game.playSfx("select"))
 						.addPerformActionOnTrigger(GUIManager::closeGUI)
@@ -145,11 +147,13 @@ public class GUITest {
 								.addPerformActionOnTrigger(() -> otherButton.queueEvent(new ScaleEvent(otherButton, -0.2f, 0.2f))))
 				.onMouseOver(new GUIAction()
 						.addPerformActionOnTrigger(() -> Game.playSfx("hover2")) // play the hover sound
-						.addPerformActionOnTrigger(() -> otherButton.queueEvent(new ScaleEvent(otherButton, 0.1f, 0.05f))) // grow by 10% over 50ms
-						.addPerformActionOnTrigger(() -> otherButton.setPrimaryColor(new Vector4f(1, 0.9f, 0.7f, 1))))
+//						.addPerformActionOnTrigger(() -> otherButton.queueEvent(new ScaleEvent(otherButton, 0.1f, 0.05f))) // grow by 10% over 50ms
+						.addPerformActionOnTrigger(() -> otherButton.setPrimaryColor(new Vector4f(1, 0.9f, 0.7f, 1)))
+						.addPerformActionOnTrigger(() -> otherButton.queueEvent(new OffsetPositionEvent(otherButton, new Vector2f(30, 0), 0.05f))))
 				.onMouseExit(new GUIAction()
-						.addPerformActionOnTrigger(() -> otherButton.queueEvent(new RestoreScaleEvent(otherButton, 0.05f))) // return to normal size
-						.addPerformActionOnTrigger(() -> otherButton.setPrimaryColor(Colors.WHITE)))
+//						.addPerformActionOnTrigger(() -> otherButton.queueEvent(new RestoreScaleEvent(otherButton, 0.05f))) // return to normal size
+						.addPerformActionOnTrigger(() -> otherButton.setPrimaryColor(Colors.WHITE))
+						.addPerformActionOnTrigger(() -> otherButton.queueEvent(new RestoreOffsetEvent(otherButton, 0.05f))))
 				.onLeftClick(new GUIAction()
 						.addPerformActionOnTrigger(() -> Game.playSfx("select")));
 
@@ -178,6 +182,20 @@ public class GUITest {
 
 		tab2.addComponent(testButton);
 
+		// tab buttons
+		for (TabbedPanel.TabButton tabButton : tabbedPanel.getTabButtons()) {
+			tabButton.onMouseOver(new GUIAction()
+					.addPerformActionOnTrigger(() -> Game.playSfx("hover2")) // play the hover sound
+							.addPerformActionOnTrigger(() -> tabButton.queueEvent(new ScaleEvent(tabButton, 0.1f, 0.05f))) // grow by 10% over 50ms
+							.addPerformActionOnTrigger(() -> tabButton.setPrimaryColor(new Vector4f(1, 0.9f, 0.7f, 1))))
+					.onClose(new GUIAction()
+							.addPerformActionOnTrigger(() -> tabButton.queueEvent(new FadeComponentEvent(tabButton, 0, 0.2f)))
+							.addPerformActionOnTrigger(() -> tabButton.queueEvent(new ScaleEvent(tabButton, -0.2f, 0.2f))))
+					.onMouseExit(new GUIAction()
+									.addPerformActionOnTrigger(() -> tabButton.queueEvent(new RestoreScaleEvent(tabButton, 0.05f))) // return to normal size
+									.addPerformActionOnTrigger(() -> tabButton.setPrimaryColor(Colors.WHITE)));
+		}
+
 
 		// activate the GUI
 		GUIManager.setActiveGUI(gui);
@@ -198,6 +216,8 @@ public class GUITest {
 			Game.update();
 			ParticleMaster.update();
 			GUIManager.update();
+
+			checkInput();
 
 			// render game internally
 			Game.render();
@@ -220,7 +240,7 @@ public class GUITest {
 			DisplayManager.updateDisplay();
 
 			// sync time
-//			sync.sync(Display.FPS_CAP);
+//			if (Settings.capFramerate) sync.sync(Settings.fpsOptions[Settings.maxFramerateIndex]);
 
 		}
 
@@ -241,6 +261,18 @@ public class GUITest {
 		glfwTerminate();
 		Objects.requireNonNull(glfwSetErrorCallback(null)).free(); // shut up, compiler
 
+	}
+
+	private static void checkInput() {
+		// TEST: Toggling post-processing effects
+		if (KeyInput.isShift()) {
+			if (KeyInput.isPressed(KeyInput.C)) { // C for contrast
+				PostProcessing.setStageEnabled("contrast", !PostProcessing.isStageEnabled("contrast"));
+			}
+			if (KeyInput.isPressed(KeyInput.I)) { // C for invert
+				PostProcessing.setStageEnabled("invertColor", !PostProcessing.isStageEnabled("invertColor"));
+			}
+		}
 	}
 
 }
