@@ -15,6 +15,7 @@ import com.floober.engine.renderEngine.particles.behavior.ParticleBehavior;
 import com.floober.engine.renderEngine.particles.behavior.appearance.AppearanceBehavior;
 import com.floober.engine.renderEngine.particles.behavior.appearance.FadeOutBehavior;
 import com.floober.engine.renderEngine.particles.behavior.movement.ConstantVelocityBehavior;
+import com.floober.engine.renderEngine.particles.behavior.movement.FireScreenBehavior;
 import com.floober.engine.renderEngine.particles.behavior.movement.MovementBehavior;
 import com.floober.engine.renderEngine.particles.emitters.LightParticleEmitter;
 import com.floober.engine.renderEngine.particles.emitters.ParticleEmitter;
@@ -46,6 +47,7 @@ public class ParticleTest {
 	static ParticleEmitter particleEmitter1;
 	static ParticleEmitter particleEmitter2;
 	static ParticleEmitter particleEmitter3;
+	static ParticleEmitter particleEmitter4;
 	static int sourceSwitch;
 	static ParticleBehavior particleBehavior;
 	static boolean useExplosionTexture;
@@ -144,6 +146,7 @@ public class ParticleTest {
 		AppearanceBehavior fadeOutBehavior = new FadeOutBehavior(1, 0);
 //		MovementBehavior flameBehavior = new FlameBehavior(-90, 15);
 		MovementBehavior constantVelocity = new ConstantVelocityBehavior(0, 360);
+
 		particleBehavior = new ParticleBehavior(constantVelocity, fadeOutBehavior);
 		particleBehavior.getAppearanceBehavior().initSize(6, 200);
 		particleBehavior.getMovementBehavior().initSpeed(100, 120);
@@ -161,6 +164,7 @@ public class ParticleTest {
 		particleEmitter1 = new ParticleEmitter(new Vector3f(), glowParticleTex, particleBehavior);
 		particleEmitter2 = new LightParticleEmitter(new Vector3f(), glowParticleTex, particleBehavior);
 		particleEmitter3 = new TexturedParticleEmitter(new Vector3f(), particleTex, particleBehavior2);
+		particleEmitter4 = new ParticleEmitter(new Vector3f(), glowParticleTex, particleBehavior);
 
 		particleEmitter1.initPositionDelta(0, 0);
 		particleEmitter1.setBoxMode(false);
@@ -168,6 +172,8 @@ public class ParticleTest {
 		particleEmitter2.setBoxMode(false);
 		particleEmitter3.initPositionDelta(0, 0);
 		particleEmitter3.setBoxMode(false);
+		particleEmitter4.initPositionDelta(0, 0);
+		particleEmitter4.setBoxMode(false);
 
 		particleEmitter = particleEmitter1;
 

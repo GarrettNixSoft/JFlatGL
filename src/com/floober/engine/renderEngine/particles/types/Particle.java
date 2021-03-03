@@ -7,6 +7,8 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+import java.util.HashMap;
+
 public class Particle implements Comparable<Particle> {
 
 	// pixel position and size
@@ -32,6 +34,8 @@ public class Particle implements Comparable<Particle> {
 	protected float lifeLength;
 	protected float elapsedTime;
 
+	private final HashMap<String, Float> extraDataValues = new HashMap<>();
+
 	/**
 	 * Generate a new particle.
 	 * @param texture The particle texture.
@@ -51,6 +55,14 @@ public class Particle implements Comparable<Particle> {
 		// update time
 		elapsedTime += DisplayManager.getFrameTimeSeconds();
 		return elapsedTime < lifeLength;
+	}
+
+	public void addValue(String key, float value) {
+		extraDataValues.put(key, value);
+	}
+
+	public float getValue(String key) {
+		return extraDataValues.get(key);
 	}
 
 	// GETTERS
@@ -78,6 +90,7 @@ public class Particle implements Comparable<Particle> {
 	public Vector3f getPosition() {
 		return position;
 	}
+	public Vector2f getPosition2f() { return new Vector2f(position.x, position.y); }
 	public Vector3f getScreenPosition() { return screenPosition; }
 	public Vector2f getVelocity() {
 		return velocity;

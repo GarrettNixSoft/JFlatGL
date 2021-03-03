@@ -15,13 +15,13 @@ public class RectElementLight extends RectElement {
 	private final Vector2f lightPosition;
 
 	public RectElementLight(Vector3f color, Vector2f lightPosition, int layer, float ambientLight, float lightIntensity, float lightRadius, float lightInnerRadius, boolean centered) {
-		super(new Vector4f(0), 0, 0, layer, Config.DEFAULT_RESOLUTION_WIDTH, Config.DEFAULT_RESOLUTION_HEIGHT, centered);
+		super(new Vector4f(0), 0, 0, layer, Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT, centered);
 		this.lightColor = color;
 		this.lightPosition = lightPosition;
 		this.ambientLight = ambientLight;
 		this.lightIntensity = lightIntensity;
-		this.lightRadius = lightRadius / Config.DEFAULT_RESOLUTION_HEIGHT;
-		this.lightInnerRadius = lightInnerRadius / Config.DEFAULT_RESOLUTION_HEIGHT;
+		this.lightRadius = lightRadius / Config.INTERNAL_HEIGHT;
+		this.lightInnerRadius = lightInnerRadius / Config.INTERNAL_HEIGHT;
 	}
 
 	public Vector3f getLightColor() {

@@ -64,8 +64,8 @@ public class MouseInput {
 
 	// UTIL: window resize support
 	public static void updateRatio(double width, double height) {
-		xPosRatio = Config.DEFAULT_RESOLUTION_WIDTH / width;
-		yPosRatio = Config.DEFAULT_RESOLUTION_HEIGHT / height;
+		xPosRatio = Config.INTERNAL_WIDTH / width;
+		yPosRatio = Config.INTERNAL_HEIGHT / height;
 		Display.SCREEN_RATIO.set(xPosRatio, yPosRatio);
 	}
 

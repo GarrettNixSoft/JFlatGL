@@ -1,7 +1,6 @@
 package com.floober.engine.display;
 
 import com.floober.engine.renderEngine.renderers.MasterRenderer;
-import com.floober.engine.util.Logger;
 import com.floober.engine.util.configuration.Config;
 import com.floober.engine.util.math.MathUtil;
 import org.joml.Vector2f;
@@ -12,8 +11,8 @@ import static org.lwjgl.opengl.GL11.glViewport;
 public class Display {
 
 	// internal resolution
-	public static int WIDTH = Config.DEFAULT_RESOLUTION_WIDTH;
-	public static int HEIGHT = Config.DEFAULT_RESOLUTION_HEIGHT;
+	public static int WIDTH = Config.INTERNAL_WIDTH;
+	public static int HEIGHT = Config.INTERNAL_HEIGHT;
 	public static int WINDOW_WIDTH, WINDOW_HEIGHT;
 	public static int FPS_CAP = 144;
 	public static final Vector2f SCREEN_RATIO = new Vector2f();
@@ -52,7 +51,7 @@ public class Display {
 	}
 
 	public static Vector2f dimensions() {
-		return new Vector2f(Config.DEFAULT_RESOLUTION_WIDTH, Config.DEFAULT_RESOLUTION_HEIGHT);
+		return new Vector2f(Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT);
 	}
 
 	/**

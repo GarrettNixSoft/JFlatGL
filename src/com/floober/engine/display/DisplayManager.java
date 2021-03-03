@@ -37,7 +37,7 @@ public class DisplayManager {
 			Display.fullscreen = !Display.fullscreen;
 			Logger.log("Attempting to toggle full screen");
 			if (Display.fullscreen) {
-				glfwSetWindowMonitor(windowID, glfwGetPrimaryMonitor(), 0, 0, Config.DEFAULT_RESOLUTION_WIDTH, Config.DEFAULT_RESOLUTION_HEIGHT, Display.FPS_CAP);
+				glfwSetWindowMonitor(windowID, glfwGetPrimaryMonitor(), 0, 0, Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT, Display.FPS_CAP);
 			}
 			else {
 				glfwSetWindowMonitor(windowID, MemoryUtil.NULL, 0, 0, Config.DEFAULT_WIDTH, Config.DEFAULT_HEIGHT, GLFW_DONT_CARE);

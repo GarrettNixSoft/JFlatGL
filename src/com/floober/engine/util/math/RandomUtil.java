@@ -125,4 +125,14 @@ public class RandomUtil {
 		return builder.toString();
 	}
 
+	// BIASED RANDOMS
+
+	public static float getCenterBiasedRandom() {
+		return getFloat() - getFloat();
+	}
+
+	public static float getCenterBiasedRandom(float range) {
+		return getCenterBiasedRandom() * range;
+	}
+
 }

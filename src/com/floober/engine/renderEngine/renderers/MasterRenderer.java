@@ -11,9 +11,7 @@ import com.floober.engine.renderEngine.particles.ParticleMaster;
 import com.floober.engine.renderEngine.batches.opaque.*;
 import com.floober.engine.renderEngine.batches.transparent.*;
 import com.floober.engine.renderEngine.elements.TextureElement;
-import com.floober.engine.util.Logger;
 import com.floober.engine.util.configuration.Config;
-import com.floober.engine.util.input.KeyInput;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -59,7 +57,7 @@ public class MasterRenderer {
 	 */
 	public MasterRenderer() {
 		// create the scene buffer
-		sceneBuffer = new FrameBuffer(Config.DEFAULT_RESOLUTION_WIDTH, Config.DEFAULT_RESOLUTION_HEIGHT, FrameBuffer.DEPTH_RENDER_BUFFER);
+		sceneBuffer = new FrameBuffer(Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT, FrameBuffer.DEPTH_RENDER_BUFFER);
 		// create the renderers
 		textureRenderer = new TextureRenderer();
 		geometryRenderer = new GeometryRenderer();

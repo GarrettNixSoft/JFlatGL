@@ -1,4 +1,4 @@
-package com.floober.engine.util;
+package com.floober.engine.util.math;
 
 import com.floober.engine.entity.core.Entity;
 import org.joml.Vector2f;

@@ -14,7 +14,7 @@ public class FrameBuffers {
 	private static final List<FrameBuffer> buffers = new ArrayList<>();
 
 	public static FrameBuffer createFullScreenFrameBuffer() {
-		return createFrameBuffer(Config.DEFAULT_RESOLUTION_WIDTH, Config.DEFAULT_RESOLUTION_HEIGHT, FrameBuffer.DEPTH_RENDER_BUFFER);
+		return createFrameBuffer(Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT, FrameBuffer.DEPTH_RENDER_BUFFER);
 	}
 
 	public static FrameBuffer createFrameBuffer(int width, int height) {

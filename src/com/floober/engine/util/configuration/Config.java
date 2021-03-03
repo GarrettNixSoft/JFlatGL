@@ -1,5 +1,7 @@
 package com.floober.engine.util.configuration;
 
+import org.joml.Vector4f;
+
 /**
 	The Config class contains all configurable settings that should be
 	customized for any project built using this engine, such as the
@@ -16,12 +18,16 @@ public class Config {
 
 	// The internal resolution at which the game is rendered;
 	// for game logic purposes, these are the bounds of the window
-	public static final int DEFAULT_RESOLUTION_WIDTH = 1920;
-	public static final int DEFAULT_RESOLUTION_HEIGHT = 1080;
+	public static final int INTERNAL_WIDTH = 1920;
+	public static final int INTERNAL_HEIGHT = 1080;
 
 	// The default size of the game window.
 	// The game will be stretched to this size.
 	public static final int DEFAULT_WIDTH = 1600;
 	public static final int DEFAULT_HEIGHT = 900;
+
+	public static Vector4f getScreenBounds() {
+		return new Vector4f(0, 0, INTERNAL_WIDTH, INTERNAL_HEIGHT);
+	}
 
 }

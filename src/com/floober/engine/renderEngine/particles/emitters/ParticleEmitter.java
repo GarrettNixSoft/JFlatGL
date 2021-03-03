@@ -1,5 +1,9 @@
 package com.floober.engine.renderEngine.particles.emitters;
 
+import com.floober.engine.renderEngine.Render;
+import com.floober.engine.renderEngine.elements.geometry.CircleElement;
+import com.floober.engine.renderEngine.elements.geometry.OutlineElement;
+import com.floober.engine.renderEngine.elements.geometry.RectElement;
 import com.floober.engine.renderEngine.particles.ParticleTexture;
 import com.floober.engine.renderEngine.particles.behavior.ParticleBehavior;
 import com.floober.engine.renderEngine.particles.types.EmitterParticle;
@@ -7,6 +11,7 @@ import com.floober.engine.util.math.MathUtil;
 import com.floober.engine.util.math.RandomUtil;
 import com.floober.engine.util.time.ScaledTimer;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 public class ParticleEmitter {
 
@@ -17,6 +22,7 @@ public class ParticleEmitter {
 
 	// particle settings
 	private float positionDeltaMin, positionDeltaMax;
+	private float positionDeltaVerticalMin, positionDeltaVerticalMax;
 	private final ScaledTimer particleTimer;
 
 	protected int batchCount = 1;
@@ -59,6 +65,11 @@ public class ParticleEmitter {
 	public void initPositionDelta(float positionDeltaMin, float positionDeltaMax) {
 		this.positionDeltaMin = positionDeltaMin;
 		this.positionDeltaMax = positionDeltaMax;
+	}
+
+	public void initPositionVerticalDelta(float positionDeltaVerticalMin, float positionDeltaVerticalMax) {
+		this.positionDeltaVerticalMin = positionDeltaVerticalMin;
+		this.positionDeltaVerticalMax = positionDeltaVerticalMax;
 	}
 
 	// GETTERS
@@ -183,6 +194,7 @@ public class ParticleEmitter {
 	}
 
 	// GENERATING PARTICLES
+
 	/**
 	 * Generate a particle at this source's position, using the current settings
 	 * of this source and the particle behavior.
@@ -212,7 +224,7 @@ public class ParticleEmitter {
 		Vector3f startingPosition = new Vector3f();
 		if (boxMode) {
 			float xPos = RandomUtil.getFloat(positionDeltaMin, positionDeltaMax);
-			float yPos = RandomUtil.getFloat(positionDeltaMin, positionDeltaMax);
+			float yPos = RandomUtil.getFloat(positionDeltaVerticalMin, positionDeltaVerticalMax);
 			if (RandomUtil.getBoolean()) xPos = -xPos;
 			if (RandomUtil.getBoolean()) yPos = -yPos;
 			startingPosition.set(xPos, yPos, position.z());
@@ -223,6 +235,20 @@ public class ParticleEmitter {
 			// use the rotation of the velocity; this ensures than particles always move away from the center
 		}
 		return new Vector3f(position).add(startingPosition);
+	}
+
+	public void renderBounds() {
+		if (boxMode) {
+			OutlineElement bounds = new OutlineElement(particleBehavior.getAppearanceBehavior().getParticleColor(),
+										position.x, position.y, (int) position.z, positionDeltaMax * 2,
+									positionDeltaVerticalMax * 2, 2, true);
+			Render.drawOutline(bounds);
+		}
+		else {
+			CircleElement bounds = new CircleElement(particleBehavior.getAppearanceBehavior().getParticleColor(),
+										position.x, position.y, (int) position.z, positionDeltaMax - 2, positionDeltaMax);
+			Render.drawCircle(bounds);
+		}
 	}
 
 }

@@ -24,6 +24,23 @@ public class OutlineElement extends GeometryElement {
 		// (for some reason I need to add lineWidth to the bottom of the left-side line when lineWidth is > 1, or else the bottom-left corner will be missing
 	}
 
+	public OutlineElement(Vector4f color, Vector4f bounds, int layer, float lineWidth, boolean centered) {
+		super(color, bounds.x(), bounds.y(), layer, centered);
+		this.width = bounds.z() - bounds.x();
+		this.height = bounds.w() - bounds.y();
+		this.lineWidth = lineWidth;
+		if (centered) {
+			x -= width / 2;
+			y -= height / 2;
+		}
+		lines = new LineElement[4];
+		lines[0] = new LineElement(color, x, y, x + width, y, layer, lineWidth); // top
+		lines[1] = new LineElement(color, x + width, y, x + width, y + height, layer, lineWidth); // right
+		lines[2] = new LineElement(color, x + width, y + height, x, y + height, layer, lineWidth); // bottom
+		lines[3] = new LineElement(color, x, y + height + lineWidth, x, y, layer, lineWidth); // left
+		// (for some reason I need to add lineWidth to the bottom of the left-side line when lineWidth is > 1, or else the bottom-left corner will be missing
+	}
+
 	public LineElement[] getLines() {
 		return lines;
 	}

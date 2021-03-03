@@ -1,13 +1,11 @@
 package com.floober.engine.entity.util;
 
-import com.floober.engine.entity.attachments.EntityAttachableTo;
 import com.floober.engine.entity.core.Entity;
 import com.floober.engine.entity.core.enemy.Enemy;
 import com.floober.engine.entity.core.pickup.Pickup;
 import com.floober.engine.entity.core.player.Player;
 import com.floober.engine.entity.projectile.Projectile;
-import com.floober.engine.util.Collisions;
-import org.joml.Vector2f;
+import com.floober.engine.util.math.Collisions;
 
 import java.awt.*;
 import java.util.ArrayList;

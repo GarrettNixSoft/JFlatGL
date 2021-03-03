@@ -42,7 +42,7 @@ public class GameWindow {
 		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRANSPARENT_FRAMEBUFFER);
 
 		// Step 3: Create the window, and test to make sure it succeeded. If it fails, die.
-		windowID = glfwCreateWindow(Config.DEFAULT_RESOLUTION_WIDTH, Config.DEFAULT_RESOLUTION_HEIGHT, Config.WINDOW_TITLE, NULL, NULL);
+		windowID = glfwCreateWindow(Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT, Config.WINDOW_TITLE, NULL, NULL);
 		if (windowID == NULL) {
 			throw new IllegalStateException("Unable to create GLFW window.");
 		}
@@ -95,8 +95,8 @@ public class GameWindow {
 			@Override
 			public void invoke(long window, int width, int height) {
 //				// log it
-				float scaleToFitWidth = (float) width / Config.DEFAULT_RESOLUTION_WIDTH;
-				float scaleToFitHeight = (float) height / Config.DEFAULT_RESOLUTION_HEIGHT;
+				float scaleToFitWidth = (float) width / Config.INTERNAL_WIDTH;
+				float scaleToFitHeight = (float) height / Config.INTERNAL_HEIGHT;
 				Display.WINDOW_WIDTH = width;
 				Display.WINDOW_HEIGHT = height;
 				if (scaleToFitWidth < scaleToFitHeight) {

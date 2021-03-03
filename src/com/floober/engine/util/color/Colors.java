@@ -13,6 +13,7 @@ public class Colors {
 	public static final Vector4f DARK_GRAY = new Vector4f(0.3f, 0.3f, 0.3f, 1);
 	public static final Vector4f RED = new Vector4f(1, 0, 0, 1);
 	public static final Vector4f ORANGE = new Vector4f(1, 0.41f, 0, 1);
+	public static final Vector4f RED_ORANGE = new Vector4f(1, 0.21f, 0, 1);
 	public static final Vector4f YELLOW = new Vector4f(1, 0.8f, 0, 1);
 	public static final Vector4f GOLD = new Vector4f(1, 0.6f, 0, 1);
 	public static final Vector4f GREEN = new Vector4f(0, 1, 0, 1);
@@ -30,6 +31,7 @@ public class Colors {
 	public static final Vector3f DARK_GRAY_3 = new Vector3f(0.3f, 0.3f, 0.3f);
 	public static final Vector3f RED_3 = new Vector3f(1, 0, 0);
 	public static final Vector3f ORANGE_3 = new Vector3f(1, 0.41f, 0);
+	public static final Vector3f RED_ORANGE_3 = new Vector3f(1, 0.21f, 0);
 	public static final Vector3f YELLOW_3 = new Vector3f(1, 0.8f, 0);
 	public static final Vector3f GOLD_3 = new Vector3f(1, 0.6f, 0);
 	public static final Vector3f GREEN_3 = new Vector3f(0, 1, 0);
@@ -45,6 +47,7 @@ public class Colors {
 	// particle colors
 	public static final Vector4f PARTICLE_RED = new Vector4f(1, 0.1f, 0.1f, 1);
 	public static final Vector4f PARTICLE_ORANGE = new Vector4f(1, 0.41f, 0.1f, 1);
+	public static final Vector4f PARTICLE_RED_ORANGE = new Vector4f(1, 0.21f, 0.1f, 1);
 	public static final Vector4f PARTICLE_YELLOW = new Vector4f(1, 0.8f, 0.1f, 1);
 	public static final Vector4f PARTICLE_GOLD = new Vector4f(1, 0.6f, 0.1f, 1);
 	public static final Vector4f PARTICLE_GREEN = new Vector4f(0.1f, 1, 0.1f, 1);

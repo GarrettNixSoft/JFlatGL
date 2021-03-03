@@ -5,7 +5,7 @@ import com.floober.engine.gui.GUIAction;
 import com.floober.engine.gui.event.ClosedEvent;
 import com.floober.engine.gui.event.GUIEvent;
 import com.floober.engine.gui.event.ReadyEvent;
-import com.floober.engine.util.Collisions;
+import com.floober.engine.util.math.Collisions;
 import com.floober.engine.util.Logger;
 import com.floober.engine.util.input.MouseInput;
 import org.joml.Vector2f;

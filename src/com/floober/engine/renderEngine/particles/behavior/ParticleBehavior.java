@@ -2,6 +2,7 @@ package com.floober.engine.renderEngine.particles.behavior;
 
 import com.floober.engine.renderEngine.particles.behavior.appearance.AppearanceBehavior;
 import com.floober.engine.renderEngine.particles.behavior.movement.MovementBehavior;
+import com.floober.engine.renderEngine.particles.systems.ParticleSystem;
 import com.floober.engine.renderEngine.particles.types.EmitterParticle;
 import com.floober.engine.util.math.RandomUtil;
 
@@ -10,6 +11,8 @@ public class ParticleBehavior implements Cloneable {
 	// sub-managers
 	private MovementBehavior movementBehavior;
 	private AppearanceBehavior appearanceBehavior;
+
+	private ParticleSystem particleSystem;
 
 	// general settings
 	private float particleLifeMin, particleLifeMax;
@@ -20,6 +23,10 @@ public class ParticleBehavior implements Cloneable {
 	}
 
 	// INITIALIZERS
+
+	public void setParticleSystem(ParticleSystem particleSystem) {
+		this.particleSystem = particleSystem;
+	}
 
 	/**
 	 * Set initial boundary values for the particle life span. This
@@ -98,6 +105,10 @@ public class ParticleBehavior implements Cloneable {
 	}
 
 	// UPDATE
+	public void update() {
+		if (particleSystem != null) particleSystem.update();
+	}
+
 	public void updateParticle(EmitterParticle particle) {
 		movementBehavior.updateParticle(particle);
 		appearanceBehavior.updateParticle(particle);
