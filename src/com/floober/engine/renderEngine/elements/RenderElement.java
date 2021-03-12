@@ -121,7 +121,7 @@ public abstract class RenderElement implements Comparable<RenderElement> {
 
 	@Override
 	public int compareTo(RenderElement other) {
-		return Float.compare(other.layer, layer);
+		return Integer.compare(other.layer, layer);
 	}
 
 }

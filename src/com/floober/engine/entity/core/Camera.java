@@ -2,7 +2,6 @@ package com.floober.engine.entity.core;
 
 import com.floober.engine.display.Display;
 import com.floober.engine.entity.effects.entity.CameraShake;
-import com.floober.engine.game.Game;
 import com.floober.engine.util.Logger;
 import com.floober.engine.util.interpolators.FadeInFloat;
 import com.floober.engine.util.math.MathUtil;

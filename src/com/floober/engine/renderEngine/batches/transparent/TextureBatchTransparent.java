@@ -19,7 +19,7 @@ public class TextureBatchTransparent extends TransparentBatch {
 	}
 
 	public void addElement(TextureElement element) {
-		if (element.hasTransparency()) {
+		if (element.textureComponentHasTransparency()) {
 			elements.add(element);
 		}
 		else {

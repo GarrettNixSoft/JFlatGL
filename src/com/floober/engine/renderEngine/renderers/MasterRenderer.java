@@ -2,15 +2,15 @@ package com.floober.engine.renderEngine.renderers;
 
 import com.floober.engine.loaders.GameLoader;
 import com.floober.engine.renderEngine.RenderLayer;
+import com.floober.engine.renderEngine.batches.opaque.*;
+import com.floober.engine.renderEngine.batches.transparent.*;
+import com.floober.engine.renderEngine.elements.TextureElement;
 import com.floober.engine.renderEngine.elements.geometry.*;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.floober.engine.renderEngine.fonts.fontRendering.FontRenderer;
 import com.floober.engine.renderEngine.fonts.fontRendering.TextMaster;
 import com.floober.engine.renderEngine.framebuffers.FrameBuffer;
 import com.floober.engine.renderEngine.particles.ParticleMaster;
-import com.floober.engine.renderEngine.batches.opaque.*;
-import com.floober.engine.renderEngine.batches.transparent.*;
-import com.floober.engine.renderEngine.elements.TextureElement;
 import com.floober.engine.util.configuration.Config;
 
 import java.util.HashMap;
@@ -115,7 +115,7 @@ public class MasterRenderer {
 		// get the layer this element will be rendered in
 		int layer = element.getLayer();
 		// add this element to the appropriate batch
-		if (element.hasTransparency())
+		if (element.textureComponentHasTransparency())
 			instance.transparentTextureBatches.get(layer).addElement(element);
 		else
 			instance.opaqueTextureBatches.get(layer).addElement(element);

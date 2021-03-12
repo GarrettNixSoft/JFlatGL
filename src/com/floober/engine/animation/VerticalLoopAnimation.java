@@ -3,7 +3,7 @@ package com.floober.engine.animation;
 import com.floober.engine.display.DisplayManager;
 import com.floober.engine.renderEngine.Render;
 import com.floober.engine.renderEngine.elements.TextureElement;
-import com.floober.engine.renderEngine.textures.Texture;
+import com.floober.engine.renderEngine.textures.TextureSet;
 
 /**
  * The VerticalLoopAnimation is an animation that repeats its
@@ -17,7 +17,7 @@ public class VerticalLoopAnimation extends Animation {
 
 	private final TextureElement textureElement;
 
-	public VerticalLoopAnimation(Texture[] frames, int frameTime, float moveSpeed, int loopHeight) {
+	public VerticalLoopAnimation(TextureSet frames, int frameTime, float moveSpeed, int loopHeight) {
 		this.moveSpeed = moveSpeed;
 		this.loopHeight = loopHeight;
 		setFrames(frames);

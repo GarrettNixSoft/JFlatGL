@@ -10,7 +10,6 @@ import com.floober.engine.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.floober.engine.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.util.Logger;
 import com.floober.engine.util.color.Colors;
-import com.floober.engine.util.configuration.Config;
 import com.floober.engine.util.configuration.Settings;
 import com.floober.engine.util.input.KeyInput;
 import com.floober.engine.util.input.MouseInput;

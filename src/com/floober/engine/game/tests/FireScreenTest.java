@@ -5,27 +5,15 @@ import com.floober.engine.display.Display;
 import com.floober.engine.display.DisplayManager;
 import com.floober.engine.display.GameWindow;
 import com.floober.engine.game.Game;
-import com.floober.engine.loaders.ImageLoader;
 import com.floober.engine.loaders.Loader;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.GUIText;
-import com.floober.engine.renderEngine.fonts.fontRendering.FontRenderer;
 import com.floober.engine.renderEngine.fonts.fontRendering.TextMaster;
 import com.floober.engine.renderEngine.particles.ParticleMaster;
-import com.floober.engine.renderEngine.particles.ParticleTexture;
-import com.floober.engine.renderEngine.particles.behavior.ParticleBehavior;
-import com.floober.engine.renderEngine.particles.behavior.appearance.FadeOutBehavior;
-import com.floober.engine.renderEngine.particles.behavior.movement.FireScreenBehavior;
-import com.floober.engine.renderEngine.particles.emitters.LightParticleEmitter;
-import com.floober.engine.renderEngine.particles.emitters.ParticleEmitter;
 import com.floober.engine.renderEngine.particles.systems.FireScreenParticleSystem;
-import com.floober.engine.renderEngine.particles.types.LightParticle;
 import com.floober.engine.renderEngine.ppfx.PostProcessing;
-import com.floober.engine.renderEngine.renderers.GeometryRenderer;
 import com.floober.engine.renderEngine.renderers.MasterRenderer;
-import com.floober.engine.renderEngine.renderers.TextureRenderer;
 import com.floober.engine.util.Logger;
 import com.floober.engine.util.color.Colors;
-import com.floober.engine.util.configuration.Config;
 import com.floober.engine.util.input.KeyInput;
 import com.floober.engine.util.input.MouseInput;
 import com.floober.engine.util.time.Sync;
@@ -36,7 +24,6 @@ import java.util.Objects;
 
 import static com.floober.engine.display.GameWindow.windowID;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.glfw.GLFW.glfwSetErrorCallback;
 
 public class FireScreenTest {
 

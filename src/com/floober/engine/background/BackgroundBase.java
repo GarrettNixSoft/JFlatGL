@@ -5,8 +5,8 @@ import com.floober.engine.display.Display;
 import com.floober.engine.display.DisplayManager;
 import com.floober.engine.renderEngine.Render;
 import com.floober.engine.renderEngine.elements.TextureElement;
-import com.floober.engine.renderEngine.textures.Texture;
-import com.floober.engine.util.configuration.Config;
+import com.floober.engine.renderEngine.textures.TextureComponent;
+import com.floober.engine.renderEngine.textures.TextureSet;
 
 /**
  * @author Floober
@@ -27,7 +27,7 @@ public class BackgroundBase {
 
 	private int xCount, yCount; // times to tile background to fill screen
 	
-	public BackgroundBase(Texture[] textures, int animationTime, float moveSpeed) {
+	public BackgroundBase(TextureSet textures, int animationTime, float moveSpeed) {
 		animation = new Animation();
 		animation.setFrames(textures);
 		animation.setFrameTime(animationTime);
@@ -37,7 +37,7 @@ public class BackgroundBase {
 	}
 
 	private void setSize() {
-		Texture texture = animation.getFrames()[0];
+		TextureComponent texture = animation.getFrames().getFrame(0);
 		int width = texture.width();
 		int height = texture.height();
 		xCount = Math.max(((Display.WIDTH + 1) / width) + 1, 2) + 1;

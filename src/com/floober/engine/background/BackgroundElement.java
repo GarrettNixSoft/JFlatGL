@@ -2,7 +2,7 @@ package com.floober.engine.background;
 
 import com.floober.engine.animation.Animation;
 import com.floober.engine.entity.core.Entity;
-import com.floober.engine.renderEngine.textures.Texture;
+import com.floober.engine.renderEngine.textures.TextureSet;
 
 /**
  * @author Floober
@@ -14,7 +14,7 @@ import com.floober.engine.renderEngine.textures.Texture;
 public class BackgroundElement extends Entity {
 
 	// create element
-	public BackgroundElement(Texture[] textures, float x, float y) {
+	public BackgroundElement(TextureSet textures, float x, float y) {
 		super(null, x, y);
 		this.x = x;
 		this.y = y;

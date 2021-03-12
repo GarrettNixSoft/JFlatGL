@@ -1,11 +1,11 @@
 package com.floober.engine.renderEngine.particles.systems;
 
+import com.floober.engine.assets.Textures;
 import com.floober.engine.display.Display;
 import com.floober.engine.loaders.ImageLoader;
 import com.floober.engine.renderEngine.particles.ParticleTexture;
 import com.floober.engine.renderEngine.particles.behavior.ParticleBehavior;
 import com.floober.engine.renderEngine.particles.behavior.appearance.FadeInOutBehavior;
-import com.floober.engine.renderEngine.particles.behavior.appearance.FadeOutBehavior;
 import com.floober.engine.renderEngine.particles.behavior.movement.FireScreenBehavior;
 import com.floober.engine.renderEngine.particles.emitters.LightParticleEmitter;
 import com.floober.engine.renderEngine.particles.types.LightParticle;
@@ -65,7 +65,7 @@ public class FireScreenParticleSystem extends ParticleSystem {
 
 	private void initEmitter() {
 		// get the glow texture
-		ParticleTexture particleTexture = new ParticleTexture(ImageLoader.loadTexture("textures/particles/glow.png"), 1, true);
+		ParticleTexture particleTexture = new ParticleTexture(Textures.wrapTexture(ImageLoader.loadTexture("textures/particles/glow.png")), 1, true);
 		// create and configure the particle behavior attributes
 		ParticleBehavior particleBehavior = new ParticleBehavior(this.particleBehavior = new FireScreenBehavior(this),
 																new FadeInOutBehavior(1, 0.15f, 0.5f));

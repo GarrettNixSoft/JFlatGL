@@ -5,17 +5,17 @@ import com.floober.engine.display.Display;
 import com.floober.engine.display.DisplayManager;
 import com.floober.engine.display.GameWindow;
 import com.floober.engine.game.Game;
-import com.floober.engine.renderEngine.fonts.fontRendering.TextMaster;
 import com.floober.engine.loaders.Loader;
-import com.floober.engine.renderEngine.particles.ParticleMaster;
 import com.floober.engine.renderEngine.elements.TextureElement;
+import com.floober.engine.renderEngine.fonts.fontRendering.TextMaster;
+import com.floober.engine.renderEngine.particles.ParticleMaster;
 import com.floober.engine.renderEngine.ppfx.PostProcessing;
 import com.floober.engine.renderEngine.renderers.MasterRenderer;
-import com.floober.engine.renderEngine.textures.Texture;
-import com.floober.engine.util.time.Sync;
+import com.floober.engine.renderEngine.textures.TextureComponent;
 import com.floober.engine.util.Logger;
 import com.floober.engine.util.input.KeyInput;
 import com.floober.engine.util.input.MouseInput;
+import com.floober.engine.util.time.Sync;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.Callbacks;
 
@@ -47,8 +47,8 @@ public class RenderingTest {
 
 		// TEST
 
-		Texture texture = Game.getTexture("default");
-		Texture texture2 = Game.getTexture("default2");
+		TextureComponent texture = Game.getTexture("default");
+		TextureComponent texture2 = Game.getTexture("default2");
 		TextureElement element1 = new TextureElement(texture, 0, 0, 15, false);
 		TextureElement element2 = new TextureElement(texture, 32, 0, 0, false);
 		TextureElement element3 = new TextureElement(texture, 0, 32, 0, false);

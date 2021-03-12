@@ -1,7 +1,7 @@
 package com.floober.engine.gui.dialogue;
 
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.FontType;
-import com.floober.engine.renderEngine.textures.Texture;
+import com.floober.engine.renderEngine.textures.TextureComponent;
 import org.joml.Vector4f;
 
 /**
@@ -13,7 +13,7 @@ import org.joml.Vector4f;
  */
 public class DialogueLine {
 
-	private final Texture face;
+	private final TextureComponent face;
 	private final String name;
 	private final String line;
 
@@ -30,7 +30,7 @@ public class DialogueLine {
 	private int charDelay;
 	private boolean auto;
 
-	public DialogueLine(Texture face, String name, String line) {
+	public DialogueLine(TextureComponent face, String name, String line) {
 		this.face = face;
 		this.name = name;
 		this.line = line;
@@ -64,7 +64,7 @@ public class DialogueLine {
 	}
 
 	// GETTERS
-	public Texture getFace() {
+	public TextureComponent getFace() {
 		return face;
 	}
 	public String getName() {

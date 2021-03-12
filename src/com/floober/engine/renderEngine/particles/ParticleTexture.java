@@ -1,10 +1,10 @@
 package com.floober.engine.renderEngine.particles;
 
 import com.floober.engine.game.Game;
-import com.floober.engine.renderEngine.textures.Texture;
+import com.floober.engine.renderEngine.textures.TextureComponent;
 import org.json.JSONObject;
 
-public record ParticleTexture(Texture texture, int numRows, boolean useAdditiveBlend) {
+public record ParticleTexture(TextureComponent texture, int numRows, boolean useAdditiveBlend) {
 
 	public int id() { return texture.id(); }
 	public int width() { return texture.width(); }
@@ -13,7 +13,7 @@ public record ParticleTexture(Texture texture, int numRows, boolean useAdditiveB
 	public boolean additiveBlend() { return useAdditiveBlend; }
 
 	public static ParticleTexture createParticleTextureFromJSON(JSONObject json, Game game) {
-		Texture texture = game.getTexture(json.getString("name"));
+		TextureComponent texture = Game.getTexture(json.getString("name"));
 		int rows = json.getInt("rows");
 		boolean additive = json.getBoolean("additiveBlend");
 		return new ParticleTexture(texture, rows, additive);

@@ -1,7 +1,6 @@
 package com.floober.engine.gui.event;
 
 import com.floober.engine.gui.component.GUIComponent;
-import com.floober.engine.util.Logger;
 
 public class ClosedEvent extends GUIEvent {
 

@@ -2,7 +2,6 @@ package com.floober.engine.entity.attachments;
 
 import com.floober.engine.entity.core.Entity;
 import com.floober.engine.entity.util.EntityHandler;
-import com.floober.engine.game.Game;
 import com.floober.engine.util.Logger;
 
 import java.util.ArrayList;

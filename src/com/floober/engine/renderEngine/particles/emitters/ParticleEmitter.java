@@ -3,7 +3,6 @@ package com.floober.engine.renderEngine.particles.emitters;
 import com.floober.engine.renderEngine.Render;
 import com.floober.engine.renderEngine.elements.geometry.CircleElement;
 import com.floober.engine.renderEngine.elements.geometry.OutlineElement;
-import com.floober.engine.renderEngine.elements.geometry.RectElement;
 import com.floober.engine.renderEngine.particles.ParticleTexture;
 import com.floober.engine.renderEngine.particles.behavior.ParticleBehavior;
 import com.floober.engine.renderEngine.particles.types.EmitterParticle;
@@ -11,7 +10,6 @@ import com.floober.engine.util.math.MathUtil;
 import com.floober.engine.util.math.RandomUtil;
 import com.floober.engine.util.time.ScaledTimer;
 import org.joml.Vector3f;
-import org.joml.Vector4f;
 
 public class ParticleEmitter {
 

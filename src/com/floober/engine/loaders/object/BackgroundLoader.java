@@ -21,7 +21,7 @@ public class BackgroundLoader {
 		else animationTime = -1;
 		float moveSpeed = baseObj.getFloat("move");
 		// create base object
-		BackgroundBase base = new BackgroundBase(Game.getTextureArray(texID), animationTime, moveSpeed);
+		BackgroundBase base = new BackgroundBase(Game.getTextureSet(texID), animationTime, moveSpeed);
 		// TODO: parse elements and add them
 		// create Background
 		Background background = new Background();

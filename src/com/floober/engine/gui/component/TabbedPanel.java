@@ -9,7 +9,7 @@ import com.floober.engine.renderEngine.elements.TextureElement;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.FontType;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.floober.engine.renderEngine.renderers.MasterRenderer;
-import com.floober.engine.renderEngine.textures.Texture;
+import com.floober.engine.renderEngine.textures.TextureComponent;
 import com.floober.engine.util.Logger;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -117,7 +117,7 @@ public class TabbedPanel extends GUIPanel {
 		return this;
 	}
 
-	public TabContentPanel generateTab(String tabLabel, Texture tabIcon) {
+	public TabContentPanel generateTab(String tabLabel, TextureComponent tabIcon) {
 		// generate the tab
 		TabContentPanel tab = new TabContentPanel(tabLabel, closeTime);
 		// make it wait on close
@@ -313,7 +313,7 @@ public class TabbedPanel extends GUIPanel {
 
 		private float defaultTextSize = 1.5f;
 
-		public TabButton(String componentID, Texture icon) {
+		public TabButton(String componentID, TextureComponent icon) {
 			super(componentID);
 			label = new GUIText("Tab", defaultTextSize, Game.getFont("default"), new Vector3f(0,0,10), 1, true);
 			iconTexture = new TextureElement();

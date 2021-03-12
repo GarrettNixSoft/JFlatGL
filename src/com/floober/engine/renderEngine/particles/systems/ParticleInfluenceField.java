@@ -6,7 +6,6 @@ import com.floober.engine.renderEngine.elements.geometry.CircleElement;
 import com.floober.engine.renderEngine.elements.geometry.LineElement;
 import com.floober.engine.renderEngine.elements.geometry.OutlineElement;
 import com.floober.engine.renderEngine.particles.types.Particle;
-import com.floober.engine.util.Logger;
 import com.floober.engine.util.color.Colors;
 import com.floober.engine.util.math.MathUtil;
 import com.floober.engine.util.time.Timer;

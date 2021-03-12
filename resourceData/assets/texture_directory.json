@@ -3,6 +3,13 @@
 		"default": "default.png",
 		"default2": "default2.png"
 	},
+	"texture_sets": {
+		"test_tilemap": {
+			"path": "tilesets/normal/test_tilemap.png",
+			"tex_width": 60,
+			"tex_height": 60
+		}
+	},
 	"texture_arrays": {
 
 	},

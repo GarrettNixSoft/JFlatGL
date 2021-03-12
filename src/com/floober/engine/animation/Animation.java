@@ -1,12 +1,13 @@
 package com.floober.engine.animation;
 
-import com.floober.engine.renderEngine.textures.Texture;
+import com.floober.engine.renderEngine.textures.TextureComponent;
+import com.floober.engine.renderEngine.textures.TextureSet;
 import com.floober.engine.util.time.TimeScale;
 
 public class Animation {
 
 	// frames and counter
-	protected Texture[] frames;
+	protected TextureSet frames;
 	protected int currentFrame;
 
 	// tracking play
@@ -17,19 +18,19 @@ public class Animation {
 	// empty animations allowed but risky
 	public Animation() {}
 
-	public Animation(Texture[] frames, int frameTime) {
+	public Animation(TextureSet frames, int frameTime) {
 		this.frames = frames;
 		this.frameTime = frameTime;
 	}
 
 	// GETTERS
-	public Texture getCurrentFrame() { return frames[currentFrame]; }
+	public TextureComponent getCurrentFrame() { return frames.getFrame(currentFrame); }
 
 	public boolean hasPlayedOnce() {
 		return playedOnce;
 	}
 
-	public Texture[] getFrames() {
+	public TextureSet getFrames() {
 		return frames;
 	}
 	public int getFrameTime() {
@@ -40,7 +41,7 @@ public class Animation {
 	}
 
 	// SETTERS
-	public void setFrames(Texture[] frames) {
+	public void setFrames(TextureSet frames) {
 		this.frames = frames;
 	}
 	public void setFrameTime(int frameTime) {
@@ -55,7 +56,7 @@ public class Animation {
 			currentFrame++;
 			startTime = System.nanoTime();
 		}
-		if (currentFrame == frames.length) {
+		if (currentFrame == frames.getNumTextures()) {
 			currentFrame = 0;
 			playedOnce = true;
 			startTime = System.nanoTime();

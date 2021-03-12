@@ -3,7 +3,7 @@ package com.floober.engine.gui.dialogue;
 import com.floober.engine.game.Game;
 import com.floober.engine.renderEngine.Render;
 import com.floober.engine.renderEngine.elements.TextureElement;
-import com.floober.engine.renderEngine.textures.Texture;
+import com.floober.engine.renderEngine.textures.TextureComponent;
 import com.floober.engine.util.interpolators.PulseFloat;
 
 public class Arrow {
@@ -15,7 +15,7 @@ public class Arrow {
 	private final float range;
 
 	public Arrow(float x, float y, int layer) {
-		Texture tex = Game.getTexture("dialogue_arrow");
+		TextureComponent tex = Game.getTexture("dialogue_arrow");
 		texture = new TextureElement(tex, x, y, layer, 16, 16, true);
 		texture.setHasTransparency(true);
 		this.x = x;

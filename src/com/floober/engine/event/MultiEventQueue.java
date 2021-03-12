@@ -1,6 +1,5 @@
 package com.floober.engine.event;
 
-import com.floober.engine.util.Logger;
 import com.floober.engine.util.data.Queue;
 
 import java.util.ArrayList;

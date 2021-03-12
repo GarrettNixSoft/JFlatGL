@@ -1,6 +1,5 @@
 package com.floober.engine.gui.dialogue;
 
-import com.floober.engine.game.Game;
 import org.json.JSONArray;
 
 public class DialogueMenu extends DialogueLine {

@@ -1,8 +1,8 @@
 package com.floober.engine.renderEngine.batches.opaque;
 
-import com.floober.engine.renderEngine.renderers.GeometryRenderer;
 import com.floober.engine.renderEngine.batches.OpaqueBatch;
 import com.floober.engine.renderEngine.elements.geometry.OutlineElement;
+import com.floober.engine.renderEngine.renderers.GeometryRenderer;
 import com.floober.engine.util.Logger;
 
 import java.util.ArrayList;

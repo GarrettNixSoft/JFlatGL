@@ -1,5 +1,6 @@
 package com.floober.engine.loaders.object;
 
+import com.floober.engine.assets.Textures;
 import com.floober.engine.game.Game;
 import com.floober.engine.gui.dialogue.*;
 import com.floober.engine.loaders.Loader;
@@ -129,10 +130,10 @@ public class DialogueLoader {
 		String faceId = faceMap.getString(identity);
 		name = nameMap.getString(identity);
 		// retrieve face tex
-		face = Game.getTexture(faceId);
+		face = Game.getTexture(faceId).texture();
 		// TODO add more code to parse extra tokens (can be affected by settings values from first line)
 		// create and return line
-		DialogueLine result = new DialogueLine(face, name, line);
+		DialogueLine result = new DialogueLine(Textures.wrapTexture(face), name, line);
 		// charDelay, auto, jumpLabel
 		result.setNameFont(nameFont);
 		result.setTextFont(textFont);

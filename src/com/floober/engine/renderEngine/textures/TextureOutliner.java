@@ -15,22 +15,23 @@ public class TextureOutliner {
 
 	public static void generateOutlineTexture(TextureElement element) {
 		// create a framebuffers to use
+		TextureComponent texture = element.getTextureComponent();
 		int padding = 24;
-		FrameBuffer outlineBuffer = FrameBuffers.createFrameBuffer(element.getTexture().width() + padding,
-																	element.getTexture().height() + padding);
-		FrameBuffer growBuffer1 = FrameBuffers.createFrameBuffer(element.getTexture().width() + padding,
-																element.getTexture().height() + padding);
-		FrameBuffer growBuffer2 = FrameBuffers.createFrameBuffer(element.getTexture().width() + padding,
-																element.getTexture().height() + padding);
-		FrameBuffer horizontalBlurBuffer = FrameBuffers.createFrameBuffer(element.getTexture().width() + padding,
-																element.getTexture().height() + padding);
-		FrameBuffer verticalBlurBuffer = FrameBuffers.createFrameBuffer(element.getTexture().width() + padding,
-																element.getTexture().height() + padding);
+		FrameBuffer outlineBuffer = FrameBuffers.createFrameBuffer(texture.width() + padding,
+																	texture.height() + padding);
+		FrameBuffer growBuffer1 = FrameBuffers.createFrameBuffer(texture.width() + padding,
+																texture.height() + padding);
+		FrameBuffer growBuffer2 = FrameBuffers.createFrameBuffer(texture.width() + padding,
+																texture.height() + padding);
+		FrameBuffer horizontalBlurBuffer = FrameBuffers.createFrameBuffer(texture.width() + padding,
+																texture.height() + padding);
+		FrameBuffer verticalBlurBuffer = FrameBuffers.createFrameBuffer(texture.width() + padding,
+																texture.height() + padding);
 		TextureRenderer renderer = new TextureRenderer();
 		// make a copy of this element, and center its position in the new buffer
 		TextureElement copy = new TextureElement(element);
 		copy.setPosition(outlineBuffer.getWidth() / 2f, outlineBuffer.getHeight() / 2f, 0);
-		copy.setSize(element.getTexture().width(), element.getTexture().height());
+		copy.setSize(texture.width(), texture.height());
 		copy.setCentered(true);
 		copy.transform(outlineBuffer);
 		Logger.log("Copy element transformed. Location: " + copy.getPosition() + "; Size: " + copy.getScale());

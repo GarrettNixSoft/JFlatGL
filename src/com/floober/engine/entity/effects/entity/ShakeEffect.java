@@ -1,6 +1,5 @@
 package com.floober.engine.entity.effects.entity;
 
-import com.floober.engine.entity.effects.entity.EntityEffect;
 import com.floober.engine.util.math.RandomUtil;
 
 public class ShakeEffect extends EntityEffect {

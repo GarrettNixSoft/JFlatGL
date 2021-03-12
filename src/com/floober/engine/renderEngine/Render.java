@@ -5,7 +5,6 @@ import com.floober.engine.renderEngine.elements.TextureElement;
 import com.floober.engine.renderEngine.elements.geometry.*;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.floober.engine.renderEngine.renderers.MasterRenderer;
-import com.floober.engine.util.configuration.Config;
 import org.joml.Vector4f;
 
 /**

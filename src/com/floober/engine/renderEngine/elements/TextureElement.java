@@ -2,16 +2,14 @@ package com.floober.engine.renderEngine.elements;
 
 import com.floober.engine.display.Display;
 import com.floober.engine.renderEngine.textures.Texture;
+import com.floober.engine.renderEngine.textures.TextureComponent;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
 public class TextureElement extends RenderElement {
 
 	// standard texture data
-	private Texture texture;
-	private final Vector4f textureOffset = new Vector4f();
-	private boolean hasTransparency;
-	private float alpha = 1;
+	private TextureComponent textureComponent;
 
 	// effect toggle
 	private boolean doColorSwap;
@@ -58,24 +56,24 @@ public class TextureElement extends RenderElement {
 	 */
 	public TextureElement() {
 		super(0, 0, 0, true);
-		this.texture = null;
+		this.textureComponent = null;
 		this.width = 0;
 		this.height = 0;
 		setTextureOffset(new Vector4f(0, 0, 1, 1));
 	}
 
-	public TextureElement(Texture texture, float x, float y, int layer, float width, float height, boolean centered) {
+	public TextureElement(TextureComponent texture, float x, float y, int layer, float width, float height, boolean centered) {
 		super(x, y, layer, centered);
-		this.texture = texture;
+		this.textureComponent = texture;
 		this.width = width;
 		this.height = height;
 		transform();
 		setTextureOffset(new Vector4f(0, 0, 1, 1));
 	}
 
-	public TextureElement(Texture texture, float x, float y, int layer, boolean centered) {
+	public TextureElement(TextureComponent texture, float x, float y, int layer, boolean centered) {
 		super(x, y, layer, centered);
-		this.texture = texture;
+		this.textureComponent = texture;
 		this.width = texture.width();
 		this.height = texture.height();
 		transform();
@@ -86,13 +84,9 @@ public class TextureElement extends RenderElement {
 	public TextureElement(TextureElement other) {
 		super(other.x, other.y, other.layer, other.centered);
 		// texture and size
-		this.texture = other.texture;
-		this.textureOffset.set(other.textureOffset);
+		this.textureComponent = other.textureComponent;
 		this.width = other.width;
 		this.height = other.height;
-		// transparency
-		this.hasTransparency = other.hasTransparency;
-		this.alpha = other.alpha;
 		// effect toggle
 		this.doColorSwap = other.doColorSwap;
 		this.doColor = other.doColor;
@@ -128,11 +122,15 @@ public class TextureElement extends RenderElement {
 	}
 
 	// GETTERS
-	public Texture getTexture() {
-		return texture;
+	public TextureComponent getTextureComponent() {
+		return textureComponent;
 	}
-	public Vector4f getTextureOffset() { return textureOffset; }
-	public boolean hasTransparency() { return hasTransparency; }
+
+	// shortcuts
+	public Texture getRawTexture() { return textureComponent.texture(); }
+	public Vector4f getTextureComponentOffset() { return textureComponent.getTextureOffset(); }
+	public float getTextureComponentAlpha() { return textureComponent.getAlpha(); }
+	public boolean textureComponentHasTransparency() { return textureComponent.hasTransparency(); }
 
 	public boolean doColorSwap() {
 		return doColorSwap;
@@ -158,7 +156,6 @@ public class TextureElement extends RenderElement {
 		return aChannelColor;
 	}
 
-	public float getAlpha() { return alpha; }
 	public Vector4f getColor() { return color; }
 	public float getMix() { return mix; }
 
@@ -187,23 +184,23 @@ public class TextureElement extends RenderElement {
 	public int getFadeDirection() { return fadeDirection; }
 
 	// SETTERS
-	public void setTexture(Texture texture) {
-		this.texture = texture;
+	public void setTexture(TextureComponent texture) {
+		this.textureComponent = texture;
 		this.width = texture.width();
 		this.height = texture.height();
 	}
 
-	public void setTexture(Texture texture, int width, int height) {
-		this.texture = texture;
+	public void setTexture(TextureComponent texture, int width, int height) {
+		this.textureComponent = texture;
 		this.width = width;
 		this.height = height;
 	}
 
 	public void setTextureOffset(Vector4f textureOffset) {
-		this.textureOffset.set(textureOffset);
+		this.textureComponent.setTextureOffset(textureOffset);
 	}
 	public void setHasTransparency(boolean hasTransparency) {
-		this.hasTransparency = hasTransparency;
+		this.textureComponent.setHasTransparency(hasTransparency);
 	}
 
 	public void setDoColorSwap(boolean doColorSwap) { this.doColorSwap = doColorSwap; }
@@ -220,7 +217,7 @@ public class TextureElement extends RenderElement {
 	public void setbChannelColor(Vector4f bChannelColor) { if (bChannelColor != null) this.bChannelColor.set(bChannelColor); }
 	public void setaChannelColor(Vector4f aChannelColor) { if (aChannelColor != null) this.aChannelColor.set(aChannelColor); }
 
-	public void setAlpha(float alpha) { this.alpha = alpha; }
+	public void setAlpha(float alpha) { this.textureComponent.setAlpha(alpha); }
 	public void setColor(Vector4f color) { this.color.set(color); }
 	public void setMix(float mix) { this.mix = mix; }
 

@@ -1,12 +1,12 @@
 package com.floober.engine.loaders.assets;
 
 import com.floober.engine.game.Game;
-import com.floober.engine.game.RunGame;
 import com.floober.engine.loaders.ImageLoader;
 import com.floober.engine.loaders.Loader;
 import com.floober.engine.renderEngine.renderers.LoadRenderer;
 import com.floober.engine.renderEngine.textures.Texture;
 import com.floober.engine.renderEngine.textures.TextureAtlas;
+import com.floober.engine.renderEngine.textures.TextureSet;
 import com.floober.engine.util.Globals;
 import com.floober.engine.util.Logger;
 import com.floober.engine.util.file.FileUtil;
@@ -44,9 +44,13 @@ public class TextureLoader extends AssetLoader {
 
 	@Override
 	protected void loadDirectory() {
-		Globals.texTotal = directory.getJSONObject("textures").keySet().size() + directory.getJSONObject("texture_arrays").keySet().size() + directory.getJSONObject("texture_atlases").keySet().size();
+		Globals.texTotal =  directory.getJSONObject("textures").keySet().size() +
+							directory.getJSONObject("texture_sets").keySet().size() +
+							directory.getJSONObject("texture_arrays").keySet().size() +
+							directory.getJSONObject("texture_atlases").keySet().size();
 		Globals.LOAD_STAGE = LoadRenderer.TEXTURES;
 		loadTextures();
+		loadTextureSets();
 		loadTextureArrays();
 		loadTextureAtlases();
 	}
@@ -66,6 +70,31 @@ public class TextureLoader extends AssetLoader {
 			Texture texture = Loader.loadTexture(path);
 			// add it to the game
 			Game.getTextures().addTexture(key, texture);
+			// report the load count
+			Globals.texCount++;
+			// render the load screen
+//			RunGame.loadRenderer.render();
+			// done
+		}
+	}
+
+	private void loadTextureSets() {
+		// get the texture set directory list
+		JSONObject textureSetDirectory = directory.getJSONObject("texture_sets");
+		// iterate over the directory's key set
+		for (String key : textureSetDirectory.keySet()) {
+			// report current asset
+			LoadRenderer.reportCurrentAsset(key);
+			// get the texture set object
+			JSONObject setObject = textureSetDirectory.getJSONObject(key);
+			// get the associated path
+			String path = setObject.getString("path");
+			// get the width and height
+			int width = setObject.getInt("tex_width");
+			int height = setObject.getInt("tex_height");
+			// build the object and add it
+			TextureSet textureSet = new TextureSet(Loader.loadTexture(path), width, height);
+			Game.getTextures().addTextureSet(key, textureSet);
 			// report the load count
 			Globals.texCount++;
 			// render the load screen

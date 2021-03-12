@@ -1,6 +1,5 @@
 package com.floober.engine.renderEngine.elements.geometry;
 
-import com.floober.engine.util.input.KeyInput;
 import org.joml.Vector4f;
 
 public class LineElement extends GeometryElement {

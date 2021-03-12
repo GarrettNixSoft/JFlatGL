@@ -1,7 +1,6 @@
 package com.floober.engine.event.audio;
 
 import com.floober.engine.event.QueuedEvent;
-import com.floober.engine.game.Game;
 
 public abstract class AudioEvent extends QueuedEvent {
 

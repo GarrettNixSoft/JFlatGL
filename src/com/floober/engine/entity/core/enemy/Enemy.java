@@ -2,7 +2,6 @@ package com.floober.engine.entity.core.enemy;
 
 import com.floober.engine.entity.core.Entity;
 import com.floober.engine.entity.util.EntityHandler;
-import com.floober.engine.game.Game;
 import com.floober.engine.util.time.TimeScale;
 
 public abstract class Enemy extends Entity {

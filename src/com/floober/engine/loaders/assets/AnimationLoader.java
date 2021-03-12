@@ -2,10 +2,9 @@ package com.floober.engine.loaders.assets;
 
 import com.floober.engine.animation.Animation;
 import com.floober.engine.game.Game;
-import com.floober.engine.game.RunGame;
 import com.floober.engine.loaders.Loader;
 import com.floober.engine.renderEngine.renderers.LoadRenderer;
-import com.floober.engine.renderEngine.textures.Texture;
+import com.floober.engine.renderEngine.textures.TextureSet;
 import com.floober.engine.util.Globals;
 import com.floober.engine.util.Logger;
 import org.json.JSONObject;
@@ -88,7 +87,7 @@ public class AnimationLoader extends AssetLoader {
 	private Animation parseAnimation(JSONObject object) {
 		String texArrayName = object.getString("textures");
 		int delay = object.getInt("delay");
-		Texture[] textures = Game.getTextureArray(texArrayName);
+		TextureSet textures = Game.getTextureSet(texArrayName);
 		return new Animation(textures, delay);
 	}
 

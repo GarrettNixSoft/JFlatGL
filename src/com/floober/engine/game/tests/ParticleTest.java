@@ -1,5 +1,6 @@
 package com.floober.engine.game.tests;
 
+import com.floober.engine.assets.Textures;
 import com.floober.engine.display.Display;
 import com.floober.engine.display.DisplayManager;
 import com.floober.engine.display.GameWindow;
@@ -15,7 +16,6 @@ import com.floober.engine.renderEngine.particles.behavior.ParticleBehavior;
 import com.floober.engine.renderEngine.particles.behavior.appearance.AppearanceBehavior;
 import com.floober.engine.renderEngine.particles.behavior.appearance.FadeOutBehavior;
 import com.floober.engine.renderEngine.particles.behavior.movement.ConstantVelocityBehavior;
-import com.floober.engine.renderEngine.particles.behavior.movement.FireScreenBehavior;
 import com.floober.engine.renderEngine.particles.behavior.movement.MovementBehavior;
 import com.floober.engine.renderEngine.particles.emitters.LightParticleEmitter;
 import com.floober.engine.renderEngine.particles.emitters.ParticleEmitter;
@@ -139,9 +139,9 @@ public class ParticleTest {
 		Texture glowTexture = ImageLoader.loadTexture("textures/particles/glow.png");
 		Texture defaultTex = ImageLoader.loadTexture("textures/complex_sample.png");
 
-		explosionParticleTex = new ParticleTexture(explosionTexture, 4, true);
-		glowParticleTex = new ParticleTexture(glowTexture, 1, true);
-		ParticleTexture particleTex = new ParticleTexture(defaultTex, 1, false);
+		explosionParticleTex = new ParticleTexture(Textures.wrapTexture(explosionTexture), 4, true);
+		glowParticleTex = new ParticleTexture(Textures.wrapTexture(glowTexture), 1, true);
+		ParticleTexture particleTex = new ParticleTexture(Textures.wrapTexture(defaultTex), 1, false);
 
 		AppearanceBehavior fadeOutBehavior = new FadeOutBehavior(1, 0);
 //		MovementBehavior flameBehavior = new FlameBehavior(-90, 15);

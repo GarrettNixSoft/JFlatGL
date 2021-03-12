@@ -38,7 +38,6 @@ import java.util.Objects;
 
 import static com.floober.engine.display.GameWindow.windowID;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.glfw.GLFW.glfwSetErrorCallback;
 
 public class GUITest {
 

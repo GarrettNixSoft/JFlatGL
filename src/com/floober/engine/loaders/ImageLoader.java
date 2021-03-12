@@ -27,7 +27,7 @@ public class ImageLoader {
 	private static final List<Integer> textures = new ArrayList<>();
 
 	/**
-	 * Load a texture, and send it to the GPU.
+	 * Load a texture from disk, and send it to the GPU.
 	 * @param path The path to the texture file.
 	 * @return A Texture to reference the loaded image.
 	 */

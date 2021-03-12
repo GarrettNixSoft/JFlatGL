@@ -1,7 +1,6 @@
 package com.floober.engine.loaders.assets;
 
 import com.floober.engine.game.Game;
-import com.floober.engine.game.RunGame;
 import com.floober.engine.loaders.Loader;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.FontType;
 import com.floober.engine.renderEngine.renderers.LoadRenderer;

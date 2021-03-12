@@ -9,11 +9,11 @@ import com.floober.engine.renderEngine.lights.LightMaster;
 import com.floober.engine.renderEngine.models.ModelLoader;
 import com.floober.engine.renderEngine.models.QuadModel;
 import com.floober.engine.renderEngine.shaders.ShaderProgram;
+import com.floober.engine.renderEngine.shaders.blur.HorizontalBlurShader;
+import com.floober.engine.renderEngine.shaders.blur.VerticalBlurShader;
 import com.floober.engine.renderEngine.shaders.textures.TextureOutlineGrowShader;
 import com.floober.engine.renderEngine.shaders.textures.TextureOutlineShader;
 import com.floober.engine.renderEngine.shaders.textures.TextureShader;
-import com.floober.engine.renderEngine.shaders.blur.HorizontalBlurShader;
-import com.floober.engine.renderEngine.shaders.blur.VerticalBlurShader;
 import com.floober.engine.renderEngine.textures.Texture;
 import com.floober.engine.util.math.MathUtil;
 import org.joml.Matrix4f;
@@ -87,7 +87,7 @@ public class TextureRenderer {
 			shader.loadTransformationMatrix(mat);
 
 			// bind the current texture
-			bindTexture(element.getTexture());
+			bindTexture(element.getRawTexture());
 
 			// draw the element
 			glDrawArrays(GL_TRIANGLE_STRIP, 0, quad.vertexCount());
@@ -113,7 +113,7 @@ public class TextureRenderer {
 	public void renderTextureOutline(TextureElement element) {
 		if (element.doOutline()) {
 			prepareOutline(outlineShader);
-			bindTexture(element.getTexture());
+			bindTexture(element.getTextureComponent().texture());
 			loadOutlineUniforms(element);
 			glDrawArrays(GL_TRIANGLE_STRIP, 0, quad.vertexCount());
 			finishOutline(outlineShader);
@@ -189,8 +189,8 @@ public class TextureRenderer {
 		// standard texture data
 		Matrix4f matrix = MathUtil.createTransformationMatrix(element.getPosition(), element.getScale(), element.getRotation());
 		shader.loadTransformationMatrix(matrix);
-		shader.loadTextureOffset(element.getTextureOffset());
-		shader.loadTextureAlpha(element.getAlpha());
+		shader.loadTextureOffset(element.getTextureComponentOffset());
+		shader.loadTextureAlpha(element.getTextureComponent().getAlpha());
 		// color swap
 		shader.loadDoColorSwap(element.doColorSwap());
 		shader.loadrChannelColor(element.getrChannelColor());
@@ -218,13 +218,13 @@ public class TextureRenderer {
 	private void loadOutlineUniforms(TextureElement element) {
 		Matrix4f matrix = MathUtil.createTransformationMatrix(element.getPosition(), element.getScale(), element.getRotation());
 		outlineShader.loadTransformationMatrix(matrix);
-		outlineShader.loadTextureOffset(element.getTextureOffset());
+		outlineShader.loadTextureOffset(element.getTextureComponentOffset());
 		outlineShader.loadStepSize(element.stepSize());
 		outlineShader.loadOutlineColor(element.outlineColor());
 	}
 
 	private void loadOutlineGrowUniforms(TextureElement element) {
-		outlineGrowShader.loadTextureOffset(element.getTextureOffset());
+		outlineGrowShader.loadTextureOffset(element.getTextureComponentOffset());
 		outlineGrowShader.loadStepSize(element.stepUnit());
 		outlineGrowShader.loadOutlineColor(element.outlineColor());
 	}

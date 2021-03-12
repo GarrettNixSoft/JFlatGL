@@ -1,8 +1,8 @@
 package com.floober.engine.renderEngine.batches.transparent;
 
-import com.floober.engine.renderEngine.renderers.GeometryRenderer;
 import com.floober.engine.renderEngine.batches.TransparentBatch;
 import com.floober.engine.renderEngine.elements.geometry.LineElement;
+import com.floober.engine.renderEngine.renderers.GeometryRenderer;
 import com.floober.engine.util.Logger;
 
 import java.util.ArrayList;

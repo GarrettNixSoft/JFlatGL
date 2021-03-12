@@ -1,13 +1,10 @@
 package com.floober.engine.gui;
 
 import com.floober.engine.gui.component.GUILayer;
-import com.floober.engine.gui.component.GUIPanel;
 import com.floober.engine.util.Logger;
 import com.floober.engine.util.data.Stack;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class GUI {
 

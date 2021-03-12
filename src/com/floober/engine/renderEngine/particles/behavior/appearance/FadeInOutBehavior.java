@@ -1,7 +1,6 @@
 package com.floober.engine.renderEngine.particles.behavior.appearance;
 
 import com.floober.engine.renderEngine.particles.types.EmitterParticle;
-import com.floober.engine.util.math.RandomUtil;
 
 public class FadeInOutBehavior extends AppearanceBehavior {
 
@@ -25,7 +24,7 @@ public class FadeInOutBehavior extends AppearanceBehavior {
 	@Override
 	public void updateParticle(EmitterParticle particle) {
 		float time = particle.getElapsedTime();
-		float value = 0;
+		float value;
 		if (time < (value = particle.getValue("fadeInTime"))) { // fading in
 			float progress = time / value;
 			particle.setAlpha(peakAlpha * progress);

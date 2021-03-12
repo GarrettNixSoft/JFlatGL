@@ -1,6 +1,5 @@
 package com.floober.engine.loaders.assets;
 
-import com.floober.engine.game.Game;
 import org.json.JSONObject;
 
 public abstract class AssetLoader {

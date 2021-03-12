@@ -8,6 +8,8 @@ import com.floober.engine.loaders.GameLoader;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.FontType;
 import com.floober.engine.renderEngine.textures.Texture;
 import com.floober.engine.renderEngine.textures.TextureAtlas;
+import com.floober.engine.renderEngine.textures.TextureComponent;
+import com.floober.engine.renderEngine.textures.TextureSet;
 import com.floober.engine.util.Logger;
 import com.floober.engine.util.Session;
 
@@ -155,16 +157,20 @@ public class Game {
 	// SHORTCUTS
 
 	// Textures
-	public static Texture getTexture(String key) {
+	public static TextureComponent getTexture(String key) {
 		return instance.textures.getTexture(key);
 	}
 
-	public static Texture[] getTextures(String... keys) {
-		Texture[] results = new Texture[keys.length];
+	public static TextureComponent[] getTextures(String... keys) {
+		TextureComponent[] results = new TextureComponent[keys.length];
 		for (int i = 0; i < keys.length; ++i) {
 			results[i] = instance.textures.getTexture(keys[i]);
 		}
 		return results;
+	}
+
+	public static TextureSet getTextureSet(String key) {
+		return instance.textures.getTextureSet(key);
 	}
 
 	public static Texture[] getTextureArray(String key) {
