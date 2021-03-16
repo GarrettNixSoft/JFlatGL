@@ -3,6 +3,7 @@ package com.floober.engine.renderEngine.ppfx;
 import com.floober.engine.renderEngine.models.ModelLoader;
 import com.floober.engine.renderEngine.models.QuadModel;
 import com.floober.engine.renderEngine.ppfx.effects.Contrast;
+import com.floober.engine.renderEngine.ppfx.effects.GaussianBlur;
 import com.floober.engine.renderEngine.ppfx.effects.InvertColor;
 import com.floober.engine.renderEngine.ppfx.effects.ToScreen;
 import org.lwjgl.opengl.GL11;
@@ -26,6 +27,7 @@ public class PostProcessing {
 	private static final HashMap<String, PPEffect> effects = new HashMap<>();
 	private static Contrast contrast;
 	private static InvertColor invertColor;
+	private static GaussianBlur gaussianBlur;
 
 	// last stage, render to screen
 	private static ToScreen toScreen;
@@ -41,6 +43,9 @@ public class PostProcessing {
 		// create the invert color effect
 		invertColor = new InvertColor();
 		effects.put("invertColor", invertColor);
+		// create the gaussian blur effect
+		gaussianBlur = new GaussianBlur();
+		effects.put("gaussianBlur", gaussianBlur);
 		// create other effects
 		// ...
 
@@ -78,6 +83,10 @@ public class PostProcessing {
 		if (contrast.isEnabled()) {
 			contrast.render(colorTexture);
 			colorTexture = contrast.getResult();
+		}
+		if (gaussianBlur.isEnabled()) {
+			gaussianBlur.render(colorTexture);
+			colorTexture = gaussianBlur.getResult();
 		}
 		// chain the rest ...
 

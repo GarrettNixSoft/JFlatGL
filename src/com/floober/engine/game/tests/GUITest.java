@@ -268,8 +268,11 @@ public class GUITest {
 			if (KeyInput.isPressed(KeyInput.C)) { // C for contrast
 				PostProcessing.setStageEnabled("contrast", !PostProcessing.isStageEnabled("contrast"));
 			}
-			if (KeyInput.isPressed(KeyInput.I)) { // C for invert
+			if (KeyInput.isPressed(KeyInput.I)) { // I for invert
 				PostProcessing.setStageEnabled("invertColor", !PostProcessing.isStageEnabled("invertColor"));
+			}
+			if (KeyInput.isPressed(KeyInput.G)) { // G for gaussian blur
+				PostProcessing.setStageEnabled("gaussianBlur", !PostProcessing.isStageEnabled("gaussianBlur"));
 			}
 		}
 	}

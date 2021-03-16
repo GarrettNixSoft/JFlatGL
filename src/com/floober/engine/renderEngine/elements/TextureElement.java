@@ -59,7 +59,6 @@ public class TextureElement extends RenderElement {
 		this.textureComponent = null;
 		this.width = 0;
 		this.height = 0;
-		setTextureOffset(new Vector4f(0, 0, 1, 1));
 	}
 
 	public TextureElement(TextureComponent texture, float x, float y, int layer, float width, float height, boolean centered) {
@@ -68,7 +67,6 @@ public class TextureElement extends RenderElement {
 		this.width = width;
 		this.height = height;
 		transform();
-		setTextureOffset(new Vector4f(0, 0, 1, 1));
 	}
 
 	public TextureElement(TextureComponent texture, float x, float y, int layer, boolean centered) {
@@ -77,7 +75,6 @@ public class TextureElement extends RenderElement {
 		this.width = texture.width();
 		this.height = texture.height();
 		transform();
-		setTextureOffset(new Vector4f(0, 0, 1, 1));
 	}
 
 	// COPY CONSTRUCTOR
@@ -118,7 +115,6 @@ public class TextureElement extends RenderElement {
 		this.fadeDirection = other.fadeDirection;
 		// finalize
 		transform();
-		setTextureOffset(new Vector4f(0, 0, 1, 1));
 	}
 
 	// GETTERS

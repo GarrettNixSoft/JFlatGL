@@ -6,7 +6,7 @@ public class TextureComponent {
 
 	// standard texture data
 	private final Texture texture;
-	private final Vector4f textureOffset = new Vector4f();
+	private final Vector4f textureOffset = new Vector4f(0, 0, 1, 1);
 	private boolean hasTransparency;
 	private float alpha = 1;
 

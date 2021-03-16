@@ -7,13 +7,13 @@ public class ImageRenderer {
 
 	private FrameBuffer fbo;
 
-	protected ImageRenderer(int width, int height) {
+	public ImageRenderer(int width, int height) {
 		this.fbo = new FrameBuffer(width, height, FrameBuffer.NONE);
 	}
 
-	protected ImageRenderer() {}
+	public ImageRenderer() {}
 
-	protected void renderQuad() {
+	public void renderQuad() {
 		if (fbo != null) {
 			fbo.bindFrameBuffer();
 		}
@@ -24,7 +24,7 @@ public class ImageRenderer {
 		}
 	}
 
-	protected int getOutputTexture() {
+	public int getOutputTexture() {
 		return fbo.getColorTexture();
 	}
 
