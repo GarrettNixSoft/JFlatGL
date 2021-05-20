@@ -23,6 +23,15 @@ public class Animation {
 		this.frameTime = frameTime;
 	}
 
+	/**
+	 * Create a static animation with only one frame.
+	 * @param texComp the texture component for the single frame
+	 */
+	public Animation(TextureComponent texComp) {
+		this.frames = new TextureSet(texComp.texture(), texComp.width(), texComp.height(), texComp.hasTransparency());
+		this.frameTime = -1;
+	}
+
 	// GETTERS
 	public TextureComponent getCurrentFrame() { return frames.getFrame(currentFrame); }
 

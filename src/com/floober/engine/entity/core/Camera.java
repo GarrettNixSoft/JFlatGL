@@ -31,7 +31,7 @@ public class Camera extends Entity {
 	private boolean wasPositionCorrected;
 
 	public Camera() {
-		super(null, 0, 0);
+		super(0, 0);
 		targetProgress = new FadeInFloat();
 		// default follow strength
 		currentMode = INIT;

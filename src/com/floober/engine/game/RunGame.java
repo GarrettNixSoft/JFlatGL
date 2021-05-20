@@ -3,17 +3,22 @@ package com.floober.engine.game;
 import com.floober.engine.audio.AudioMaster;
 import com.floober.engine.display.DisplayManager;
 import com.floober.engine.display.GameWindow;
+import com.floober.engine.gui.GUIManager;
 import com.floober.engine.loaders.Loader;
 import com.floober.engine.renderEngine.Screenshot;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.GUIText;
+import com.floober.engine.renderEngine.fonts.fontRendering.FontRenderer;
 import com.floober.engine.renderEngine.fonts.fontRendering.TextMaster;
 import com.floober.engine.renderEngine.particles.ParticleMaster;
 import com.floober.engine.renderEngine.ppfx.PostProcessing;
+import com.floober.engine.renderEngine.renderers.GeometryRenderer;
 import com.floober.engine.renderEngine.renderers.LoadRenderer;
 import com.floober.engine.renderEngine.renderers.MasterRenderer;
+import com.floober.engine.renderEngine.renderers.TextureRenderer;
 import com.floober.engine.renderEngine.textures.TextureOutliner;
 import com.floober.engine.util.Logger;
 import com.floober.engine.util.color.Colors;
+import com.floober.engine.util.configuration.Config;
 import com.floober.engine.util.configuration.Settings;
 import com.floober.engine.util.input.KeyInput;
 import com.floober.engine.util.input.MouseInput;
@@ -42,6 +47,10 @@ public class RunGame {
 		// Set up logging.
 		Logger.setLoggerConfig();
 
+		// TESTING GAME
+		Config.FULLSCREEN = false;
+		// FOR EFFICIENCY IN RUNNING MULTIPLE TIMES TO CHECK THINGS
+
 		// Create the window and set up OpenGL and GLFW.
 		GameWindow.initGame();
 
@@ -65,8 +74,11 @@ public class RunGame {
 		// load the game assets
 		Game.init();
 
+		// with assets now loaded, have the system masters set their global shortcuts
+		ParticleMaster.initGlobals();
+
 		// finish load render
-		loadRenderer.cleanUp();
+//		loadRenderer.cleanUp();
 
 		// SET UP DEBUG TEXT
 		fpsDisplay = new GUIText("FPS: ", 0.5f, Game.getFont("menu"), new Vector3f(0, 0, 0), 1, false);
@@ -87,29 +99,23 @@ public class RunGame {
 
 			// run game logic
 			Game.update();
-
-			// update components
 			ParticleMaster.update();
+			GUIManager.update();
 
 			// clear window
 			MasterRenderer.prepare();
 
 			// render game internally
 			Game.render();
+			GUIManager.render();
 
 			// Debug!
 			float fps = 1.0f / DisplayManager.getFrameTimeRaw();
-			if (Settings.debugMode)
-				fpsDisplay.replaceText("[DEBUG MODE]\nFPS: " + fps + ", Particles: " + ParticleMaster.numParticles + ", Time = " + TimeScale.getTimeScale());
-			else if (Settings.showFps)
-				fpsDisplay.replaceText("FPS: " + fps);
-
-			// TEST
-			if (KeyInput.isPressed(KeyInput.F1)) {
-				if (TimeScale.getTimeScale() != 1) TimeScale.setTimeScaleTransition(1, 1000);
-				else TimeScale.setTimeScaleTransition(0.4f, 1000);
-			}
-			// END_TEST
+			fpsDisplay.replaceText("FPS: " + fps +
+					"\nGeom: " + GeometryRenderer.ELEMENT_COUNT +
+					"\nTxtr: " + TextureRenderer.ELEMENT_COUNT +
+					"\nText: " + FontRenderer.ELEMENT_COUNT +
+					"\nPart: " + ParticleMaster.numParticles);
 
 			// handle top-level universal inputs
 			handleInput();

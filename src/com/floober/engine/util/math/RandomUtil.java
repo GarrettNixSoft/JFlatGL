@@ -63,6 +63,14 @@ public class RandomUtil {
 		return getFloat(average - variation, average + variation);
 	}
 
+	public static float randNegate(float value) {
+		return getBoolean() ? value : -value;
+	}
+
+	public static float randNegateFloat(float max) {
+		return randNegate(getFloat(max));
+	}
+
 	/**
 	 * Get a random int from 0 to {@code max}.
 	 * @param max The upper bound.

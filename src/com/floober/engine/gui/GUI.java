@@ -69,7 +69,14 @@ public class GUI {
 		}
 	}
 
+	public void lock() {
+		for (GUILayer layer : layerStack.getElements()) {
+			layer.lock();
+		}
+	}
+
 	public void update() {
+//		Logger.log("Updating GUI");
 		if (layerStack.isEmpty()) return;
 		// remove top layer if it's closed completely
 		if (layerStack.peek().isClosed()) {

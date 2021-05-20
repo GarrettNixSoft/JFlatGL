@@ -9,6 +9,8 @@ import java.util.List;
 
 public abstract class EntityAttachableTo extends Entity {
 
+	protected EntityHandler entityHandler;
+
 	// attaching entities to one another
 	protected static class Attachment {
 		public Attachable attachedEntity;
@@ -25,7 +27,8 @@ public abstract class EntityAttachableTo extends Entity {
 	private boolean allowsJumping;
 
 	public EntityAttachableTo(EntityHandler entityHandler, float x, float y, int layer) {
-		super(entityHandler, x, y, layer);
+		super(x, y, layer);
+		this.entityHandler = entityHandler;
 		allowsJumping = true;
 	}
 

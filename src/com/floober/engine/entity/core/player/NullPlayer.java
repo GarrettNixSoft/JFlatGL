@@ -1,13 +1,11 @@
 package com.floober.engine.entity.core.player;
 
-import com.floober.engine.entity.util.EntityHandler;
-
 public class NullPlayer extends Player {
 	/**
 	 * Create a non-functioning dummy Player.
 	 */
-	public NullPlayer(EntityHandler entityHandler) {
-		super(entityHandler, 0, 0);
+	public NullPlayer() {
+		super(null, 0, 0);
 	}
 
 	@Override

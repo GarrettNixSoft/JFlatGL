@@ -4,6 +4,7 @@ import com.floober.engine.display.Display;
 import com.floober.engine.renderEngine.framebuffers.FrameBuffer;
 import com.floober.engine.renderEngine.framebuffers.FrameBuffers;
 import com.floober.engine.renderEngine.renderers.MasterRenderer;
+import com.floober.engine.util.Logger;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
@@ -31,7 +32,11 @@ public abstract class RenderElement implements Comparable<RenderElement> {
 	 */
 	public void transform() {
 		position = Display.convertToDisplayPosition(x, y, layer, width, height, centered);
-		scale = Display.convertToDisplayScale(width, height);
+//		Logger.log("Position converted from (" + x + ", " + y + ") to " + position);
+//		scale = Display.convertToDisplayScale(width, height);
+		// TEST
+		scale = new Vector2f(width, height);
+		// END_TEST
 	}
 
 	/**

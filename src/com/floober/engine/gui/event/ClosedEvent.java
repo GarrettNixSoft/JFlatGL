@@ -17,7 +17,7 @@ public class ClosedEvent extends GUIEvent {
 	@Override
 	public void update() {
 		assert targetComponent != null;
-		if (!targetComponent.hasPendingEvents()) {
+		if (!targetComponent.hasPendingEvents(this)) {
 			targetComponent.setActive(false);
 			complete = true;
 		}

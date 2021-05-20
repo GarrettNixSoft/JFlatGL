@@ -74,10 +74,11 @@ public class Display {
 		// invert y axis
 		y = HEIGHT - y;
 		// convert pixel coordinates to OpenGL coordinates
-		float displayX = -1 + (2f / Display.WIDTH) * x;
-		float displayY = -1 + (2f / Display.HEIGHT) * y;
+		float displayX = -1 + (2f / Config.INTERNAL_WIDTH) * x;
+		float displayY = -1 + (2f / Config.INTERNAL_HEIGHT) * y;
 		// convert Z position to [0 ... 1]
-		float displayZ = MathUtil.interpolateBounded(0, MasterRenderer.TOP_LAYER, z);
+		float displayZ = 1 - MathUtil.interpolateBounded(0, MasterRenderer.TOP_LAYER, z);
+//		Logger.log("Layer " + z + " converted to z-position " + displayZ);
 		// return the result
 		return new Vector3f(displayX, displayY, displayZ);
 	}

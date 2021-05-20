@@ -3,19 +3,18 @@ package com.floober.engine.entity.core;
 import com.floober.engine.animation.Animation;
 import com.floober.engine.display.Display;
 import com.floober.engine.entity.attachments.EntityAttachableTo;
-import com.floober.engine.entity.util.EntityHandler;
+import com.floober.engine.entity.projectile.Projectile;
+import com.floober.engine.game.Game;
 import com.floober.engine.renderEngine.elements.TextureElement;
 import com.floober.engine.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.util.Logger;
+import com.floober.engine.util.configuration.Config;
 import com.floober.engine.util.math.Collisions;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 public abstract class Entity {
-
-	// game access
-	protected EntityHandler entityHandler;
 
 	// retrieving this entity
 	protected String entityID;
@@ -51,26 +50,23 @@ public abstract class Entity {
 	// attaching this entity to another
 	protected EntityAttachableTo entityAttachedTo;
 
-	public Entity(EntityHandler entityHandler) {
-		this.entityHandler = entityHandler;
+	public Entity() {
 		this.x = 0;
 		this.y = 0;
-		this.layer = MasterRenderer.NUM_LAYERS / 2;
+		this.layer = MasterRenderer.DEFAULT_LAYER;
 		// init a null Texture that can be set/moved later
 		textureElement = new TextureElement(null, 0, 0, 0, 0, 0, true);
 	}
 
-	public Entity(EntityHandler entityHandler, float x, float y) {
-		this.entityHandler = entityHandler;
+	public Entity(float x, float y) {
 		this.x = x;
 		this.y = y;
-		this.layer = MasterRenderer.NUM_LAYERS / 2;
+		this.layer = MasterRenderer.DEFAULT_LAYER;
 		// init a null Texture that can be set/moved later
 		textureElement = new TextureElement(null, 0, 0, 0, 0, 0, true);
 	}
 
-	public Entity(EntityHandler entityHandler, float x, float y, int layer) {
-		this.entityHandler = entityHandler;
+	public Entity(float x, float y, int layer) {
 		this.x = x;
 		this.y = y;
 		this.layer = layer;
@@ -83,7 +79,7 @@ public abstract class Entity {
 	public TextureElement getTextureElement() { return textureElement; }
 	public float getX() { return x; }
 	public float getY() { return y; }
-	public float getLayer() { return layer; }
+	public int getLayer() { return layer; }
 	public float getDX() { return dx; }
 	public float getDY() { return dy; }
 	public Vector2f getPosition() { return new Vector2f(x, y); }
@@ -103,7 +99,6 @@ public abstract class Entity {
 	public boolean isDead() {
 		return dead;
 	}
-	public EntityHandler getEntityHandler() { return entityHandler; }
 
 	public boolean remove() { return remove; }
 
@@ -129,15 +124,21 @@ public abstract class Entity {
 	// interacting with the entity
 	public void damage(float damage) {}
 
+	public void damage(Projectile projectile) {}
+
 	public void kill() {
 		Logger.log("ENTITY " + entityID + " KILLED");
 		damage(maxHealth);
 	}
 
 	protected void fixBounds() {
-		if (x < 0) x = 0;
-		if (y < 0) y = 0;
+//		if (x < 0) x = 0;
+//		if (y < 0) y = 0;
 		// implement upper bounds
+		if (x < width / 2) x = width / 2;
+		if (y < Game.PLAY_AREA_TOP + height / 2) y = Game.PLAY_AREA_TOP + width / 2;
+		if (x > Config.DEFAULT_WIDTH - width / 2) x = Config.DEFAULT_WIDTH - width / 2;
+		if (y > Game.PLAY_AREA_BOTTOM - height / 2) y = Game.PLAY_AREA_BOTTOM - height / 2;
 	}
 
 	// screen bounds

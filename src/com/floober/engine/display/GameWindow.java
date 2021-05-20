@@ -40,9 +40,24 @@ public class GameWindow {
 		glfwDefaultWindowHints();
 		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRANSPARENT_FRAMEBUFFER);
+		glfwWindowHint(GLFW_AUTO_ICONIFY, GL_FALSE);
 
-		// Step 3: Create the window, and test to make sure it succeeded. If it fails, die.
-		windowID = glfwCreateWindow(Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT, Config.WINDOW_TITLE, NULL, NULL);
+		// Step 3: Create the window. The process depends on whether we're creating a fullscreen window or not.
+		if (Config.FULLSCREEN) {
+			GLFWVidMode videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+			glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+			glfwWindowHint(GLFW_RED_BITS, videoMode.redBits());
+			glfwWindowHint(GLFW_GREEN_BITS, videoMode.greenBits());
+			glfwWindowHint(GLFW_BLUE_BITS, videoMode.blueBits());
+			glfwWindowHint(GLFW_REFRESH_RATE, videoMode.refreshRate());
+			windowID = glfwCreateWindow(videoMode.width(), videoMode.height(), Config.WINDOW_TITLE, glfwGetPrimaryMonitor(), NULL);
+			glfwSetInputMode(windowID, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		}
+		else {
+			windowID = glfwCreateWindow(Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT, Config.WINDOW_TITLE, NULL, NULL);
+		}
+
+		// Step 3.5: Test to make sure the window creation succeeded. If it fails, die.
 		if (windowID == NULL) {
 			throw new IllegalStateException("Unable to create GLFW window.");
 		}

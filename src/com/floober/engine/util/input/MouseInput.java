@@ -3,11 +3,12 @@ package com.floober.engine.util.input;
 import com.floober.engine.display.Display;
 import com.floober.engine.display.GameWindow;
 import com.floober.engine.util.configuration.Config;
+import com.floober.engine.util.math.Collisions;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
+import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
 
-import java.awt.*;
 import java.nio.DoubleBuffer;
 
 import static org.lwjgl.glfw.GLFW.*;
@@ -32,7 +33,7 @@ public class MouseInput {
 	public static int xOffset = 0;
 	public static int yOffset = 0;
 
-//	private static int DX, DY;
+	private static int DX, DY;
 	
 	public static void update() {
 		System.arraycopy(buttonState, 0, prevButtonState, 0, NUM_BUTTONS);
@@ -45,6 +46,8 @@ public class MouseInput {
 		double yPos = (yBuffer.get() + yOffset) * yPosRatio;
 		prevLocation = mouseLocation;
 		mouseLocation = new Vector2i((int) xPos, (int) yPos);
+		DX = mouseLocation.x - prevLocation.x;
+		DY = mouseLocation.y - prevLocation.y;
 		// TEST
 //		if (leftClick()) {
 //			xBuffer = BufferUtils.createDoubleBuffer(1);
@@ -101,9 +104,12 @@ public class MouseInput {
 	public static int getY() {
 		return mouseLocation.y();
 	}
-	
-	public static boolean mouseOver(Rectangle rect) {
-		return rect.contains(new Point(mouseLocation.x, mouseLocation.y));
+
+	public static int getDX() { return DX; }
+	public static int getDY() { return DY; }
+
+	public static boolean mouseOver(Vector4f bounds) {
+		return Collisions.contains(bounds, mouseLocation);
 	}
 	
 }

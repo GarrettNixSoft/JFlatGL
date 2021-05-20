@@ -6,8 +6,6 @@ import com.floober.engine.renderEngine.models.QuadModel;
 import com.floober.engine.renderEngine.shaders.geometry.CircleShader;
 import com.floober.engine.renderEngine.shaders.geometry.RectLightShader;
 import com.floober.engine.renderEngine.shaders.geometry.RectShader;
-import com.floober.engine.util.Logger;
-import com.floober.engine.util.input.KeyInput;
 import com.floober.engine.util.math.MathUtil;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
@@ -57,8 +55,7 @@ public class GeometryRenderer {
 
 		for (RectElement rectElement : rectangles) {
 
-			Matrix4f transformationMatrix = MathUtil.createTransformationMatrix(rectElement.getRenderPosition(), rectElement.getScale());
-			if (KeyInput.isPressed(KeyInput.P)) Logger.log("Layer = " + rectElement.getLayer() + ", z = " + rectElement.getRenderPosition().z());
+			Matrix4f transformationMatrix = MathUtil.createTransformationMatrix(rectElement.getRenderPosition(), rectElement.getScale(), rectElement.getRotation());
 			rectShader.loadRoundRadius(rectElement.getRoundRadius());
 			rectShader.loadDimensions(new Vector2f(rectElement.getHeight(), rectElement.getWidth()));
 			rectShader.loadColor(rectElement.getColor());
@@ -79,7 +76,7 @@ public class GeometryRenderer {
 
 		for (RectElementLight element : elements) {
 
-			Matrix4f transformationMatrix = MathUtil.createTransformationMatrix(element.getPosition(), element.getScale());
+			Matrix4f transformationMatrix = MathUtil.createTransformationMatrix(element.getPosition(), element.getScale(), element.getRotation());
 			rectLightShader.loadColor(element.getLightColor());
 			rectLightShader.loadTransformationMatrix(transformationMatrix);
 			rectLightShader.loadAmbientLight(element.getAmbientLight());
@@ -103,7 +100,7 @@ public class GeometryRenderer {
 
 		for (CircleElement circleElement : circles) {
 
-			Matrix4f transformationMatrix = MathUtil.createTransformationMatrix(circleElement.getPosition(), circleElement.getScale());
+			Matrix4f transformationMatrix = MathUtil.createTransformationMatrix(circleElement.getPosition(), circleElement.getScale(), circleElement.getRotation());
 			circleShader.loadColor(circleElement.getColor());
 			circleShader.loadTransformationMatrix(transformationMatrix);
 			circleShader.loadCenter(circleElement.getCenter());
@@ -151,7 +148,7 @@ public class GeometryRenderer {
 
 	// LINE UTILITY METHOD
 	private void renderLineElement(LineElement lineElement) {
-		Matrix4f transformationMatrix = MathUtil.createTransformationMatrix(lineElement.getPosition(), lineElement.getScale());
+		Matrix4f transformationMatrix = MathUtil.createTransformationMatrix(lineElement.getPosition(), lineElement.getScale(), lineElement.getRotation());
 		rectShader.loadTransformationMatrix(transformationMatrix);
 		rectShader.loadColor(lineElement.getColor());
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, quad.vertexCount());

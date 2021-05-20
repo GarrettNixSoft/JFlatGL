@@ -1,6 +1,5 @@
 package com.floober.engine.audio;
 
-import com.floober.engine.util.Logger;
 import com.floober.engine.util.input.KeyInput;
 import com.floober.engine.util.time.Tweener;
 
@@ -45,9 +44,11 @@ public class AudioChannel {
 	// SETTERS
 	public void setVolume(float volume) {
 		this.volume = volume;
+		source.setVolume(volume);
 	}
 	public void setPitch(float pitch) {
 		this.pitch = pitch;
+		source.setPitch(pitch);
 	}
 
 	public void setLooping(boolean looping) {
@@ -56,11 +57,12 @@ public class AudioChannel {
 
 	// PLAYING/PAUSING AUDIO
 	public void playAudio(Sound sound) {
+//		Logger.log("Playing audio at volume " + volume);
 		source.play(sound);
 	}
 
 	public void playAudioFrom(Sound sound, float startTime) {
-		Logger.logAudio("Playing sound, starting volume = " + volume);
+//		Logger.logAudio("Playing sound, starting volume = " + volume);
 //		source.setVolume(0);
 		source.play(sound);
 		source.setPosition(startTime);

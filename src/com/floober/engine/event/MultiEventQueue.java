@@ -1,5 +1,6 @@
 package com.floober.engine.event;
 
+import com.floober.engine.gui.event.ClosedEvent;
 import com.floober.engine.util.data.Queue;
 
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ public class MultiEventQueue<E extends QueuedEvent> extends EventQueue<E> {
 
 	private final List<E> runningEvents;
 	private final Queue<E> eventsToRemove;
+	private final Queue<E> waitingEvents;
 	private QueuedEvent lastEventAdded;
 	private int maxSimultaneousEvents = 10;
 
@@ -16,6 +18,7 @@ public class MultiEventQueue<E extends QueuedEvent> extends EventQueue<E> {
 		super();
 		runningEvents = new ArrayList<>();
 		eventsToRemove = new Queue<>();
+		waitingEvents = new Queue<>();
 	}
 
 	public MultiEventQueue(int capacity) {
@@ -23,6 +26,12 @@ public class MultiEventQueue<E extends QueuedEvent> extends EventQueue<E> {
 		maxSimultaneousEvents = capacity;
 		runningEvents = new ArrayList<>();
 		eventsToRemove = new Queue<>();
+		waitingEvents = new Queue<>();
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return events.isEmpty() && runningEvents.isEmpty() && waitingEvents.isEmpty();
 	}
 
 	/**
@@ -37,24 +46,30 @@ public class MultiEventQueue<E extends QueuedEvent> extends EventQueue<E> {
 	@Override
 	public void update() {
 		// check the queue, add events if possible
-		if (lastEventAdded != null && 													// if an event has been added at some point, and
-				(!lastEventAdded.isBlocking() || 										// 1. it is not a blocking event, or
+		if (lastEventAdded != null && 													// if an event has been added at some point, and the most recent event
+				(!lastEventAdded.isBlocking() || 										// 1. is not a blocking event, or
 				(lastEventAdded.isBlocking()) && lastEventAdded.isComplete())) { 		// 2. it is a blocking event but it's over now, then
 			while (!events.isEmpty() && 												// while there are more events in the queue, and
 					runningEvents.size() < maxSimultaneousEvents && 					// there is room for more simultaneous events, and
 					(!lastEventAdded.isBlocking() || 									// the last event added was not a blocking event, or
 					(lastEventAdded.isBlocking()) && lastEventAdded.isComplete())) { 	// it was, but is now complete, then start the next event and continue
-				E nextEvent = events.poll();
+				E nextEvent = events.peek();
 				if (nextEvent.mustWait()) { 											// unless the next event has to wait, in which case,
-					if (!runningEvents.isEmpty()) break; 								// we're done here until the running events are gone
+					if (!runningEvents.isEmpty() || nextEvent instanceof ClosedEvent) {										// we're done here until the running events are gone
+						if (nextEvent instanceof ClosedEvent) {
+							waitingEvents.push(nextEvent);
+							events.remove();
+						}
+						break;
+					}
 				}
-				lastEventAdded = nextEvent;
+				events.remove();
 				runningEvents.add(nextEvent);
+				lastEventAdded = nextEvent;
 				nextEvent.onStart();
 			}
 		}
 		// update the currently running events
-//		if (!runningEvents.isEmpty()) Logger.log(concurrentEventsToString());
 		for (E event : runningEvents) {
 			event.update();
 			if (event.isComplete()) {
@@ -66,6 +81,18 @@ public class MultiEventQueue<E extends QueuedEvent> extends EventQueue<E> {
 		while (!eventsToRemove.isEmpty()) {
 			runningEvents.remove(eventsToRemove.poll());
 		}
+		// if all events are gone, go to the wait list
+		if (runningEvents.isEmpty() && events.isEmpty()) {
+			if (!waitingEvents.isEmpty()) {
+				E nextEvent = waitingEvents.poll();
+				runningEvents.add(nextEvent);
+				lastEventAdded = nextEvent;
+			}
+		}
+	}
+
+	public List<E> getRunningEvents() {
+		return runningEvents;
 	}
 
 //	private String concurrentEventsToString() {

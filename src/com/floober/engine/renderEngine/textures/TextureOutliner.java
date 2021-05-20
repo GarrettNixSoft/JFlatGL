@@ -4,8 +4,8 @@ import com.floober.engine.renderEngine.elements.TextureElement;
 import com.floober.engine.renderEngine.framebuffers.FrameBuffer;
 import com.floober.engine.renderEngine.framebuffers.FrameBuffers;
 import com.floober.engine.renderEngine.renderers.TextureRenderer;
-import com.floober.engine.renderEngine.shaders.ppfx.blur.HorizontalBlurShader;
-import com.floober.engine.renderEngine.shaders.ppfx.blur.VerticalBlurShader;
+import com.floober.engine.renderEngine.shaders.blur.HorizontalBlurShader;
+import com.floober.engine.renderEngine.shaders.blur.VerticalBlurShader;
 import com.floober.engine.util.Logger;
 
 public class TextureOutliner {

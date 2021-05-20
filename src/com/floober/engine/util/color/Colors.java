@@ -68,7 +68,7 @@ public class Colors {
 
 	/**
 	 * Get a Color vector that represents a mixture of two other colors.
-	 * {@code a} may be a value between 0 and 1 and represents the
+	 * {@code mixPercentage} may be a value between 0 and 1 and represents the
 	 * percentage of the resulting color that will be contributed by
 	 * the mix color, with the rest coming from the base color.
 	 * @param baseColor The base color.

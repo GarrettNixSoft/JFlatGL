@@ -2,8 +2,8 @@ package com.floober.engine.renderEngine.ppfx.effects;
 
 import com.floober.engine.renderEngine.ppfx.ImageRenderer;
 import com.floober.engine.renderEngine.ppfx.PPEffect;
-import com.floober.engine.renderEngine.shaders.ppfx.blur.HorizontalBlurShader;
-import com.floober.engine.renderEngine.shaders.ppfx.blur.VerticalBlurShader;
+import com.floober.engine.renderEngine.shaders.blur.HorizontalBlurShader;
+import com.floober.engine.renderEngine.shaders.blur.VerticalBlurShader;
 import com.floober.engine.util.configuration.Config;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;

@@ -24,6 +24,7 @@ import com.floober.engine.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.renderEngine.renderers.TextureRenderer;
 import com.floober.engine.util.Logger;
 import com.floober.engine.util.color.Colors;
+import com.floober.engine.util.configuration.Config;
 import com.floober.engine.util.configuration.Settings;
 import com.floober.engine.util.exception.GUIException;
 import com.floober.engine.util.input.KeyInput;
@@ -52,6 +53,8 @@ public class GUITest {
 		// Set up logging.
 		Logger.setLoggerConfig();
 
+		Config.FULLSCREEN = false;
+
 		// Create the window and set up OpenGL and GLFW.
 		GameWindow.initGame();
 
@@ -65,7 +68,7 @@ public class GUITest {
 		TextMaster.init();
 		ParticleMaster.init();
 		PostProcessing.init();
-//		Sync sync = new Sync();
+		Sync sync = new Sync();
 
 		// SET UP DEBUG TEXT
 		fpsDisplay = new GUIText("FPS: ", 0.5f, Game.getFont("menu"),
@@ -161,7 +164,7 @@ public class GUITest {
 		// create a sample button for the second test tab
 		Button testButton = new Button("test_button");
 		testButton.label("Test").rounded(0.15f).textSize(1.2f)
-				.location(Display.center().add(300 - 300, 0), MasterRenderer.TOP_LAYER).size(new Vector2f(250, 100))
+				.location(Display.center().add(300, 0), MasterRenderer.TOP_LAYER).size(new Vector2f(250, 100))
 				.primaryColor(Colors.WHITE).secondaryColor(Colors.BLACK)
 				.onOpen(new GUIAction()
 						.addPerformActionOnTrigger(() -> testButton.queueEvent(new RestoreScaleEvent(testButton, 0.05f)))
@@ -271,12 +274,8 @@ public class GUITest {
 			if (KeyInput.isPressed(KeyInput.I)) { // I for invert
 				PostProcessing.setStageEnabled("invertColor", !PostProcessing.isStageEnabled("invertColor"));
 			}
-			if (KeyInput.isPressed(KeyInput.B)) { // B for gaussian blur
+			if (KeyInput.isPressed(KeyInput.G)) { // G for gaussian blur
 				PostProcessing.setStageEnabled("gaussianBlur", !PostProcessing.isStageEnabled("gaussianBlur"));
-			}
-			if (KeyInput.isPressed(KeyInput.G)) { // G for grayscale
-				PostProcessing.toggleStage("grayscale");
-//				PostProcessing.setStageEnabled("grayscale", !PostProcessing.isStageEnabled("grayscale"));
 			}
 		}
 	}

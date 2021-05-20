@@ -23,6 +23,13 @@ public class RectElement extends GeometryElement {
 		transform();
 	}
 
+	public RectElement(Vector4f color, Vector4f bounds, int layer, boolean centered) {
+		super(color, bounds.x, bounds.y, layer, centered);
+		this.width = bounds.z - bounds.x;
+		this.height = bounds.w - bounds.y;
+		transform();
+	}
+
 	public void setRoundRadius(float r) {
 		this.r = r;
 	}

@@ -1,7 +1,6 @@
 package com.floober.engine.entity.misc;
 
 import com.floober.engine.entity.core.Entity;
-import com.floober.engine.entity.util.EntityHandler;
 import com.floober.engine.renderEngine.particles.emitters.ParticleEmitter;
 import org.joml.Vector3f;
 
@@ -9,8 +8,8 @@ public class ParticleEmitterEntity extends Entity {
 
 	private final ParticleEmitter particleEmitter;
 
-	public ParticleEmitterEntity(EntityHandler entityHandler, ParticleEmitter particleEmitter) {
-		super(entityHandler);
+	public ParticleEmitterEntity(ParticleEmitter particleEmitter) {
+		super();
 		this.particleEmitter = particleEmitter;
 	}
 

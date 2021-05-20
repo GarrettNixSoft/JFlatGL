@@ -1,5 +1,7 @@
 package com.floober.engine.util.math;
 
+import com.floober.engine.util.Logger;
+import com.floober.engine.util.configuration.Config;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -18,12 +20,12 @@ public class MathUtil {
 		return matrix;
 	}
 
-	public static Matrix4f createTransformationMatrix(Vector3f translation, Vector2f scale) {
-		Matrix4f matrix = new Matrix4f();
-		matrix.translate(translation);
-		matrix.scale(new Vector3f(scale, 0));
-		return matrix;
-	}
+//	public static Matrix4f createTransformationMatrix(Vector3f translation, Vector2f scale) {
+//		Matrix4f matrix = new Matrix4f();
+//		matrix.translate(translation);
+//		matrix.scale(new Vector3f(scale, 0));
+//		return matrix;
+//	}
 
 	public static Matrix4f createTransformationMatrix(Vector2f translation, Vector2f scale, float rz) {
 		Matrix4f matrix = new Matrix4f();
@@ -33,13 +35,13 @@ public class MathUtil {
 		return matrix;
 	}
 
-	public static Matrix4f createTransformationMatrix(Vector3f translation, Vector2f scale, float rz) {
-		Matrix4f matrix = new Matrix4f();
-		matrix.translate(translation);
-		matrix.scale(new Vector3f(scale, 1));
-		matrix.rotate((float) Math.toRadians(rz), new Vector3f(0,0,1));
-		return matrix;
-	}
+//	public static Matrix4f createTransformationMatrix(Vector3f translation, Vector2f scale, float rz) {
+//		Matrix4f matrix = new Matrix4f();
+//		matrix.translation(translation);
+//		matrix.rotate((float) Math.toRadians(rz), new Vector3f(0,0,1));
+//		matrix.scale(new Vector3f(scale, 1));
+//		return matrix;
+//	}
 
 	public static Matrix4f createTransformationMatrix(Vector3f translation, float rx, float ry, float rz, float scale) {
 		Matrix4f matrix = new Matrix4f();
@@ -49,6 +51,27 @@ public class MathUtil {
 		matrix.rotate((float) Math.toRadians(rz), new Vector3f(0,0,1));
 		matrix.scale(scale);
 		return matrix;
+	}
+
+	public static Matrix4f createTransformationMatrix(Vector3f translation, Vector2f scale, float rz) {
+//		Logger.log("Translation: " + translation);
+		// create a projection matrix
+		Matrix4f projectionMatrix = new Matrix4f();
+		projectionMatrix.m00(1.0f / Config.INTERNAL_WIDTH);
+		projectionMatrix.m11(1.0f / Config.DEFAULT_HEIGHT);
+//		projectionMatrix.translation(translation);
+//		projectionMatrix.rotate((float) Math.toRadians(rz), new Vector3f(0,0,1));
+//		projectionMatrix.scale(new Vector3f(scale, 1));
+		projectionMatrix.m30(translation.x);
+		projectionMatrix.m31(translation.y);
+		projectionMatrix.m32(translation.z);
+		// model matrix it
+		Matrix4f modelMatrix = new Matrix4f();
+//		modelMatrix.translation(translation);
+		modelMatrix.rotate((float) Math.toRadians(rz), new Vector3f(0,0,1));
+		modelMatrix.scale(new Vector3f(scale, 1));
+		// multiply them
+		return projectionMatrix.mul(modelMatrix);
 	}
 
 	public static float interpolateBounded(float min, float max, float value) {
@@ -194,5 +217,38 @@ public class MathUtil {
 	public static Vector2f center(Rectangle r) {
 		return new Vector2f((float) (r.getX() + (r.getWidth() / 2.0)), (float) (r.getY() + (r.getHeight() / 2.0)));
 	}
+
+	/**
+	 * Get the angle, in degrees, from the horizontal formed by
+	 * the line passing through the two given points.
+	 * @param x1 Point 1 x position
+	 * @param y1 Point 1 y position
+	 * @param x2 Point 2 x position
+	 * @param y2 Point 2 y position
+	 * @return the angle
+	 */
+	public static float getAngle(float x1, float y1, float x2, float y2) {
+		double xDelta = x2 - x1;
+		double yDelta = y1 - y2;
+		double angle = Math.atan2(xDelta, yDelta);
+		angle -= Math.PI / 2;
+		return (float) Math.toDegrees(angle);
+	}
+
+	/**
+	 * Get the angle, in degrees, from the horizontal formed by
+	 * the line passing through the two given points.
+	 * @param pointA the first point
+	 * @param pointB the second point
+	 * @return the angle
+	 */
+	public static float getAngle(Vector2f pointA, Vector2f pointB) {
+		double xDelta = pointB.x - pointA.x;
+		double yDelta = pointB.y - pointA.y;
+		double angle = Math.atan2(xDelta, yDelta);
+		angle -= Math.PI / 2;
+		return (float) Math.toDegrees(angle);
+	}
+
 
 }

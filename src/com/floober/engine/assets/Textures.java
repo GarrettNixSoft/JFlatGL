@@ -49,4 +49,8 @@ public class Textures {
 		return new TextureComponent(texture);
 	}
 
+	public static TextureSet generateStaticSet(TextureComponent textureComponent) {
+		return new TextureSet(textureComponent.texture(), textureComponent.width(), textureComponent.height(), textureComponent.hasTransparency());
+	}
+
 }

@@ -15,7 +15,7 @@ public class BackgroundElement extends Entity {
 
 	// create element
 	public BackgroundElement(TextureSet textures, float x, float y) {
-		super(null, x, y);
+		super(x, y);
 		this.x = x;
 		this.y = y;
 		animation = new Animation();

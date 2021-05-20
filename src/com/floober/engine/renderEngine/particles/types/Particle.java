@@ -12,7 +12,7 @@ import java.util.HashMap;
 public class Particle implements Comparable<Particle> {
 
 	// pixel position and size
-	protected float x, y, z;
+	protected float x, y, layer;
 	protected float width, height;
 
 	// screen values
@@ -40,12 +40,12 @@ public class Particle implements Comparable<Particle> {
 	 * Generate a new particle.
 	 * @param texture The particle texture.
 	 */
-	public Particle(ParticleTexture texture, float x, float y, float z, float width, float height, float lifeLength) {
+	public Particle(ParticleTexture texture, float x, float y, float layer, float width, float height, float lifeLength) {
 		this.texture = texture;
 		this.x = x;
 		this.y = y;
-		this.z = z;
-		this.position.set(x, y, z);
+		this.layer = layer;
+		this.position.set(x, y, layer);
 		this.width = width;
 		this.height = height;
 		this.lifeLength = lifeLength;
@@ -78,8 +78,8 @@ public class Particle implements Comparable<Particle> {
 	public float getY() {
 		return y;
 	}
-	public float getZ() {
-		return z;
+	public float getLayer() {
+		return layer;
 	}
 	public float getWidth() {
 		return width;
@@ -124,8 +124,8 @@ public class Particle implements Comparable<Particle> {
 	public void setY(float y) {
 		this.y = y;
 	}
-	public void setZ(float z) {
-		this.z = z;
+	public void setLayer(float layer) {
+		this.layer = layer;
 	}
 	public void setWidth(float width) {
 		this.width = width;
@@ -156,7 +156,7 @@ public class Particle implements Comparable<Particle> {
 	public void setPosition(float x, float y, float z) {
 		this.x = x;
 		this.y = y;
-		this.z = z;
+		this.layer = z;
 		this.position.set(x, y, z);
 		convertScreenPosition();
 	}
@@ -167,13 +167,13 @@ public class Particle implements Comparable<Particle> {
 
 	// UPDATING THE PARTICLE
 	public void convertScreenPosition() {
-		screenPosition.set(Display.convertToDisplayPosition(x, y, z, width, height, true));
+		screenPosition.set(Display.convertToDisplayPosition(x, y, layer, width, height, true));
 		scaleVec.set(Display.convertToDisplayScale(width, height));
 	}
 
 	@Override
 	public int compareTo(Particle o) {
-		return Float.compare(o.z, z);
+		return Float.compare(o.layer, layer);
 	}
 
 }

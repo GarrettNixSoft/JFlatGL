@@ -114,7 +114,9 @@ public abstract class GUIComponent {
 	}
 
 	public GUIComponent onClose(GUIAction action) {
-		actions[ON_CLOSE] = action.addPerformActionOnTrigger(() -> queueEvent(new ClosedEvent(this)));
+		actions[ON_CLOSE] = action
+//				.addPerformActionOnTrigger(() -> Logger.log("This is the inserted event from the GUIComponent class, added on component " + componentID))
+				.addPerformActionOnTrigger(() -> queueEvent(new ClosedEvent(this)));
 		return this;
 	}
 
@@ -155,11 +157,26 @@ public abstract class GUIComponent {
 	}
 
 	public boolean isClosed() {
-		return !active && eventQueue.isEmpty();
+		return !active && !hasPendingEvents();
 	}
 
 	public boolean hasPendingEvents() {
 		return !eventQueue.isEmpty();
+	}
+
+	/**
+	 * Custom hasPendingEvents() method used by the ClosedEvent class, which passes itself.
+	 * Returns true if the queue is empty, OR, the only remaining event is the ClosedEvent
+	 * that called this method.
+	 * @param event the ClosedEvent calling this method
+	 * @return {@code true} if the queue is empty, or the calling object is the only event in the queue
+	 */
+	public boolean hasPendingEvents(ClosedEvent event) {
+		if (eventQueue.isEmpty()) return false;
+		else {
+			if (eventQueue.getRunningEvents().size() == 1 && eventQueue.getRunningEvents().contains(event)) return false;
+			else return true;
+		}
 	}
 
 	public Vector3f getPosition() {
@@ -294,6 +311,7 @@ public abstract class GUIComponent {
 
 	public void close() {
 		if (isClosed()) return;
+		Logger.log("Closing component " + componentID);
 		trigger(ON_CLOSE);
 	}
 

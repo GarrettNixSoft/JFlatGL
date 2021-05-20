@@ -1,5 +1,7 @@
 package com.floober.engine.gui;
 
+import com.floober.engine.util.Logger;
+
 public class GUIManager {
 
 	private static GUI activeGUI;
@@ -15,18 +17,33 @@ public class GUIManager {
 	}
 
 	public static void closeGUI() {
+		Logger.log("CLOSING GUI ************************************************************************");
 		activeGUI.close();
 	}
 
 	public static void update() {
 		GUIEventsHandler.handleEvents(); // handle events from last frame
-		// TODO check for GUI close done, switch to next GUI
-		activeGUI.update();
+		// only update GUI if one exists
+		if (activeGUI != null) {
+			activeGUI.update();
+			if (activeGUI.isClosed()) {
+				if (nextGUI != null) {
+					activeGUI = nextGUI;
+					nextGUI = null;
+				}
+				else {
+					activeGUI = null;
+				}
+			}
+		}
+
 	}
 
 	public static void render() {
-		activeGUI.doTransform();
-		activeGUI.render();
+		if (activeGUI != null) {
+			activeGUI.doTransform();
+			activeGUI.render();
+		}
 	}
 
 }

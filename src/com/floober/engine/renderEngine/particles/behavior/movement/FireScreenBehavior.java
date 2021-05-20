@@ -34,7 +34,7 @@ public class FireScreenBehavior extends MovementBehavior {
 		float xPos = position.x() + dx;
 		float yPos = position.y() + dy;
 		// set map position
-		particle.setPosition(xPos, yPos, particle.getZ());
+		particle.setPosition(xPos, yPos, particle.getLayer());
 	}
 
 }

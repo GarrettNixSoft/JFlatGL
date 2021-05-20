@@ -4,7 +4,7 @@ import org.joml.Vector4f;
 
 import java.util.NoSuchElementException;
 
-public record TextureSet(Texture baseTex, int texWidth, int texHeight) {
+public record TextureSet(Texture baseTex, int texWidth, int texHeight, boolean hasTransparency) {
 
 	public int getNumTextures() { return (baseTex().width() / texWidth) * (baseTex().height() / texHeight); }
 
@@ -26,6 +26,7 @@ public record TextureSet(Texture baseTex, int texWidth, int texHeight) {
 		Vector4f offsets = getTextureOffset(index);
 		TextureComponent frame = new TextureComponent(texCopy);
 		frame.setTextureOffset(offsets);
+		frame.setHasTransparency(hasTransparency);
 		return frame;
 	}
 

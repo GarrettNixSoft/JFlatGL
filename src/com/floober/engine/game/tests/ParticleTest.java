@@ -68,6 +68,7 @@ public class ParticleTest {
 		Logger.setLoggerConfig();
 
 		Config.WINDOW_TITLE += " (Particle Test)";
+		Config.FULLSCREEN = false;
 
 		// Create the window and set up OpenGL and GLFW.
 		GameWindow.initGame();
@@ -205,7 +206,7 @@ public class ParticleTest {
 			KeyInput.update();
 			MouseInput.update();
 
-			DisplayManager.checkToggleFullscreen();
+//			DisplayManager.checkToggleFullscreen();
 
 			// run game logic
 			// game.update();

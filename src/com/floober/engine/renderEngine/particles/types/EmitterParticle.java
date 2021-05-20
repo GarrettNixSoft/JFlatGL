@@ -79,8 +79,9 @@ public class EmitterParticle extends Particle {
 	@Override
 	public void convertScreenPosition() {
 		setMapPosition();
-		screenPosition.set(Display.convertToDisplayPosition(x, y, z, width, height, true));
-		scaleVec.set(Display.convertToDisplayScale(width, height));
+		screenPosition.set(Display.convertToDisplayPosition(x, y, layer, width, height, true));
+//		scaleVec.set(Display.convertToDisplayScale(width, height));
+		scaleVec.set(width, height);
 	}
 
 	// move

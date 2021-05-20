@@ -12,7 +12,7 @@ public class Player extends Entity {
 	 * @param y The starting y-position of the player.
 	 */
 	public Player(EntityHandler entityHandler, float x, float y) {
-		super(entityHandler, x, y);
+		super(x, y);
 		// implement
 	}
 

@@ -4,6 +4,7 @@ import com.floober.engine.audio.AudioChannel;
 import com.floober.engine.audio.AudioMaster;
 import com.floober.engine.audio.Sound;
 import com.floober.engine.util.Logger;
+import com.floober.engine.util.configuration.Settings;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +25,7 @@ public class Music {
 		CHANNELS = new AudioChannel[NUM_CHANNELS];
 		for (int i = 0; i < CHANNELS.length; ++i) {
 			CHANNELS[i] = new AudioChannel(AudioMaster.generateSource());
+			CHANNELS[i].setVolume(Settings.musicVolume);
 		}
 	}
 
@@ -102,6 +104,7 @@ public class Music {
 		if (!CHANNELS[channel].isPlaying()) {
 			currentMusicChannel = channel;
 			CHANNELS[channel].playAudio(music.get(key));
+			CHANNELS[channel].setLooping(true);
 			return true;
 		}
 		else return false;

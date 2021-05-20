@@ -5,7 +5,7 @@ import com.floober.engine.entity.core.Entity;
 public abstract class Effect extends Entity {
 
 	public Effect() {
-		super(null, 0, 0);
+		super(0, 0);
 	}
 
 	// actions

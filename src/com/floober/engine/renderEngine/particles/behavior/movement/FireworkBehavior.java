@@ -49,7 +49,7 @@ public class FireworkBehavior extends MovementBehavior {
 		// set the new position
 		Vector3f start = new Vector3f(), end = new Vector3f();
 		if (output) System.out.println("Particle old position: " +  (start = new Vector3f(particle.getPosition())));
-		particle.setPosition(xPos, yPos, particle.getZ());
+		particle.setPosition(xPos, yPos, particle.getLayer());
 		if (output) System.out.println("Particle new position: " + (end = new Vector3f(particle.getPosition())));
 		if (output) System.out.println("Velocity magnitude: " + velocity.length());
 		if (output) System.out.println("Actual change in magnitude: " + start.sub(end).length());

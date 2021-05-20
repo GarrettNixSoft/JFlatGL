@@ -44,6 +44,11 @@ public class Timer {
 		start = -1;
 	}
 
+	public void reset(float newTime) {
+		reset();
+		setTime(newTime);
+	}
+
 	/**
 	 * Restart the timer. Calls {@code reset()} and {@code restart()}.
 	 */
@@ -54,11 +59,11 @@ public class Timer {
 
 	/**
 	 * Restart the timer with a new time target. Calls {@code reset()}, {@code setTime()} and {@code start()}.
-	 * @param time The new duration.
+	 * @param newTime The new duration.
 	 */
-	public void restart(float time) {
+	public void restart(float newTime) {
 		reset();
-		setTime(time);
+		setTime(newTime);
 		start();
 	}
 

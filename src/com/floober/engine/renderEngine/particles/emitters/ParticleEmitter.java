@@ -6,6 +6,7 @@ import com.floober.engine.renderEngine.elements.geometry.OutlineElement;
 import com.floober.engine.renderEngine.particles.ParticleTexture;
 import com.floober.engine.renderEngine.particles.behavior.ParticleBehavior;
 import com.floober.engine.renderEngine.particles.types.EmitterParticle;
+import com.floober.engine.util.Logger;
 import com.floober.engine.util.math.MathUtil;
 import com.floober.engine.util.math.RandomUtil;
 import com.floober.engine.util.time.ScaledTimer;
@@ -50,7 +51,6 @@ public class ParticleEmitter {
 			particleTimer.restart();
 		}
 	}
-
 
 	// INITIALIZERS
 
@@ -232,7 +232,7 @@ public class ParticleEmitter {
 			startingPosition.set(MathUtil.getCartesian(distance, 0), position.z());
 			// use the rotation of the velocity; this ensures than particles always move away from the center
 		}
-		return new Vector3f(position).add(startingPosition);
+		return new Vector3f(position).add(startingPosition.x, startingPosition.y, 0);
 	}
 
 	public void renderBounds() {

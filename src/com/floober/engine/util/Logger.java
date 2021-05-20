@@ -27,6 +27,7 @@ public class Logger {
 	public static boolean logEntityDebug;
 	public static boolean logEnemyDebug;
 	public static boolean logPlayerDebug;
+	public static boolean logEnemyWaves;
 	// UI
 	public static boolean logUIEvents;
 	public static boolean logUIInteractions;
@@ -50,6 +51,7 @@ public class Logger {
 		Logger.logEntityDebug = true;
 		Logger.logEnemyDebug = false;
 		Logger.logPlayerDebug = true;
+		Logger.logEnemyWaves = true;
 		// event
 		Logger.logEvents = false;
 		Logger.logCutscenes = true;
@@ -144,6 +146,11 @@ public class Logger {
 	public static void logEvent(String message) {
 		if (!logEvents) return;
 		outStream.println("[EVENT] " + message);
+	}
+
+	public static void logWave(String message) {
+		if (!logEnemyWaves) return;
+		outStream.println("[WAVE] " + message);
 	}
 
 	public static void logCutscene(String message) {

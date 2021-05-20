@@ -6,8 +6,11 @@ import com.floober.engine.entity.util.EntityHandler;
 
 public abstract class Pickup extends Entity {
 
+	protected EntityHandler entityHandler;
+
 	public Pickup(float x, float y, EntityHandler entityHandler) {
-		super(entityHandler, x, y);
+		super(x, y);
+		this.entityHandler = entityHandler;
 		textureElement.setHasTransparency(true);
 	}
 

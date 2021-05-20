@@ -31,6 +31,7 @@ public class GameStateManager {
 		unloadState(currentState);
 		currentState = state;
 		loadState(currentState);
+		gameStates[currentState].init();
 	}
 
 	private void loadState(int state) {
@@ -46,11 +47,16 @@ public class GameStateManager {
 	}
 
 	public void update() {
+		gameStates[currentState].handleInput();
 		gameStates[currentState].update();
 	}
 
 	public void render() {
 		gameStates[currentState].render();
+	}
+
+	public GameState getCurrentState() {
+		return gameStates[currentState];
 	}
 
 }

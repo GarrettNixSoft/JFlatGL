@@ -3,7 +3,11 @@ package com.floober.engine.game;
 import com.floober.engine.animation.Animation;
 import com.floober.engine.assets.*;
 import com.floober.engine.audio.Sound;
+import com.floober.engine.entity.core.player.NullPlayer;
+import com.floober.engine.entity.core.player.Player;
+import com.floober.engine.entity.effects.EffectsHandler;
 import com.floober.engine.game.gameState.GameStateManager;
+import com.floober.engine.game.gameState.states.PlayState;
 import com.floober.engine.loaders.GameLoader;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.FontType;
 import com.floober.engine.renderEngine.textures.Texture;
@@ -12,6 +16,7 @@ import com.floober.engine.renderEngine.textures.TextureComponent;
 import com.floober.engine.renderEngine.textures.TextureSet;
 import com.floober.engine.util.Logger;
 import com.floober.engine.util.Session;
+import com.floober.engine.util.configuration.Config;
 
 import java.util.HashMap;
 
@@ -34,6 +39,10 @@ public class Game {
 
 	// flag for requesting quit
 	private boolean closeRequest;
+
+	public static final int PLAY_AREA_TOP = 100;
+	public static final int PLAY_AREA_BOTTOM = Config.DEFAULT_HEIGHT - 100;
+	public static final int PLAY_AREA_HEIGHT = Config.DEFAULT_HEIGHT;
 
 	public Game() {
 		textures = new Textures();
@@ -78,7 +87,12 @@ public class Game {
 	 * @param sfxID the ID of the audio file in sfx_directory.json
 	 */
 	public static void playSfx(String sfxID) {
-		instance.sfx.playSfx(sfxID);
+		try {
+			instance.sfx.playSfx(sfxID);
+		}
+		catch (Exception e) {
+			Logger.logError("An error occurred while attempting to play Sound Effect [id=\"" + sfxID + "\"]: " + e.getClass() + "; " + e.getMessage());
+		}
 	}
 
 	/**
@@ -173,6 +187,10 @@ public class Game {
 		return instance.textures.getTextureSet(key);
 	}
 
+	public static TextureSet getStaticSet(String key) {
+		return Textures.generateStaticSet(getTexture(key));
+	}
+
 	public static Texture[] getTextureArray(String key) {
 		return instance.textures.getTextureArray(key);
 	}
@@ -182,7 +200,12 @@ public class Game {
 	}
 
 	// Animations
-	public static Animation getAnimation(String key) { return instance.animations.getAnimation(key); }
+	public static Animation getAnimation(String key) {
+		Animation result = instance.animations.getAnimation(key);
+		if (result == null) Logger.logError("Animation requested does not exist: " + key, Logger.HIGH);
+		return result;
+	}
+
 	public static HashMap<String, Animation> getAnimationSet(String key) { return instance.animations.getAnimationSet(key); }
 
 	// Audio

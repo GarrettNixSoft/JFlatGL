@@ -1,7 +1,6 @@
 package com.floober.engine.entity.core.enemy;
 
 import com.floober.engine.entity.core.Entity;
-import com.floober.engine.entity.util.EntityHandler;
 import com.floober.engine.util.time.TimeScale;
 
 public abstract class Enemy extends Entity {
@@ -14,19 +13,14 @@ public abstract class Enemy extends Entity {
 	protected int invincibilityDuration;
 	protected boolean invincible;
 
-	// (optional) can jump
-	protected boolean jumping;
-	protected float stopJumpSpeed;
-
-	public Enemy(EntityHandler entityHandler, float x, float y) {
-		super(entityHandler, x, y);
+	public Enemy(float x, float y) {
+		super(x, y);
 		this.x = x;
 		this.y = y;
-		textureElement.setHasTransparency(true);
 	}
 
 	// INTERACTIONS
-	public abstract void damage(float damage);
+//	public abstract void damage(float damage);
 
 	// GETTERS
 	public float getDamage() { return damage; }

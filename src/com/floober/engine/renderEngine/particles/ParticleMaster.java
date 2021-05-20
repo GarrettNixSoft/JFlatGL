@@ -1,5 +1,6 @@
 package com.floober.engine.renderEngine.particles;
 
+import com.floober.engine.game.Game;
 import com.floober.engine.renderEngine.particles.types.LightParticle;
 import com.floober.engine.renderEngine.particles.types.Particle;
 import com.floober.engine.renderEngine.particles.types.TexturedParticle;
@@ -30,6 +31,8 @@ public class ParticleMaster {
 	// Total particle counter
 	public static int numParticles = 0;
 
+	public static ParticleTexture GLOW_PARTICLE_TEXTURE;
+
 	/**
 	 * Initialize the Particle Renderers and the Particle Collections for each layer.
 	 */
@@ -44,6 +47,11 @@ public class ParticleMaster {
 		}
 	}
 
+	public static void initGlobals() {
+		// init global particle textures
+		GLOW_PARTICLE_TEXTURE = new ParticleTexture(Game.getTexture("glow_particle"), 1, true);
+	}
+
 	public static void addParticle(Particle particle) {
 		// enforce hard particle limit
 		if (numParticles >= ParticleRenderer.MAX_INSTANCES) {
@@ -51,7 +59,7 @@ public class ParticleMaster {
 			return;
 		}
 		// if limit not exceeded, add the particle
-		int layer = (int) particle.getZ();
+		int layer = (int) particle.getLayer();
 		// add the particle to its corresponding type collection
 		if (particle instanceof LightParticle lp) {
 			lightEmittingParticles[layer].add(lp);

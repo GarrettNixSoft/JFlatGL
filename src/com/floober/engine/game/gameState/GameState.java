@@ -12,6 +12,9 @@ public abstract class GameState {
 		this.gsm = gsm;
 	}
 
+	// override when necessary
+	public void init() {}
+
 	public abstract void update();
 	public abstract void render();
 	public abstract void handleInput();

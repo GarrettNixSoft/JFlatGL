@@ -3,6 +3,7 @@ package com.floober.engine.assets;
 import com.floober.engine.audio.AudioChannel;
 import com.floober.engine.audio.AudioMaster;
 import com.floober.engine.audio.Sound;
+import com.floober.engine.util.configuration.Settings;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,10 +19,11 @@ public class Sfx {
 
 	// Constructor initializes channel sources
 	public Sfx() {
-		int NUM_CHANNELS = 4;
+		int NUM_CHANNELS = 64;
 		CHANNELS = new AudioChannel[NUM_CHANNELS];
 		for (int i = 0; i < CHANNELS.length; ++i) {
 			CHANNELS[i] = new AudioChannel(AudioMaster.generateSource());
+			CHANNELS[i].setVolume(Settings.sfxVolume);
 		}
 	}
 

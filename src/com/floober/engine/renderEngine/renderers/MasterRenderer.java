@@ -37,6 +37,8 @@ public class MasterRenderer {
 	private final RenderLayer[] layers;
 	public static final int NUM_LAYERS = 10;
 	public static final int TOP_LAYER = NUM_LAYERS - 1;
+	public static final int BOTTOM_LAYER = 0;
+	public static final int DEFAULT_LAYER = NUM_LAYERS / 2;
 
 	// Render batches; mapped by layer index
 	private final Map<Integer, TextureBatchOpaque> opaqueTextureBatches = new HashMap<>();

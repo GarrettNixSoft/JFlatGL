@@ -8,6 +8,8 @@ import org.json.JSONObject;
 
 public class BackgroundLoader {
 
+	// TODO maybe delete this class, I like the old self-loading background method
+
 	public Background load(String path) {
 		// get file
 		JSONObject json = Loader.getJSON(path);
@@ -24,7 +26,7 @@ public class BackgroundLoader {
 		BackgroundBase base = new BackgroundBase(Game.getTextureSet(texID), animationTime, moveSpeed);
 		// TODO: parse elements and add them
 		// create Background
-		Background background = new Background();
+		Background background = new Background(path);
 		background.setBase(base);
 		// return the result
 		return background;

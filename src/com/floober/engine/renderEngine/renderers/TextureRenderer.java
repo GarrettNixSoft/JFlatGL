@@ -9,8 +9,8 @@ import com.floober.engine.renderEngine.lights.LightMaster;
 import com.floober.engine.renderEngine.models.ModelLoader;
 import com.floober.engine.renderEngine.models.QuadModel;
 import com.floober.engine.renderEngine.shaders.ShaderProgram;
-import com.floober.engine.renderEngine.shaders.ppfx.blur.HorizontalBlurShader;
-import com.floober.engine.renderEngine.shaders.ppfx.blur.VerticalBlurShader;
+import com.floober.engine.renderEngine.shaders.blur.HorizontalBlurShader;
+import com.floober.engine.renderEngine.shaders.blur.VerticalBlurShader;
 import com.floober.engine.renderEngine.shaders.textures.TextureOutlineGrowShader;
 import com.floober.engine.renderEngine.shaders.textures.TextureOutlineShader;
 import com.floober.engine.renderEngine.shaders.textures.TextureShader;
@@ -73,6 +73,8 @@ public class TextureRenderer {
 
 			// bind this element's data
 			loadTextureUniforms(element);
+
+//			Logger.log("Element position: " + element.getPosition());
 
 			Matrix4f mat = MathUtil.createTransformationMatrix(element.getPosition(), element.getScale(), element.getRotation());
 
@@ -149,7 +151,7 @@ public class TextureRenderer {
 	public void rawRender(Texture texture, Vector3f position, Vector2f scale) {
 		prepare(false);
 		bindTexture(texture);
-		shader.loadTransformationMatrix(MathUtil.createTransformationMatrix(position, scale));
+		shader.loadTransformationMatrix(MathUtil.createTransformationMatrix(position, scale, 0));
 		shader.loadTextureAlpha(1);
 		glDrawArrays(GL_TRIANGLE_STRIP, 0, quad.vertexCount());
 		finish();

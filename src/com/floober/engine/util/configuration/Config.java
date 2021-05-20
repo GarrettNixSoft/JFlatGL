@@ -9,7 +9,7 @@ import org.joml.Vector4f;
  */
 public class Config {
 
-	public static String WINDOW_TITLE = "FlooberEngine Development Version";
+	public static String WINDOW_TITLE = "Galactic Horizon";
 
 	// 3 image files for the game window icons
 	public static final String ICON_PATH_64 = "icon/icon64.png";
@@ -23,8 +23,10 @@ public class Config {
 
 	// The default size of the game window.
 	// The game will be stretched to this size.
-	public static final int DEFAULT_WIDTH = 1600;
-	public static final int DEFAULT_HEIGHT = 900;
+	public static final int DEFAULT_WIDTH = 1920;
+	public static final int DEFAULT_HEIGHT = 1080;
+
+	public static boolean FULLSCREEN = true; // TODO mess with this
 
 	public static Vector4f getScreenBounds() {
 		return new Vector4f(0, 0, INTERNAL_WIDTH, INTERNAL_HEIGHT);

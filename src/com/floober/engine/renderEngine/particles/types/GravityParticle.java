@@ -28,7 +28,7 @@ public class GravityParticle extends Particle {
 		this.dy += gravity * time;
 		this.x += dx * time;
 		this.y += dy * time;
-		setPosition(Display.convertToDisplayPosition(x, y, z, width, height, true));
+		setPosition(Display.convertToDisplayPosition(x, y, layer, width, height, true));
 		return super.update();
 	}
 

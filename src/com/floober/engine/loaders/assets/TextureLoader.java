@@ -89,11 +89,15 @@ public class TextureLoader extends AssetLoader {
 			JSONObject setObject = textureSetDirectory.getJSONObject(key);
 			// get the associated path
 			String path = setObject.getString("path");
+			// pre-load the texture
+			Texture rawTex = Loader.loadTexture(path);
 			// get the width and height
 			int width = setObject.getInt("tex_width");
-			int height = setObject.getInt("tex_height");
+			int height = setObject.optInt("tex_height", rawTex.height());
+			// get optional transparency flag
+			boolean hasTransparency = setObject.optBoolean("transparent", false);
 			// build the object and add it
-			TextureSet textureSet = new TextureSet(Loader.loadTexture(path), width, height);
+			TextureSet textureSet = new TextureSet(rawTex, width, height, hasTransparency);
 			Game.getTextures().addTextureSet(key, textureSet);
 			// report the load count
 			Globals.texCount++;

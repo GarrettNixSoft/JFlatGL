@@ -1,5 +1,6 @@
 package com.floober.engine.gui.component;
 
+import com.floober.engine.gui.event.ClosedEvent;
 import com.floober.engine.util.Logger;
 
 import java.util.ArrayList;
@@ -21,8 +22,12 @@ public class GUIPanel extends GUIComponent {
 	public boolean isClosed() {
 		if (components.isEmpty()) return false;
  		for (GUIComponent component : components) {
-			if (!component.isClosed()) return false;
+			if (!component.isClosed()) {
+//				Logger.log("Panel not closed; component " + component.getComponentID() + " is still open");
+				return false;
+			}
 		}
+// 		Logger.log("Panel closed!");
 		return !hasPendingEvents();
 	}
 
@@ -38,9 +43,22 @@ public class GUIPanel extends GUIComponent {
 	@Override
 	public boolean hasPendingEvents() {
 		for (GUIComponent component : components) {
-			if (component.hasPendingEvents()) return true;
+			if (component.hasPendingEvents()) {
+				// TODO THIS is where the bug is coming from; why does play_button not report that it's waiting on a ClosedEvent?
+				return true;
+			}
 		}
 		return super.hasPendingEvents();
+	}
+
+	@Override
+	public boolean hasPendingEvents(ClosedEvent event) {
+		for (GUIComponent component : components) {
+			if (component.hasPendingEvents(event)) {
+				return true;
+			}
+		}
+		return super.hasPendingEvents(event);
 	}
 
 	@Override
@@ -79,7 +97,6 @@ public class GUIPanel extends GUIComponent {
 
 	@Override
 	public void update() {
-		updateEvents();
 		for (GUIComponent component : components) {
 			component.updateEvents();
 			if (!component.isActive() || component.isLocked() || isLocked()) continue;
