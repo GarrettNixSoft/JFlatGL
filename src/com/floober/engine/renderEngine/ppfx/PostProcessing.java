@@ -2,10 +2,7 @@ package com.floober.engine.renderEngine.ppfx;
 
 import com.floober.engine.renderEngine.models.ModelLoader;
 import com.floober.engine.renderEngine.models.QuadModel;
-import com.floober.engine.renderEngine.ppfx.effects.Contrast;
-import com.floober.engine.renderEngine.ppfx.effects.GaussianBlur;
-import com.floober.engine.renderEngine.ppfx.effects.InvertColor;
-import com.floober.engine.renderEngine.ppfx.effects.ToScreen;
+import com.floober.engine.renderEngine.ppfx.effects.*;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
@@ -28,6 +25,7 @@ public class PostProcessing {
 	private static Contrast contrast;
 	private static InvertColor invertColor;
 	private static GaussianBlur gaussianBlur;
+	private static Grayscale grayscale;
 
 	// last stage, render to screen
 	private static ToScreen toScreen;
@@ -46,6 +44,9 @@ public class PostProcessing {
 		// create the gaussian blur effect
 		gaussianBlur = new GaussianBlur();
 		effects.put("gaussianBlur", gaussianBlur);
+		// create the grayscale effect
+		grayscale = new Grayscale();
+		effects.put("grayscale", grayscale);
 		// create other effects
 		// ...
 
@@ -73,6 +74,12 @@ public class PostProcessing {
 		else effects.get(stageID).disable();
 	}
 
+	public static void toggleStage(String stageID) {
+		PPEffect effect = effects.get(stageID);
+		if (effect.isEnabled()) effect.disable();
+		else effect.enable();
+	}
+
 	public static void doPostProcessing(int colorTexture) {
 		start();
 
@@ -87,6 +94,10 @@ public class PostProcessing {
 		if (gaussianBlur.isEnabled()) {
 			gaussianBlur.render(colorTexture);
 			colorTexture = gaussianBlur.getResult();
+		}
+		if (grayscale.isEnabled()) { // GRAYSCALE SHOULD BE LAST
+			grayscale.render(colorTexture);
+			colorTexture = grayscale.getResult();
 		}
 		// chain the rest ...
 

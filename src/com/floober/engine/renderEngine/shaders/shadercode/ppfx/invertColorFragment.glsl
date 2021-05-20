@@ -1,11 +1,11 @@
 #version 140
 
 in vec2 textureCoords;
-out vec4 out_Colour;
-uniform sampler2D colourTexture;
+out vec4 out_Color;
+uniform sampler2D colorTexture;
 
 void main() {
 
-	out_Colour = 1 - texture(colourTexture, textureCoords);
+	out_Color = 1 - texture(colorTexture, textureCoords);
 
 }
