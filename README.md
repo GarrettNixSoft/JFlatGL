@@ -11,4 +11,3 @@ Current features:
 - Simple GUI library with customizable elements and built-in event system
 - Support for GLSL shaders and post-processing effects
 - Resizable game window (when not in fullscreen), auto-resizes viewport to preserve aspect ratio
-- 
