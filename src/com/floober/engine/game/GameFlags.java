@@ -5,6 +5,12 @@ import com.floober.engine.util.Globals;
 import java.util.HashMap;
 import java.util.prefs.Preferences;
 
+/**
+ * The GameFlags class stores all boolean flags to store
+ * on the player's system. This allows the game's progress
+ * to be saved, loaded, and updated.
+ */
+
 public class GameFlags {
 
 	private static HashMap<String, Boolean> gameFlags;

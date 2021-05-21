@@ -132,13 +132,8 @@ public abstract class Entity {
 	}
 
 	protected void fixBounds() {
-//		if (x < 0) x = 0;
-//		if (y < 0) y = 0;
-		// implement upper bounds
-		if (x < width / 2) x = width / 2;
-		if (y < Game.PLAY_AREA_TOP + height / 2) y = Game.PLAY_AREA_TOP + width / 2;
-		if (x > Config.DEFAULT_WIDTH - width / 2) x = Config.DEFAULT_WIDTH - width / 2;
-		if (y > Game.PLAY_AREA_BOTTOM - height / 2) y = Game.PLAY_AREA_BOTTOM - height / 2;
+		if (x < 0) x = 0;
+		if (y < 0) y = 0;
 	}
 
 	// screen bounds

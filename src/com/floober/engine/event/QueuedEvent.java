@@ -1,5 +1,16 @@
 package com.floober.engine.event;
 
+/**
+ * {@code QueuedEvent}s provide for a structured sequence of
+ * events run through an {@code EventQueue}. In a {@code MultiEventQueue},
+ * They can be configured to be "blocking", where they will
+ * prevent new events from beginning until they are completed,
+ * or as "mustWait", where they will prevent themselves from
+ * beginning until all currently running events are complete.
+ * All other {@code QueuedEvent}s will simply be started in
+ * sequence and can run simultaneously.
+ */
+
 public abstract class QueuedEvent {
 
 	private boolean started;

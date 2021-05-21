@@ -3,6 +3,11 @@ package com.floober.engine.event;
 import com.floober.engine.util.Logger;
 import com.floober.engine.util.data.Queue;
 
+/**
+ * A specialized {@code Queue} that only accepts {@code QueuedEvent}s.
+ * @param <T> - all valid subclasses of {@code QueuedEvent}
+ */
+
 public class EventQueue<T extends QueuedEvent> {
 
 	protected Queue<T> events;

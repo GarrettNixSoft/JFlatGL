@@ -6,6 +6,11 @@ import com.floober.engine.util.data.Queue;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A specialized {@code EventQueue} that supports simultaneous events.
+ * @param <E> - all valid subclasses of {@code QueuedEvent}
+ */
+
 public class MultiEventQueue<E extends QueuedEvent> extends EventQueue<E> {
 
 	private final List<E> runningEvents;
@@ -29,6 +34,12 @@ public class MultiEventQueue<E extends QueuedEvent> extends EventQueue<E> {
 		waitingEvents = new Queue<>();
 	}
 
+	/**
+	 * Check if this {@code MultiEventQueue} is empty.
+	 * "Empty" is defined as having no queued, running,
+	 * or currently waiting events.
+	 * @return
+	 */
 	@Override
 	public boolean isEmpty() {
 		return events.isEmpty() && runningEvents.isEmpty() && waitingEvents.isEmpty();

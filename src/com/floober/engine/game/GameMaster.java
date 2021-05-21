@@ -6,8 +6,6 @@ import com.floober.engine.game.gameState.states.MainMenuState;
 import com.floober.engine.game.gameState.states.PlayState;
 
 /**
- * @author Floober
- *
  * The GameMaster controls what content is played when the player
  * advances to the next level, and keeps records of player choices.
  */

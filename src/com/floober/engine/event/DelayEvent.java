@@ -3,16 +3,17 @@ package com.floober.engine.event;
 import com.floober.engine.util.Logger;
 import com.floober.engine.util.time.Timer;
 
-/*
-	Generic delay, can be used in any event queue
-	to pause for a specified duration.
+/**
+ * Generic delay, can be used in any event queue
+ * to pause for a specified duration.
  */
+
 public class DelayEvent extends QueuedEvent {
 
 	private final Timer timer;
 
 	public DelayEvent(float duration) {
-		super(false);
+		super(true);
 		timer = new Timer(duration);
 	}
 

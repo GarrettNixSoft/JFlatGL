@@ -32,6 +32,11 @@ import java.util.Objects;
 import static com.floober.engine.display.GameWindow.windowID;
 import static org.lwjgl.glfw.GLFW.*;
 
+/**
+ * Run the game! The {@code main()} function here contains
+ * all initial game setup and the game loop, as well as clean-up
+ * code after the game loop.
+ */
 public class RunGame {
 
 	public static LoadRenderer loadRenderer = new LoadRenderer();
@@ -62,7 +67,7 @@ public class RunGame {
 		PostProcessing.init();
 
 		// game components
-//		Sync sync = new Sync();
+//		Sync sync = new Sync(); // this is optional; it's meant to sync framerates to a constant speed but is rather buggy
 
 		// master components
 		TextMaster.init();

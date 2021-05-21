@@ -3,11 +3,7 @@ package com.floober.engine.game;
 import com.floober.engine.animation.Animation;
 import com.floober.engine.assets.*;
 import com.floober.engine.audio.Sound;
-import com.floober.engine.entity.core.player.NullPlayer;
-import com.floober.engine.entity.core.player.Player;
-import com.floober.engine.entity.effects.EffectsHandler;
 import com.floober.engine.game.gameState.GameStateManager;
-import com.floober.engine.game.gameState.states.PlayState;
 import com.floober.engine.loaders.GameLoader;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.FontType;
 import com.floober.engine.renderEngine.textures.Texture;
@@ -16,9 +12,14 @@ import com.floober.engine.renderEngine.textures.TextureComponent;
 import com.floober.engine.renderEngine.textures.TextureSet;
 import com.floober.engine.util.Logger;
 import com.floober.engine.util.Session;
-import com.floober.engine.util.configuration.Config;
 
 import java.util.HashMap;
+
+/**
+ * This class represents the Game itself. It provides convenience
+ * functions for fetching all assets (textures, audio, etc.) and
+ * for triggering audio events (playing music or sfx).
+ */
 
 public class Game {
 
@@ -40,10 +41,10 @@ public class Game {
 	// flag for requesting quit
 	private boolean closeRequest;
 
-	public static final int PLAY_AREA_TOP = 100;
-	public static final int PLAY_AREA_BOTTOM = Config.DEFAULT_HEIGHT - 100;
-	public static final int PLAY_AREA_HEIGHT = Config.DEFAULT_HEIGHT;
-
+	/**
+	 * Create the game. This will initialize all
+	 * asset containers.
+	 */
 	public Game() {
 		textures = new Textures();
 		music = new Music();
@@ -53,17 +54,31 @@ public class Game {
 		session = new Session();
 	}
 
+	/**
+	 * Calling this method will load all game assets
+	 * specified in the JSON directories contained in
+	 * resourceData/assets. Once loading is complete,
+	 * the GameStateManager will be initialized.
+	 */
 	public static void init() {
 		instance.load();
 		instance.gsm = new GameStateManager(instance);
 	}
 
+	/**
+	 * Load the game. Run on the game's instance.
+	 */
 	private void load() {
 		GameLoader gameLoader = new GameLoader(this);
 		gameLoader.load();
 	}
 
 	// RUN GAME LOGIC
+
+	/**
+	 * Update the Game instance. Calls {@code update()} on
+	 * the GameStateManager, Music, and SFX objects.
+	 */
 	public static void update() {
 		instance.gsm.update();
 		instance.music.update();
@@ -71,11 +86,22 @@ public class Game {
 	}
 
 	// RENDER GAME INTERNALLY
+	/**
+	 * Calls the GSM's {@code render()} method, rendering all
+	 * of the game's current elements to the framebuffer. Note
+	 * this does NOT render to the screen; the framebuffer must
+	 * be processed by the PostProcessing system first before it
+	 * appears on screen.
+	 */
 	public static void render() {
 		instance.gsm.render();
 	}
 
 	// request game exit
+	/**
+	 * Sets the {@code closeRequest} flag, which will cause the
+	 * game loop to exit on the next iteration.
+	 */
 	public static void quit() {
 		instance.closeRequest = true;
 	}
@@ -171,14 +197,24 @@ public class Game {
 	// SHORTCUTS
 
 	// Textures
+	/**
+	 * Get a textureComponent from the stored Textures.
+	 * @param key the key to the component
+	 * @return the corresponding {@code TextureComponent}, or {@code null} if it does not exist.
+	 */
 	public static TextureComponent getTexture(String key) {
 		return instance.textures.getTexture(key);
 	}
 
+	/**
+	 * Get an array of texture components.
+	 * @param keys any number of keys to retrieve and store in the array.
+	 * @return an array populated with the {@code TextureComponent}s corresponding to the given keys.
+	 */
 	public static TextureComponent[] getTextures(String... keys) {
 		TextureComponent[] results = new TextureComponent[keys.length];
 		for (int i = 0; i < keys.length; ++i) {
-			results[i] = instance.textures.getTexture(keys[i]);
+			results[i] = getTexture(keys[i]);
 		}
 		return results;
 	}
@@ -187,6 +223,14 @@ public class Game {
 		return instance.textures.getTextureSet(key);
 	}
 
+	/**
+	 * Get a texture set composed of only one TextureComponent.
+	 * This is a convenience method for getting a texture set in
+	 * cases where only a single, unchanging texture is needed, but
+	 * a texture set object is required.
+	 * @param key the key to the {@code TextureComponent} to wrap
+	 * @return a {@code TextureSet} containing one {@code TextureComponent}
+	 */
 	public static TextureSet getStaticSet(String key) {
 		return Textures.generateStaticSet(getTexture(key));
 	}
