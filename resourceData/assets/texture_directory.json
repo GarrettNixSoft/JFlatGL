@@ -1,7 +1,8 @@
 {
 	"textures": {
 		"default": "default.png",
-		"default2": "default2.png"
+		"default2": "default2.png",
+		"gui_audio_icon_white": "gui/icons/audio_icon_white.png"
 	},
 	"texture_sets": {
 		"test_tilemap": {
@@ -20,10 +21,6 @@
 		},
 		"test_tilemap": {
 			"path": "tilesets/normal/test_tilemap.png",
-			"rows": 8
-		},
-		"s_level": {
-			"path": "tilesets/normal/s_level.png",
 			"rows": 8
 		}
 	}

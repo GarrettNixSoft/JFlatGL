@@ -30,6 +30,28 @@ public class FileUtil {
 		return data;
 	}
 
+	public static ArrayList<String> getFileData(File file) {
+		Logger.logLoad("Loading file: " + file.getName());
+		ArrayList<String> data = new ArrayList<>();
+		try {
+			InputStream in = FileUtil.class.getResourceAsStream(file.getPath());
+			if (in == null)
+				in = ResourceLoader.getResourceAsStream(file.getPath());
+			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+			while (true) {
+				String line = reader.readLine();
+				if (line == null) break;
+				data.add(line);
+			}
+			reader.close();
+		} catch (Exception e) {
+			Logger.logLoadError("Failed to load file: " + file.getPath());
+			e.printStackTrace();
+			return data;
+		}
+		return data;
+	}
+
 	public static File getFile(String path) {
 		path = path.replace("\\", "/");
 		File file = new File(path);

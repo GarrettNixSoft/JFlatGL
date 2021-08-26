@@ -13,6 +13,7 @@ import org.json.JSONObject;
 
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -22,6 +23,14 @@ public class Loader {
 
 	// LOAD METHODS
 	public static JSONObject getJSON(String file) {
+		// load file data
+		ArrayList<String> fileData = FileUtil.getFileData(file);
+		String combined = StringConverter.combineAll(fileData);
+		// create JSON parser
+		return new JSONObject(combined);
+	}
+
+	public static JSONObject getJSON(File file) {
 		// load file data
 		ArrayList<String> fileData = FileUtil.getFileData(file);
 		String combined = StringConverter.combineAll(fileData);
