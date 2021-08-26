@@ -116,23 +116,25 @@ public class GameWindow {
 				Display.WINDOW_HEIGHT = height;
 				if (scaleToFitWidth < scaleToFitHeight) {
 					// scale to fit width
-					float ratio16x9 = 9.0f / 16.0f;
-					int topY = (int) ((height - width * ratio16x9) / 2);
-					Display.setViewport(0, topY, width, (int) (width * ratio16x9));
+					float aspectRatio = (float) Config.INTERNAL_HEIGHT / Config.INTERNAL_WIDTH;
+//					float ratio16x9 = 9.0f / 16.0f;
+					int topY = (int) ((height - width * aspectRatio) / 2);
+					Display.setViewport(0, topY, width, (int) (width * aspectRatio));
 //					glViewport(0, topY, width, (int) (width * ratio16x9));
-					MouseInput.updateRatio(width, width * ratio16x9);
+					MouseInput.updateRatio(width, width * aspectRatio);
 					MouseInput.setOffset(0, -topY);
-					Logger.log("Window resized to [" + width + " x " + height + "]; Viewport is now [" + width + " x " + (int) (width * ratio16x9) + "], Mouse Offset is now (0, " + (-topY / 2) + "); Scale used was width: " + scaleToFitWidth);
+					Logger.log("Resizing to fit width! Window resized to [" + width + " x " + height + "]; Viewport is now [" + width + " x " + (int) (width * aspectRatio) + "], Mouse Offset is now (0, " + (-topY / 2) + "); Scale used was width: " + scaleToFitWidth);
 				}
 				else {
 					// scale to fit height
-					float ratio16x9 = 16.0f / 9.0f;
-					int leftX = (int) ((width - height * ratio16x9) / 2);
-					Display.setViewport(leftX, 0, (int) (height * ratio16x9), height);
+					float aspectRatio = (float) Config.INTERNAL_WIDTH / Config.INTERNAL_HEIGHT;
+//					float ratio16x9 = 16.0f / 9.0f;
+					int leftX = (int) ((width - height * aspectRatio) / 2);
+					Display.setViewport(leftX, 0, (int) (height * aspectRatio), height);
 //					glViewport(leftX, 0, (int) (height * ratio16x9), height);
-					MouseInput.updateRatio(height * ratio16x9, height);
+					MouseInput.updateRatio(height * aspectRatio, height);
 					MouseInput.setOffset(-leftX, 0);
-					Logger.log("Window resized to [" + width + " x " + height + "]; Viewport is now [" + (int) (height * ratio16x9) + " x " + height + "], Mouse Offset is now (" + -leftX + ", 0); Scale used was height: " + scaleToFitHeight);
+					Logger.log("Resizing to fit height! Window resized to [" + width + " x " + height + "]; Viewport is now [" + (int) (height * aspectRatio) + " x " + height + "], Mouse Offset is now (" + -leftX + ", 0); Scale used was height: " + scaleToFitHeight);
 				}
 			}
 		};
