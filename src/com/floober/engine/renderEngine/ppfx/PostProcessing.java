@@ -6,6 +6,7 @@ import com.floober.engine.renderEngine.ppfx.effects.Contrast;
 import com.floober.engine.renderEngine.ppfx.effects.GaussianBlur;
 import com.floober.engine.renderEngine.ppfx.effects.InvertColor;
 import com.floober.engine.renderEngine.ppfx.effects.ToScreen;
+import com.floober.engine.util.Logger;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
@@ -21,30 +22,30 @@ public class PostProcessing {
 
 	// vertex data for the whole screen
 	private static final float[] POSITIONS = {-1, 1, -1, -1, 1, 1, 1, -1};
-	private static QuadModel quad;
+	private final QuadModel quad;
 
 	// effects to use
-	private static final HashMap<String, PPEffect> effects = new HashMap<>();
-	private static Contrast contrast;
-	private static InvertColor invertColor;
-	private static GaussianBlur gaussianBlur;
+	private final HashMap<String, PPEffect> effects = new HashMap<>();
+	private final Contrast contrast;
+	private final InvertColor invertColor;
+	private final GaussianBlur gaussianBlur;
 
 	// last stage, render to screen
-	private static ToScreen toScreen;
+	private final ToScreen toScreen;
 
-	public static void init() {
+	public PostProcessing(long windowID) {
 		// generate the screen quad
 		quad = ModelLoader.loadToVAO(POSITIONS, 2);
 		// create the screen render stage
-		toScreen = new ToScreen();
+		toScreen = new ToScreen(windowID);
 		// create the contrast change effect
-		contrast = new Contrast();
+		contrast = new Contrast(windowID);
 		effects.put("contrast", contrast);
 		// create the invert color effect
-		invertColor = new InvertColor();
+		invertColor = new InvertColor(windowID);
 		effects.put("invertColor", invertColor);
 		// create the gaussian blur effect
-		gaussianBlur = new GaussianBlur();
+		gaussianBlur = new GaussianBlur(windowID);
 		effects.put("gaussianBlur", gaussianBlur);
 		// create other effects
 		// ...
@@ -60,7 +61,7 @@ public class PostProcessing {
 	 * @param stageID the ID of the stage
 	 * @return true if enabled, false if disabled
 	 */
-	public static boolean isStageEnabled(String stageID) {
+	public boolean isStageEnabled(String stageID) {
 		return effects.get(stageID).isEnabled();
 	}
 
@@ -68,12 +69,22 @@ public class PostProcessing {
 	 * Turn a Post Processing stage on or off.
 	 * @param stageID the ID of the stage
 	 */
-	public static void setStageEnabled(String stageID, boolean enabled) {
-		if (enabled) effects.get(stageID).enable();
-		else effects.get(stageID).disable();
+	public void setStageEnabled(String stageID, boolean enabled) {
+		if (enabled) {
+			if (isStageEnabled(stageID)) Logger.logWarning("Tried to enable post-processing stage \"" + stageID + "\", but that stage was already enabled.");
+			effects.get(stageID).enable();
+		}
+		else {
+			if (!isStageEnabled(stageID)) Logger.logWarning("Tried to disable post-processing stage \"" + stageID + "\", but that stage was already disabled.");
+			effects.get(stageID).disable();
+		}
 	}
 
-	public static void doPostProcessing(int colorTexture) {
+	public void toggleStageEnabled(String stageID) {
+		setStageEnabled(stageID, !isStageEnabled(stageID));
+	}
+
+	public void doPostProcessing(int colorTexture) {
 		start();
 
 		if (invertColor.isEnabled()) {
@@ -96,19 +107,19 @@ public class PostProcessing {
 		end();
 	}
 
-	private static void start(){
+	private void start(){
 		GL30.glBindVertexArray(quad.vaoID());
 		GL20.glEnableVertexAttribArray(0);
 		GL11.glDisable(GL11.GL_DEPTH_TEST);
 	}
 
-	private static void end(){
+	private void end(){
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
 		GL20.glDisableVertexAttribArray(0);
 		GL30.glBindVertexArray(0);
 	}
 
-	public static void cleanUp() {
+	public void cleanUp() {
 		contrast.cleanUp();
 		invertColor.cleanUp();
 	}

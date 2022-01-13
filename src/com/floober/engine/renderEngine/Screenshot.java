@@ -1,6 +1,7 @@
 package com.floober.engine.renderEngine;
 
-import com.floober.engine.display.Display;
+import com.floober.engine.display.DisplayManager;
+import com.floober.engine.display.Window;
 import com.floober.engine.util.Logger;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
@@ -33,9 +34,9 @@ public class Screenshot {
 		// Bind the PBO
 		glBindBuffer(GL_PIXEL_PACK_BUFFER, PBOHandle);
 		// Create the PBO
-		glBufferData(GL_PIXEL_PACK_BUFFER, buffer.capacity() * 4, GL_STREAM_READ);
+		glBufferData(GL_PIXEL_PACK_BUFFER, buffer.capacity() * 4L, GL_STREAM_READ);
 		// Read to the PBO
-		GL11.glReadPixels(0, 0, Display.WINDOW_WIDTH, Display.WINDOW_HEIGHT, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, 0);
+		GL11.glReadPixels(0, 0, DisplayManager.getPrimaryGameWindow().getWidth(), DisplayManager.getPrimaryGameWindow().getHeight(), GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, 0);
 		// Get the data
 		buffer = glMapBuffer(GL_PIXEL_PACK_BUFFER, GL_READ_WRITE, null);
 		// Unmap the buffer and go back to normal
@@ -60,8 +61,8 @@ public class Screenshot {
 		@Override
 		public void run() {
 			// dimensions and bytes
-			int width = Display.WINDOW_WIDTH;
-			int height = Display.WINDOW_HEIGHT;
+			int width = DisplayManager.getPrimaryGameWindow().getWidth();
+			int height = DisplayManager.getPrimaryGameWindow().getHeight();
 			int bpp = 4; // Assuming a 32-bit display with a byte each for red, green, blue, and alpha.
 			// location to save
 			File file = new File(targetPath); // The file to save to.

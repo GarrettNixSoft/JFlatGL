@@ -1,6 +1,7 @@
 package com.floober.engine.gui.component;
 
-import com.floober.engine.display.Display;
+import com.floober.engine.display.DisplayManager;
+import com.floober.engine.display.Window;
 import com.floober.engine.game.Game;
 import com.floober.engine.gui.GUIAction;
 import com.floober.engine.gui.event.BlockingDelayEvent;
@@ -165,11 +166,12 @@ public class TabbedPanel extends GUIPanel {
 	 */
 	public void finalizeLayout() {
 		// set anchor position based on list position and button size
+		Window gameWindow = DisplayManager.getPrimaryGameWindow();
 		anchorPosition = switch (listPosition) {
-			case TOP -> new Vector2f(Display.centerX(), buttonSize.y() / 2 + borderPadding);
-			case BOTTOM -> new Vector2f(Display.centerX(), Display.HEIGHT - (buttonSize.y() / 2 + borderPadding));
-			case LEFT -> new Vector2f(buttonSize.x() / 2 + borderPadding, Display.centerY());
-			case RIGHT -> new Vector2f(Display.WIDTH - (buttonSize.x() / 2 + borderPadding), Display.centerY());
+			case TOP -> new Vector2f(gameWindow.centerX(), buttonSize.y() / 2 + borderPadding);
+			case BOTTOM -> new Vector2f(gameWindow.centerX(), gameWindow.getHeight() - (buttonSize.y() / 2 + borderPadding));
+			case LEFT -> new Vector2f(buttonSize.x() / 2 + borderPadding, gameWindow.centerY());
+			case RIGHT -> new Vector2f(gameWindow.getHeight() - (buttonSize.x() / 2 + borderPadding), gameWindow.centerY());
 		};
 		// place all the buttons in their proper positions
 		float listSize = listPosition == ListPosition.TOP || listPosition == ListPosition.BOTTOM ?
@@ -345,8 +347,8 @@ public class TabbedPanel extends GUIPanel {
 			iconTexture.setPosition(getPosition().setComponent(2, getPosition().z() - 1));
 			iconTexture.setSize(getSize().mul(getScale()));
 			iconTexture.transform();
-			label.setPosition(new Vector3f(Display.convertToScreenPos(new Vector2f(getPosition().x(), getPosition().y() + getSize().y() / 2)),
-					MasterRenderer.getScreenZ((int) getPosition().z())));
+			label.setPosition(new Vector3f(DisplayManager.convertToTextScreenPos(new Vector2f(getPosition().x(), getPosition().y() + getSize().y() / 2)),
+					MasterRenderer.primaryWindowRenderer.getScreenZ((int) getPosition().z())));
 			label.center();
 			label.setFontSize(defaultTextSize * getScale());
 			label.setColor(getSecondaryColor().mul(getOpacity()));
@@ -354,7 +356,7 @@ public class TabbedPanel extends GUIPanel {
 
 		@Override
 		public void render() {
-			if (!label.isOnScreen()) label.show();
+			if (label.isHidden()) label.show();
 			Render.drawImage(iconTexture);
 		}
 	}

@@ -1,7 +1,7 @@
 package com.floober.engine.background;
 
 import com.floober.engine.animation.Animation;
-import com.floober.engine.display.Display;
+import com.floober.engine.display.Window;
 import com.floober.engine.display.DisplayManager;
 import com.floober.engine.renderEngine.Render;
 import com.floober.engine.renderEngine.elements.TextureElement;
@@ -39,8 +39,8 @@ public class BackgroundBase {
 		TextureComponent texture = animation.getFrames().getFrame(0);
 		int width = texture.width();
 		int height = texture.height();
-		xCount = Math.max(((Display.WIDTH + 1) / width) + 1, 2) + 1;
-		yCount = Math.max(((Display.HEIGHT + 1) / height) + 1, 2) + 1;
+		xCount = Math.max(((DisplayManager.getPrimaryGameWindow().getWidth() + 1) / width) + 1, 2) + 1;
+		yCount = Math.max(((DisplayManager.getPrimaryGameWindow().getHeight() + 1) / height) + 1, 2) + 1;
 //		Logger.log("Background will be tiled: " + xCount + "x" + yCount);
 	}
 	

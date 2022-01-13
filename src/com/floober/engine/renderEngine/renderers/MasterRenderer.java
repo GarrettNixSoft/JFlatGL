@@ -1,5 +1,7 @@
 package com.floober.engine.renderEngine.renderers;
 
+import com.floober.engine.display.DisplayManager;
+import com.floober.engine.display.Window;
 import com.floober.engine.loaders.GameLoader;
 import com.floober.engine.renderEngine.RenderLayer;
 import com.floober.engine.renderEngine.batches.opaque.*;
@@ -11,11 +13,13 @@ import com.floober.engine.renderEngine.fonts.fontRendering.FontRenderer;
 import com.floober.engine.renderEngine.fonts.fontRendering.TextMaster;
 import com.floober.engine.renderEngine.framebuffers.FrameBuffer;
 import com.floober.engine.renderEngine.particles.ParticleMaster;
+import com.floober.engine.renderEngine.ppfx.PostProcessing;
 import com.floober.engine.util.configuration.Config;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
 import static org.lwjgl.opengl.GL11.*;
 
 /**
@@ -24,7 +28,12 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class MasterRenderer {
 
-	public static final MasterRenderer instance = new MasterRenderer();
+	public static final HashMap<Long, MasterRenderer> instances = new HashMap<>();
+	public static MasterRenderer primaryWindowRenderer;
+	public static MasterRenderer currentRenderTarget;
+
+	// Window target
+	private final long windowTarget;
 
 	// game scene frame buffer
 	private final FrameBuffer sceneBuffer;
@@ -54,25 +63,55 @@ public class MasterRenderer {
 
 	private final Map<Integer, RectLightBatchTransparent> rectLightBatches = new HashMap<>();
 
+	// Post-processing stage
+	private final PostProcessing postProcessor;
+
 	/**
 	 * Create a new MasterRenderer.
 	 */
-	public MasterRenderer() {
+	public MasterRenderer(Window window) {
+		// make this window's context current before creating any assets, buffers, etc.
+		glfwMakeContextCurrent(window.getWindowID());
+		if (primaryWindowRenderer == null) {
+			primaryWindowRenderer = this;
+			currentRenderTarget = this;
+		}
 		// create the scene buffer
-		sceneBuffer = new FrameBuffer(Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT, FrameBuffer.DEPTH_RENDER_BUFFER);
+		sceneBuffer = new FrameBuffer(window, Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT, FrameBuffer.DEPTH_RENDER_BUFFER);
 		// create the renderers
 		textureRenderer = new TextureRenderer();
 		geometryRenderer = new GeometryRenderer();
 		layers = new RenderLayer[NUM_LAYERS];
 		initLayers();
+		// create the post-processor
+		postProcessor = new PostProcessing(window.getWindowID());
+		// add to instance list
+		instances.put(window.getWindowID(), this);
+		this.windowTarget = window.getWindowID();
 	}
+
+	public static long getTargetWindowID() {
+		return currentRenderTarget.windowTarget;
+	}
+
+	public static Window getTargetWindow() {
+		return DisplayManager.getWindow(currentRenderTarget.windowTarget);
+	}
+
+	public PostProcessing getPostProcessor() {
+		return postProcessor;
+	}
+
+//	public void setWindowTarget(long windowID) {
+//		currentRenderTarget = instances.get(windowID);
+//	}
 
 	/**
 	 * Get the frame buffer used to render the scene.
 	 * @return the scene buffer
 	 */
-	public static FrameBuffer getSceneBuffer() {
-		return instance.sceneBuffer;
+	public FrameBuffer getSceneBuffer() {
+		return primaryWindowRenderer.sceneBuffer;
 	}
 
 	/**
@@ -102,89 +141,97 @@ public class MasterRenderer {
 		}
 	}
 
-	public static float getScreenZ(int layer) {
+	public float getScreenZ(int layer) {
 		int trueLayer = NUM_LAYERS - layer;
 		return ((float) trueLayer / NUM_LAYERS);
 	}
 
-	public static int getLayerByZ(float z) {
+	public int getLayerByZ(float z) {
 		return (int) (NUM_LAYERS - (z * 10));
 	}
 
 	// *** ADDING ELEMENTS ***
 
-	public static void addTextureElement(TextureElement element) {
+	public void addTextureElement(TextureElement element) {
 		// get the layer this element will be rendered in
 		int layer = element.getLayer();
 		// add this element to the appropriate batch
 		if (element.textureComponentHasTransparency())
-			instance.transparentTextureBatches.get(layer).addElement(element);
+			transparentTextureBatches.get(layer).addElement(element);
 		else
-			instance.opaqueTextureBatches.get(layer).addElement(element);
+			opaqueTextureBatches.get(layer).addElement(element);
 	}
 
-	public static void addTextElement(GUIText text) {
+	public void addTextElement(GUIText text) {
 		// get the layer this element will be rendered in
 		int layer = (int) text.getPosition().z();
 //		TextMaster.
 	}
 
-	public static void addRectElement(RectElement element) {
+	public void addRectElement(RectElement element) {
 		// get the layer this element will be rendered in
 		int layer = element.getLayer();
 		// add this element to the appropriate batch
 		if (element.hasTransparency())
-			instance.transparentRectBatches.get(layer).addElement(element);
+			transparentRectBatches.get(layer).addElement(element);
 		else
-			instance.opaqueRectBatches.get(layer).addElement(element);
+			opaqueRectBatches.get(layer).addElement(element);
 	}
 
-	public static void addRectLightElement(RectElementLight element) {
+	public void addRectLightElement(RectElementLight element) {
 		// get the layer this element will be rendered in
 		int layer = element.getLayer();
 		// add this element to the appropriate batch
-		instance.rectLightBatches.get(layer).addElement(element);
+		rectLightBatches.get(layer).addElement(element);
 	}
 
-	public static void addCircleElement(CircleElement element) {
-		// get the layer this element will be rendered in
-		int layer = element.getLayer();
-		// add this element to the appropriate batch
-		if (element.hasTransparency())
-			instance.transparentCircleBatches.get(layer).addElement(element);
-		else
-			instance.opaqueCircleBatches.get(layer).addElement(element);
-	}
-
-	public static void addLineElement(LineElement element) {
+	public void addCircleElement(CircleElement element) {
 		// get the layer this element will be rendered in
 		int layer = element.getLayer();
 		// add this element to the appropriate batch
 		if (element.hasTransparency())
-			instance.transparentLineBatches.get(layer).addElement(element);
+			transparentCircleBatches.get(layer).addElement(element);
 		else
-			instance.opaqueLineBatches.get(layer).addElement(element);
+			opaqueCircleBatches.get(layer).addElement(element);
 	}
 
-	public static void addOutlineElement(OutlineElement element) {
+	public void addLineElement(LineElement element) {
 		// get the layer this element will be rendered in
 		int layer = element.getLayer();
 		// add this element to the appropriate batch
 		if (element.hasTransparency())
-			instance.transparentOutlineBatches.get(layer).addElement(element);
+			transparentLineBatches.get(layer).addElement(element);
 		else
-			instance.opaqueOutlineBatches.get(layer).addElement(element);
+			opaqueLineBatches.get(layer).addElement(element);
+	}
+
+	public void addOutlineElement(OutlineElement element) {
+		// get the layer this element will be rendered in
+		int layer = element.getLayer();
+		// add this element to the appropriate batch
+		if (element.hasTransparency())
+			transparentOutlineBatches.get(layer).addElement(element);
+		else
+			opaqueOutlineBatches.get(layer).addElement(element);
 	}
 
 	// *** RENDERING ***
-	public static void prepare() {
-		if (GameLoader.LOAD_COMPLETE) instance.sceneBuffer.bindFrameBuffer();
+	public void prepare() {
+		currentRenderTarget = this;
+		if (GameLoader.LOAD_COMPLETE) sceneBuffer.bindFrameBuffer();
 		glDepthMask(true);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		if (GameLoader.LOAD_COMPLETE) instance.sceneBuffer.unbindFrameBuffer();
+		if (GameLoader.LOAD_COMPLETE) sceneBuffer.unbindFrameBuffer();
+
+		// target the current window
+		glfwMakeContextCurrent(windowTarget);
+		getTargetWindow().setViewport();
 	}
 
-	public static void render() {
+	public void render() {
+
+		// target the current window
+//		glfwMakeContextCurrent(windowTarget);
 
 		// clear element counts
 		GeometryRenderer.ELEMENT_COUNT = 0;
@@ -192,28 +239,32 @@ public class MasterRenderer {
 		FontRenderer.ELEMENT_COUNT = 0;
 
 		// render to scene buffer
-		if (GameLoader.LOAD_COMPLETE) instance.sceneBuffer.bindFrameBuffer();
+		if (GameLoader.LOAD_COMPLETE) sceneBuffer.bindFrameBuffer();
 
 		// prepare
-		instance.prepareLayers();
+		prepareLayers();
 
 		// RENDERING
 		// render all opaque layers first, front to back
 		for (int i = NUM_LAYERS - 1; i >= 0; --i) {
-			instance.renderLayerOpaque(instance.layers[i]);
+			renderLayerOpaque(layers[i]);
 		}
 		// render transparent layers, back to front
 		for (int i = 0; i < NUM_LAYERS; ++i) {
-			instance.renderLayerTransparent(instance.layers[i]);
+			renderLayerTransparent(layers[i]);
 			ParticleMaster.renderParticles(i);
 			TextMaster.render(i);
 		}
 
+
 		// clear
-		instance.clearBatches();
+		clearBatches();
 
 		// unbind scene buffer
-		if (GameLoader.LOAD_COMPLETE) instance.sceneBuffer.unbindFrameBuffer();
+		if (GameLoader.LOAD_COMPLETE) sceneBuffer.unbindFrameBuffer();
+
+		// Do post-processing to complete the frame render
+		postProcessor.doPostProcessing(sceneBuffer.getColorTexture());
 
 	}
 
@@ -259,9 +310,9 @@ public class MasterRenderer {
 	}
 
 	public static void cleanUp() {
-		instance.sceneBuffer.cleanUp();
-		instance.textureRenderer.cleanUp();
-		instance.geometryRenderer.cleanUp();
+		primaryWindowRenderer.sceneBuffer.cleanUp();
+		primaryWindowRenderer.textureRenderer.cleanUp();
+		primaryWindowRenderer.geometryRenderer.cleanUp();
 	}
 
 }

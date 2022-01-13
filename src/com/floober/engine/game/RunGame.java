@@ -2,7 +2,6 @@ package com.floober.engine.game;
 
 import com.floober.engine.audio.AudioMaster;
 import com.floober.engine.display.DisplayManager;
-import com.floober.engine.display.GameWindow;
 import com.floober.engine.gui.GUIManager;
 import com.floober.engine.loaders.Loader;
 import com.floober.engine.renderEngine.Screenshot;
@@ -29,7 +28,7 @@ import org.lwjgl.glfw.Callbacks;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 
-import static com.floober.engine.display.GameWindow.windowID;
+import static com.floober.engine.display.DisplayManager.primaryWindowID;
 import static org.lwjgl.glfw.GLFW.*;
 
 /**
@@ -57,14 +56,11 @@ public class RunGame {
 		// FOR EFFICIENCY IN RUNNING MULTIPLE TIMES TO CHECK THINGS
 
 		// Create the window and set up OpenGL and GLFW.
-		GameWindow.initGame();
+		DisplayManager.initPrimaryGameWindow();
 
 		// Set up OpenAL.
 		AudioMaster.init();
 		AudioMaster.setListenerData(0, 0, 0);
-
-		// Set up post-processing
-		PostProcessing.init();
 
 		// game components
 //		Sync sync = new Sync(); // this is optional; it's meant to sync framerates to a constant speed but is rather buggy
@@ -93,7 +89,7 @@ public class RunGame {
 		fpsDisplay.show();
 
 		// Run the game loop!
-		while (!(glfwWindowShouldClose(windowID) || Game.closeRequested())) {
+		while (!(glfwWindowShouldClose(primaryWindowID) || Game.closeRequested())) {
 
 			// poll input
 			KeyInput.update();
@@ -108,7 +104,7 @@ public class RunGame {
 			GUIManager.update();
 
 			// clear window
-			MasterRenderer.prepare();
+			MasterRenderer.primaryWindowRenderer.prepare();
 
 			// render game internally
 			Game.render();
@@ -126,17 +122,14 @@ public class RunGame {
 			handleInput();
 
 			// render to the screen
-			MasterRenderer.render();
-
-			// do post processing
-			PostProcessing.doPostProcessing(MasterRenderer.getSceneBuffer().getColorTexture());
+			MasterRenderer.primaryWindowRenderer.render();
 
 			// update display and poll events
 			DisplayManager.updateDisplay();
 
 			// sync time
 //			sync.sync(Display.FPS_CAP);
-// 			TODO decide if this is worth it; for me, it's smoother without (but rare hitching occurs for like 0.1s)
+// 			decide if this is worth it; for me, it's smoother without (but rare hitching occurs for like 0.1s)
 		}
 
 		// Clean up when done.
@@ -146,11 +139,10 @@ public class RunGame {
 		ParticleMaster.cleanUp();
 		AudioMaster.cleanUp();
 		TextureOutliner.cleanUp();
-		PostProcessing.cleanUp();
 
 		// Clean up GLFW
-		Callbacks.glfwFreeCallbacks(windowID);
-		glfwDestroyWindow(windowID);
+		Callbacks.glfwFreeCallbacks(primaryWindowID);
+		glfwDestroyWindow(primaryWindowID);
 
 		glfwTerminate();
 		Objects.requireNonNull(glfwSetErrorCallback(null)).free(); // shut up, compiler
@@ -182,10 +174,10 @@ public class RunGame {
 		// TEST: Toggling post-processing effects
 		if (KeyInput.isShift()) {
 			if (KeyInput.isPressed(KeyInput.C)) { // C for contrast
-				PostProcessing.setStageEnabled("contrast", !PostProcessing.isStageEnabled("contrast"));
+				MasterRenderer.primaryWindowRenderer.getPostProcessor().toggleStageEnabled("contrast");
 			}
 			if (KeyInput.isPressed(KeyInput.I)) { // C for invert
-				PostProcessing.setStageEnabled("invertColor", !PostProcessing.isStageEnabled("invertColor"));
+				MasterRenderer.primaryWindowRenderer.getPostProcessor().toggleStageEnabled("invertColor");
 			}
 		}
 	}

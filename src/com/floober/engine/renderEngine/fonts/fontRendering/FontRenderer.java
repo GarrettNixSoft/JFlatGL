@@ -65,6 +65,7 @@ public class FontRenderer {
 		glEnableVertexAttribArray(1);
 		shader.loadColor(text.getColor());
 		shader.loadTranslation(text.getPosition());
+		Logger.log("Text at " + text.getPosition());
 		shader.loadWidth(text.getWidth());
 		shader.loadEdge(text.getEdge());
 		shader.loadBorderWidth(text.getBorderWidth());

@@ -6,6 +6,7 @@ import com.floober.engine.renderEngine.models.QuadModel;
 import com.floober.engine.renderEngine.shaders.geometry.CircleShader;
 import com.floober.engine.renderEngine.shaders.geometry.RectLightShader;
 import com.floober.engine.renderEngine.shaders.geometry.RectShader;
+import com.floober.engine.util.Logger;
 import com.floober.engine.util.math.MathUtil;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
@@ -72,7 +73,7 @@ public class GeometryRenderer {
 
 		ELEMENT_COUNT += elements.size();
 
-		prepareLightRectangles(false);
+		prepareLightRectangles();
 
 		for (RectElementLight element : elements) {
 
@@ -173,12 +174,12 @@ public class GeometryRenderer {
 		rectShader.stop();
 	}
 
-	private void prepareLightRectangles(boolean depthWritingEnabled) {
+	private void prepareLightRectangles() {
 		rectLightShader.start();
 		glBindVertexArray(quad.vaoID());
 		glEnableVertexAttribArray(0);
 		glEnable(GL_BLEND);
-		glDepthMask(depthWritingEnabled);
+		glDepthMask(false); // light rectangles never render to depth mask
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_DEPTH_TEST);
 	}

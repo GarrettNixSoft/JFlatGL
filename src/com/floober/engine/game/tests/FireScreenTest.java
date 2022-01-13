@@ -1,9 +1,7 @@
 package com.floober.engine.game.tests;
 
 import com.floober.engine.audio.AudioMaster;
-import com.floober.engine.display.Display;
 import com.floober.engine.display.DisplayManager;
-import com.floober.engine.display.GameWindow;
 import com.floober.engine.game.Game;
 import com.floober.engine.loaders.Loader;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.GUIText;
@@ -22,7 +20,7 @@ import org.lwjgl.glfw.Callbacks;
 
 import java.util.Objects;
 
-import static com.floober.engine.display.GameWindow.windowID;
+import static com.floober.engine.display.DisplayManager.primaryWindowID;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class FireScreenTest {
@@ -33,7 +31,7 @@ public class FireScreenTest {
 		Logger.setLoggerConfig();
 
 		// Create the window and set up OpenGL and GLFW.
-		GameWindow.initGame();
+		DisplayManager.initPrimaryGameWindow();
 
 		AudioMaster.init();
 		AudioMaster.setListenerData(0, 0, 0);
@@ -42,10 +40,6 @@ public class FireScreenTest {
 		Game.init();
 		// game components
 		Sync sync = new Sync();
-		// master components
-		TextMaster.init();
-		ParticleMaster.init();
-		PostProcessing.init();
 
 		GUIText fpsDisplay = new GUIText("FPS: ", 0.5f, Game.getFont("menu"),
 				new Vector3f(0, 0, 1), 1, false);
@@ -61,9 +55,9 @@ public class FireScreenTest {
 		// END_TEST
 
 		// Run the game loop!
-		while (!glfwWindowShouldClose(windowID)) {
+		while (!glfwWindowShouldClose(primaryWindowID)) {
 			// clear window
-			MasterRenderer.prepare();
+			MasterRenderer.primaryWindowRenderer.prepare();
 
 			// poll input
 			KeyInput.update();
@@ -87,16 +81,13 @@ public class FireScreenTest {
 			fpsDisplay.replaceText("FPS: " + fps + "\nParticles: " + ParticleMaster.getParticleCount());
 
 			// render to the screen
-			MasterRenderer.render();
-
-			// Post processing
-			PostProcessing.doPostProcessing(MasterRenderer.getSceneBuffer().getColorTexture());
+			MasterRenderer.primaryWindowRenderer.render();
 
 			// update display and poll events
 			DisplayManager.updateDisplay();
 
 			// sync time
-			sync.sync(Display.FPS_CAP);
+			sync.sync(DisplayManager.FPS_CAP);
 		}
 
 		// Clean up when done.
@@ -108,8 +99,8 @@ public class FireScreenTest {
 		ParticleMaster.cleanUp();
 
 		// Clean up GLFW
-		Callbacks.glfwFreeCallbacks(windowID);
-		glfwDestroyWindow(windowID);
+		Callbacks.glfwFreeCallbacks(primaryWindowID);
+		glfwDestroyWindow(primaryWindowID);
 
 		glfwTerminate();
 		Objects.requireNonNull(glfwSetErrorCallback(null)).free(); // shut up, compiler

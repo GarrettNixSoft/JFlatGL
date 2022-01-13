@@ -1,6 +1,6 @@
 package com.floober.engine.renderEngine.particles.types;
 
-import com.floober.engine.display.Display;
+import com.floober.engine.display.Window;
 import com.floober.engine.display.DisplayManager;
 import com.floober.engine.renderEngine.particles.ParticleTexture;
 import org.joml.Vector2f;
@@ -167,8 +167,8 @@ public class Particle implements Comparable<Particle> {
 
 	// UPDATING THE PARTICLE
 	public void convertScreenPosition() {
-		screenPosition.set(Display.convertToDisplayPosition(x, y, layer, width, height, true));
-		scaleVec.set(Display.convertToDisplayScale(width, height));
+		screenPosition.set(DisplayManager.convertToDisplayPosition(x, y, layer, width, height, true));
+		scaleVec.set(DisplayManager.convertToDisplayScale(width, height));
 	}
 
 	@Override

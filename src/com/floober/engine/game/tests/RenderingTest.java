@@ -1,12 +1,10 @@
 package com.floober.engine.game.tests;
 
 import com.floober.engine.audio.AudioMaster;
-import com.floober.engine.display.Display;
+import com.floober.engine.display.Window;
 import com.floober.engine.display.DisplayManager;
-import com.floober.engine.display.GameWindow;
 import com.floober.engine.game.Game;
 import com.floober.engine.loaders.Loader;
-import com.floober.engine.renderEngine.Render;
 import com.floober.engine.renderEngine.elements.TextureElement;
 import com.floober.engine.renderEngine.elements.geometry.OutlineElement;
 import com.floober.engine.renderEngine.fonts.fontRendering.TextMaster;
@@ -33,7 +31,7 @@ import org.lwjgl.glfw.Callbacks;
 
 import java.util.Objects;
 
-import static com.floober.engine.display.GameWindow.windowID;
+import static com.floober.engine.display.DisplayManager.primaryWindowID;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class RenderingTest {
@@ -46,7 +44,7 @@ public class RenderingTest {
 		Config.FULLSCREEN = false;
 
 		// Create the window and set up OpenGL and GLFW.
-		GameWindow.initGame();
+		DisplayManager.initPrimaryGameWindow();
 
 		AudioMaster.init();
 		AudioMaster.setListenerData(0, 0, 0);
@@ -55,13 +53,9 @@ public class RenderingTest {
 		Game.init();
 		// game components
 		Sync sync = new Sync();
-		// master components
-		TextMaster.init();
-		ParticleMaster.init();
-		ParticleMaster.initGlobals();
-		PostProcessing.init();
 
 		// TEST
+		Window gameWindow = DisplayManager.getPrimaryGameWindow();
 
 		TextureComponent texture = Game.getTexture("default");
 //		TextureComponent texture2 = Game.getTexture("default2");
@@ -72,12 +66,12 @@ public class RenderingTest {
 //		TextureElement element4 = new TextureElement(texture, 32, 32, 0, false);
 //		TextureElement testStackElement = new TextureElement(texture2, 0, 0, 10, false);
 
-		OutlineElement testBounds = new OutlineElement(Colors.RED, Display.centerX(), Display.centerY(), MasterRenderer.TOP_LAYER, 128, 32, 2, true);
+		OutlineElement testBounds = new OutlineElement(Colors.RED, gameWindow.centerX(), gameWindow.centerY(), MasterRenderer.TOP_LAYER, 128, 32, 2, true);
 
-		TextureElement testRotateElement = new TextureElement(texture3, Display.centerX(), Display.centerY(), MasterRenderer.TOP_LAYER, true);
+		TextureElement testRotateElement = new TextureElement(texture3, gameWindow.centerX(), gameWindow.centerY(), MasterRenderer.TOP_LAYER, true);
 		Logger.log("Position of testRotateElement: (" + testRotateElement.getX() + ", " + testRotateElement.getY() + ")");
 
-		TextureElement testCropElement = new TextureElement(texture, Display.WIDTH / 2f, Display.HEIGHT / 2f, 0, 64, 64, true);
+		TextureElement testCropElement = new TextureElement(texture, gameWindow.getWidth() / 2f, gameWindow.getHeight() / 2f, 0, 64, 64, true);
 		testCropElement.setTextureOffset(new Vector4f(0.25f, 0.25f, 0.75f, 0.75f));
 
 		Timer timer = new Timer(18f);
@@ -96,7 +90,7 @@ public class RenderingTest {
 		engineParticleBehavior.initLife(0.15f, 0.5f);
 //		engineParticleBehavior.initLife(3f, 5f);
 		// create the emitter
-		engineParticleEmitter = new ParticleEmitter(new Vector3f(Display.center(), MasterRenderer.DEFAULT_LAYER), ParticleMaster.GLOW_PARTICLE_TEXTURE, engineParticleBehavior);
+		engineParticleEmitter = new ParticleEmitter(new Vector3f(gameWindow.center(), MasterRenderer.DEFAULT_LAYER), ParticleMaster.GLOW_PARTICLE_TEXTURE, engineParticleBehavior);
 		engineParticleEmitter.setBatchCount(10);
 		engineParticleEmitter.initPositionDelta(0, 15);
 		engineParticleEmitter.setParticleDelay(0.02f);
@@ -104,9 +98,9 @@ public class RenderingTest {
 		// END_TEST
 
 		// Run the game loop!
-		while (!glfwWindowShouldClose(windowID)) {
+		while (!glfwWindowShouldClose(primaryWindowID)) {
 			// clear window
-			MasterRenderer.prepare();
+			MasterRenderer.primaryWindowRenderer.prepare();
 
 			// poll input
 			KeyInput.update();
@@ -129,13 +123,13 @@ public class RenderingTest {
 
 			if (timer.finished()) timer.restart();
 
-			testRotateElement.setPosition(new Vector3f(Display.center(), 0));
+			testRotateElement.setPosition(new Vector3f(gameWindow.center(), 0));
 			testRotateElement.setRotation(360 * timer.getProgress());
 			testRotateElement.transform();
-			MasterRenderer.addTextureElement(testRotateElement);
+			MasterRenderer.currentRenderTarget.addTextureElement(testRotateElement);
 
 			// ***
-			// TODO: create a particle emitter and test particle rendering!
+			// create a particle emitter and test particle rendering!
 			// (it doesn't seem to work for player particle trails)
 			// ***
 
@@ -146,16 +140,13 @@ public class RenderingTest {
 //			Render.drawOutline(testBounds);
 
 			// render to the screen
-			MasterRenderer.render();
-
-			// Post processing
-			PostProcessing.doPostProcessing(MasterRenderer.getSceneBuffer().getColorTexture());
+			MasterRenderer.primaryWindowRenderer.render();
 
 			// update display and poll events
 			DisplayManager.updateDisplay();
 
 			// sync time
-			sync.sync(Display.FPS_CAP);
+			sync.sync(DisplayManager.FPS_CAP);
 		}
 
 		// Clean up when done.
@@ -167,8 +158,8 @@ public class RenderingTest {
 		ParticleMaster.cleanUp();
 
 		// Clean up GLFW
-		Callbacks.glfwFreeCallbacks(windowID);
-		glfwDestroyWindow(windowID);
+		Callbacks.glfwFreeCallbacks(primaryWindowID);
+		glfwDestroyWindow(primaryWindowID);
 
 		glfwTerminate();
 		Objects.requireNonNull(glfwSetErrorCallback(null)).free(); // shut up, compiler

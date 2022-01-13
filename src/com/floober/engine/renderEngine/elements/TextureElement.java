@@ -1,6 +1,7 @@
 package com.floober.engine.renderEngine.elements;
 
-import com.floober.engine.display.Display;
+import com.floober.engine.display.DisplayManager;
+import com.floober.engine.display.Window;
 import com.floober.engine.renderEngine.textures.Texture;
 import com.floober.engine.renderEngine.textures.TextureComponent;
 import org.joml.Vector2f;
@@ -229,7 +230,7 @@ public class TextureElement extends RenderElement {
 
 	public void setOutlineTexture(Texture outlineTexture) {
 		this.outlineTexture = outlineTexture;
-		this.outlineScale = Display.convertToDisplayScale(outlineTexture.width(), outlineTexture.height());
+		this.outlineScale = DisplayManager.convertToDisplayScale(outlineTexture.width(), outlineTexture.height());
 	}
 
 	public void setFadeMin(float fadeMin) {

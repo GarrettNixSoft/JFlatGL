@@ -1,5 +1,7 @@
 package com.floober.engine.renderEngine.ppfx;
 
+import com.floober.engine.display.DisplayManager;
+import com.floober.engine.display.Window;
 import com.floober.engine.renderEngine.framebuffers.FrameBuffer;
 import org.lwjgl.opengl.GL11;
 
@@ -7,8 +9,8 @@ public class ImageRenderer {
 
 	private FrameBuffer fbo;
 
-	public ImageRenderer(int width, int height) {
-		this.fbo = new FrameBuffer(width, height, FrameBuffer.NONE);
+	public ImageRenderer(long windowID, int width, int height) {
+		this.fbo = new FrameBuffer(windowID, width, height, FrameBuffer.NONE);
 	}
 
 	public ImageRenderer() {}

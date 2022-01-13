@@ -6,6 +6,9 @@ import com.floober.engine.audio.Sound;
 import com.floober.engine.game.gameState.GameStateManager;
 import com.floober.engine.loaders.GameLoader;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.FontType;
+import com.floober.engine.renderEngine.fonts.fontRendering.TextMaster;
+import com.floober.engine.renderEngine.particles.ParticleMaster;
+import com.floober.engine.renderEngine.ppfx.PostProcessing;
 import com.floober.engine.renderEngine.textures.Texture;
 import com.floober.engine.renderEngine.textures.TextureAtlas;
 import com.floober.engine.renderEngine.textures.TextureComponent;
@@ -61,6 +64,11 @@ public class Game {
 	 * the GameStateManager will be initialized.
 	 */
 	public static void init() {
+		// master components
+		TextMaster.init();
+		ParticleMaster.init();
+		ParticleMaster.initGlobals();
+		// the game itself (load assets)
 		instance.load();
 		instance.gsm = new GameStateManager(instance);
 	}

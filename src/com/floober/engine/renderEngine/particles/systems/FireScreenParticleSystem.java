@@ -1,7 +1,8 @@
 package com.floober.engine.renderEngine.particles.systems;
 
 import com.floober.engine.assets.Textures;
-import com.floober.engine.display.Display;
+import com.floober.engine.display.DisplayManager;
+import com.floober.engine.display.Window;
 import com.floober.engine.loaders.ImageLoader;
 import com.floober.engine.renderEngine.particles.ParticleTexture;
 import com.floober.engine.renderEngine.particles.behavior.ParticleBehavior;
@@ -74,7 +75,7 @@ public class FireScreenParticleSystem extends ParticleSystem {
 		particleBehavior.initLife(2f, 4f);
 		particleBehavior.getAppearanceBehavior().setParticleColor(Colors.PARTICLE_RED_ORANGE);
 		// now, create the emitter
-		particleEmitter = new LightParticleEmitter(new Vector3f(Display.centerX(),
+		particleEmitter = new LightParticleEmitter(new Vector3f(DisplayManager.getPrimaryGameWindow().centerX(),
 				Config.INTERNAL_HEIGHT * 1.1f, 0), particleTexture, particleBehavior);
 		// particle settings
 		particleEmitter.initInnerRadius(2, 8);

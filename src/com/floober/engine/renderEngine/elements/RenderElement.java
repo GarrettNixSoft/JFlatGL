@@ -1,10 +1,10 @@
 package com.floober.engine.renderEngine.elements;
 
-import com.floober.engine.display.Display;
+import com.floober.engine.display.DisplayManager;
+import com.floober.engine.display.Window;
 import com.floober.engine.renderEngine.framebuffers.FrameBuffer;
 import com.floober.engine.renderEngine.framebuffers.FrameBuffers;
 import com.floober.engine.renderEngine.renderers.MasterRenderer;
-import com.floober.engine.util.Logger;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
@@ -31,7 +31,7 @@ public abstract class RenderElement implements Comparable<RenderElement> {
 	 * values from pixel units to screen units.
 	 */
 	public void transform() {
-		position = Display.convertToDisplayPosition(x, y, layer, width, height, centered);
+		position = DisplayManager.convertToDisplayPosition(x, y, layer, width, height, centered);
 //		Logger.log("Position converted from (" + x + ", " + y + ") to " + position);
 //		scale = Display.convertToDisplayScale(width, height);
 		// TEST
@@ -78,7 +78,7 @@ public abstract class RenderElement implements Comparable<RenderElement> {
 	}
 
 	public Vector3f getRenderPosition() {
-		return new Vector3f(position).setComponent(2, MasterRenderer.getScreenZ(layer));
+		return new Vector3f(position).setComponent(2, MasterRenderer.primaryWindowRenderer.getScreenZ(layer));
 	}
 
 	// SETTERS

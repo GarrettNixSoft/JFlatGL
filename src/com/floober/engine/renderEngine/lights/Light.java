@@ -1,6 +1,7 @@
 package com.floober.engine.renderEngine.lights;
 
-import com.floober.engine.display.Display;
+import com.floober.engine.display.DisplayManager;
+import com.floober.engine.display.Window;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
@@ -12,7 +13,7 @@ public record Light(Vector2f position, Vector4f color, float intensity, float in
 	 *                    converted to screen-space coordinates.
 	 */
 	public void setPosition(Vector2f newPosition) {
-		position.set(Display.convertToDisplayPosition2D(newPosition));
+		position.set(DisplayManager.convertToDisplayPosition2D(newPosition));
 	}
 
 }

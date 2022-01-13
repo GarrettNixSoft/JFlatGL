@@ -6,8 +6,8 @@ import com.floober.engine.util.configuration.Config;
 
 public class InvertColor extends PPEffect {
 
-	public InvertColor() {
-		super(Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT);
+	public InvertColor(long windowID) {
+		super(windowID, Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT);
 		shader = new InvertColorShader();
 	}
 

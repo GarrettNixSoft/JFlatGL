@@ -8,8 +8,8 @@ public class Contrast extends PPEffect {
 
 	private float contrastChangeAmount;
 
-	public Contrast() {
-		super(Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT);
+	public Contrast(long windowID) {
+		super(windowID, Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT);
 		shader = new ContrastShader();
 		contrastChangeAmount = 0.5f;
 	}

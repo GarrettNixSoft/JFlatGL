@@ -1,12 +1,16 @@
 package com.floober.engine.renderEngine.framebuffers;
 
-import com.floober.engine.display.Display;
+import com.floober.engine.display.DisplayManager;
+import com.floober.engine.display.Window;
+import com.floober.engine.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.renderEngine.textures.Texture;
+import com.floober.engine.util.Logger;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
 import java.nio.ByteBuffer;
 
+import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
 import static org.lwjgl.opengl.GL30.*;
@@ -17,6 +21,7 @@ public class FrameBuffer {
 	public static final int DEPTH_TEXTURE = 1;
 	public static final int DEPTH_RENDER_BUFFER = 2;
 
+	private final Window window;
 	private final int width;
 	private final int height;
 	private int bufferID;
@@ -30,7 +35,15 @@ public class FrameBuffer {
 	// flag if the buffer has been deleted
 	private boolean deleted = false;
 
-	public FrameBuffer(int width, int height, int depthBufferType) {
+	public FrameBuffer(Window window, int width, int height, int depthBufferType) {
+		this.window = window;
+		this.width = width;
+		this.height = height;
+		initializeFrameBuffer(depthBufferType);
+	}
+
+	public FrameBuffer(long windowID, int width, int height, int depthBufferType) {
+		this.window = DisplayManager.getWindow(windowID);
 		this.width = width;
 		this.height = height;
 		initializeFrameBuffer(depthBufferType);
@@ -72,6 +85,10 @@ public class FrameBuffer {
 	 */
 	public void bindFrameBuffer() {
 		GL30.glBindFramebuffer(GL30.GL_DRAW_FRAMEBUFFER, bufferID);
+//		glfwMakeContextCurrent(window.getWindowID());
+//		window.setViewport(0, 0, width, height);
+//		Logger.log("The framebuffer is [" + width + " x " + height + "]");
+//		window.setViewport();
 		GL11.glViewport(0, 0, width, height);
 	}
 
@@ -82,7 +99,8 @@ public class FrameBuffer {
 	 */
 	public void unbindFrameBuffer() {
 		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, 0);
-		Display.setViewport();
+		window.setViewport();
+//		MasterRenderer.currentRenderTarget.getTargetWindow().setViewport();
 	}
 
 	/**

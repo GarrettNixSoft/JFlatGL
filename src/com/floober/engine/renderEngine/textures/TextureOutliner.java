@@ -13,19 +13,19 @@ public class TextureOutliner {
 	private static final HorizontalBlurShader horizontalBlurShader = new HorizontalBlurShader();
 	private static final VerticalBlurShader verticalBlurShader = new VerticalBlurShader();
 
-	public static void generateOutlineTexture(TextureElement element) {
+	public static void generateOutlineTexture(long windowID, TextureElement element) {
 		// create a framebuffers to use
 		TextureComponent texture = element.getTextureComponent();
 		int padding = 24;
-		FrameBuffer outlineBuffer = FrameBuffers.createFrameBuffer(texture.width() + padding,
+		FrameBuffer outlineBuffer = FrameBuffers.createFrameBuffer(windowID, texture.width() + padding,
 																	texture.height() + padding);
-		FrameBuffer growBuffer1 = FrameBuffers.createFrameBuffer(texture.width() + padding,
+		FrameBuffer growBuffer1 = FrameBuffers.createFrameBuffer(windowID, texture.width() + padding,
 																texture.height() + padding);
-		FrameBuffer growBuffer2 = FrameBuffers.createFrameBuffer(texture.width() + padding,
+		FrameBuffer growBuffer2 = FrameBuffers.createFrameBuffer(windowID, texture.width() + padding,
 																texture.height() + padding);
-		FrameBuffer horizontalBlurBuffer = FrameBuffers.createFrameBuffer(texture.width() + padding,
+		FrameBuffer horizontalBlurBuffer = FrameBuffers.createFrameBuffer(windowID, texture.width() + padding,
 																texture.height() + padding);
-		FrameBuffer verticalBlurBuffer = FrameBuffers.createFrameBuffer(texture.width() + padding,
+		FrameBuffer verticalBlurBuffer = FrameBuffers.createFrameBuffer(windowID, texture.width() + padding,
 																texture.height() + padding);
 		TextureRenderer renderer = new TextureRenderer();
 		// make a copy of this element, and center its position in the new buffer

@@ -6,8 +6,8 @@ import com.floober.engine.util.configuration.Config;
 
 public class Grayscale extends PPEffect {
 
-	public Grayscale() {
-		super(Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT);
+	public Grayscale(long windowID) {
+		super(windowID, Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT);
 		shader = new GrayscaleShader();
 	}
 

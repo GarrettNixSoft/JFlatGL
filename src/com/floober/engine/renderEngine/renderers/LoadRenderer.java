@@ -1,7 +1,6 @@
 package com.floober.engine.renderEngine.renderers;
 
 import com.floober.engine.assets.Textures;
-import com.floober.engine.display.Display;
 import com.floober.engine.display.DisplayManager;
 import com.floober.engine.game.GameFlags;
 import com.floober.engine.loaders.ImageLoader;
@@ -69,9 +68,12 @@ public class LoadRenderer {
 	 * Loads the resources necessary for the loading screen.
 	 */
 	public LoadRenderer init() {
+		// width and height convenience variables
+		int WIDTH = DisplayManager.getPrimaryGameWindow().getWidth();
+		int HEIGHT = DisplayManager.getPrimaryGameWindow().getHeight();
 		// positions
-		float screenCenterX = Display.WIDTH / 2f;
-		float screenCenterY = Display.HEIGHT / 2f;
+		float screenCenterX = WIDTH / 2f;
+		float screenCenterY = HEIGHT / 2f;
 		// load assets
 		// loading screen assets
 		Texture logo = ImageLoader.loadTexture("res/icon/icon512.png");
@@ -98,14 +100,14 @@ public class LoadRenderer {
 		int barWidth = 500;
 		int barHeight = 10;
 		// base bar
-		baseBar = new RectElement(baseColor, Display.WIDTH / 2f, Display.HEIGHT / 2f + 30, 200, barWidth, barHeight, true);
-		progressBar = new RectElement(barColor, Display.WIDTH / 2f - barWidth / 2f, Display.HEIGHT / 2f + 30 - barHeight / 2f, 100, 0, barHeight, false);
+		baseBar = new RectElement(baseColor, WIDTH / 2f, HEIGHT / 2f + 30, 200, barWidth, barHeight, true);
+		progressBar = new RectElement(barColor, WIDTH / 2f - barWidth / 2f, HEIGHT / 2f + 30 - barHeight / 2f, 100, 0, barHeight, false);
 		// particle effect
 		Texture tex = ImageLoader.loadTexture("res/textures/particles/glow_map.png");
 		TextureComponent particleTex = Textures.wrapTexture(tex);
 		// particle effect
 		ParticleTexture particleTexture = new ParticleTexture(particleTex, 1, true);
-		Vector3f sourcePosition = new Vector3f(Display.WIDTH / 2f - barWidth / 2f, Display.HEIGHT / 2f + 30 - barHeight / 2f, 0);
+		Vector3f sourcePosition = new Vector3f(WIDTH / 2f - barWidth / 2f, HEIGHT / 2f + 30 - barHeight / 2f, 0);
 		MovementBehavior movementBehavior = new FlameBehavior(-90, 20);
 		movementBehavior.initSpeed(10, 80);
 		AppearanceBehavior appearanceBehavior = new FadeOutBehavior(1, 0);
@@ -283,8 +285,8 @@ public class LoadRenderer {
 
 	private void renderFrame() {
 		ParticleMaster.update();
-		MasterRenderer.prepare();
-		MasterRenderer.render();
+		MasterRenderer.primaryWindowRenderer.prepare();
+		MasterRenderer.primaryWindowRenderer.render();
 	}
 
 	/**

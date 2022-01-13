@@ -1,6 +1,7 @@
 package com.floober.engine.gui.dialogue;
 
-import com.floober.engine.display.Display;
+import com.floober.engine.display.DisplayManager;
+import com.floober.engine.display.Window;
 import com.floober.engine.game.Game;
 import com.floober.engine.renderEngine.Render;
 import com.floober.engine.renderEngine.elements.TextureElement;
@@ -122,12 +123,13 @@ public class Dialogue {
 	}
 
 	private void setLocationAndSize() {
+		Window gameWindow = DisplayManager.getPrimaryGameWindow();
 		// box location and size
-		width = (int) Math.min(Display.WIDTH * 0.6, 900); // 60% of window width, up to 900px
-		height = (int) Math.min(Display.HEIGHT * 0.3, 300); // 30% of window height, up to 270px
+		width = (int) Math.min(gameWindow.getWidth() * 0.6, 900); // 60% of window width, up to 900px
+		height = (int) Math.min(gameWindow.getHeight() * 0.3, 300); // 30% of window height, up to 270px
 		// TODO box must be at least 680x200
-		x = (int) Display.centerX(); // centered horizontally
-		y = Display.HEIGHT  - (height / 2 + 10); // centered 10px from bottom of window
+		x = (int) gameWindow.centerX(); // centered horizontally
+		y = gameWindow.getHeight()  - (height / 2 + 10); // centered 10px from bottom of window
 		z = MasterRenderer.TOP_LAYER - 1;
 		// face location and size
 		faceWidth = (int) (width * 0.15); // 15% of box width

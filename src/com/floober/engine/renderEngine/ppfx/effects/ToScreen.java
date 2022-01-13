@@ -11,8 +11,8 @@ import com.floober.engine.renderEngine.shaders.ppfx.ToScreenShader;
  */
 public class ToScreen extends PPEffect {
 
-	public ToScreen() {
-		super();
+	public ToScreen(long windowID) {
+		super(windowID);
 		shader = new ToScreenShader();
 	}
 

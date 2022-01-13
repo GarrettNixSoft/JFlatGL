@@ -1,14 +1,13 @@
 package com.floober.engine.entity.core;
 
 import com.floober.engine.animation.Animation;
-import com.floober.engine.display.Display;
+import com.floober.engine.display.DisplayManager;
+import com.floober.engine.display.Window;
 import com.floober.engine.entity.attachments.EntityAttachableTo;
 import com.floober.engine.entity.projectile.Projectile;
-import com.floober.engine.game.Game;
 import com.floober.engine.renderEngine.elements.TextureElement;
 import com.floober.engine.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.util.Logger;
-import com.floober.engine.util.configuration.Config;
 import com.floober.engine.util.math.Collisions;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -139,9 +138,9 @@ public abstract class Entity {
 	// screen bounds
 	public boolean notOnScreen() {
 		return x + width / 2 < 0 ||
-				x - width / 2 > Display.WIDTH ||
+				x - width / 2 > DisplayManager.getPrimaryGameWindow().getWidth() ||
 				y + height / 2 < 0 ||
-				y - height / 2 > Display.HEIGHT;
+				y - height / 2 > DisplayManager.getPrimaryGameWindow().getHeight();
 	}
 
 	public boolean onScreen() { // for ease of reading

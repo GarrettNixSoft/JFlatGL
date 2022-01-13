@@ -1,6 +1,6 @@
 package com.floober.engine.gui.component;
 
-import com.floober.engine.display.Display;
+import com.floober.engine.display.DisplayManager;
 import com.floober.engine.game.Game;
 import com.floober.engine.renderEngine.Render;
 import com.floober.engine.renderEngine.elements.geometry.RectElement;
@@ -60,8 +60,8 @@ public class Button extends GUIComponent {
 		baseElement.setSize(getSize().mul(getScale()));
 		baseElement.transform();
 		baseElement.setColor(getPrimaryColor().mul(getOpacity()));
-		label.setPosition(new Vector3f(Display.convertToScreenPos(new Vector2f(getPosition().x(), getPosition().y())),
-				MasterRenderer.getScreenZ((int) getPosition().z())));
+		label.setPosition(new Vector3f(DisplayManager.convertToTextScreenPos(new Vector2f(getPosition().x(), getPosition().y())),
+				MasterRenderer.primaryWindowRenderer.getScreenZ((int) getPosition().z())));
 		label.center();
 		label.setFontSize(defaultTextSize * getScale());
 		label.setColor(getSecondaryColor().mul(getOpacity()));
@@ -69,7 +69,7 @@ public class Button extends GUIComponent {
 
 	@Override
 	public void render() {
-		if (!label.isOnScreen()) label.show();
+		if (label.isHidden()) label.show();
 		Render.drawRect(baseElement);
 	}
 

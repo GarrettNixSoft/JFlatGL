@@ -1,6 +1,6 @@
 package com.floober.engine.renderEngine.renderers;
 
-import com.floober.engine.display.Display;
+import com.floober.engine.display.Window;
 import com.floober.engine.display.DisplayManager;
 import com.floober.engine.loaders.ImageLoader;
 import com.floober.engine.renderEngine.elements.TextureElement;
@@ -244,7 +244,7 @@ public class TextureRenderer {
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_DEPTH_TEST);
 		// send the light information to the shaders
-		shader.loadScreenRatio(Display.SCREEN_RATIO);
+		shader.loadScreenRatio(MasterRenderer.getTargetWindow().getScreenRatio());
 		shader.loadAmbientLight(LightMaster.getAmbientLight());
 		shader.loadLights(LightMaster.getSceneLights());
 		// bind the glitch texture

@@ -1,9 +1,8 @@
 package com.floober.engine.game.tests;
 
 import com.floober.engine.audio.AudioMaster;
-import com.floober.engine.display.Display;
+import com.floober.engine.display.Window;
 import com.floober.engine.display.DisplayManager;
-import com.floober.engine.display.GameWindow;
 import com.floober.engine.game.Game;
 import com.floober.engine.game.GameFlags;
 import com.floober.engine.gui.GUI;
@@ -37,12 +36,10 @@ import org.lwjgl.glfw.Callbacks;
 
 import java.util.Objects;
 
-import static com.floober.engine.display.GameWindow.windowID;
+import static com.floober.engine.display.DisplayManager.primaryWindowID;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class GUITest {
-
-	private static GUIText fpsDisplay;
 
 	public static void main(String[] args) throws GUIException {
 
@@ -56,7 +53,7 @@ public class GUITest {
 		Config.FULLSCREEN = false;
 
 		// Create the window and set up OpenGL and GLFW.
-		GameWindow.initGame();
+		DisplayManager.initPrimaryGameWindow();
 
 		// Audio master has to be initialized before game loads
 		AudioMaster.init();
@@ -65,13 +62,10 @@ public class GUITest {
 		Game.init();
 
 		// game components
-		TextMaster.init();
-		ParticleMaster.init();
-		PostProcessing.init();
 		Sync sync = new Sync();
 
 		// SET UP DEBUG TEXT
-		fpsDisplay = new GUIText("FPS: ", 0.5f, Game.getFont("menu"),
+		GUIText fpsDisplay = new GUIText("FPS: ", 0.5f, Game.getFont("menu"),
 				new Vector3f(0, 0, 1), 1, false);
 		fpsDisplay.setColor(Colors.GREEN);
 		fpsDisplay.setWidth(0.5f);
@@ -79,6 +73,7 @@ public class GUITest {
 		fpsDisplay.show();
 
 		// TEST GUI CODE
+		Window gameWindow = DisplayManager.getPrimaryGameWindow();
 
 		GUI gui = new GUI("test_gui");
 		GUILayer layer = new GUILayer("test_layer");
@@ -87,7 +82,7 @@ public class GUITest {
 		tabbedPanel.listPosition(TabbedPanel.ListPosition.TOP).borderPadding(10)
 				.buttonSize(new Vector2f(120, 120)).buttonSpacing(50)
 				.closeTime(0.3f)
-				.location(new Vector3f(Display.center(), MasterRenderer.TOP_LAYER))
+				.location(new Vector3f(gameWindow.center(), MasterRenderer.TOP_LAYER))
 				.primaryColor(Colors.WHITE).secondaryColor(Colors.RED)
 				.onClose(new GUIAction()
 						.addPerformActionOnTrigger(() -> tabbedPanel.queueEvent(new FadeComponentEvent(tabbedPanel, 0, 0.2f)))
@@ -109,7 +104,7 @@ public class GUITest {
 		Button button = new Button("quit_button");
 		// set the button's parameters
 		button.label("Quit").rounded(0.15f).textSize(1.2f)
-				.location(new Vector3f(Display.centerX(), Display.centerY() + 120, MasterRenderer.TOP_LAYER))
+				.location(new Vector3f(gameWindow.centerX(), gameWindow.centerY() + 120, MasterRenderer.TOP_LAYER))
 				.size(new Vector2f(250, 100)).primaryColor(Colors.WHITE).secondaryColor(Colors.BLACK)
 				.onOpen(new GUIAction()
 						.addPerformActionOnTrigger(() -> button.queueEvent(new RestoreOpacityEvent(button, 0.05f)))
@@ -139,7 +134,7 @@ public class GUITest {
 
 		Button otherButton = new Button("click_button");
 		otherButton.label("Click").rounded(0.15f).textSize(1.2f)
-				.location(Display.center(), MasterRenderer.TOP_LAYER).size(new Vector2f(250, 100))
+				.location(gameWindow.center(), MasterRenderer.TOP_LAYER).size(new Vector2f(250, 100))
 				.primaryColor(Colors.WHITE).secondaryColor(Colors.BLACK)
 				.onOpen(new GUIAction()
 						.addPerformActionOnTrigger(() -> otherButton.queueEvent(new RestoreOpacityEvent(otherButton, 0.05f)))
@@ -164,7 +159,7 @@ public class GUITest {
 		// create a sample button for the second test tab
 		Button testButton = new Button("test_button");
 		testButton.label("Test").rounded(0.15f).textSize(1.2f)
-				.location(Display.center().add(300, 0), MasterRenderer.TOP_LAYER).size(new Vector2f(250, 100))
+				.location(gameWindow.center().add(300, 0), MasterRenderer.TOP_LAYER).size(new Vector2f(250, 100))
 				.primaryColor(Colors.WHITE).secondaryColor(Colors.BLACK)
 				.onOpen(new GUIAction()
 						.addPerformActionOnTrigger(() -> testButton.queueEvent(new RestoreScaleEvent(testButton, 0.05f)))
@@ -204,9 +199,9 @@ public class GUITest {
 
 		// END_TEST
 
-		while (!(glfwWindowShouldClose(windowID) || Game.closeRequested())) {
+		while (!(glfwWindowShouldClose(primaryWindowID) || Game.closeRequested())) {
 			// clear window
-			MasterRenderer.prepare();
+			MasterRenderer.primaryWindowRenderer.prepare();
 
 			// poll input
 			KeyInput.update();
@@ -233,10 +228,7 @@ public class GUITest {
 					"\nText: " + FontRenderer.ELEMENT_COUNT);
 
 			// render to the screen
-			MasterRenderer.render();
-
-			// Post processing
-			PostProcessing.doPostProcessing(MasterRenderer.getSceneBuffer().getColorTexture());
+			MasterRenderer.primaryWindowRenderer.render();
 
 			// update display and poll events
 			DisplayManager.updateDisplay();
@@ -257,8 +249,8 @@ public class GUITest {
 		Settings.save();
 
 		// Clean up GLFW
-		Callbacks.glfwFreeCallbacks(windowID);
-		glfwDestroyWindow(windowID);
+		Callbacks.glfwFreeCallbacks(primaryWindowID);
+		glfwDestroyWindow(primaryWindowID);
 
 		glfwTerminate();
 		Objects.requireNonNull(glfwSetErrorCallback(null)).free(); // shut up, compiler
@@ -269,13 +261,13 @@ public class GUITest {
 		// TEST: Toggling post-processing effects
 		if (KeyInput.isShift()) {
 			if (KeyInput.isPressed(KeyInput.C)) { // C for contrast
-				PostProcessing.setStageEnabled("contrast", !PostProcessing.isStageEnabled("contrast"));
+				MasterRenderer.primaryWindowRenderer.getPostProcessor().toggleStageEnabled("contrast");
 			}
 			if (KeyInput.isPressed(KeyInput.I)) { // I for invert
-				PostProcessing.setStageEnabled("invertColor", !PostProcessing.isStageEnabled("invertColor"));
+				MasterRenderer.primaryWindowRenderer.getPostProcessor().toggleStageEnabled("invertColor");
 			}
 			if (KeyInput.isPressed(KeyInput.G)) { // G for gaussian blur
-				PostProcessing.setStageEnabled("gaussianBlur", !PostProcessing.isStageEnabled("gaussianBlur"));
+				MasterRenderer.primaryWindowRenderer.getPostProcessor().toggleStageEnabled("gaussianBlur");
 			}
 		}
 	}

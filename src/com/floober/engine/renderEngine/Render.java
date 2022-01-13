@@ -1,10 +1,12 @@
 package com.floober.engine.renderEngine;
 
-import com.floober.engine.display.Display;
+import com.floober.engine.display.DisplayManager;
 import com.floober.engine.renderEngine.elements.TextureElement;
 import com.floober.engine.renderEngine.elements.geometry.*;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.floober.engine.renderEngine.renderers.MasterRenderer;
+import com.floober.engine.util.Logger;
+import com.floober.engine.util.configuration.Config;
 import org.joml.Vector4f;
 
 /**
@@ -18,27 +20,27 @@ public class Render {
 	// MAIN RENDER METHODS
 
 	public static void drawImage(TextureElement textureElement) {
-		MasterRenderer.addTextureElement(textureElement);
+		MasterRenderer.currentRenderTarget.addTextureElement(textureElement);
 	}
 
-	public static void drawText(GUIText text) { MasterRenderer.addTextElement(text); }
+	public static void drawText(GUIText text) { MasterRenderer.currentRenderTarget.addTextElement(text); }
 
 	public static void drawRect(RectElement rectElement) {
-		MasterRenderer.addRectElement(rectElement);
+		MasterRenderer.currentRenderTarget.addRectElement(rectElement);
 	}
 
-	public static void drawLightRect(RectElementLight element) { MasterRenderer.addRectLightElement(element); }
+	public static void drawLightRect(RectElementLight element) { MasterRenderer.currentRenderTarget.addRectLightElement(element); }
 
 	public static void drawCircle(CircleElement circleElement) {
-		MasterRenderer.addCircleElement(circleElement);
+		MasterRenderer.currentRenderTarget.addCircleElement(circleElement);
 	}
 
 	public static void drawLine(LineElement lineElement) {
-		MasterRenderer.addLineElement(lineElement);
+		MasterRenderer.currentRenderTarget.addLineElement(lineElement);
 	}
 
 	public static void drawOutline(OutlineElement outlineElement) {
-		MasterRenderer.addOutlineElement(outlineElement);
+		MasterRenderer.currentRenderTarget.addOutlineElement(outlineElement);
 	}
 
 
@@ -64,7 +66,11 @@ public class Render {
 	 * @param centered Whether to center the rectangle on (x,y). If false, (x,y) will be treated as the top-left corner.
 	 */
 	public static void drawRect(Vector4f color, float x, float y, int layer, float width, float height, boolean centered) {
-		MasterRenderer.addRectElement(new RectElement(color, x, y, layer, width, height, centered));
+		RectElement element = new RectElement(color, x, y, layer, width, height, centered);
+		element.transform();
+//		if (MasterRenderer.currentRenderTarget != MasterRenderer.primaryWindowRenderer)
+//			Logger.log("Rect pos transformed = " + element.getPosition());
+		MasterRenderer.currentRenderTarget.addRectElement(element);
 	}
 
 	/**
@@ -72,7 +78,7 @@ public class Render {
 	 * @param color The color to fill.
 	 */
 	public static void fillScreen(Vector4f color) {
-		MasterRenderer.addRectElement(new RectElement(color, 0, 0, MasterRenderer.TOP_LAYER, Display.WIDTH, Display.HEIGHT, false));
+		MasterRenderer.currentRenderTarget.addRectElement(new RectElement(color, 0, 0, MasterRenderer.BOTTOM_LAYER, Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT, false));
 	}
 
 	/**
@@ -80,7 +86,7 @@ public class Render {
 	 * @param color The color to fill.
 	 */
 	public static void fillScreen(Vector4f color, int layer) {
-		MasterRenderer.addRectElement(new RectElement(color, 0, 0, layer, Display.WIDTH, Display.HEIGHT, false));
+		MasterRenderer.currentRenderTarget.addRectElement(new RectElement(color, 0, 0, layer, Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT, false));
 	}
 
 	// CIRCLES
@@ -94,7 +100,7 @@ public class Render {
 	 * @param radius The radius of the circle.
 	 */
 	public static void drawCircle(Vector4f color, float x, float y, int layer, float radius) {
-		MasterRenderer.addCircleElement(new CircleElement(color, x, y, layer, radius));
+		MasterRenderer.currentRenderTarget.addCircleElement(new CircleElement(color, x, y, layer, radius));
 	}
 
 	/**
@@ -107,7 +113,7 @@ public class Render {
 	 * @param outerRadius The outer radius of the circle.
 	 */
 	public static void drawCircle(Vector4f color, float x, float y, int layer, float innerRadius, float outerRadius) {
-		MasterRenderer.addCircleElement(new CircleElement(color, x, y, layer, innerRadius, outerRadius));
+		MasterRenderer.currentRenderTarget.addCircleElement(new CircleElement(color, x, y, layer, innerRadius, outerRadius));
 	}
 
 	/**
@@ -122,7 +128,7 @@ public class Render {
 	 * @param offset The offset from which to begin drawing. An offset of 0 indicates drawing starting from the top; a positive offset moves the starting position clockwise, in degrees.
 	 */
 	public static void drawCircle(Vector4f color, float x, float y, int layer, float innerRadius, float outerRadius, float portion, float offset) {
-		MasterRenderer.addCircleElement(new CircleElement(color, x, y, layer, innerRadius, outerRadius, portion, offset));
+		MasterRenderer.currentRenderTarget.addCircleElement(new CircleElement(color, x, y, layer, innerRadius, outerRadius, portion, offset));
 	}
 
 	/**
@@ -135,7 +141,7 @@ public class Render {
 	 * @param layer The z coordinate of the line.
 	 */
 	public static void drawLine(Vector4f color, float x1, float y1, float x2, float y2, int layer) {
-		MasterRenderer.addLineElement(new LineElement(color, x1, y1, x2, y2, layer, 1));
+		MasterRenderer.currentRenderTarget.addLineElement(new LineElement(color, x1, y1, x2, y2, layer, 1));
 	}
 
 	/**
@@ -149,7 +155,7 @@ public class Render {
 	 * @param lineWidth The width of the line.
 	 */
 	public static void drawLine(Vector4f color, float x1, float y1, float x2, float y2, int layer, float lineWidth) {
-		MasterRenderer.addLineElement(new LineElement(color, x1, y1, x2, y2, layer, lineWidth));
+		MasterRenderer.currentRenderTarget.addLineElement(new LineElement(color, x1, y1, x2, y2, layer, lineWidth));
 	}
 
 	/**
@@ -163,7 +169,7 @@ public class Render {
 	 * @param centered Whether the (x, y) position should be treated as the center of the outline. If false, it will be treated as the top-left corner.
 	 */
 	public static void drawOutline(Vector4f color, float x, float y, int layer, float width, float height, boolean centered) {
-		MasterRenderer.addOutlineElement(new OutlineElement(color, x, y, layer, width, height, 1, centered));
+		MasterRenderer.currentRenderTarget.addOutlineElement(new OutlineElement(color, x, y, layer, width, height, 1, centered));
 	}
 
 	/**
@@ -178,7 +184,7 @@ public class Render {
 	 * @param centered Whether the (x, y) position should be treated as the center of the outline. If false, it will be treated as the top-left corner.
 	 */
 	public static void drawOutline(Vector4f color, float x, float y, int layer, float width, float height, float lineWidth, boolean centered) {
-		MasterRenderer.addOutlineElement(new OutlineElement(color, x, y, layer, width, height, lineWidth, centered));
+		MasterRenderer.currentRenderTarget.addOutlineElement(new OutlineElement(color, x, y, layer, width, height, lineWidth, centered));
 	}
 
 }

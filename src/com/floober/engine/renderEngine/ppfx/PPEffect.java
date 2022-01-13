@@ -6,6 +6,7 @@ import org.lwjgl.opengl.GL13;
 
 public abstract class PPEffect {
 
+	protected long windowID;
 	protected ImageRenderer renderer;
 	protected ShaderProgram shader;
 
@@ -15,7 +16,8 @@ public abstract class PPEffect {
 	 * Create a Post Processing effect that will render
 	 * its image to the screen.
 	 */
-	public PPEffect() {
+	public PPEffect(long windowID) {
+		this.windowID = windowID;
 		renderer = new ImageRenderer();
 	}
 
@@ -25,8 +27,8 @@ public abstract class PPEffect {
 	 * @param width the width of the frame buffer
 	 * @param height the height of the frame buffer
 	 */
-	public PPEffect(int width, int height) {
-		renderer = new ImageRenderer(width, height);
+	public PPEffect(long windowID, int width, int height) {
+		renderer = new ImageRenderer(windowID, width, height);
 	}
 
 	/**

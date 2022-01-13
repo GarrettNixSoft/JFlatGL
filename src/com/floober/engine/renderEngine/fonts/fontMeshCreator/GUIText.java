@@ -55,7 +55,7 @@ public class GUIText {
 	 * Creates a new text, loads the text's quads into a VAO, and adds the text
 	 * to the screen.
 	 * 
-	 * @param text Tthe text.
+	 * @param text The text.
 	 * @param fontSize The font size of the text, where a font size of 1 is the
 	 *            default size.
 	 * @param font The font that this text should use.
@@ -309,8 +309,11 @@ public class GUIText {
 		return textString;
 	}
 
-	public boolean isOnScreen() {
-		return !hidden;
+	/**
+	 * @return Whether this text is currently hidden.
+	 */
+	public boolean isHidden() {
+		return hidden;
 	}
 
 	// ACTIONS

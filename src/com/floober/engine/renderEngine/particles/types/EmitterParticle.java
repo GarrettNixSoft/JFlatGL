@@ -1,6 +1,6 @@
 package com.floober.engine.renderEngine.particles.types;
 
-import com.floober.engine.display.Display;
+import com.floober.engine.display.Window;
 import com.floober.engine.display.DisplayManager;
 import com.floober.engine.renderEngine.particles.ParticleMaster;
 import com.floober.engine.renderEngine.particles.ParticleTexture;
@@ -79,7 +79,7 @@ public class EmitterParticle extends Particle {
 	@Override
 	public void convertScreenPosition() {
 		setMapPosition();
-		screenPosition.set(Display.convertToDisplayPosition(x, y, layer, width, height, true));
+		screenPosition.set(DisplayManager.convertToDisplayPosition(x, y, layer, width, height, true));
 //		scaleVec.set(Display.convertToDisplayScale(width, height));
 		scaleVec.set(width, height);
 	}

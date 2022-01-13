@@ -1,5 +1,6 @@
 package com.floober.engine.renderEngine.framebuffers;
 
+import com.floober.engine.display.DisplayManager;
 import com.floober.engine.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.util.configuration.Config;
 import com.floober.engine.util.math.MathUtil;
@@ -14,15 +15,15 @@ public class FrameBuffers {
 	private static final List<FrameBuffer> buffers = new ArrayList<>();
 
 	public static FrameBuffer createFullScreenFrameBuffer() {
-		return createFrameBuffer(Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT, FrameBuffer.DEPTH_RENDER_BUFFER);
+		return createFrameBuffer(DisplayManager.primaryWindowID, Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT, FrameBuffer.DEPTH_RENDER_BUFFER);
 	}
 
-	public static FrameBuffer createFrameBuffer(int width, int height) {
-		return createFrameBuffer(width, height, FrameBuffer.NONE);
+	public static FrameBuffer createFrameBuffer(long windowID, int width, int height) {
+		return createFrameBuffer(windowID, width, height, FrameBuffer.NONE);
 	}
 
-	public static FrameBuffer createFrameBuffer(int width, int height, int depthBufferType) {
-		FrameBuffer buffer = new FrameBuffer(width, height, depthBufferType);
+	public static FrameBuffer createFrameBuffer(long windowID, int width, int height, int depthBufferType) {
+		FrameBuffer buffer = new FrameBuffer(windowID, width, height, depthBufferType);
 		buffers.add(buffer);
 		return buffer;
 	}

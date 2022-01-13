@@ -1,6 +1,7 @@
 package com.floober.engine.entity.core;
 
-import com.floober.engine.display.Display;
+import com.floober.engine.display.DisplayManager;
+import com.floober.engine.display.Window;
 import com.floober.engine.entity.effects.entity.CameraShake;
 import com.floober.engine.util.Logger;
 import com.floober.engine.util.interpolators.FadeInFloat;
@@ -143,7 +144,7 @@ public class Camera extends Entity {
 	}
 
 	private Vector2f getPositionVector() {
-		return new Vector2f(Display.centerX() - x, Display.centerY() - y);
+		return new Vector2f(DisplayManager.getPrimaryGameWindow().centerX() - x, DisplayManager.getPrimaryGameWindow().centerY() - y);
 	}
 
 	private Vector2f getFinalPosition() {

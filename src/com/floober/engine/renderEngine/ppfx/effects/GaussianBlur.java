@@ -20,9 +20,9 @@ public class GaussianBlur extends PPEffect {
 
 	private boolean secondStage = false;
 
-	public GaussianBlur() {
-		super(Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT);
-		stage1Renderer = new ImageRenderer(Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT);
+	public GaussianBlur(long windowID) {
+		super(windowID, Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT);
+		stage1Renderer = new ImageRenderer(windowID, Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT);
 		horizontalBlurAmount = 1.0f;
 		verticalBlurAmount = 1.0f;
 	}

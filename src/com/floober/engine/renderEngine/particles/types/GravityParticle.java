@@ -1,6 +1,6 @@
 package com.floober.engine.renderEngine.particles.types;
 
-import com.floober.engine.display.Display;
+import com.floober.engine.display.Window;
 import com.floober.engine.display.DisplayManager;
 import com.floober.engine.renderEngine.particles.ParticleTexture;
 
@@ -28,7 +28,7 @@ public class GravityParticle extends Particle {
 		this.dy += gravity * time;
 		this.x += dx * time;
 		this.y += dy * time;
-		setPosition(Display.convertToDisplayPosition(x, y, layer, width, height, true));
+		setPosition(DisplayManager.convertToDisplayPosition(x, y, layer, width, height, true));
 		return super.update();
 	}
 

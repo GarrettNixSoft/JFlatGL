@@ -1,6 +1,7 @@
 package com.floober.engine.util.conversion;
 
-import com.floober.engine.display.Display;
+import com.floober.engine.display.DisplayManager;
+import com.floober.engine.display.Window;
 import com.floober.engine.util.Logger;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -9,7 +10,7 @@ public class CoordinateConverter {
 
 	public static Vector3f convertToCoordinateVector(String str) {
 		switch (str) {
-			case "screen_center" -> { return new Vector3f(Display.centerX(), Display.centerY(), 0.5f); }
+			case "screen_center" -> { return new Vector3f(DisplayManager.getPrimaryGameWindow().centerX(), DisplayManager.getPrimaryGameWindow().centerY(), 0.5f); }
 			case "screen_top_left" -> { return new Vector3f(0, 0, 0); }
 			default -> { return new Vector3f(parseCoords(str), 0); }
 		}
