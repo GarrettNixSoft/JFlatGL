@@ -286,7 +286,7 @@ public class DisplayManager {
 
 		// Step 9: Manually resize to size specified in Config.
 		glfwSetWindowSize(primaryWindowID, Config.DEFAULT_WIDTH, Config.DEFAULT_HEIGHT);
-//		windowResizeCallback.invoke(primaryWindowID, Config.DEFAULT_WIDTH, Config.DEFAULT_HEIGHT);
+		windowResizeCallback.invoke(primaryWindowID, Config.DEFAULT_WIDTH, Config.DEFAULT_HEIGHT);
 		centerWindow(primaryWindowID);
 
 		mainGameWindow.setReady(true);
@@ -328,14 +328,14 @@ public class DisplayManager {
 		window.setWindowTitle(Config.WINDOW_TITLE + " #" + (windows.size() + 1));
 		// size the window as requested
 		glfwSetWindowSize(windowID, width, height);
-//		windowResizeCallback.invoke(windowID, width, height);
+		windowResizeCallback.invoke(windowID, width, height);
 		// position the window as requested
 		glfwSetWindowPos(windowID, x, y);
 		// configure the window settings
 		glfwSetWindowSizeCallback(windowID, windowResizeCallback);
 		glfwSetWindowCloseCallback(windowID, windowCloseCallback);
 		glfwSetWindowIcon(windowID, iconBuffer);
-		// configure window mosue input
+		// configure window mouse input
 		if (glfwRawMouseMotionSupported())
 			glfwSetInputMode(windowID, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 		glfwSetScrollCallback(windowID, (theWindowID, xoffset, yoffset) -> MouseInput.windowMouseAdapters.get(windowID).WHEEL = yoffset);
