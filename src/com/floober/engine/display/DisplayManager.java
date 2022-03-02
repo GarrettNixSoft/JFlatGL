@@ -1,13 +1,14 @@
 package com.floober.engine.display;
 
 
+import com.floober.engine.assets.loaders.GameLoader;
+import com.floober.engine.assets.loaders.ImageLoader;
 import com.floober.engine.game.Game;
-import com.floober.engine.loaders.GameLoader;
-import com.floober.engine.loaders.ImageLoader;
 import com.floober.engine.renderEngine.Render;
 import com.floober.engine.renderEngine.particles.ParticleMaster;
 import com.floober.engine.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.renderEngine.textures.RawTextureData;
+import com.floober.engine.renderEngine.util.Layers;
 import com.floober.engine.util.Logger;
 import com.floober.engine.util.color.Colors;
 import com.floober.engine.util.configuration.Config;
@@ -30,7 +31,6 @@ import java.util.List;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL11.GL_DONT_CARE;
 import static org.lwjgl.opengl.GL43.GL_DEBUG_SEVERITY_NOTIFICATION;
 import static org.lwjgl.opengl.GL43.glDebugMessageControl;
 import static org.lwjgl.system.MemoryUtil.NULL;
@@ -112,23 +112,23 @@ public class DisplayManager {
 				if (scaleToFitWidth < scaleToFitHeight) {
 					// scale to fit width
 					float aspectRatio = (float) Config.INTERNAL_HEIGHT / Config.INTERNAL_WIDTH;
-//					float ratio16x9 = 9.0f / 16.0f;
 					int bottomY = (int) ((height - width * aspectRatio) / 2);
 					targetWindow.setViewport(0, bottomY, width, (int) (width * aspectRatio));
-//					glViewport(0, topY, width, (int) (width * ratio16x9));
 					targetWindow.updateRatio(width, width * aspectRatio);
 					targetWindow.setMouseOffset(0, -bottomY);
-					Logger.log("Resizing to fit width! Window resized to [" + width + " x " + height + "]; Viewport is now [" + width + " x " + (int) (width * aspectRatio) + "], Mouse Offset is now (0, " + (-bottomY / 2) + "); Scale used was width: " + scaleToFitWidth);
+					Logger.log(	"Resizing to fit width! Window resized to [" + width + " x " + height + "]; " +
+								"Viewport is now [" + width + " x " + (int) (width * aspectRatio) + "], " +
+								"Mouse Offset is now (0, " + (-bottomY / 2) + "); Scale used was width: " + scaleToFitWidth);
 				} else {
 					// scale to fit height
 					float aspectRatio = (float) Config.INTERNAL_WIDTH / Config.INTERNAL_HEIGHT;
-//					float ratio16x9 = 16.0f / 9.0f;
 					int leftX = (int) ((width - height * aspectRatio) / 2);
 					targetWindow.setViewport(leftX, 0, (int) (height * aspectRatio), height);
-//					glViewport(leftX, 0, (int) (height * ratio16x9), height);
 					targetWindow.updateRatio(height * aspectRatio, height);
 					targetWindow.setMouseOffset(-leftX, 0);
-					Logger.log("Resizing to fit height! Window resized to [" + width + " x " + height + "]; Viewport is now [" + (int) (height * aspectRatio) + " x " + height + "], Mouse Offset is now (" + -leftX + ", 0); Scale used was height: " + scaleToFitHeight);
+					Logger.log(	"Resizing to fit height! Window resized to [" + width + " x " + height + "]; " +
+								"Viewport is now [" + (int) (height * aspectRatio) + " x " + height + "], " +
+								"Mouse Offset is now (" + -leftX + ", 0); Scale used was height: " + scaleToFitHeight);
 				}
 
 				// TEST
@@ -172,8 +172,8 @@ public class DisplayManager {
 
 				} // this whole section is indented an extra level because it's actually inside a collapsed invoke() method
 
-			// update display and poll events
-			DisplayManager.updateDisplay();
+				// update display and poll events
+				DisplayManager.updateDisplay();
 			}
 		};
 	}
@@ -389,6 +389,30 @@ public class DisplayManager {
 		gameStartTime = System.nanoTime();
 	}
 
+	// CLEAN UP METHODS
+
+	/**
+	 * Clean up GLFW by freeing all Callbacks and destroying all windows.
+	 */
+	public static void cleanUp() {
+		freeCallbacks();
+		destroyWindows();
+	}
+
+	private static void freeCallbacks() {
+		Callbacks.glfwFreeCallbacks(primaryWindowID);
+		for (Long windowID : windowsByID.keySet()) {
+			if (windowID != primaryWindowID) Callbacks.glfwFreeCallbacks(windowID);
+		}
+	}
+
+	private static void destroyWindows() {
+		glfwDestroyWindow(primaryWindowID);
+		for (Long windowID : windowsByID.keySet()) {
+			if (windowID != primaryWindowID) glfwDestroyWindow(windowID);
+		}
+	}
+
 	// TIME METHODS
 
 	/**
@@ -471,8 +495,9 @@ public class DisplayManager {
 		// convert pixel coordinates to OpenGL coordinates
 		float displayX = -1 + (2f / Config.INTERNAL_WIDTH) * x;
 		float displayY = -1 + (2f / Config.INTERNAL_HEIGHT) * y;
+//		Logger.log("Scale was calculated using screen dimensions [" + Config.INTERNAL_WIDTH + " x " + Config.INTERNAL_HEIGHT + "]");
 		// convert Z position to [0 ... 1]
-		float displayZ = 1 - MathUtil.interpolateBounded(0, MasterRenderer.TOP_LAYER, z);
+		float displayZ = 1 - MathUtil.interpolateBounded(0, Layers.TOP_LAYER, z);
 //		Logger.log("Layer " + z + " converted to z-position " + displayZ);
 		// return the result
 		return new Vector3f(displayX, displayY, displayZ);
@@ -485,10 +510,25 @@ public class DisplayManager {
 	public static Vector2f convertToDisplayPosition2D(long window, Vector2f position) {
 		Window targetWindow = windowsByID.get(window);
 		// invert y axis
-		float y = targetWindow.getHeight() - position.y;
+		float y = Config.INTERNAL_HEIGHT - position.y;
 		// convert pixel coordinates to OpenGL coordinates
-		float displayX = -1 + (2f / targetWindow.getWidth()) * position.x;
-		float displayY = -1 + (2f / targetWindow.getHeight()) * y;
+		float displayX = -1 + (2f / Config.INTERNAL_WIDTH) * position.x;
+		float displayY = -1 + (2f / Config.INTERNAL_HEIGHT) * y;
+		// return the result
+		return new Vector2f(displayX, displayY);
+	}
+
+	public static Vector2f convertToDisplayPosition2DNoInvertY(Vector2f position) {
+		return convertToDisplayPosition2DNoInvertY(MasterRenderer.getTargetWindowID(), position);
+	}
+
+	public static Vector2f convertToDisplayPosition2DNoInvertY(long window, Vector2f position) {
+		Window targetWindow = windowsByID.get(window);
+		// invert y axis
+//		float y = Config.INTERNAL_HEIGHT - position.y;
+		// convert pixel coordinates to OpenGL coordinates
+		float displayX = -1 + (2f / Config.INTERNAL_WIDTH) * position.x;
+		float displayY = -1 + (2f / Config.INTERNAL_HEIGHT) * position.y; // used to use commented-out y variable above ^^^
 		// return the result
 		return new Vector2f(displayX, displayY);
 	}
@@ -501,10 +541,10 @@ public class DisplayManager {
 		Window targetWindow = windowsByID.get(window);
 		Logger.log("Position " + position);
 		// invert y axis
-		float y = targetWindow.getHeight() - position.y;
+		float y = Config.INTERNAL_HEIGHT - position.y;
 		// convert pixel coordinates to OpenGL coordinates
-		float displayX = -1 + (2f / targetWindow.getWidth()) * position.x;
-		float displayY = -1 + (2f / targetWindow.getHeight()) * y;
+		float displayX = -1 + (2f / Config.INTERNAL_WIDTH) * position.x;
+		float displayY = -1 + (2f / Config.INTERNAL_HEIGHT) * y;
 		// return the result
 		Logger.log("Converted to position " + new Vector2f(displayX, displayY));
 		return new Vector2f(displayX, displayY);

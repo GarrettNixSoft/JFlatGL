@@ -1,8 +1,9 @@
 package com.floober.engine.game.tests;
 
+import com.floober.engine.assets.loaders.Loader;
 import com.floober.engine.audio.AudioMaster;
-import com.floober.engine.display.Window;
 import com.floober.engine.display.DisplayManager;
+import com.floober.engine.display.Window;
 import com.floober.engine.game.Game;
 import com.floober.engine.game.GameFlags;
 import com.floober.engine.gui.GUI;
@@ -12,15 +13,14 @@ import com.floober.engine.gui.component.Button;
 import com.floober.engine.gui.component.GUILayer;
 import com.floober.engine.gui.component.TabbedPanel;
 import com.floober.engine.gui.event.*;
-import com.floober.engine.loaders.Loader;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.floober.engine.renderEngine.fonts.fontRendering.FontRenderer;
 import com.floober.engine.renderEngine.fonts.fontRendering.TextMaster;
 import com.floober.engine.renderEngine.particles.ParticleMaster;
-import com.floober.engine.renderEngine.ppfx.PostProcessing;
 import com.floober.engine.renderEngine.renderers.GeometryRenderer;
 import com.floober.engine.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.renderEngine.renderers.TextureRenderer;
+import com.floober.engine.renderEngine.util.Layers;
 import com.floober.engine.util.Logger;
 import com.floober.engine.util.color.Colors;
 import com.floober.engine.util.configuration.Config;
@@ -82,7 +82,7 @@ public class GUITest {
 		tabbedPanel.listPosition(TabbedPanel.ListPosition.TOP).borderPadding(10)
 				.buttonSize(new Vector2f(120, 120)).buttonSpacing(50)
 				.closeTime(0.3f)
-				.location(new Vector3f(gameWindow.center(), MasterRenderer.TOP_LAYER))
+				.location(new Vector3f(gameWindow.center(), Layers.TOP_LAYER))
 				.primaryColor(Colors.WHITE).secondaryColor(Colors.RED)
 				.onClose(new GUIAction()
 						.addPerformActionOnTrigger(() -> tabbedPanel.queueEvent(new FadeComponentEvent(tabbedPanel, 0, 0.2f)))
@@ -104,7 +104,7 @@ public class GUITest {
 		Button button = new Button("quit_button");
 		// set the button's parameters
 		button.label("Quit").rounded(0.15f).textSize(1.2f)
-				.location(new Vector3f(gameWindow.centerX(), gameWindow.centerY() + 120, MasterRenderer.TOP_LAYER))
+				.location(new Vector3f(gameWindow.centerX(), gameWindow.centerY() + 120, Layers.TOP_LAYER))
 				.size(new Vector2f(250, 100)).primaryColor(Colors.WHITE).secondaryColor(Colors.BLACK)
 				.onOpen(new GUIAction()
 						.addPerformActionOnTrigger(() -> button.queueEvent(new RestoreOpacityEvent(button, 0.05f)))
@@ -134,7 +134,7 @@ public class GUITest {
 
 		Button otherButton = new Button("click_button");
 		otherButton.label("Click").rounded(0.15f).textSize(1.2f)
-				.location(gameWindow.center(), MasterRenderer.TOP_LAYER).size(new Vector2f(250, 100))
+				.location(gameWindow.center(), Layers.TOP_LAYER).size(new Vector2f(250, 100))
 				.primaryColor(Colors.WHITE).secondaryColor(Colors.BLACK)
 				.onOpen(new GUIAction()
 						.addPerformActionOnTrigger(() -> otherButton.queueEvent(new RestoreOpacityEvent(otherButton, 0.05f)))
@@ -159,7 +159,7 @@ public class GUITest {
 		// create a sample button for the second test tab
 		Button testButton = new Button("test_button");
 		testButton.label("Test").rounded(0.15f).textSize(1.2f)
-				.location(gameWindow.center().add(300, 0), MasterRenderer.TOP_LAYER).size(new Vector2f(250, 100))
+				.location(gameWindow.center().add(300, 0), Layers.TOP_LAYER).size(new Vector2f(250, 100))
 				.primaryColor(Colors.WHITE).secondaryColor(Colors.BLACK)
 				.onOpen(new GUIAction()
 						.addPerformActionOnTrigger(() -> testButton.queueEvent(new RestoreScaleEvent(testButton, 0.05f)))

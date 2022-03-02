@@ -1,7 +1,7 @@
 package com.floober.engine.renderEngine.framebuffers;
 
 import com.floober.engine.display.DisplayManager;
-import com.floober.engine.renderEngine.renderers.MasterRenderer;
+import com.floober.engine.renderEngine.util.Layers;
 import com.floober.engine.util.configuration.Config;
 import com.floober.engine.util.math.MathUtil;
 import org.joml.Vector2f;
@@ -40,7 +40,7 @@ public class FrameBuffers {
 		float displayX = -1 + (2f / buffer.getWidth()) * x;
 		float displayY = -1 + (2f / buffer.getHeight()) * y;
 		// convert Z position to [0 ... 1]
-		float displayZ = MathUtil.interpolateBounded(0, MasterRenderer.TOP_LAYER, z);
+		float displayZ = MathUtil.interpolateBounded(0, Layers.TOP_LAYER, z);
 		// return the result
 		return new Vector3f(displayX, displayY, displayZ);
 	}

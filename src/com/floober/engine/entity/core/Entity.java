@@ -2,11 +2,11 @@ package com.floober.engine.entity.core;
 
 import com.floober.engine.animation.Animation;
 import com.floober.engine.display.DisplayManager;
-import com.floober.engine.display.Window;
 import com.floober.engine.entity.attachments.EntityAttachableTo;
 import com.floober.engine.entity.projectile.Projectile;
 import com.floober.engine.renderEngine.elements.TextureElement;
 import com.floober.engine.renderEngine.renderers.MasterRenderer;
+import com.floober.engine.renderEngine.util.Layers;
 import com.floober.engine.util.Logger;
 import com.floober.engine.util.math.Collisions;
 import org.joml.Vector2f;
@@ -52,7 +52,7 @@ public abstract class Entity {
 	public Entity() {
 		this.x = 0;
 		this.y = 0;
-		this.layer = MasterRenderer.DEFAULT_LAYER;
+		this.layer = Layers.DEFAULT_LAYER;
 		// init a null Texture that can be set/moved later
 		textureElement = new TextureElement(null, 0, 0, 0, 0, 0, true);
 	}
@@ -60,7 +60,7 @@ public abstract class Entity {
 	public Entity(float x, float y) {
 		this.x = x;
 		this.y = y;
-		this.layer = MasterRenderer.DEFAULT_LAYER;
+		this.layer = Layers.DEFAULT_LAYER;
 		// init a null Texture that can be set/moved later
 		textureElement = new TextureElement(null, 0, 0, 0, 0, 0, true);
 	}

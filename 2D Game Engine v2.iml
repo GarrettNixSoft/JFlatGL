@@ -11,6 +11,9 @@
       <excludeFolder url="file://$MODULE_DIR$/lib/pngdecoder" />
       <excludeFolder url="file://$MODULE_DIR$/lib/slick-util" />
       <excludeFolder url="file://$MODULE_DIR$/lib/slick-util3" />
+      <excludeFolder url="file://$MODULE_DIR$/.idea/artifacts" />
+      <excludeFolder url="file://$MODULE_DIR$/.idea/dictionaries" />
+      <excludeFolder url="file://$MODULE_DIR$/.idea/libraries" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

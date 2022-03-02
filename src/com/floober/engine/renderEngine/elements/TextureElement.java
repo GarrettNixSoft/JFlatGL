@@ -1,7 +1,6 @@
 package com.floober.engine.renderEngine.elements;
 
 import com.floober.engine.display.DisplayManager;
-import com.floober.engine.display.Window;
 import com.floober.engine.renderEngine.textures.Texture;
 import com.floober.engine.renderEngine.textures.TextureComponent;
 import org.joml.Vector2f;

@@ -19,7 +19,7 @@ public class TextureBatchOpaque extends OpaqueBatch {
 	}
 
 	public void addElement(TextureElement element) {
-		if (!element.getTextureComponent().hasTransparency()) {
+		if (!element.textureComponentHasTransparency()) {
 			elements.add(element);
 		}
 		else {

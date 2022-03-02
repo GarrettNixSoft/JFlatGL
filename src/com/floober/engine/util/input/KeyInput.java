@@ -1,6 +1,5 @@
 package com.floober.engine.util.input;
 
-import com.floober.engine.display.DisplayManager;
 import com.floober.engine.renderEngine.renderers.MasterRenderer;
 
 import java.util.HashMap;

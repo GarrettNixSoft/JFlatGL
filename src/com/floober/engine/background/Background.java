@@ -1,8 +1,9 @@
 package com.floober.engine.background;
 
+import com.floober.engine.assets.loaders.Loader;
 import com.floober.engine.game.Game;
-import com.floober.engine.loaders.Loader;
 import com.floober.engine.renderEngine.textures.TextureSet;
+import com.floober.engine.util.file.FileUtil;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -31,7 +32,7 @@ public class Background {
 	// build a background from a JSON configuration
 	public Background(String jsonFile) {
 		elements = new ArrayList<>();
-		JSONObject json = Loader.getJSON(jsonFile);
+		JSONObject json = FileUtil.getJSON(jsonFile);
 		loadBase(json);
 		loadElements(json);
 	}

@@ -4,6 +4,7 @@ out vec4 out_color;
 
 uniform vec4 color;
 uniform float r;
+uniform int roundMode;
 uniform vec2 dimensions;
 
 in vec2 pos;
@@ -14,7 +15,7 @@ float udRoundBox(vec2 pos, vec2 ext) {
 
 void main(void) {
 
-	vec2 aspectRatio = vec2(1, dimensions.x / dimensions.y);
+	vec2 aspectRatio = roundMode == 0 ? vec2(1, dimensions.x / dimensions.y) : vec2(dimensions.y / dimensions.x, 1);
 
 	vec2 pos2 = pos * aspectRatio;
 	vec2 halfRes = vec2(0.5) * aspectRatio;

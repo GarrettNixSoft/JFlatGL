@@ -1,7 +1,5 @@
 package com.floober.engine.renderEngine.ppfx;
 
-import com.floober.engine.display.DisplayManager;
-import com.floober.engine.display.Window;
 import com.floober.engine.renderEngine.framebuffers.FrameBuffer;
 import org.lwjgl.opengl.GL11;
 

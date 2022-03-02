@@ -1,12 +1,13 @@
-package com.floober.engine.loaders.assets;
+package com.floober.engine.assets.loaders.gameassets;
 
 import com.floober.engine.animation.Animation;
+import com.floober.engine.assets.loaders.AssetLoader;
 import com.floober.engine.game.Game;
-import com.floober.engine.loaders.Loader;
 import com.floober.engine.renderEngine.renderers.LoadRenderer;
 import com.floober.engine.renderEngine.textures.TextureSet;
 import com.floober.engine.util.Globals;
 import com.floober.engine.util.Logger;
+import com.floober.engine.util.file.FileUtil;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -17,8 +18,7 @@ public class AnimationLoader extends AssetLoader {
 	
 	// create loader
 	public AnimationLoader() {
-		super();
-		directory = Loader.getJSON("/assets/animations_directory.json");
+		directory = FileUtil.getJSON("/assets/animations_directory.json");
 	}
 
 	@Override
@@ -56,7 +56,7 @@ public class AnimationLoader extends AssetLoader {
 				Globals.animationCount++;
 //				RunGame.loadRenderer.render();
 			} catch (Exception e) {
-				System.out.println("Failed to load Animation [key=" + key + "], error: " + e.toString());
+				System.out.println("Failed to load Animation [key=" + key + "], error: " + e);
 			}
 		}
 	}
@@ -78,7 +78,7 @@ public class AnimationLoader extends AssetLoader {
 				Globals.animationCount++;
 //				RunGame.loadRenderer.render();
 			} catch (Exception e) {
-				System.out.println("Failed to load Animation Set [key=" + key + "], error: " + e.toString());
+				System.out.println("Failed to load Animation Set [key=" + key + "], error: " + e);
 			}
 		}
 	}

@@ -1,7 +1,6 @@
 package com.floober.engine.renderEngine;
 
 import com.floober.engine.display.DisplayManager;
-import com.floober.engine.display.Window;
 import com.floober.engine.util.Logger;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;

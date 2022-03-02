@@ -1,5 +1,6 @@
-package com.floober.engine.loaders.event;
+package com.floober.engine.assets.loaders.event;
 import com.floober.engine.event.DelayEvent;
+import com.floober.engine.event.QueuedEvent;
 import com.floober.engine.event.TriggerEventQueue;
 import org.json.JSONObject;
 
@@ -11,11 +12,11 @@ import org.json.JSONObject;
 	EventLoader subclasses to handle different sorts
 	of event data (Audio, UI animation, cutscene, etc.)
  */
-public abstract class EventLoader {
+public abstract class EventLoader<T extends QueuedEvent> {
 
-	protected TriggerEventQueue eventQueue;
+	protected TriggerEventQueue<T> eventQueue;
 
-	public TriggerEventQueue getEventQueue() {
+	public TriggerEventQueue<T> getEventQueue() {
 		return eventQueue;
 	}
 

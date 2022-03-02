@@ -5,7 +5,6 @@ import com.floober.engine.util.configuration.Config;
 import org.joml.Vector2f;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 import static org.lwjgl.opengl.GL11.glViewport;
 
 public class Window {
@@ -208,11 +207,16 @@ public class Window {
 		glViewport(xOffset, yOffset, viewportWidth, viewportHeight);
 	}
 
+	public static float mainCenterX() { return DisplayManager.getPrimaryGameWindow().centerX(); }
+
+	public static float mainCenterY() { return DisplayManager.getPrimaryGameWindow().centerY(); }
+
 	public float centerX() {
-		return width / 2f;
+		return Config.INTERNAL_WIDTH / 2f;
 	}
+
 	public float centerY() {
-		return height / 2f;
+		return Config.INTERNAL_HEIGHT / 2f;
 	}
 
 	public Vector2f center() {

@@ -1,10 +1,12 @@
 package com.floober.engine.renderEngine.elements;
 
 import com.floober.engine.display.DisplayManager;
-import com.floober.engine.display.Window;
+import com.floober.engine.renderEngine.Render;
+import com.floober.engine.renderEngine.elements.geometry.*;
 import com.floober.engine.renderEngine.framebuffers.FrameBuffer;
 import com.floober.engine.renderEngine.framebuffers.FrameBuffers;
 import com.floober.engine.renderEngine.renderers.MasterRenderer;
+import com.floober.engine.renderEngine.util.Layers;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
@@ -19,6 +21,7 @@ public abstract class RenderElement implements Comparable<RenderElement> {
 	protected boolean centered;
 
 	public RenderElement(float x, float y, int layer, boolean centered) {
+		assert layer <= Layers.TOP_LAYER && layer >= Layers.BOTTOM_LAYER;
 		this.x = x;
 		this.y = y;
 		this.layer = layer;
@@ -50,6 +53,22 @@ public abstract class RenderElement implements Comparable<RenderElement> {
 		scale = FrameBuffers.convertToFramebufferScale(width, height, buffer);
 	}
 
+	/**
+	 * Render this RenderElement. Uses the new Java 17 preview feature, Pattern Matching for switch,
+	 * to call the appropriate Render method for whatever type this RenderElement is.
+	 */
+	public void render() {
+		switch (this) {
+			case LineElement l -> Render.drawLine(l);
+			case CircleElement c -> Render.drawCircle(c);
+			case OutlineElement o -> Render.drawOutline(o);
+			case RectElementLight rl -> Render.drawLightRect(rl);
+			case RectElement r -> Render.drawRect(r);
+			case TextureElement tex -> Render.drawImage(tex);
+			default -> throw new IllegalStateException("Unexpected value: " + this);
+		}
+	}
+
 	// GETTERS
 	public float getX() {
 		return x;
@@ -75,6 +94,10 @@ public abstract class RenderElement implements Comparable<RenderElement> {
 	}
 	public Vector2f getScale() {
 		return scale;
+	}
+
+	public Vector3f getPixelPosition() {
+		return new Vector3f(x, y, layer);
 	}
 
 	public Vector3f getRenderPosition() {

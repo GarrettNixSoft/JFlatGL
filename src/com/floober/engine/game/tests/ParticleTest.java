@@ -1,11 +1,11 @@
 package com.floober.engine.game.tests;
 
 import com.floober.engine.assets.Textures;
+import com.floober.engine.assets.loaders.GameLoader;
+import com.floober.engine.assets.loaders.ImageLoader;
+import com.floober.engine.assets.loaders.Loader;
 import com.floober.engine.display.DisplayManager;
 import com.floober.engine.display.Window;
-import com.floober.engine.loaders.GameLoader;
-import com.floober.engine.loaders.ImageLoader;
-import com.floober.engine.loaders.Loader;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.FontType;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.floober.engine.renderEngine.fonts.fontRendering.TextMaster;
@@ -21,9 +21,9 @@ import com.floober.engine.renderEngine.particles.emitters.LightParticleEmitter;
 import com.floober.engine.renderEngine.particles.emitters.ParticleEmitter;
 import com.floober.engine.renderEngine.particles.emitters.TexturedParticleEmitter;
 import com.floober.engine.renderEngine.particles.types.LightParticle;
-import com.floober.engine.renderEngine.ppfx.PostProcessing;
 import com.floober.engine.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.renderEngine.textures.Texture;
+import com.floober.engine.renderEngine.textures.TextureComponent;
 import com.floober.engine.util.Logger;
 import com.floober.engine.util.color.Colors;
 import com.floober.engine.util.configuration.Config;
@@ -139,19 +139,19 @@ public class ParticleTest {
 
 		// Particles
 
-		Texture explosionTexture = ImageLoader.loadTexture("textures/particles/explosion.png");
-		Texture glowTexture = ImageLoader.loadTexture("textures/particles/glow.png");
-		Texture defaultTex = ImageLoader.loadTexture("textures/complex_sample.png");
+		TextureComponent explosionTexture = ImageLoader.loadTexture("textures/particles/explosion.png");
+		TextureComponent glowTexture = ImageLoader.loadTexture("textures/particles/glow.png");
+		TextureComponent defaultTex = ImageLoader.loadTexture("textures/complex_sample.png");
 
-		explosionParticleTex = new ParticleTexture(Textures.wrapTexture(explosionTexture), 4, true);
-		glowParticleTex = new ParticleTexture(Textures.wrapTexture(glowTexture), 1, true);
-		ParticleTexture particleTex = new ParticleTexture(Textures.wrapTexture(defaultTex), 1, false);
+		explosionParticleTex = new ParticleTexture(explosionTexture, 4, true);
+		glowParticleTex = new ParticleTexture(glowTexture, 1, true);
+		ParticleTexture particleTex = new ParticleTexture(defaultTex, 1, false);
 
 		AppearanceBehavior fadeOutBehavior = new FadeOutBehavior(1, 0);
 		MovementBehavior flameBehavior = new FlameBehavior(-90, 15);
 		MovementBehavior constantVelocity = new ConstantVelocityBehavior(0, 360);
 
-		particleBehavior = new ParticleBehavior(flameBehavior, fadeOutBehavior);
+		particleBehavior = new ParticleBehavior(constantVelocity, fadeOutBehavior);
 		particleBehavior.getAppearanceBehavior().initSize(6, 200);
 		particleBehavior.getMovementBehavior().initSpeed(100, 120);
 		particleBehavior.initLife(2f, 4f);
@@ -222,6 +222,7 @@ public class ParticleTest {
 
 			// render to the screen
 			MasterRenderer.primaryWindowRenderer.render();
+			MasterRenderer.getTargetWindow().swapBuffers();
 
 			// update display and poll events
 			DisplayManager.updateDisplay();

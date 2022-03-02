@@ -1,5 +1,10 @@
 package com.floober.engine.util;
 
+import com.floober.engine.util.conversion.StringConverter;
+import org.joml.Vector2f;
+import org.joml.Vector2i;
+import org.joml.Vector4f;
+
 import java.io.PrintStream;
 
 public class Logger {
@@ -14,7 +19,7 @@ public class Logger {
 	public static final int CRITICAL = 3;
 	
 	// SETTINGS
-	// game
+	// main
 	public static boolean logAnything;
 	public static boolean logWarnings;
 	public static boolean logErrors;
@@ -27,7 +32,6 @@ public class Logger {
 	public static boolean logEntityDebug;
 	public static boolean logEnemyDebug;
 	public static boolean logPlayerDebug;
-	public static boolean logEnemyWaves;
 	// UI
 	public static boolean logUIEvents;
 	public static boolean logUIInteractions;
@@ -38,7 +42,7 @@ public class Logger {
 	public static boolean logCutscenes;
 
 	public static void setLoggerConfig() {
-		// game
+		// main
 		Logger.logAnything = true;
 		Logger.logWarnings = false;
 		Logger.logErrors = true;
@@ -50,8 +54,7 @@ public class Logger {
 		// in-game
 		Logger.logEntityDebug = true;
 		Logger.logEnemyDebug = false;
-		Logger.logPlayerDebug = true;
-		Logger.logEnemyWaves = true;
+		Logger.logPlayerDebug = false;
 		// event
 		Logger.logEvents = false;
 		Logger.logCutscenes = true;
@@ -76,6 +79,26 @@ public class Logger {
 	public static void log(String message) {
 		if (!logAnything) return;
 		outStream.println("[MESSAGE] " + message);
+	}
+
+	public static void log(Object object) {
+		if (!logAnything) return;
+		outStream.println("[MESSAGE] " + object.toString());
+	}
+
+	public static void log(Vector4f vec4f) {
+		if (!logAnything) return;
+		outStream.println("[MESSAGE] " + StringConverter.vec4fToString(vec4f));
+	}
+
+	public static void log(Vector2f vec2f) {
+		if (!logAnything) return;
+		outStream.println("[MESSAGE] " + StringConverter.vec2fToString(vec2f));
+	}
+
+	public static void log(Vector2i vec2i) {
+		if (!logAnything) return;
+		outStream.println("[MESSAGE] " + StringConverter.vec2iToString(vec2i));
 	}
 
 	public static void logAudio(String message) {
@@ -121,6 +144,19 @@ public class Logger {
 		outStream.println(message + error);
 		if (severity == CRITICAL) System.exit(-1); // Critical errors force crashes.
 	}
+
+	public static void logError(String error, int severity, Exception e) {
+		if (!logErrors && severity != CRITICAL) return;
+		String message = "*** [ERROR] (Severity: ";
+		switch (severity) {
+			case LOW -> message = message + " LOW) ";
+			case MEDIUM -> message = message + " MEDIUM) ";
+			case HIGH -> message = message + " HIGH) ";
+			case CRITICAL -> message = "*** [CRITICAL ERROR] ";
+		}
+		outStream.println(message + error + " (Exception message: " + e.getMessage() + ")");
+		if (severity == CRITICAL) System.exit(-1); // Critical errors force crashes.
+	}
 	
 	public static void logLoadComplete(String message) {
 		if (!logLoadGeneral) return;
@@ -146,11 +182,6 @@ public class Logger {
 	public static void logEvent(String message) {
 		if (!logEvents) return;
 		outStream.println("[EVENT] " + message);
-	}
-
-	public static void logWave(String message) {
-		if (!logEnemyWaves) return;
-		outStream.println("[WAVE] " + message);
 	}
 
 	public static void logCutscene(String message) {

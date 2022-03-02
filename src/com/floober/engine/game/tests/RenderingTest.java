@@ -1,12 +1,14 @@
 package com.floober.engine.game.tests;
 
+import com.floober.engine.animation.Animation;
+import com.floober.engine.assets.loaders.Loader;
 import com.floober.engine.audio.AudioMaster;
-import com.floober.engine.display.Window;
 import com.floober.engine.display.DisplayManager;
+import com.floober.engine.display.Window;
 import com.floober.engine.game.Game;
-import com.floober.engine.loaders.Loader;
 import com.floober.engine.renderEngine.elements.TextureElement;
 import com.floober.engine.renderEngine.elements.geometry.OutlineElement;
+import com.floober.engine.renderEngine.elements.geometry.RectElement;
 import com.floober.engine.renderEngine.fonts.fontRendering.TextMaster;
 import com.floober.engine.renderEngine.particles.ParticleMaster;
 import com.floober.engine.renderEngine.particles.behavior.ParticleBehavior;
@@ -15,14 +17,16 @@ import com.floober.engine.renderEngine.particles.behavior.appearance.FadeOutBeha
 import com.floober.engine.renderEngine.particles.behavior.movement.ConstantVelocityBehavior;
 import com.floober.engine.renderEngine.particles.behavior.movement.MovementBehavior;
 import com.floober.engine.renderEngine.particles.emitters.ParticleEmitter;
-import com.floober.engine.renderEngine.ppfx.PostProcessing;
 import com.floober.engine.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.renderEngine.textures.TextureComponent;
+import com.floober.engine.renderEngine.textures.TextureSet;
+import com.floober.engine.renderEngine.util.Layers;
 import com.floober.engine.util.Logger;
 import com.floober.engine.util.color.Colors;
 import com.floober.engine.util.configuration.Config;
 import com.floober.engine.util.input.KeyInput;
 import com.floober.engine.util.input.MouseInput;
+import com.floober.engine.util.math.Collisions;
 import com.floober.engine.util.time.Sync;
 import com.floober.engine.util.time.Timer;
 import org.joml.Vector3f;
@@ -59,16 +63,16 @@ public class RenderingTest {
 
 		TextureComponent texture = Game.getTexture("default");
 //		TextureComponent texture2 = Game.getTexture("default2");
-		TextureComponent texture3 = Game.getTexture("default3");
+		TextureComponent texture3 = Game.getTexture("default2");
 //		TextureElement element1 = new TextureElement(texture, 0, 0, 15, false);
 //		TextureElement element2 = new TextureElement(texture, 32, 0, 0, false);
 //		TextureElement element3 = new TextureElement(texture, 0, 32, 0, false);
 //		TextureElement element4 = new TextureElement(texture, 32, 32, 0, false);
 //		TextureElement testStackElement = new TextureElement(texture2, 0, 0, 10, false);
 
-		OutlineElement testBounds = new OutlineElement(Colors.RED, gameWindow.centerX(), gameWindow.centerY(), MasterRenderer.TOP_LAYER, 128, 32, 2, true);
+		OutlineElement testBounds = new OutlineElement(Colors.RED, gameWindow.centerX(), gameWindow.centerY(), Layers.TOP_LAYER, 128, 32, 2, true);
 
-		TextureElement testRotateElement = new TextureElement(texture3, gameWindow.centerX(), gameWindow.centerY(), MasterRenderer.TOP_LAYER, true);
+		TextureElement testRotateElement = new TextureElement(texture3, gameWindow.centerX(), gameWindow.centerY(), Layers.TOP_LAYER, true);
 		Logger.log("Position of testRotateElement: (" + testRotateElement.getX() + ", " + testRotateElement.getY() + ")");
 
 		TextureElement testCropElement = new TextureElement(texture, gameWindow.getWidth() / 2f, gameWindow.getHeight() / 2f, 0, 64, 64, true);
@@ -78,7 +82,7 @@ public class RenderingTest {
 
 		ParticleEmitter engineParticleEmitter;
 		// movement behavior
-		MovementBehavior engineParticleMovement = new ConstantVelocityBehavior(170, 190);
+		MovementBehavior engineParticleMovement = new ConstantVelocityBehavior(80, 100);
 		engineParticleMovement.initSpeed(-15, -75);
 		// appearance
 		AppearanceBehavior engineParticleAppearance = new FadeOutBehavior(1, 0);
@@ -90,13 +94,28 @@ public class RenderingTest {
 		engineParticleBehavior.initLife(0.15f, 0.5f);
 //		engineParticleBehavior.initLife(3f, 5f);
 		// create the emitter
-		engineParticleEmitter = new ParticleEmitter(new Vector3f(gameWindow.center(), MasterRenderer.DEFAULT_LAYER), ParticleMaster.GLOW_PARTICLE_TEXTURE, engineParticleBehavior);
+		engineParticleEmitter = new ParticleEmitter(new Vector3f(gameWindow.center(), Layers.DEFAULT_LAYER), ParticleMaster.GLOW_PARTICLE_TEXTURE, engineParticleBehavior);
 		engineParticleEmitter.setBatchCount(10);
 		engineParticleEmitter.initPositionDelta(0, 15);
-		engineParticleEmitter.setParticleDelay(0.02f);
+		engineParticleEmitter.setParticleDelay(0.005f);
+
+
+
+		// TEST ANIMATION!
+		TextureSet testSet = Game.getTextureSet("default_set");
+		Animation testAnimation = new Animation(testSet, 333);
+
+		// TEST COLLISIONS!
+		OutlineElement testBigRect = new OutlineElement(Colors.RED, Window.mainCenterX(), Window.mainCenterY(), Layers.DEFAULT_LAYER, 400, 400, 3, true);
+		RectElement testBigRectFill = new RectElement(Colors.RED, Window.mainCenterX(), Window.mainCenterY(), Layers.DEFAULT_LAYER, 400, 400, true);
+
+		RectElement testMoveElem = new RectElement(Colors.GREEN, Window.mainCenterX(), Window.mainCenterY(), Layers.DEFAULT_LAYER + 3, 50, 50, true);
+
+
 
 		// END_TEST
 
+		Logger.log("Starting game loop!");
 		// Run the game loop!
 		while (!glfwWindowShouldClose(primaryWindowID)) {
 			// clear window
@@ -123,6 +142,10 @@ public class RenderingTest {
 
 			if (timer.finished()) timer.restart();
 
+			testAnimation.update();
+
+			testRotateElement.setTexture(testAnimation.getCurrentFrame());
+
 			testRotateElement.setPosition(new Vector3f(gameWindow.center(), 0));
 			testRotateElement.setRotation(360 * timer.getProgress());
 			testRotateElement.transform();
@@ -134,13 +157,40 @@ public class RenderingTest {
 			// ***
 
 			// update engine particles
-			engineParticleEmitter.setPosition(new Vector3f(MouseInput.getMousePos(), MasterRenderer.DEFAULT_LAYER));
-			engineParticleEmitter.update();
+//			engineParticleEmitter.setPosition(new Vector3f(MouseInput.getMousePos(), MasterRenderer.DEFAULT_LAYER));
+//			engineParticleEmitter.update();
+
+			testMoveElem.setPosition(MouseInput.getX(), MouseInput.getY(), testMoveElem.getLayer());
+
+			testBigRect.transform();
+			testBigRect.render();
+			testBigRectFill.transform();
+			testBigRectFill.render();
+			testMoveElem.transform();
+			testMoveElem.render();
+
+//			Vector4f testMoveBox = new Vector4f(testMoveElem.getX(), testMoveElem.getY(), testMoveElem.getX() + testMoveElem.getWidth(), testMoveElem.getY() + testMoveElem.getHeight());
+//			Vector4f bigBox = new Vector4f(testBigRect.getX(), testBigRect.getY(), testBigRect.getX() + testBigRect.getWidth(), testBigRect.getY() + testBigRect.getHeight());
+			Vector4f testMoveBox = Collisions.createCollisionBox(testMoveElem.getPixelPosition(), testMoveElem.getScale());
+			Vector4f bigBox = Collisions.createCollisionBox(testBigRect.getPixelPosition(), testBigRect.getScale());
+
+//			Logger.log(bigBox);
+//			Logger.log(testMoveBox);
+//			Logger.log(testMoveElem.getPosition());
+
+			if (Collisions.intersects(testMoveBox, bigBox)) {
+				float overlap = Collisions.overlapProportion(testMoveBox, bigBox);
+//				Logger.log("overlap = " + overlap);
+				Vector4f mix = Colors.mix(Colors.GREEN, Colors.BLUE, overlap);
+				testMoveElem.setColor(mix);
+			} else testMoveElem.setColor(Colors.GREEN);
+//			Logger.log("Collision");
 
 //			Render.drawOutline(testBounds);
 
 			// render to the screen
 			MasterRenderer.primaryWindowRenderer.render();
+			MasterRenderer.getTargetWindow().swapBuffers();
 
 			// update display and poll events
 			DisplayManager.updateDisplay();

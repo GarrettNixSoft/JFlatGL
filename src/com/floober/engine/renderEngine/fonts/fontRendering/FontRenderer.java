@@ -3,8 +3,6 @@ package com.floober.engine.renderEngine.fonts.fontRendering;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.FontType;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.floober.engine.renderEngine.shaders.FontShader;
-import com.floober.engine.util.Logger;
-import com.floober.engine.util.input.KeyInput;
 
 import java.util.List;
 import java.util.Map;
@@ -38,7 +36,6 @@ public class FontRenderer {
 			glBindTexture(GL_TEXTURE_2D, fontType.getTextureAtlas());
 
 			for (GUIText text : texts.get(fontType)) {
-				if (KeyInput.isPressed(KeyInput.P)) Logger.log("Text at z = " + text.getPosition().z());
 				renderText(text);
 			}
 		}
@@ -65,7 +62,6 @@ public class FontRenderer {
 		glEnableVertexAttribArray(1);
 		shader.loadColor(text.getColor());
 		shader.loadTranslation(text.getPosition());
-		Logger.log("Text at " + text.getPosition());
 		shader.loadWidth(text.getWidth());
 		shader.loadEdge(text.getEdge());
 		shader.loadBorderWidth(text.getBorderWidth());

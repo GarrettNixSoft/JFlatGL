@@ -28,7 +28,7 @@ public class Animation {
 	 * @param texComp the texture component for the single frame
 	 */
 	public Animation(TextureComponent texComp) {
-		this.frames = new TextureSet(texComp.texture(), texComp.width(), texComp.height(), texComp.hasTransparency());
+		this.frames = new TextureSet(texComp, texComp.width(), texComp.height(), texComp.hasTransparency());
 		this.frameTime = -1;
 	}
 

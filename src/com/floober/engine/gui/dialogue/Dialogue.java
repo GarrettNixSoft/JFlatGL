@@ -9,6 +9,7 @@ import com.floober.engine.renderEngine.elements.geometry.RectElement;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.FontType;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.floober.engine.renderEngine.renderers.MasterRenderer;
+import com.floober.engine.renderEngine.util.Layers;
 import com.floober.engine.util.Logger;
 import com.floober.engine.util.color.Colors;
 import com.floober.engine.util.configuration.Settings;
@@ -130,7 +131,7 @@ public class Dialogue {
 		// TODO box must be at least 680x200
 		x = (int) gameWindow.centerX(); // centered horizontally
 		y = gameWindow.getHeight()  - (height / 2 + 10); // centered 10px from bottom of window
-		z = MasterRenderer.TOP_LAYER - 1;
+		z = Layers.TOP_LAYER - 1;
 		// face location and size
 		faceWidth = (int) (width * 0.15); // 15% of box width
 		faceHeight = (int) (width * 0.15); // square

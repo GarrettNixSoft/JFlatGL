@@ -1,3 +1,7 @@
 # Project exclude paths
+/shelf/
+/workspace.xml
 /out/
 /.idea
+/lib/
+/lib/lwjgl-release-3.3.0-custom/

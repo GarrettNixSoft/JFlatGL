@@ -1,8 +1,8 @@
 package com.floober.engine.renderEngine.renderers;
 
+import com.floober.engine.assets.loaders.GameLoader;
 import com.floober.engine.display.DisplayManager;
 import com.floober.engine.display.Window;
-import com.floober.engine.loaders.GameLoader;
 import com.floober.engine.renderEngine.RenderLayer;
 import com.floober.engine.renderEngine.batches.opaque.*;
 import com.floober.engine.renderEngine.batches.transparent.*;
@@ -14,6 +14,7 @@ import com.floober.engine.renderEngine.fonts.fontRendering.TextMaster;
 import com.floober.engine.renderEngine.framebuffers.FrameBuffer;
 import com.floober.engine.renderEngine.particles.ParticleMaster;
 import com.floober.engine.renderEngine.ppfx.PostProcessing;
+import com.floober.engine.renderEngine.util.Layers;
 import com.floober.engine.util.configuration.Config;
 
 import java.util.HashMap;
@@ -44,10 +45,6 @@ public class MasterRenderer {
 
 	// Render layers
 	private final RenderLayer[] layers;
-	public static final int NUM_LAYERS = 10;
-	public static final int TOP_LAYER = NUM_LAYERS - 1;
-	public static final int BOTTOM_LAYER = 0;
-	public static final int DEFAULT_LAYER = NUM_LAYERS / 2;
 
 	// Render batches; mapped by layer index
 	private final Map<Integer, TextureBatchOpaque> opaqueTextureBatches = new HashMap<>();
@@ -81,7 +78,7 @@ public class MasterRenderer {
 		// create the renderers
 		textureRenderer = new TextureRenderer();
 		geometryRenderer = new GeometryRenderer();
-		layers = new RenderLayer[NUM_LAYERS];
+		layers = new RenderLayer[Layers.NUM_LAYERS];
 		initLayers();
 		// create the post-processor
 		postProcessor = new PostProcessing(window.getWindowID());
@@ -122,7 +119,7 @@ public class MasterRenderer {
 	 * values defined in Config.
 	 */
 	private void initLayers() {
-		for (int i = 0; i < NUM_LAYERS; ++i) {
+		for (int i = 0; i < Layers.NUM_LAYERS; ++i) {
 			// create the layer
 			layers[i] = new RenderLayer();
 			// create the batches that will be used to populate the layer
@@ -142,12 +139,12 @@ public class MasterRenderer {
 	}
 
 	public float getScreenZ(int layer) {
-		int trueLayer = NUM_LAYERS - layer;
-		return ((float) trueLayer / NUM_LAYERS);
+		int trueLayer = Layers.NUM_LAYERS - layer;
+		return ((float) trueLayer / Layers.NUM_LAYERS);
 	}
 
 	public int getLayerByZ(float z) {
-		return (int) (NUM_LAYERS - (z * 10));
+		return (int) (Layers.NUM_LAYERS - (z * 10));
 	}
 
 	// *** ADDING ELEMENTS ***
@@ -246,11 +243,11 @@ public class MasterRenderer {
 
 		// RENDERING
 		// render all opaque layers first, front to back
-		for (int i = NUM_LAYERS - 1; i >= 0; --i) {
+		for (int i = Layers.NUM_LAYERS - 1; i >= 0; --i) {
 			renderLayerOpaque(layers[i]);
 		}
 		// render transparent layers, back to front
-		for (int i = 0; i < NUM_LAYERS; ++i) {
+		for (int i = 0; i < Layers.NUM_LAYERS; ++i) {
 			renderLayerTransparent(layers[i]);
 			ParticleMaster.renderParticles(i);
 			TextMaster.render(i);
@@ -277,7 +274,7 @@ public class MasterRenderer {
 	}
 
 	private void prepareLayers() {
-		for (int i = 0; i < NUM_LAYERS; ++i) {
+		for (int i = 0; i < Layers.NUM_LAYERS; ++i) {
 			RenderLayer layer = layers[i];
 			layer.addOpaqueBatch(opaqueTextureBatches.get((i)));
 			layer.addOpaqueBatch(opaqueRectBatches.get((i)));
@@ -294,7 +291,7 @@ public class MasterRenderer {
 	}
 
 	private void clearBatches() {
-		for (int i = 0; i < NUM_LAYERS; ++i) {
+		for (int i = 0; i < Layers.NUM_LAYERS; ++i) {
 			opaqueTextureBatches.get(i).clear();
 			transparentTextureBatches.get(i).clear();
 			opaqueRectBatches.get(i).clear();
@@ -310,9 +307,13 @@ public class MasterRenderer {
 	}
 
 	public static void cleanUp() {
-		primaryWindowRenderer.sceneBuffer.cleanUp();
-		primaryWindowRenderer.textureRenderer.cleanUp();
-		primaryWindowRenderer.geometryRenderer.cleanUp();
+		for (Window window : DisplayManager.getWindows()) {
+			MasterRenderer windowRenderer = window.getWindowRenderer();
+			windowRenderer.sceneBuffer.cleanUp();
+			windowRenderer.textureRenderer.cleanUp();
+			windowRenderer.geometryRenderer.cleanUp();
+		}
+
 	}
 
 }

@@ -1,9 +1,9 @@
-package com.floober.engine.loaders.object;
+package com.floober.engine.assets.loaders.object;
 
 import com.floober.engine.background.Background;
 import com.floober.engine.background.BackgroundBase;
 import com.floober.engine.game.Game;
-import com.floober.engine.loaders.Loader;
+import com.floober.engine.util.file.FileUtil;
 import org.json.JSONObject;
 
 public class BackgroundLoader {
@@ -12,7 +12,7 @@ public class BackgroundLoader {
 
 	public Background load(String path) {
 		// get file
-		JSONObject json = Loader.getJSON(path);
+		JSONObject json = FileUtil.getJSON(path);
 		// get base
 		JSONObject baseObj = json.getJSONObject("base");
 		// parse base

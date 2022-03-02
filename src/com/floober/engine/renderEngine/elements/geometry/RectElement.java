@@ -6,7 +6,11 @@ import java.awt.*;
 
 public class RectElement extends GeometryElement {
 
-	private float r = 0;
+	public static final int HORIZONTAL = 0;
+	public static final int VERTICAL = 1;
+	private int roundingMode = HORIZONTAL;
+
+	private float round = 0;
 
 	public RectElement(Vector4f color, float x, float y, int layer, float width, float height, boolean centered) {
 		super(color, x, y, layer, centered);
@@ -19,7 +23,7 @@ public class RectElement extends GeometryElement {
 		super(color, x, y, layer, centered);
 		this.width = width;
 		this.height = height;
-		this.r = r;
+		this.round = r;
 		transform();
 	}
 
@@ -31,11 +35,19 @@ public class RectElement extends GeometryElement {
 	}
 
 	public void setRoundRadius(float r) {
-		this.r = r;
+		this.round = r;
 	}
 
 	public float getRoundRadius() {
-		return r;
+		return round;
+	}
+
+	public int getRoundingMode() {
+		return roundingMode;
+	}
+
+	public void setRoundingMode(int roundingMode) {
+		this.roundingMode = roundingMode;
 	}
 
 	public Rectangle getRectangle() {

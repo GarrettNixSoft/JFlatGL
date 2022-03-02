@@ -1,4 +1,4 @@
-package com.floober.engine.loaders.assets;
+package com.floober.engine.assets.loaders;
 
 import org.json.JSONObject;
 

@@ -1,7 +1,6 @@
 package com.floober.engine.renderEngine.fonts.fontMeshCreator;
 
-import com.floober.engine.display.DisplayManager;
-import com.floober.engine.display.Window;
+import com.floober.engine.util.configuration.Config;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -48,7 +47,7 @@ public class MetaFile {
 	 *            - the font file, stored as a string.
 	 */
 	protected MetaFile(String fileString) {
-		this.aspectRatio = (double) DisplayManager.getPrimaryGameWindow().getWidth() / (double) DisplayManager.getPrimaryGameWindow().getHeight();
+		this.aspectRatio = (double) Config.INTERNAL_WIDTH / (double) Config.INTERNAL_HEIGHT;
 		openFile(fileString);
 		loadPaddingData();
 		loadLineSizes();

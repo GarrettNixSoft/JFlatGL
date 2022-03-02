@@ -3,7 +3,8 @@ package com.floober.engine.util;
 public class Globals {
 
 	// GAME IDENTIFIER
-	public static final String GAME_TITLE = "FlooberEngine"; // TODO Customize this per project!
+	public static final String GAME_TITLE = "FlooberEngine"; // TODO Customize these per project!
+	public static final String GAME_TITLE_ON_DISK = "FlooberEngine";
 
 	// LOADING
 	// stage

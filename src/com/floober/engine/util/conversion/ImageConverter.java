@@ -1,7 +1,7 @@
 package com.floober.engine.util.conversion;
 
-import com.floober.engine.loaders.ImageLoader;
-import com.floober.engine.renderEngine.textures.Texture;
+import com.floober.engine.assets.loaders.ImageLoader;
+import com.floober.engine.renderEngine.textures.TextureComponent;
 import com.floober.engine.util.Logger;
 
 import java.awt.image.BufferedImage;
@@ -15,12 +15,12 @@ public class ImageConverter {
 	 * @param textureWidth The width of each texture.
 	 * @return An array of Textures.
 	 */
-	public static Texture[] convertToTextureArray(BufferedImage image, int textureWidth) {
+	public static TextureComponent[] convertToTextureArray(BufferedImage image, int textureWidth) {
 		// warn if the image does not evenly divide by the width
 		if (image.getWidth() % textureWidth != 0)
 			Logger.logWarning("BufferedImage width does not divide evenly by given width (" + image.getWidth() + ")");
 		// initialize the results array
-		Texture[] results = new Texture[image.getWidth() / textureWidth];
+		TextureComponent[] results = new TextureComponent[image.getWidth() / textureWidth];
 		// loop through and populate the array
 		for (int i = 0; i < results.length; ++i) {
 			BufferedImage subimage = image.getSubimage(i * textureWidth,  0, textureWidth, image.getHeight());
@@ -38,7 +38,7 @@ public class ImageConverter {
 	 * @param textureHeight The height of each texture.
 	 * @return An array of Textures.
 	 */
-	public static Texture[] convertToTextureArray(BufferedImage image, int textureWidth, int textureHeight) {
+	public static TextureComponent[] convertToTextureArray(BufferedImage image, int textureWidth, int textureHeight) {
 		// warn if the image does not evenly divide by the given dimensions
 		if (image.getWidth() % textureWidth != 0)
 			Logger.logWarning("BufferedImage width does not divide evenly by given width (" + image.getWidth() + ")");
@@ -47,7 +47,7 @@ public class ImageConverter {
 		// initialize the results array
 		int numRows = image.getHeight() / textureHeight;
 		int numCols = image.getWidth() / textureWidth;
-		Texture[] results = new Texture[numRows * numCols];
+		TextureComponent[] results = new TextureComponent[numRows * numCols];
 		// loop through and populate the array
 		for (int i = 0; i < results.length; i++) {
 			BufferedImage subimage = image.getSubimage(i % numCols * textureWidth, i / numRows * textureHeight, textureWidth, textureHeight);

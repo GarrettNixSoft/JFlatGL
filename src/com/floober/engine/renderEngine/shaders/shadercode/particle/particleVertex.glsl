@@ -14,6 +14,8 @@ out vec4 pass_color;
 
 uniform float numRows;
 
+out vec2 pos;
+
 void main(void) {
 
 	vec2 textureCoords = position + vec2(0.5, 0.5);
@@ -25,5 +27,6 @@ void main(void) {
 
 	gl_Position = transformationMatrix * vec4(position, 0.0, 1.0);
 	pass_color = color;
+	pos = position;
 
 }

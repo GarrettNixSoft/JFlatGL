@@ -4,7 +4,7 @@ import com.floober.engine.renderEngine.fonts.fontMeshCreator.FontType;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.TextMeshData;
 import com.floober.engine.renderEngine.models.ModelLoader;
-import com.floober.engine.renderEngine.renderers.MasterRenderer;
+import com.floober.engine.renderEngine.util.Layers;
 import com.floober.engine.util.Logger;
 
 import java.util.*;
@@ -19,8 +19,8 @@ public class TextMaster {
 	@SuppressWarnings("unchecked") // suck it, compiler; this is valid
 	public static void init() {
 		renderer = new FontRenderer();
-		texts = new HashMap[MasterRenderer.NUM_LAYERS];
-		for (int i = 0; i < MasterRenderer.NUM_LAYERS; i++) {
+		texts = new HashMap[Layers.NUM_LAYERS];
+		for (int i = 0; i < Layers.NUM_LAYERS; i++) {
 			texts[i] = new HashMap<>();
 		}
 	}

@@ -1,10 +1,10 @@
 package com.floober.engine.renderEngine.renderers;
 
 import com.floober.engine.assets.Textures;
+import com.floober.engine.assets.loaders.ImageLoader;
+import com.floober.engine.assets.loaders.Loader;
 import com.floober.engine.display.DisplayManager;
 import com.floober.engine.game.GameFlags;
-import com.floober.engine.loaders.ImageLoader;
-import com.floober.engine.loaders.Loader;
 import com.floober.engine.renderEngine.Render;
 import com.floober.engine.renderEngine.elements.TextureElement;
 import com.floober.engine.renderEngine.elements.geometry.RectElement;
@@ -76,11 +76,11 @@ public class LoadRenderer {
 		float screenCenterY = HEIGHT / 2f;
 		// load assets
 		// loading screen assets
-		Texture logo = ImageLoader.loadTexture("res/icon/icon512.png");
-		logoElement = new TextureElement(Textures.wrapTexture(logo), screenCenterX, screenCenterY - 200, 0, 256, 256, true);
+		TextureComponent logo = ImageLoader.loadTexture("res/icon/icon512.png");
+		logoElement = new TextureElement(logo, screenCenterX, screenCenterY - 200, 0, 256, 256, true);
 		logoElement.setHasTransparency(true);
-		Texture check = Loader.loadTexture("menu/load/load_check.png");
-		checkElement = new TextureElement(Textures.wrapTexture(check), screenCenterX, screenCenterY + 200, 0, 64, 64, true);
+		TextureComponent check = Loader.loadTexture("menu/load/load_check.png");
+		checkElement = new TextureElement(check, screenCenterX, screenCenterY + 200, 0, 64, 64, true);
 		checkElement.setHasTransparency(true);
 		FontType loadingFont = Loader.loadFont("aller");
 		// set colors
@@ -103,8 +103,7 @@ public class LoadRenderer {
 		baseBar = new RectElement(baseColor, WIDTH / 2f, HEIGHT / 2f + 30, 200, barWidth, barHeight, true);
 		progressBar = new RectElement(barColor, WIDTH / 2f - barWidth / 2f, HEIGHT / 2f + 30 - barHeight / 2f, 100, 0, barHeight, false);
 		// particle effect
-		Texture tex = ImageLoader.loadTexture("res/textures/particles/glow_map.png");
-		TextureComponent particleTex = Textures.wrapTexture(tex);
+		TextureComponent particleTex = ImageLoader.loadTexture("res/textures/particles/glow_map.png");
 		// particle effect
 		ParticleTexture particleTexture = new ParticleTexture(particleTex, 1, true);
 		Vector3f sourcePosition = new Vector3f(WIDTH / 2f - barWidth / 2f, HEIGHT / 2f + 30 - barHeight / 2f, 0);

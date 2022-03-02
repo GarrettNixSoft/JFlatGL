@@ -2,9 +2,15 @@
 	"textures": {
 		"default": "default.png",
 		"default2": "default2.png",
-		"gui_audio_icon_white": "gui/icons/audio_icon_white.png"
+		"gui_audio_icon_white": "gui/icons/audio_icon_white.png",
+		"glow_particle": "particles/glow_map.png"
 	},
 	"texture_sets": {
+		"default_set": {
+			"path": "default_set.png",
+			"tex_width": 32,
+			"tex_height": 32
+		},
 		"test_tilemap": {
 			"path": "tilesets/normal/test_tilemap.png",
 			"tex_width": 60,

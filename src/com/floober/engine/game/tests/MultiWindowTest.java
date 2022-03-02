@@ -1,14 +1,13 @@
 package com.floober.engine.game.tests;
 
+import com.floober.engine.assets.loaders.Loader;
 import com.floober.engine.audio.AudioMaster;
 import com.floober.engine.display.DisplayManager;
 import com.floober.engine.display.Window;
 import com.floober.engine.game.Game;
-import com.floober.engine.loaders.Loader;
 import com.floober.engine.renderEngine.Render;
 import com.floober.engine.renderEngine.fonts.fontRendering.TextMaster;
 import com.floober.engine.renderEngine.particles.ParticleMaster;
-import com.floober.engine.renderEngine.ppfx.PostProcessing;
 import com.floober.engine.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.util.Logger;
 import com.floober.engine.util.color.Colors;
@@ -17,15 +16,13 @@ import com.floober.engine.util.input.KeyInput;
 import com.floober.engine.util.input.MouseInput;
 import com.floober.engine.util.math.RandomUtil;
 import com.floober.engine.util.time.Sync;
-import org.joml.Vector2f;
-import org.lwjgl.glfw.Callbacks;
 
 import java.util.Objects;
 
 import static com.floober.engine.display.DisplayManager.primaryWindowID;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.glfw.GLFW.glfwSetErrorCallback;
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_VIEWPORT;
+import static org.lwjgl.opengl.GL11.glGetIntegerv;
 
 public class MultiWindowTest {
 
@@ -49,7 +46,8 @@ public class MultiWindowTest {
 
 		// Run the game loop!
 		while (!glfwWindowShouldClose(primaryWindowID)) {
-			// clear window
+
+			// clear window and make window context current
 			MasterRenderer.primaryWindowRenderer.prepare();
 
 			// poll input
@@ -58,8 +56,6 @@ public class MultiWindowTest {
 
 			if (KeyInput.isPressed(KeyInput.T)) Logger.log("Key press detected on primary window");
 			if (MouseInput.leftClick()) Logger.log("Left click detected on primary window");
-
-			Vector2f mousePos = MouseInput.getMousePos();
 
 			// run game logic
 			Game.update();
@@ -101,9 +97,6 @@ public class MultiWindowTest {
 					if (KeyInput.isPressed(KeyInput.T)) Logger.log("Key press detected on window #" + window.getWindowID());
 					if (MouseInput.leftClick()) Logger.log("Left click detected on window #" + window.getWindowID());
 
-					Vector2f mousePosDiff = MouseInput.getMousePos().sub(mousePos);
-//					Logger.log("Diff in mouse pos = " + mousePosDiff);
-
 //					glClearColor(1, 0, 0, 1);
 //					glClear(GL_COLOR_BUFFER_BIT);
 
@@ -123,8 +116,7 @@ public class MultiWindowTest {
 					windowRenderer.render();
 					// Post-processing is now handled automatically in the render call, no need to call it!
 
-					glfwSwapBuffers(window.getWindowID());
-					glfwPollEvents();
+					window.swapBuffers();
 				}
 			}
 
@@ -144,8 +136,8 @@ public class MultiWindowTest {
 		ParticleMaster.cleanUp();
 
 		// Clean up GLFW
-		Callbacks.glfwFreeCallbacks(primaryWindowID);
-		glfwDestroyWindow(primaryWindowID);
+		DisplayManager.cleanUp();
+
 
 		glfwTerminate();
 		Objects.requireNonNull(glfwSetErrorCallback(null)).free(); // shut up, compiler

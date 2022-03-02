@@ -1,7 +1,6 @@
 package com.floober.engine.renderEngine.lights;
 
 import com.floober.engine.display.DisplayManager;
-import com.floober.engine.display.Window;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 

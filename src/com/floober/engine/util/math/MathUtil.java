@@ -1,6 +1,5 @@
 package com.floober.engine.util.math;
 
-import com.floober.engine.util.Logger;
 import com.floober.engine.util.configuration.Config;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
@@ -58,7 +57,7 @@ public class MathUtil {
 		// create a projection matrix
 		Matrix4f projectionMatrix = new Matrix4f();
 		projectionMatrix.m00(1.0f / Config.INTERNAL_WIDTH);
-		projectionMatrix.m11(1.0f / Config.DEFAULT_HEIGHT);
+		projectionMatrix.m11(1.0f / Config.INTERNAL_HEIGHT);
 //		projectionMatrix.translation(translation);
 //		projectionMatrix.rotate((float) Math.toRadians(rz), new Vector3f(0,0,1));
 //		projectionMatrix.scale(new Vector3f(scale, 1));
@@ -249,6 +248,5 @@ public class MathUtil {
 		angle -= Math.PI / 2;
 		return (float) Math.toDegrees(angle);
 	}
-
 
 }

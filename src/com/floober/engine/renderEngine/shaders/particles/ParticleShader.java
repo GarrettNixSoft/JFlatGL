@@ -5,7 +5,7 @@ import com.floober.engine.renderEngine.shaders.ShaderProgram;
 public class ParticleShader extends ShaderProgram {
 
 	private static final String VERTEX_FILE = "/com/floober/engine/renderEngine/shaders/shadercode/particle/particleVertex.glsl";
-	private static final String FRAGMENT_FILE = "/com/floober/engine/renderEngine/shaders/shadercode/particle/particleFragment.glsl";
+	private static final String FRAGMENT_FILE = "/com/floober/engine/renderEngine/shaders/shadercode/particle/particlePointFragment.glsl";
 
 	private int location_numRows;
 

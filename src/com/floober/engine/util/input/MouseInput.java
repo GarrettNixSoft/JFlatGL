@@ -1,10 +1,7 @@
 package com.floober.engine.util.input;
 
-import com.floober.engine.display.DisplayManager;
 import com.floober.engine.display.Window;
 import com.floober.engine.renderEngine.renderers.MasterRenderer;
-import com.floober.engine.util.Logger;
-import com.floober.engine.util.configuration.Config;
 import com.floober.engine.util.math.Collisions;
 import org.joml.Vector2f;
 import org.joml.Vector2i;

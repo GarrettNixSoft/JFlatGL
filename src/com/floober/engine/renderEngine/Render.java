@@ -1,11 +1,10 @@
 package com.floober.engine.renderEngine;
 
-import com.floober.engine.display.DisplayManager;
 import com.floober.engine.renderEngine.elements.TextureElement;
 import com.floober.engine.renderEngine.elements.geometry.*;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.floober.engine.renderEngine.renderers.MasterRenderer;
-import com.floober.engine.util.Logger;
+import com.floober.engine.renderEngine.util.Layers;
 import com.floober.engine.util.configuration.Config;
 import org.joml.Vector4f;
 
@@ -78,7 +77,7 @@ public class Render {
 	 * @param color The color to fill.
 	 */
 	public static void fillScreen(Vector4f color) {
-		MasterRenderer.currentRenderTarget.addRectElement(new RectElement(color, 0, 0, MasterRenderer.BOTTOM_LAYER, Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT, false));
+		MasterRenderer.currentRenderTarget.addRectElement(new RectElement(color, 0, 0, Layers.BOTTOM_LAYER, Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT, false));
 	}
 
 	/**

@@ -1,8 +1,7 @@
 package com.floober.engine.renderEngine.renderers;
 
-import com.floober.engine.display.Window;
+import com.floober.engine.assets.loaders.ImageLoader;
 import com.floober.engine.display.DisplayManager;
-import com.floober.engine.loaders.ImageLoader;
 import com.floober.engine.renderEngine.elements.TextureElement;
 import com.floober.engine.renderEngine.framebuffers.FrameBuffer;
 import com.floober.engine.renderEngine.lights.LightMaster;

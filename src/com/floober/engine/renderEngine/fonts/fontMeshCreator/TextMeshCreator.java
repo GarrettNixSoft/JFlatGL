@@ -1,6 +1,8 @@
 package com.floober.engine.renderEngine.fonts.fontMeshCreator;
 
+import com.floober.engine.renderEngine.util.Layers;
 import com.floober.engine.util.data.Pair;
+import com.floober.engine.util.math.MathUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,6 +121,7 @@ public class TextMeshCreator {
 	}
 
 	private static void addVertices(List<Float> vertices, double x, double y, float z, double maxX, double maxY) {
+		z = 1 - MathUtil.interpolateBounded(0, Layers.TOP_LAYER, z);
 		vertices.add((float) x);
 		vertices.add((float) y);
 		vertices.add(z);

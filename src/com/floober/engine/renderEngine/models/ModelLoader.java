@@ -70,7 +70,7 @@ public class ModelLoader {
 		int vbo = glGenBuffers();
 		vbos.add(vbo);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glBufferData(GL_ARRAY_BUFFER, floatCount * 4, GL_STREAM_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, floatCount * 4L, GL_STREAM_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		return vbo;
 	}
@@ -89,7 +89,7 @@ public class ModelLoader {
 		buffer.put(data);
 		buffer.flip();
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glBufferData(GL_ARRAY_BUFFER, buffer.capacity() * 4, GL_STREAM_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, buffer.capacity() * 4L, GL_STREAM_DRAW);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, buffer);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
@@ -97,7 +97,7 @@ public class ModelLoader {
 	public static void addInstancedAttribute(int vao, int vbo, int attribute, int dataSize, int instancedDataLength, int offset) {
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
 		glBindVertexArray(vao);
-		glVertexAttribPointer(attribute, dataSize, GL_FLOAT, false, instancedDataLength * 4, offset * 4);
+		glVertexAttribPointer(attribute, dataSize, GL_FLOAT, false, instancedDataLength * 4, offset * 4L);
 		glVertexAttribDivisor(attribute, 1);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindVertexArray(0);

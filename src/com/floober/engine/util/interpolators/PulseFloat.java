@@ -57,7 +57,6 @@ public class PulseFloat extends FloatInterpolator {
 			// update alpha
 			float modifier = (float) Math.cos(elapsed / (float) frequency);
 			value = range * modifier + startValue;
-//			Logger.log(value + " = " + range + " * " + modifier + " + " + startValue);
 		}
 	}
 	

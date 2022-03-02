@@ -20,6 +20,23 @@ public class TextureComponent {
 		this.hasTransparency = hasTransparency;
 	}
 
+	public TextureComponent(int textureID, int width, int height) {
+		this.texture = new Texture(textureID, width, height);
+		this.hasTransparency = false;
+	}
+
+	public TextureComponent(int textureID, int width, int height, boolean hasTransparency) {
+		this.texture = new Texture(textureID, width, height);
+		this.hasTransparency = hasTransparency;
+	}
+
+	public TextureComponent(TextureComponent other) {
+		this.texture = other.texture;
+		this.textureOffset.set(other.textureOffset);
+		this.hasTransparency = other.hasTransparency;
+		this.alpha = other.alpha;
+	}
+
 	// GETTERS
 	public Texture texture() { return texture; }
 

@@ -4,24 +4,23 @@ import org.joml.Vector4f;
 
 public class OutlineElement extends GeometryElement {
 
-	private final LineElement[] lines;
-	private final float lineWidth;
+	private float round = 0;
+	private float lineWidth;
 
+	// CONSTRUCTORS
 	public OutlineElement(Vector4f color, float x, float y, int layer, float width, float height, float lineWidth, boolean centered) {
 		super(color, x, y, layer, centered);
 		this.width = width;
 		this.height = height;
 		this.lineWidth = lineWidth;
-		if (centered) {
-			x -= width / 2;
-			y -= height / 2;
-		}
-		lines = new LineElement[4];
-		lines[0] = new LineElement(color, x, y, x + width, y, layer, lineWidth); // top
-		lines[1] = new LineElement(color, x + width, y, x + width, y + height, layer, lineWidth); // right
-		lines[2] = new LineElement(color, x + width, y + height, x, y + height, layer, lineWidth); // bottom
-		lines[3] = new LineElement(color, x, y + height + lineWidth, x, y, layer, lineWidth); // left
-		// (for some reason I need to add lineWidth to the bottom of the left-side line when lineWidth is > 1, or else the bottom-left corner will be missing
+	}
+
+	public OutlineElement(Vector4f color, float x, float y, int layer, float width, float height, float lineWidth, float round, boolean centered) {
+		super(color, x, y, layer, centered);
+		this.width = width;
+		this.height = height;
+		this.lineWidth = lineWidth;
+		this.round = round;
 	}
 
 	public OutlineElement(Vector4f color, Vector4f bounds, int layer, float lineWidth, boolean centered) {
@@ -33,46 +32,34 @@ public class OutlineElement extends GeometryElement {
 			x -= width / 2;
 			y -= height / 2;
 		}
-		lines = new LineElement[4];
-		lines[0] = new LineElement(color, x, y, x + width, y, layer, lineWidth); // top
-		lines[1] = new LineElement(color, x + width, y, x + width, y + height, layer, lineWidth); // right
-		lines[2] = new LineElement(color, x + width, y + height, x, y + height, layer, lineWidth); // bottom
-		lines[3] = new LineElement(color, x, y + height + lineWidth, x, y, layer, lineWidth); // left
-		// (for some reason I need to add lineWidth to the bottom of the left-side line when lineWidth is > 1, or else the bottom-left corner will be missing
 	}
 
-	public LineElement[] getLines() {
-		return lines;
+	// GETTERS
+	public float getLineWidth() {
+		return lineWidth;
 	}
 
+	public float getRoundRadius() {
+		return round;
+	}
+
+	/**
+	 * Overrides {@code GeometryElement.hasTransparency()} to always return {@code true}.
+	 * Outline elements, by their very nature, should always contain transparent pixels.
+	 * @return true
+	 */
 	@Override
-	public void setColor(Vector4f color) {
-		super.setColor(color);
-		for (LineElement line : lines) {
-			line.setColor(color);
-		}
+	public boolean hasTransparency() {
+		return true;
 	}
 
-	@Override
-	public void setPosition(float x, float y, int layer) {
-		this.x = x;
-		this.y = y;
-		this.layer = layer;
-		if (centered) {
-			this.x -= width / 2;
-			this.y -= height / 2;
-		}
-		lines[0].setPosition(x, y, x + width, y, lineWidth); // top
-		lines[1].setPosition(x + width, y, x + width, y + height, lineWidth); // right
-		lines[2].setPosition(x + width, y + height, x, y + height, lineWidth); // bottom
-		lines[3].setPosition(x, y + height + lineWidth, x, y, lineWidth); // left
+	// SETTERS
+	public void setRoundRadius(float r) {
+		this.round = r;
 	}
 
-	@Override
-	public void transform() {
-		super.transform();
-		for (LineElement line : lines)
-			line.transform();
+	public void setLineWidth(float lineWidth) {
+		this.lineWidth = lineWidth;
 	}
 
 }

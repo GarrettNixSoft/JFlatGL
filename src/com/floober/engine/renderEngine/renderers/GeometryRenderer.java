@@ -4,6 +4,7 @@ import com.floober.engine.renderEngine.elements.geometry.*;
 import com.floober.engine.renderEngine.models.ModelLoader;
 import com.floober.engine.renderEngine.models.QuadModel;
 import com.floober.engine.renderEngine.shaders.geometry.CircleShader;
+import com.floober.engine.renderEngine.shaders.geometry.OutlineShader;
 import com.floober.engine.renderEngine.shaders.geometry.RectLightShader;
 import com.floober.engine.renderEngine.shaders.geometry.RectShader;
 import com.floober.engine.util.Logger;
@@ -34,6 +35,7 @@ public class GeometryRenderer {
 	private final RectShader rectShader;
 	private final RectLightShader rectLightShader;
 	private final CircleShader circleShader;
+	private final OutlineShader outlineShader;
 
 	// debug
 	public static int ELEMENT_COUNT = 0;
@@ -45,6 +47,7 @@ public class GeometryRenderer {
 		rectShader = new RectShader();
 		rectLightShader = new RectLightShader();
 		circleShader = new CircleShader();
+		outlineShader = new OutlineShader();
 	}
 
 	// RENDER METHODS
@@ -58,6 +61,7 @@ public class GeometryRenderer {
 
 			Matrix4f transformationMatrix = MathUtil.createTransformationMatrix(rectElement.getRenderPosition(), rectElement.getScale(), rectElement.getRotation());
 			rectShader.loadRoundRadius(rectElement.getRoundRadius());
+			rectShader.loadRoundMode(rectElement.getRoundingMode());
 			rectShader.loadDimensions(new Vector2f(rectElement.getHeight(), rectElement.getWidth()));
 			rectShader.loadColor(rectElement.getColor());
 			rectShader.loadTransformationMatrix(transformationMatrix);
@@ -73,7 +77,7 @@ public class GeometryRenderer {
 
 		ELEMENT_COUNT += elements.size();
 
-		prepareLightRectangles();
+		prepareLightRectangles(false);
 
 		for (RectElementLight element : elements) {
 
@@ -106,6 +110,7 @@ public class GeometryRenderer {
 			circleShader.loadTransformationMatrix(transformationMatrix);
 			circleShader.loadCenter(circleElement.getCenter());
 			circleShader.loadInnerRadius(circleElement.getInnerRadius());
+//			Logger.log("Inner radius = " + circleElement.getInnerRadius());
 			circleShader.loadOuterRadius(circleElement.getOuterRadius());
 			circleShader.loadPortion(circleElement.getPortion());
 			circleShader.loadSmoothness(circleElement.getSmoothness());
@@ -133,17 +138,23 @@ public class GeometryRenderer {
 
 	public void renderOutlines(List<OutlineElement> outlines, boolean depthWritingEnabled) {
 
-		ELEMENT_COUNT += outlines.size() * 4;
+		ELEMENT_COUNT += outlines.size();
 
-		prepareRectangles(depthWritingEnabled);
+		prepareOutlines(depthWritingEnabled);
 
 		for (OutlineElement outlineElement : outlines) {
-			for (LineElement lineElement : outlineElement.getLines()) {
-				renderLineElement(lineElement);
-			}
+
+			Matrix4f transformationMatrix = MathUtil.createTransformationMatrix(outlineElement.getRenderPosition(), outlineElement.getScale(), outlineElement.getRotation());
+			outlineShader.loadRoundRadius(outlineElement.getRoundRadius());
+			outlineShader.loadDimensions(new Vector2f(outlineElement.getHeight(), outlineElement.getWidth()));
+			outlineShader.loadColor(outlineElement.getColor());
+			outlineShader.loadLineWidth(outlineElement.getLineWidth() / outlineElement.getWidth());
+			outlineShader.loadTransformationMatrix(transformationMatrix);
+			glDrawArrays(GL_TRIANGLE_STRIP, 0, quad.vertexCount());
+
 		}
 
-		finishRectangles();
+		finishOutlines();
 
 	}
 
@@ -174,12 +185,12 @@ public class GeometryRenderer {
 		rectShader.stop();
 	}
 
-	private void prepareLightRectangles() {
+	private void prepareLightRectangles(boolean depthWritingEnabled) {
 		rectLightShader.start();
 		glBindVertexArray(quad.vaoID());
 		glEnableVertexAttribArray(0);
 		glEnable(GL_BLEND);
-		glDepthMask(false); // light rectangles never render to depth mask
+		glDepthMask(depthWritingEnabled);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glEnable(GL_DEPTH_TEST);
 	}
@@ -208,6 +219,24 @@ public class GeometryRenderer {
 		glDisableVertexAttribArray(0);
 		glBindVertexArray(0);
 		circleShader.stop();
+	}
+
+	private void prepareOutlines(boolean depthWritingEnabled) {
+		outlineShader.start();
+		glBindVertexArray(quad.vaoID());
+		glEnableVertexAttribArray(0);
+		glEnable(GL_BLEND);
+		glDepthMask(depthWritingEnabled);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glEnable(GL_DEPTH_TEST);
+	}
+
+	private void finishOutlines() {
+		glDisable(GL_BLEND);
+		glDisable(GL_DEPTH_TEST);
+		glDisableVertexAttribArray(0);
+		glBindVertexArray(0);
+		outlineShader.stop();
 	}
 
 	public void cleanUp() {

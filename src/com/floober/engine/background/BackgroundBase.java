@@ -1,13 +1,13 @@
 package com.floober.engine.background;
 
 import com.floober.engine.animation.Animation;
-import com.floober.engine.display.Window;
 import com.floober.engine.display.DisplayManager;
 import com.floober.engine.renderEngine.Render;
 import com.floober.engine.renderEngine.elements.TextureElement;
 import com.floober.engine.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.renderEngine.textures.TextureComponent;
 import com.floober.engine.renderEngine.textures.TextureSet;
+import com.floober.engine.renderEngine.util.Layers;
 
 /**
  * @author Floober
@@ -63,7 +63,7 @@ public class BackgroundBase {
 
 	private void updateTextureElement(float x, float y, float width, float height) {
 		textureElement.setTexture(animation.getCurrentFrame());
-		textureElement.setPosition(x, y, MasterRenderer.BOTTOM_LAYER);
+		textureElement.setPosition(x, y, Layers.BOTTOM_LAYER);
 		textureElement.setSize(width, height);
 		textureElement.transform();
 	}

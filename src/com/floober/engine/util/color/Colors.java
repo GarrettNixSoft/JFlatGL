@@ -84,4 +84,10 @@ public class Colors {
 				baseColor.w * (1f - mixPercentage) + mixColor.w * mixPercentage
 		);
 	}
+
+	public static Vector4f fade(Vector4f baseColor, float alpha) {
+		Vector4f result = new Vector4f(baseColor);
+		result.w *= alpha;
+		return result;
+	}
 }

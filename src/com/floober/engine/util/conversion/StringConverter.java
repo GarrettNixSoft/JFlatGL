@@ -1,6 +1,8 @@
 package com.floober.engine.util.conversion;
 
 import org.joml.Vector2f;
+import org.joml.Vector2i;
+import org.joml.Vector4f;
 
 import java.util.List;
 
@@ -11,8 +13,27 @@ import java.util.List;
  * 
  */
 public class StringConverter {
-	
-	public StringConverter() {}
+
+	public static String vectorToString(Object vecObj) {
+		return switch (vecObj) {
+			case Vector4f v4f -> vec4fToString(v4f);
+			case Vector2f v2f -> vec2fToString(v2f);
+			case Vector2i v2i -> vec2iToString(v2i);
+			default -> vecObj.toString();
+		};
+	}
+
+	public static String vec4fToString(Vector4f vector) {
+		return "Vector4f(" + vector.x() + ", " + vector.y() + ", " + vector.z() + ", " + vector.w() + ")";
+	}
+
+	public static String vec2fToString(Vector2f vector) {
+		return "Vector4f(" + vector.x() + ", " + vector.y() + ")";
+	}
+
+	public static String vec2iToString(Vector2i vector) {
+		return "Vector4f(" + vector.x() + ", " + vector.y() + ")";
+	}
 	
 	/*
 	 * Given a list of strings, return them all combined

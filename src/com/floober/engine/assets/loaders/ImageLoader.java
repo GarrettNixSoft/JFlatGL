@@ -1,8 +1,10 @@
-package com.floober.engine.loaders;
+package com.floober.engine.assets.loaders;
 
 import com.floober.engine.renderEngine.textures.RawTextureData;
 import com.floober.engine.renderEngine.textures.Texture;
+import com.floober.engine.renderEngine.textures.TextureComponent;
 import com.floober.engine.util.Logger;
+import com.floober.engine.util.file.FileUtil;
 import com.floober.engine.util.file.ResourceLoader;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.system.MemoryStack;
@@ -31,7 +33,7 @@ public class ImageLoader {
 	 * @param path The path to the texture file.
 	 * @return A Texture to reference the loaded image.
 	 */
-	public static Texture loadTexture(String path) {
+	public static TextureComponent loadTexture(String path) {
 		// report load
 		Logger.logLoad("Loading texture: " + path);
 		// init OpenGL texture
@@ -56,11 +58,13 @@ public class ImageLoader {
 		glBindTexture(GL_TEXTURE_2D, 0);
 		// add to list to clean up
 		textures.add(textureID);
-		// create the Texture object and return it
-		return new Texture(textureID, width, height);
+		// create the Texture object
+		Texture texture = new Texture(textureID, width, height);
+		// wrap it in a TextureComponent and return it
+		return new TextureComponent(texture);
 	}
 
-	public static Texture loadTexture(ByteBuffer textureData) {
+	public static TextureComponent loadTexture(ByteBuffer textureData) {
 		// report load
 //		Logger.logLoad("Loading texture from ByteBuffer...");
 		// init OpenGL texture
@@ -88,7 +92,7 @@ public class ImageLoader {
 		// add to list to clean up
 		textures.add(textureID);
 		// create the Texture object and return it
-		return new Texture(textureID, width, height);
+		return new TextureComponent(new Texture(textureID, width, height));
 	}
 
 	/**
@@ -204,8 +208,8 @@ public class ImageLoader {
 		}
 		catch (Exception e1) {
 			try {
-				Logger.logLoad("Export-load failed, trying in-development load...");
-				in = ResourceLoader.getResourceAsStream("res/" + path); // in development
+				Logger.logError("Export-load failed, trying in-development load...");
+				in = ResourceLoader.getResourceAsStream("res" + FileUtil.SEPARATOR + path); // in development
 			} catch (Exception e2) {
 				Logger.logError("In-development load failed. Resource could not be found.");
 			}

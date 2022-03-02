@@ -1,14 +1,13 @@
 package com.floober.engine.game.tests;
 
+import com.floober.engine.assets.loaders.Loader;
 import com.floober.engine.audio.AudioMaster;
 import com.floober.engine.display.DisplayManager;
 import com.floober.engine.game.Game;
-import com.floober.engine.loaders.Loader;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.floober.engine.renderEngine.fonts.fontRendering.TextMaster;
 import com.floober.engine.renderEngine.particles.ParticleMaster;
 import com.floober.engine.renderEngine.particles.systems.FireScreenParticleSystem;
-import com.floober.engine.renderEngine.ppfx.PostProcessing;
 import com.floober.engine.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.util.Logger;
 import com.floober.engine.util.color.Colors;

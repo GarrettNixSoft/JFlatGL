@@ -1,15 +1,14 @@
 package com.floober.engine.game;
 
+import com.floober.engine.assets.loaders.Loader;
 import com.floober.engine.audio.AudioMaster;
 import com.floober.engine.display.DisplayManager;
 import com.floober.engine.gui.GUIManager;
-import com.floober.engine.loaders.Loader;
 import com.floober.engine.renderEngine.Screenshot;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.floober.engine.renderEngine.fonts.fontRendering.FontRenderer;
 import com.floober.engine.renderEngine.fonts.fontRendering.TextMaster;
 import com.floober.engine.renderEngine.particles.ParticleMaster;
-import com.floober.engine.renderEngine.ppfx.PostProcessing;
 import com.floober.engine.renderEngine.renderers.GeometryRenderer;
 import com.floober.engine.renderEngine.renderers.LoadRenderer;
 import com.floober.engine.renderEngine.renderers.MasterRenderer;

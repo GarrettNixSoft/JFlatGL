@@ -1,5 +1,6 @@
 package com.floober.engine.renderEngine.fonts.fontMeshCreator;
 
+import com.floober.engine.game.Game;
 import com.floober.engine.renderEngine.fonts.fontRendering.TextMaster;
 import com.floober.engine.renderEngine.models.ModelLoader;
 import com.floober.engine.util.Logger;
@@ -51,10 +52,52 @@ public class GUIText {
 	private boolean processed;
 	private boolean needsReload;
 
+	public GUIText() {
+		this.textString = "";
+		this.fontSize = 1;
+		this.font = Game.getFont("default");
+		this.position = new Vector3f();
+		this.lineMaxSize = 1;
+		this.centerText = false;
+		this.firstCharVisible = 0;
+		this.lastCharVisible = textString.length();
+		// default values
+		this.width = 0.5f;
+		this.edge = 0.01f;
+		this.borderWidth = 0;
+		this.borderEdge = 0.1f;
+		this.shadowOffset = new Vector2f(0, 0);
+		this.outlineColor = new Vector4f(0, 0, 0, 1);
+		this.hidden = true;
+		// create mesh data
+		TextMaster.processText(this);
+	}
+
+	public GUIText(String text) {
+		this.textString = text;
+		this.fontSize = 1;
+		this.font = Game.getFont("default");
+		this.position = new Vector3f();
+		this.lineMaxSize = 1;
+		this.centerText = false;
+		this.firstCharVisible = 0;
+		this.lastCharVisible = textString.length();
+		// default values
+		this.width = 0.5f;
+		this.edge = 0.01f;
+		this.borderWidth = 0;
+		this.borderEdge = 0.1f;
+		this.shadowOffset = new Vector2f(0, 0);
+		this.outlineColor = new Vector4f(0, 0, 0, 1);
+		this.hidden = true;
+		// create mesh data
+		TextMaster.processText(this);
+	}
+
 	/**
 	 * Creates a new text, loads the text's quads into a VAO, and adds the text
 	 * to the screen.
-	 * 
+	 *
 	 * @param text The text.
 	 * @param fontSize The font size of the text, where a font size of 1 is the
 	 *            default size.
@@ -403,6 +446,7 @@ public class GUIText {
 			try {
 				float textHeight = textMeshData.textHeight();
 				position.y -= textHeight / 2;
+				if (textString.startsWith("Floober101")) Logger.log("text y = " + position.y);
 			} catch (Exception e) {
 				// guess we're not ready for that yet
 				Logger.logWarning("Maybe don't center this text yet, if you can help it");

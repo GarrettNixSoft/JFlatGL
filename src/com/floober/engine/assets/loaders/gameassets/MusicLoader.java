@@ -1,19 +1,20 @@
-package com.floober.engine.loaders.assets;
+package com.floober.engine.assets.loaders.gameassets;
 
+import com.floober.engine.assets.loaders.AssetLoader;
+import com.floober.engine.assets.loaders.Loader;
 import com.floober.engine.audio.Sound;
 import com.floober.engine.game.Game;
-import com.floober.engine.loaders.Loader;
 import com.floober.engine.renderEngine.renderers.LoadRenderer;
 import com.floober.engine.util.Globals;
 import com.floober.engine.util.Logger;
+import com.floober.engine.util.file.FileUtil;
 
 import java.io.File;
 
 public class MusicLoader extends AssetLoader {
 
 	public MusicLoader() {
-		super();
-		directory = Loader.getJSON("/assets/music_directory.json");
+		directory = FileUtil.getJSON("/assets/music_directory.json");
 	}
 
 	@Override

@@ -2,9 +2,10 @@ package com.floober.engine.renderEngine.textures;
 
 import org.joml.Vector4f;
 
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public record TextureSet(Texture baseTex, int texWidth, int texHeight, boolean hasTransparency) {
+public record TextureSet(TextureComponent baseTex, int texWidth, int texHeight, boolean hasTransparency) implements Iterable<TextureComponent> {
 
 	public int getNumTextures() { return (baseTex().width() / texWidth) * (baseTex().height() / texHeight); }
 
@@ -22,12 +23,30 @@ public record TextureSet(Texture baseTex, int texWidth, int texHeight, boolean h
 	}
 
 	public TextureComponent getFrame(int index) {
-		Texture texCopy = baseTex.copy();
+		Texture texCopy = new Texture(baseTex.id(), texWidth, texHeight);
 		Vector4f offsets = getTextureOffset(index);
 		TextureComponent frame = new TextureComponent(texCopy);
 		frame.setTextureOffset(offsets);
 		frame.setHasTransparency(hasTransparency);
 		return frame;
+	}
+
+	public Iterator<TextureComponent> iterator() {
+		return new Iterator<>() {
+
+			private int index = 0;
+
+			@Override
+			public boolean hasNext() {
+				return index < getNumTextures();
+			}
+
+			@Override
+			public TextureComponent next() {
+				return getFrame(index++);
+			}
+
+		};
 	}
 
 }

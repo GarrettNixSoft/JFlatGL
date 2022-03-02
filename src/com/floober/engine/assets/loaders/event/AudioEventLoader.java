@@ -1,25 +1,25 @@
-package com.floober.engine.loaders.event;
+package com.floober.engine.assets.loaders.event;
 
 import com.floober.engine.event.DelayEvent;
+import com.floober.engine.event.QueuedEvent;
 import com.floober.engine.event.TriggerEventQueue;
 import com.floober.engine.event.audio.*;
-import com.floober.engine.loaders.Loader;
+import com.floober.engine.util.file.FileUtil;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
  * Load Audio Events from a JSON file.
  */
-public class AudioEventLoader extends EventLoader {
+public class AudioEventLoader extends EventLoader<QueuedEvent> {
 
-	@SuppressWarnings("unchecked")
 	public void load(String path) {
 
 		// create queue for storing events
-		eventQueue = new TriggerEventQueue<AudioEvent>();
+		eventQueue = new TriggerEventQueue<>();
 
 		// load JSON
-		JSONObject json = Loader.getJSON(path);
+		JSONObject json = FileUtil.getJSON(path);
 		JSONArray events = json.getJSONArray("events");
 
 		// parse events

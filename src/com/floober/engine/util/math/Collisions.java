@@ -1,6 +1,8 @@
 package com.floober.engine.util.math;
 
 import com.floober.engine.entity.core.Entity;
+import com.floober.engine.util.Logger;
+import com.floober.engine.util.configuration.Config;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
 import org.joml.Vector3f;
@@ -64,11 +66,66 @@ public class Collisions {
 	}
 
 	public static boolean intersects(Vector4f bounds1, Vector4f bounds2) {
-		Vector2f point1 = new Vector2f(bounds2.x, bounds2.y);
-		Vector2f point2 = new Vector2f(bounds2.z, bounds2.y);
-		Vector2f point3 = new Vector2f(bounds2.z, bounds2.w);
-		Vector2f point4 = new Vector2f(bounds2.x, bounds2.w);
-		return contains(bounds1, point1) || contains(bounds1, point2) || contains(bounds1, point3) || contains(bounds1, point4);
+		Vector2f[] corners1 = new Vector2f[4];
+		corners1[0] = new Vector2f(bounds1.x, bounds1.y);
+		corners1[1] = new Vector2f(bounds1.z, bounds1.y);
+		corners1[2] = new Vector2f(bounds1.z, bounds1.w);
+		corners1[3] = new Vector2f(bounds1.x, bounds1.w);
+		Vector2f[] corners2 = new Vector2f[4];
+		corners2[0] = new Vector2f(bounds2.x, bounds2.y);
+		corners2[1] = new Vector2f(bounds2.z, bounds2.y);
+		corners2[2] = new Vector2f(bounds2.z, bounds2.w);
+		corners2[3] = new Vector2f(bounds2.x, bounds2.w);
+		return checkIntersectionOneWay(bounds1, corners2) || checkIntersectionOneWay(bounds2, corners1);
+	}
+
+	private static boolean checkIntersectionOneWay(Vector4f bounds, Vector2f[] corners) {
+		if (Config.DEBUG_MODE) {
+			if (contains(bounds, corners[0])) {
+//				Logger.log("Top left corner contained");
+				return true;
+			} else if (contains(bounds, corners[1])) {
+//				Logger.log("Top right corner contained");
+				return true;
+			} else if (contains(bounds, corners[2])) {
+//				Logger.log("Bottom right corner contained");
+				return true;
+			} else if (contains(bounds, corners[3])) {
+//				Logger.log("Bottom left corner contained");
+				return true;
+			} else return false;
+		}
+		else {
+			return  contains(bounds, corners[0]) ||
+					contains(bounds, corners[1]) ||
+					contains(bounds, corners[2]) ||
+					contains(bounds, corners[3]);
+		}
+	}
+
+	/**
+	 * Determine what proportion of {@code rect1}'s area
+	 * overlaps with {@code rect2}'s area.
+	 * @param rect1 the rect to find the proportion of
+	 * @param rect2 the rect that is intersected
+	 * @return a float in the range [0..1]
+	 */
+	public static float overlapProportion(Vector4f rect1, Vector4f rect2) {
+		// there is no overlap if they don't intersect
+		if (!intersects(rect1, rect2)) return 0;
+		// find the area of rect1
+		float rectArea = (rect1.z - rect1.x) * (rect1.w - rect1.y);
+//		Logger.log("Rect area = " + rectArea);
+		// find the rectangle representing the overlapping area
+		float l = Math.max(rect1.x, rect2.x);
+		float r = Math.min(rect1.z, rect2.z);
+		float t = Math.max(rect1.y, rect2.y);
+		float b = Math.min(rect1.w, rect2.w);
+		// calculate its area
+		float overlapArea = (r - l) * (b - t);
+//		Logger.log("overlap area = " + overlapArea);
+		// return the proportion
+		return overlapArea / rectArea;
 	}
 
 	/**

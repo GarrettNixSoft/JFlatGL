@@ -4,10 +4,10 @@ import com.floober.engine.game.Game;
 import com.floober.engine.renderEngine.particles.types.LightParticle;
 import com.floober.engine.renderEngine.particles.types.Particle;
 import com.floober.engine.renderEngine.particles.types.TexturedParticle;
-import com.floober.engine.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.renderEngine.renderers.ParticleLightRenderer;
 import com.floober.engine.renderEngine.renderers.ParticleRenderer;
 import com.floober.engine.renderEngine.renderers.ParticleTexturedRenderer;
+import com.floober.engine.renderEngine.util.Layers;
 import com.floober.engine.util.Logger;
 import com.floober.engine.util.Sorting;
 import org.joml.Vector4f;
@@ -17,15 +17,15 @@ import java.util.*;
 public class ParticleMaster {
 
 	@SuppressWarnings("unchecked") // Regular particles (Source or not)
-	private static final Map<ParticleTexture, List<Particle>>[] particles = new HashMap[MasterRenderer.NUM_LAYERS];
+	private static final Map<ParticleTexture, List<Particle>>[] particles = new HashMap[Layers.NUM_LAYERS];
 	private static ParticleRenderer particleRenderer;
 
 	@SuppressWarnings("unchecked") // Light-emitting particles
-	private static final List<LightParticle>[] lightEmittingParticles = new ArrayList[MasterRenderer.NUM_LAYERS];
+	private static final List<LightParticle>[] lightEmittingParticles = new ArrayList[Layers.NUM_LAYERS];
 	private static ParticleLightRenderer lightParticleRenderer;
 
 	@SuppressWarnings("unchecked") // Textured particles
-	private static final Map<ParticleTexture, List<TexturedParticle>>[] texturedParticles = new HashMap[MasterRenderer.NUM_LAYERS];
+	private static final Map<ParticleTexture, List<TexturedParticle>>[] texturedParticles = new HashMap[Layers.NUM_LAYERS];
 	private static ParticleTexturedRenderer texturedParticleRenderer;
 
 	// Total particle counter
@@ -40,7 +40,7 @@ public class ParticleMaster {
 		particleRenderer = new ParticleRenderer();
 		lightParticleRenderer = new ParticleLightRenderer();
 		texturedParticleRenderer = new ParticleTexturedRenderer();
-		for (int i = 0; i < MasterRenderer.NUM_LAYERS; ++i) {
+		for (int i = 0; i < Layers.NUM_LAYERS; ++i) {
 			particles[i] = new HashMap<>();
 			lightEmittingParticles[i] = new ArrayList<>();
 			texturedParticles[i] = new HashMap<>();
@@ -78,7 +78,7 @@ public class ParticleMaster {
 	public static void update() {
 
 		// FOR each LAYER
-		for (int i = 0; i < MasterRenderer.NUM_LAYERS; ++i) {
+		for (int i = 0; i < Layers.NUM_LAYERS; ++i) {
 
 			// get the key set to iterate over
 			Set<ParticleTexture> keySet = particles[i].keySet();
@@ -169,7 +169,7 @@ public class ParticleMaster {
 	// GETTERS
 	public static int getParticleCount() {
 		int total = 0;
-		for (int i = 0; i < MasterRenderer.NUM_LAYERS; ++i) {
+		for (int i = 0; i < Layers.NUM_LAYERS; ++i) {
 			for (ParticleTexture particleTexture : particles[i].keySet()) {
 				total += particles[i].get(particleTexture).size();
 			}
@@ -183,7 +183,7 @@ public class ParticleMaster {
 
 	// ACTIONS
 	public static void setColorForAllParticlesOfType(ParticleTexture key, Vector4f color) {
-		for (int i = 0; i < MasterRenderer.NUM_LAYERS; ++i) {
+		for (int i = 0; i < Layers.NUM_LAYERS; ++i) {
 			List<Particle> particleList = particles[i].get(key);
 			for (Particle particle : particleList) {
 				particle.setColor(color.x(), color.y(), color.z(), particle.getColor().w());

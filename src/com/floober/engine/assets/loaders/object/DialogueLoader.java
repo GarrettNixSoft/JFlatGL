@@ -1,15 +1,17 @@
-package com.floober.engine.loaders.object;
+package com.floober.engine.assets.loaders.object;
 
 import com.floober.engine.assets.Textures;
+import com.floober.engine.assets.loaders.Loader;
 import com.floober.engine.game.Game;
 import com.floober.engine.gui.dialogue.*;
-import com.floober.engine.loaders.Loader;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.FontType;
 import com.floober.engine.renderEngine.textures.Texture;
+import com.floober.engine.renderEngine.textures.TextureComponent;
 import com.floober.engine.util.Logger;
 import com.floober.engine.util.color.ColorConverter;
 import com.floober.engine.util.color.Colors;
 import com.floober.engine.util.configuration.Settings;
+import com.floober.engine.util.file.FileUtil;
 import org.joml.Vector4f;
 import org.json.JSONObject;
 
@@ -19,13 +21,13 @@ public class DialogueLoader {
 	private static final JSONObject faceMap;
 
 	static {
-		nameMap = Loader.getJSON("/level_data/dialogue/maps/name_map.json");
-		faceMap = Loader.getJSON("/level_data/dialogue/maps/face_map.json");
+		nameMap = FileUtil.getJSON("/level_data/dialogue/maps/name_map.json");
+		faceMap = FileUtil.getJSON("/level_data/dialogue/maps/face_map.json");
 	}
 
 	public static Dialogue load(String path) {
 		// get file
-		String[] lines = Loader.getFileRaw("level_data/dialogue/" + path);
+		String[] lines = FileUtil.getFileRaw("level_data/dialogue/" + path);
 		// first line is for settings
 		assert lines != null;
 		// load lines and return result
@@ -50,7 +52,7 @@ public class DialogueLoader {
 	private static DialogueLine parseLine(String rawLine) {
 //		Logger.log("Parsing line: " + rawLine);
 		// all variables that need to be initialized before construction, with some default values
-		Texture face;
+		TextureComponent face;
 		String name, line;
 		FontType textFont = null, nameFont = null;
 		Vector4f textColor = new Vector4f(Colors.WHITE), nameColor = new Vector4f(Colors.WHITE), backgroundColor = new Vector4f(0.05f, 0.05f, 0.05f, 0.5f);
@@ -130,10 +132,10 @@ public class DialogueLoader {
 		String faceId = faceMap.getString(identity);
 		name = nameMap.getString(identity);
 		// retrieve face tex
-		face = Game.getTexture(faceId).texture();
+		face = Game.getTexture(faceId);
 		// TODO add more code to parse extra tokens (can be affected by settings values from first line)
 		// create and return line
-		DialogueLine result = new DialogueLine(Textures.wrapTexture(face), name, line);
+		DialogueLine result = new DialogueLine(face, name, line);
 		// charDelay, auto, jumpLabel
 		result.setNameFont(nameFont);
 		result.setTextFont(textFont);

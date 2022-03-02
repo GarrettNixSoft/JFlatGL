@@ -2,13 +2,12 @@ package com.floober.engine.game;
 
 import com.floober.engine.animation.Animation;
 import com.floober.engine.assets.*;
+import com.floober.engine.assets.loaders.GameLoader;
 import com.floober.engine.audio.Sound;
 import com.floober.engine.game.gameState.GameStateManager;
-import com.floober.engine.loaders.GameLoader;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.FontType;
 import com.floober.engine.renderEngine.fonts.fontRendering.TextMaster;
 import com.floober.engine.renderEngine.particles.ParticleMaster;
-import com.floober.engine.renderEngine.ppfx.PostProcessing;
 import com.floober.engine.renderEngine.textures.Texture;
 import com.floober.engine.renderEngine.textures.TextureAtlas;
 import com.floober.engine.renderEngine.textures.TextureComponent;
@@ -66,11 +65,13 @@ public class Game {
 	public static void init() {
 		// master components
 		TextMaster.init();
-		ParticleMaster.init();
-		ParticleMaster.initGlobals();
+		TextureAnalyzer.init();
 		// the game itself (load assets)
 		instance.load();
 		instance.gsm = new GameStateManager(instance);
+		// load particles AFTER textures are loaded (some particles need to load textures from the game's pool)
+		ParticleMaster.init();
+		ParticleMaster.initGlobals();
 	}
 
 	/**
@@ -243,7 +244,7 @@ public class Game {
 		return Textures.generateStaticSet(getTexture(key));
 	}
 
-	public static Texture[] getTextureArray(String key) {
+	public static TextureComponent[] getTextureArray(String key) {
 		return instance.textures.getTextureArray(key);
 	}
 

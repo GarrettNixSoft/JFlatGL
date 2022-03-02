@@ -1,5 +1,8 @@
 package com.floober.engine.renderEngine.shaders;
 
+import com.floober.engine.renderEngine.util.Layers;
+import com.floober.engine.util.Logger;
+import com.floober.engine.util.math.MathUtil;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -46,7 +49,13 @@ public class FontShader extends ShaderProgram{
 		super.loadVector(location_color, color);
 	}
 	public void loadTranslation(Vector3f translation) {
-		super.loadVector(location_translation, translation);
+		Vector3f pos = new Vector3f(translation);
+//		pos.z = 1;
+		pos.z = 1 - MathUtil.interpolateBounded(0, Layers.TOP_LAYER, translation.z);
+//		Logger.log("text is at z = " + pos.z);
+		super.loadVector(location_translation, pos);
+//		Logger.log("text is at z = " + translation.z);
+//		super.loadVector(location_translation, translation);
 	}
 	public void loadWidth(float width) {
 		super.loadFloat(location_width, width);

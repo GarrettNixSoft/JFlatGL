@@ -1,17 +1,18 @@
-package com.floober.engine.loaders.assets;
+package com.floober.engine.assets.loaders.gameassets;
 
+import com.floober.engine.assets.loaders.AssetLoader;
+import com.floober.engine.assets.loaders.Loader;
 import com.floober.engine.game.Game;
-import com.floober.engine.loaders.Loader;
 import com.floober.engine.renderEngine.fonts.fontMeshCreator.FontType;
 import com.floober.engine.renderEngine.renderers.LoadRenderer;
 import com.floober.engine.util.Globals;
 import com.floober.engine.util.Logger;
+import com.floober.engine.util.file.FileUtil;
 
 public class FontLoader extends AssetLoader {
 
 	public FontLoader() {
-		super();
-		directory = Loader.getJSON("/assets/fonts_directory.json");
+		directory = FileUtil.getJSON("/assets/fonts_directory.json");
 	}
 
 	@Override
