@@ -1,10 +1,10 @@
 package com.floober.engine.gui.dialogue;
 
-import com.floober.engine.game.Game;
-import com.floober.engine.renderEngine.Render;
-import com.floober.engine.renderEngine.elements.TextureElement;
-import com.floober.engine.renderEngine.textures.TextureComponent;
-import com.floober.engine.util.interpolators.PulseFloat;
+import com.floober.engine.core.Game;
+import com.floober.engine.core.renderEngine.Render;
+import com.floober.engine.core.renderEngine.elements.TextureElement;
+import com.floober.engine.core.renderEngine.textures.TextureComponent;
+import com.floober.engine.core.util.interpolators.PulseFloat;
 
 public class Arrow {
 

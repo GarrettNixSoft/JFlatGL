@@ -1,7 +1,7 @@
 package com.floober.engine.gui.event;
 
 import com.floober.engine.gui.component.GUIComponent;
-import com.floober.engine.util.time.Timer;
+import com.floober.engine.core.util.time.Timer;
 
 /**
  * The ScaleEvent will change its target component's

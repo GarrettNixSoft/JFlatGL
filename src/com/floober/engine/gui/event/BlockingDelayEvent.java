@@ -1,7 +1,7 @@
 package com.floober.engine.gui.event;
 
-import com.floober.engine.util.Logger;
-import com.floober.engine.util.time.Timer;
+import com.floober.engine.core.util.Logger;
+import com.floober.engine.core.util.time.Timer;
 
 public class BlockingDelayEvent extends GUIEvent {
 

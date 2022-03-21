@@ -1,12 +1,12 @@
 package com.floober.engine.gui.component;
 
-import com.floober.engine.display.DisplayManager;
-import com.floober.engine.game.Game;
-import com.floober.engine.renderEngine.Render;
-import com.floober.engine.renderEngine.elements.geometry.RectElement;
-import com.floober.engine.renderEngine.fonts.fontMeshCreator.FontType;
-import com.floober.engine.renderEngine.fonts.fontMeshCreator.GUIText;
-import com.floober.engine.renderEngine.renderers.MasterRenderer;
+import com.floober.engine.core.renderEngine.display.DisplayManager;
+import com.floober.engine.core.Game;
+import com.floober.engine.core.renderEngine.Render;
+import com.floober.engine.core.renderEngine.elements.geometry.RectElement;
+import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.FontType;
+import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.GUIText;
+import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 

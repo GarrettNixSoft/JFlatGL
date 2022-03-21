@@ -1,7 +1,7 @@
 package com.floober.engine.gui.component;
 
 import com.floober.engine.gui.event.ClosedEvent;
-import com.floober.engine.util.Logger;
+import com.floober.engine.core.util.Logger;
 
 import java.util.ArrayList;
 import java.util.List;

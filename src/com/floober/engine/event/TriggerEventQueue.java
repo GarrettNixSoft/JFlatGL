@@ -1,7 +1,7 @@
 package com.floober.engine.event;
 
-import com.floober.engine.util.Logger;
-import com.floober.engine.util.data.Queue;
+import com.floober.engine.core.util.Logger;
+import com.floober.engine.core.util.data.Queue;
 
 /**
  * A specialized {@code EventQueue} that will wait to run until triggered.

@@ -1,8 +1,8 @@
 package com.floober.engine.animation;
 
-import com.floober.engine.renderEngine.textures.TextureComponent;
-import com.floober.engine.renderEngine.textures.TextureSet;
-import com.floober.engine.util.time.TimeScale;
+import com.floober.engine.core.renderEngine.textures.TextureComponent;
+import com.floober.engine.core.renderEngine.textures.TextureSet;
+import com.floober.engine.core.util.time.TimeScale;
 
 public class Animation {
 

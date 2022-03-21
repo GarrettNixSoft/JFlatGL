@@ -1,6 +1,6 @@
 package com.floober.engine.gui;
 
-import com.floober.engine.util.Logger;
+import com.floober.engine.core.util.Logger;
 
 public class GUIManager {
 

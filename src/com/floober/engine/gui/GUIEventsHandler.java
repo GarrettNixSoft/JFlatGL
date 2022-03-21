@@ -1,7 +1,7 @@
 package com.floober.engine.gui;
 
 import com.floober.engine.gui.event.GUIEvent;
-import com.floober.engine.util.data.Queue;
+import com.floober.engine.core.util.data.Queue;
 
 public class GUIEventsHandler {
 

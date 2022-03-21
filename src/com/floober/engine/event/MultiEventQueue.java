@@ -1,7 +1,7 @@
 package com.floober.engine.event;
 
 import com.floober.engine.gui.event.ClosedEvent;
-import com.floober.engine.util.data.Queue;
+import com.floober.engine.core.util.data.Queue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,7 @@ public class MultiEventQueue<E extends QueuedEvent> extends EventQueue<E> {
 	 * Check if this {@code MultiEventQueue} is empty.
 	 * "Empty" is defined as having no queued, running,
 	 * or currently waiting events.
-	 * @return
+	 * @return {@code true} if the queue currently contains zero elements.
 	 */
 	@Override
 	public boolean isEmpty() {

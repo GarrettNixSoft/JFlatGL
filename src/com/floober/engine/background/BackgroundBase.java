@@ -1,13 +1,12 @@
 package com.floober.engine.background;
 
 import com.floober.engine.animation.Animation;
-import com.floober.engine.display.DisplayManager;
-import com.floober.engine.renderEngine.Render;
-import com.floober.engine.renderEngine.elements.TextureElement;
-import com.floober.engine.renderEngine.renderers.MasterRenderer;
-import com.floober.engine.renderEngine.textures.TextureComponent;
-import com.floober.engine.renderEngine.textures.TextureSet;
-import com.floober.engine.renderEngine.util.Layers;
+import com.floober.engine.core.renderEngine.display.DisplayManager;
+import com.floober.engine.core.renderEngine.Render;
+import com.floober.engine.core.renderEngine.elements.TextureElement;
+import com.floober.engine.core.renderEngine.textures.TextureComponent;
+import com.floober.engine.core.renderEngine.textures.TextureSet;
+import com.floober.engine.core.renderEngine.util.Layers;
 
 /**
  * @author Floober

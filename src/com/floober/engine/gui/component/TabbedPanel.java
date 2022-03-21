@@ -1,17 +1,17 @@
 package com.floober.engine.gui.component;
 
-import com.floober.engine.display.DisplayManager;
-import com.floober.engine.display.Window;
-import com.floober.engine.game.Game;
+import com.floober.engine.core.renderEngine.display.DisplayManager;
+import com.floober.engine.core.renderEngine.display.Window;
+import com.floober.engine.core.Game;
 import com.floober.engine.gui.GUIAction;
 import com.floober.engine.gui.event.BlockingDelayEvent;
-import com.floober.engine.renderEngine.Render;
-import com.floober.engine.renderEngine.elements.TextureElement;
-import com.floober.engine.renderEngine.fonts.fontMeshCreator.FontType;
-import com.floober.engine.renderEngine.fonts.fontMeshCreator.GUIText;
-import com.floober.engine.renderEngine.renderers.MasterRenderer;
-import com.floober.engine.renderEngine.textures.TextureComponent;
-import com.floober.engine.util.Logger;
+import com.floober.engine.core.renderEngine.Render;
+import com.floober.engine.core.renderEngine.elements.TextureElement;
+import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.FontType;
+import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.GUIText;
+import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
+import com.floober.engine.core.renderEngine.textures.TextureComponent;
+import com.floober.engine.core.util.Logger;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 

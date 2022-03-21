@@ -1,7 +1,7 @@
 package com.floober.engine.gui.dialogue;
 
-import com.floober.engine.renderEngine.fonts.fontMeshCreator.FontType;
-import com.floober.engine.renderEngine.textures.TextureComponent;
+import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.FontType;
+import com.floober.engine.core.renderEngine.textures.TextureComponent;
 import org.joml.Vector4f;
 
 /**

@@ -1,8 +1,8 @@
 package com.floober.engine.gui;
 
 import com.floober.engine.gui.component.GUILayer;
-import com.floober.engine.util.Logger;
-import com.floober.engine.util.data.Stack;
+import com.floober.engine.core.util.Logger;
+import com.floober.engine.core.util.data.Stack;
 
 import java.util.HashMap;
 

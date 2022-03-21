@@ -1,8 +1,8 @@
 package com.floober.engine.background;
 
 import com.floober.engine.animation.Animation;
-import com.floober.engine.entity.core.Entity;
-import com.floober.engine.renderEngine.textures.TextureSet;
+import com.floober.engine.core.entity.Entity;
+import com.floober.engine.core.renderEngine.textures.TextureSet;
 
 /**
  * @author Floober

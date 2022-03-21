@@ -1,7 +1,7 @@
 package com.floober.engine.event;
 
-import com.floober.engine.util.Logger;
-import com.floober.engine.util.time.Timer;
+import com.floober.engine.core.util.Logger;
+import com.floober.engine.core.util.time.Timer;
 
 /**
  * Generic delay, can be used in any event queue

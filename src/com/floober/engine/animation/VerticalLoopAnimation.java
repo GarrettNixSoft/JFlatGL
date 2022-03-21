@@ -1,9 +1,9 @@
 package com.floober.engine.animation;
 
-import com.floober.engine.display.DisplayManager;
-import com.floober.engine.renderEngine.Render;
-import com.floober.engine.renderEngine.elements.TextureElement;
-import com.floober.engine.renderEngine.textures.TextureSet;
+import com.floober.engine.core.renderEngine.display.DisplayManager;
+import com.floober.engine.core.renderEngine.Render;
+import com.floober.engine.core.renderEngine.elements.TextureElement;
+import com.floober.engine.core.renderEngine.textures.TextureSet;
 
 /**
  * The VerticalLoopAnimation is an animation that repeats its

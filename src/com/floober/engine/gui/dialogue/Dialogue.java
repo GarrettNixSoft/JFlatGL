@@ -1,21 +1,20 @@
 package com.floober.engine.gui.dialogue;
 
-import com.floober.engine.display.DisplayManager;
-import com.floober.engine.display.Window;
-import com.floober.engine.game.Game;
-import com.floober.engine.renderEngine.Render;
-import com.floober.engine.renderEngine.elements.TextureElement;
-import com.floober.engine.renderEngine.elements.geometry.RectElement;
-import com.floober.engine.renderEngine.fonts.fontMeshCreator.FontType;
-import com.floober.engine.renderEngine.fonts.fontMeshCreator.GUIText;
-import com.floober.engine.renderEngine.renderers.MasterRenderer;
-import com.floober.engine.renderEngine.util.Layers;
-import com.floober.engine.util.Logger;
-import com.floober.engine.util.color.Colors;
-import com.floober.engine.util.configuration.Settings;
-import com.floober.engine.util.input.KeyInput;
-import com.floober.engine.util.input.MouseInput;
-import com.floober.engine.util.time.TimeScale;
+import com.floober.engine.core.renderEngine.display.DisplayManager;
+import com.floober.engine.core.renderEngine.display.Window;
+import com.floober.engine.core.Game;
+import com.floober.engine.core.renderEngine.Render;
+import com.floober.engine.core.renderEngine.elements.TextureElement;
+import com.floober.engine.core.renderEngine.elements.geometry.RectElement;
+import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.FontType;
+import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.GUIText;
+import com.floober.engine.core.renderEngine.util.Layers;
+import com.floober.engine.core.util.Logger;
+import com.floober.engine.core.util.color.Colors;
+import com.floober.engine.core.util.configuration.Settings;
+import com.floober.engine.core.util.input.KeyInput;
+import com.floober.engine.core.util.input.MouseInput;
+import com.floober.engine.core.util.time.TimeScale;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
