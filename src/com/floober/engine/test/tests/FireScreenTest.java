@@ -69,15 +69,13 @@ public class FireScreenTest {
 
 			fireSystem.update();
 
-			ParticleMaster.update();
-
 			// render game internally
 			Game.render();
 
 			fireSystem.render();
 
 			float fps = 1.0f / DisplayManager.getFrameTimeRaw();
-			fpsDisplay.replaceText("FPS: " + fps + "\nParticles: " + ParticleMaster.getParticleCount());
+			fpsDisplay.replaceText("FPS: " + fps + "\nParticles: " + MasterRenderer.getParticleCount());
 
 			// render to the screen
 			MasterRenderer.primaryWindowRenderer.render();
@@ -95,7 +93,6 @@ public class FireScreenTest {
 		Loader.cleanUp();
 		MasterRenderer.cleanUp();
 		TextMaster.cleanUp();
-		ParticleMaster.cleanUp();
 
 		// Clean up GLFW
 		Callbacks.glfwFreeCallbacks(primaryWindowID);

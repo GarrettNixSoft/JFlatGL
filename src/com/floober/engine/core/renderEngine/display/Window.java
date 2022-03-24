@@ -71,6 +71,10 @@ public class Window {
 		glfwPollEvents();
 	}
 
+	public void update() {
+		// TODO: window shake effect
+	}
+
 	// GETTERS
 	public long getWindowID() {
 		return windowID;

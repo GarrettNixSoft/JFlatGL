@@ -77,7 +77,6 @@ public class ParticleTest {
 		Sync sync = new Sync();
 		// master components
 		TextMaster.init();
-		ParticleMaster.init();
 
 		Logger.log("initialization completed");
 
@@ -213,7 +212,6 @@ public class ParticleTest {
 
 			// run game logic
 			// game.update();
-			ParticleMaster.update();
 
 			// color selection
 			runParticleTest();
@@ -237,7 +235,6 @@ public class ParticleTest {
 		Loader.cleanUp();
 		MasterRenderer.cleanUp();
 		TextMaster.cleanUp();
-		ParticleMaster.cleanUp();
 
 		// Clean up GLFW
 		Callbacks.glfwFreeCallbacks(primaryWindowID);
@@ -360,7 +357,7 @@ public class ParticleTest {
 		Vector4f color = particleBehavior.getAppearanceBehavior().getParticleColor();
 		colorDisplay.setColor(color.x(), color.y(), color.z(), color.w());
 		colorDisplay.replaceText(particleBehavior.getAppearanceBehavior().isRandomColor() ? "Random" : "Color");
-		particleCountDisplay.replaceText("Particles: " + ParticleMaster.getParticleCount());
+		particleCountDisplay.replaceText("Particles: " + MasterRenderer.getParticleCount());
 		particleSettingsDisplay.replaceText("Particle Settings:\n"
 				+ "Min. Size: " + particleBehavior.getAppearanceBehavior().getParticleSizeMin() + "\n"
 				+ "Max. Size: " + particleBehavior.getAppearanceBehavior().getParticleSizeMax() + "\n"

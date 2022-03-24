@@ -4,6 +4,7 @@ import com.floober.engine.core.renderEngine.display.DisplayManager;
 import com.floober.engine.core.renderEngine.particles.ParticleMaster;
 import com.floober.engine.core.renderEngine.particles.ParticleTexture;
 import com.floober.engine.core.renderEngine.particles.behavior.ParticleBehavior;
+import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -28,7 +29,7 @@ public class EmitterParticle extends Particle {
 		this.position.set(position);
 		this.behavior = behavior;
 		this.startAlpha = 1;
-		ParticleMaster.addParticle(this);
+		MasterRenderer.addParticle(this);
 	}
 
 	public EmitterParticle(ParticleBehavior behavior, ParticleTexture texture, Vector4f color, Vector3f position, float width, float height, Vector2f velocity, float lifeLength, float initialRotation, float rotationSpeed, boolean fadeOut) {
@@ -41,7 +42,7 @@ public class EmitterParticle extends Particle {
 		this.rotationSpeed = rotationSpeed;
 		this.fadeOut = fadeOut;
 		convertScreenPosition();
-		ParticleMaster.addParticle(this);
+		MasterRenderer.addParticle(this);
 	}
 
 	// GETTERS

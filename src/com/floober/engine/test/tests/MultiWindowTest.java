@@ -59,7 +59,6 @@ public class MultiWindowTest {
 
 			// run game logic
 			Game.update();
-			ParticleMaster.update();
 
 			// TEST: Create a new window
 			if (KeyInput.isPressed(KeyInput.W)) {
@@ -102,9 +101,9 @@ public class MultiWindowTest {
 
 					// Test manually rendering
 					Render.fillScreen(Colors.RED);
-					Render.drawRect(Colors.GREEN, 0, 0, 5, 80, 80, true);
-					Render.drawRect(Colors.GREEN, 100, 100, 5, 80, 80, true);
-					Render.drawRect(Colors.GREEN, MouseInput.getX(), MouseInput.getY(), 5, 80, 80, true);
+					Render.drawRect(Colors.GREEN, 0, 0, 0, 80, 80, true);
+					Render.drawRect(Colors.GREEN, 100, 100, 0, 80, 80, true);
+					Render.drawRect(Colors.GREEN, MouseInput.getX(), MouseInput.getY(), 0, 80, 80, true);
 
 					if (KeyInput.isPressed(KeyInput.P)) {
 						int[] viewport = new int[4];
@@ -133,7 +132,6 @@ public class MultiWindowTest {
 		Loader.cleanUp();
 		MasterRenderer.cleanUp();
 		TextMaster.cleanUp();
-		ParticleMaster.cleanUp();
 
 		// Clean up GLFW
 		DisplayManager.cleanUp();

@@ -146,9 +146,6 @@ public class DisplayManager {
 					// run game logic
 					Game.update();
 
-					// update components
-					ParticleMaster.update();
-
 					if (targetWindow.isReady()) {
 
 						// Set target
@@ -161,8 +158,8 @@ public class DisplayManager {
 						// render game internally
 						Game.render();
 						Render.fillScreen(Colors.GRAY);
-						if (targetWindow.getWindowID() == DisplayManager.primaryWindowID) Render.drawRect(Colors.RED, 1920/2f, 1080/2f, 5, 300, 300, true);
-						Render.drawRect(Colors.GREEN, MouseInput.getX(), MouseInput.getY(), 5, 80, 80, true);
+						if (targetWindow.getWindowID() == DisplayManager.primaryWindowID) Render.drawRect(Colors.RED, 1920/2f, 1080/2f, 0, 300, 300, true);
+						Render.drawRect(Colors.GREEN, MouseInput.getX(), MouseInput.getY(), 0, 80, 80, true);
 
 						// render to the screen
 						MasterRenderer.currentRenderTarget.render();

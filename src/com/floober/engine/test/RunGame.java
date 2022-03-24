@@ -68,7 +68,6 @@ public class RunGame {
 
 		// master components
 		TextMaster.init();
-		ParticleMaster.init();
 
 		// Update the display once to get the timings set
 		DisplayManager.updateDisplay();
@@ -101,7 +100,6 @@ public class RunGame {
 
 			// run game logic
 			Game.update();
-			ParticleMaster.update();
 			GUIManager.update();
 
 			// clear window
@@ -117,7 +115,7 @@ public class RunGame {
 					"\nGeom: " + GeometryRenderer.ELEMENT_COUNT +
 					"\nTxtr: " + TextureRenderer.ELEMENT_COUNT +
 					"\nText: " + FontRenderer.ELEMENT_COUNT +
-					"\nPart: " + ParticleMaster.numParticles);
+					"\nPart: " + MasterRenderer.getParticleCount());
 
 			// handle top-level universal inputs
 			handleInput();
@@ -137,7 +135,6 @@ public class RunGame {
 		Loader.cleanUp();
 		MasterRenderer.cleanUp();
 		TextMaster.cleanUp();
-		ParticleMaster.cleanUp();
 		AudioMaster.cleanUp();
 		TextureOutliner.cleanUp();
 

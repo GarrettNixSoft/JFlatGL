@@ -281,7 +281,6 @@ public class LoadRenderer {
 	}
 
 	private void renderFrame() {
-		ParticleMaster.update();
 		MasterRenderer.primaryWindowRenderer.prepare();
 		MasterRenderer.primaryWindowRenderer.render();
 	}

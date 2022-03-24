@@ -69,7 +69,6 @@ public class Game {
 		instance.load();
 		instance.gsm = new GameStateManager(instance);
 		// load particles AFTER textures are loaded (some particles need to load textures from the game's pool)
-		ParticleMaster.init();
 		ParticleMaster.initGlobals();
 	}
 

@@ -211,7 +211,6 @@ public class GUITest {
 
 			// run game logic
 			Game.update();
-			ParticleMaster.update();
 			GUIManager.update();
 
 			checkInput();
@@ -244,7 +243,6 @@ public class GUITest {
 		Loader.cleanUp();
 		MasterRenderer.cleanUp();
 		TextMaster.cleanUp();
-		ParticleMaster.cleanUp();
 
 		Settings.save();
 

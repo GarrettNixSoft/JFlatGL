@@ -129,7 +129,6 @@ public class RenderingTest {
 
 			// run game logic
 			Game.update();
-			ParticleMaster.update();
 
 			// render game internally
 			Game.render();
@@ -205,7 +204,6 @@ public class RenderingTest {
 		Loader.cleanUp();
 		MasterRenderer.cleanUp();
 		TextMaster.cleanUp();
-		ParticleMaster.cleanUp();
 
 		// Clean up GLFW
 		Callbacks.glfwFreeCallbacks(primaryWindowID);

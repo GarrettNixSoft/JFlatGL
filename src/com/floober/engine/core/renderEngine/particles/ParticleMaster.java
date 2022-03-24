@@ -17,30 +17,36 @@ import java.util.*;
 public class ParticleMaster {
 
 	@SuppressWarnings("unchecked") // Regular particles (Source or not)
-	private static final Map<ParticleTexture, List<Particle>>[] particles = new HashMap[Layers.NUM_LAYERS];
-	private static ParticleRenderer particleRenderer;
+	private final Map<ParticleTexture, List<Particle>>[] particles = new HashMap[Layers.NUM_LAYERS];
+	private ParticleRenderer particleRenderer;
 
 	@SuppressWarnings("unchecked") // Light-emitting particles
-	private static final List<LightParticle>[] lightEmittingParticles = new ArrayList[Layers.NUM_LAYERS];
-	private static ParticleLightRenderer lightParticleRenderer;
+	private final List<LightParticle>[] lightEmittingParticles = new ArrayList[Layers.NUM_LAYERS];
+	private ParticleLightRenderer lightParticleRenderer;
 
 	@SuppressWarnings("unchecked") // Textured particles
-	private static final Map<ParticleTexture, List<TexturedParticle>>[] texturedParticles = new HashMap[Layers.NUM_LAYERS];
-	private static ParticleTexturedRenderer texturedParticleRenderer;
+	private final Map<ParticleTexture, List<TexturedParticle>>[] texturedParticles = new HashMap[Layers.NUM_LAYERS];
+	private ParticleTexturedRenderer texturedParticleRenderer;
 
 	// Total particle counter
-	public static int numParticles = 0;
+	public int numParticles = 0;
 
 	public static ParticleTexture GLOW_PARTICLE_TEXTURE;
+
+	private final int RENDER_LAYERS;
+
+	public ParticleMaster(int layers) {
+		this.RENDER_LAYERS = layers;
+	}
 
 	/**
 	 * Initialize the Particle Renderers and the Particle Collections for each layer.
 	 */
-	public static void init() {
+	public void init() {
 		particleRenderer = new ParticleRenderer();
 		lightParticleRenderer = new ParticleLightRenderer();
 		texturedParticleRenderer = new ParticleTexturedRenderer();
-		for (int i = 0; i < Layers.NUM_LAYERS; ++i) {
+		for (int i = 0; i < RENDER_LAYERS; ++i) {
 			particles[i] = new HashMap<>();
 			lightEmittingParticles[i] = new ArrayList<>();
 			texturedParticles[i] = new HashMap<>();
@@ -52,7 +58,7 @@ public class ParticleMaster {
 		GLOW_PARTICLE_TEXTURE = new ParticleTexture(Game.getTexture("glow_particle"), 1, true);
 	}
 
-	public static void addParticle(Particle particle) {
+	public void addParticle(Particle particle) {
 		// enforce hard particle limit
 		if (numParticles >= ParticleRenderer.MAX_INSTANCES) {
 			Logger.logError("Too many particles!");
@@ -75,10 +81,10 @@ public class ParticleMaster {
 		numParticles++;
 	}
 
-	public static void update() {
+	public void update() {
 
 		// FOR each LAYER
-		for (int i = 0; i < Layers.NUM_LAYERS; ++i) {
+		for (int i = 0; i < RENDER_LAYERS; ++i) {
 
 			// get the key set to iterate over
 			Set<ParticleTexture> keySet = particles[i].keySet();
@@ -154,22 +160,22 @@ public class ParticleMaster {
 
 	}
 
-	public static void renderParticles(int layer) {
+	public void renderParticles(int layer) {
 		particleRenderer.render(particles[layer]);
 		lightParticleRenderer.render(lightEmittingParticles[layer]);
 		texturedParticleRenderer.render(texturedParticles[layer]);
 	}
 
-	public static void cleanUp() {
+	public void cleanUp() {
 		particleRenderer.cleanUp();
 		lightParticleRenderer.cleanUp();
 		texturedParticleRenderer.cleanUp();
 	}
 
 	// GETTERS
-	public static int getParticleCount() {
+	public int getParticleCount() {
 		int total = 0;
-		for (int i = 0; i < Layers.NUM_LAYERS; ++i) {
+		for (int i = 0; i < RENDER_LAYERS; ++i) {
 			for (ParticleTexture particleTexture : particles[i].keySet()) {
 				total += particles[i].get(particleTexture).size();
 			}
@@ -182,8 +188,8 @@ public class ParticleMaster {
 	}
 
 	// ACTIONS
-	public static void setColorForAllParticlesOfType(ParticleTexture key, Vector4f color) {
-		for (int i = 0; i < Layers.NUM_LAYERS; ++i) {
+	public void setColorForAllParticlesOfType(ParticleTexture key, Vector4f color) {
+		for (int i = 0; i < RENDER_LAYERS; ++i) {
 			List<Particle> particleList = particles[i].get(key);
 			for (Particle particle : particleList) {
 				particle.setColor(color.x(), color.y(), color.z(), particle.getColor().w());
