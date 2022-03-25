@@ -33,16 +33,8 @@ public class MultiWindowTest {
 
 		Config.FULLSCREEN = false;
 
-		// Create the window and set up OpenGL and GLFW.
-		DisplayManager.initPrimaryGameWindow();
-
-		AudioMaster.init();
-		AudioMaster.setListenerData(0, 0, 0);
-
 		// Initialize the game.
 		Game.init();
-		// game components
-		Sync sync = new Sync();
 
 		// Run the game loop!
 		while (!glfwWindowShouldClose(primaryWindowID)) {

@@ -59,15 +59,8 @@ public class RunGame {
 		// Create the window and set up OpenGL and GLFW.
 		DisplayManager.initPrimaryGameWindow();
 
-		// Set up OpenAL.
-		AudioMaster.init();
-		AudioMaster.setListenerData(0, 0, 0);
-
 		// game components
 //		Sync sync = new Sync(); // this is optional; it's meant to sync framerates to a constant speed but is rather buggy
-
-		// master components
-		TextMaster.init();
 
 		// Update the display once to get the timings set
 		DisplayManager.updateDisplay();

@@ -1,5 +1,6 @@
 package com.floober.engine.test.tests;
 
+import com.floober.engine.core.Game;
 import com.floober.engine.core.assets.loaders.GameLoader;
 import com.floober.engine.core.assets.loaders.ImageLoader;
 import com.floober.engine.core.assets.loaders.Loader;
@@ -68,15 +69,8 @@ public class ParticleTest {
 		Config.WINDOW_TITLE += " (Particle Test)";
 		Config.FULLSCREEN = false;
 
-		// Create the window and set up OpenGL and GLFW.
-		DisplayManager.initPrimaryGameWindow();
-
 		// Initialize the game.
-		// game.init();
-		// game components
-		Sync sync = new Sync();
-		// master components
-		TextMaster.init();
+		Game.init();
 
 		Logger.log("initialization completed");
 

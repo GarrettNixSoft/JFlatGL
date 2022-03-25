@@ -52,12 +52,6 @@ public class GUITest {
 
 		Config.FULLSCREEN = false;
 
-		// Create the window and set up OpenGL and GLFW.
-		DisplayManager.initPrimaryGameWindow();
-
-		// Audio master has to be initialized before game loads
-		AudioMaster.init();
-
 		// Initialize the game. (Also loads assets)
 		Game.init();
 

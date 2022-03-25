@@ -3,7 +3,9 @@ package com.floober.engine.core;
 import com.floober.engine.animation.Animation;
 import com.floober.engine.core.assets.*;
 import com.floober.engine.core.assets.loaders.GameLoader;
+import com.floober.engine.core.audio.AudioMaster;
 import com.floober.engine.core.audio.Sound;
+import com.floober.engine.core.renderEngine.display.DisplayManager;
 import com.floober.gametitle.gameState.GameStateManager;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.FontType;
 import com.floober.engine.core.renderEngine.fonts.fontRendering.TextMaster;
@@ -25,7 +27,7 @@ import java.util.HashMap;
 public class Game {
 
 	// global access to the game
-	public static final Game instance = new Game();
+	public static Game instance;
 
 	// game components
 	private final Textures textures;
@@ -62,9 +64,16 @@ public class Game {
 	 * the GameStateManager will be initialized.
 	 */
 	public static void init() {
+		// Create the window and set up OpenGL and GLFW.
+		DisplayManager.initPrimaryGameWindow();
+		// Set up OpenAL.
+		AudioMaster.init();
+		AudioMaster.setListenerData(0, 0, 0);
 		// master components
 		TextMaster.init();
 		TextureAnalyzer.init();
+		// initialize the instance
+		instance = new Game();
 		// the game itself (load assets)
 		instance.load();
 		instance.gsm = new GameStateManager(instance);
