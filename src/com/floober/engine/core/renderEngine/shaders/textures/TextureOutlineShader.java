@@ -7,8 +7,8 @@ import org.joml.Vector4f;
 
 public class TextureOutlineShader extends ShaderProgram {
 
-	private static final String VERTEX_FILE = "/com/floober/engine/core/renderEngine/shaders/shadercode/texture/textureVertex.glsl";
-	private static final String FRAGMENT_FILE = "/com/floober/engine/core/renderEngine/shaders/shadercode/texture/textureOutline.glsl";
+	private static final String VERTEX_FILE = SHADER_PATH + "texture/textureVertex.glsl";
+	private static final String FRAGMENT_FILE = SHADER_PATH + "texture/textureOutline.glsl";
 
 	private int location_transformationMatrix;
 	private int location_textureOffset;

@@ -4,8 +4,8 @@ import com.floober.engine.core.renderEngine.shaders.ShaderProgram;
 
 public class ParticleLightShader extends ShaderProgram {
 
-	private static final String VERTEX_FILE = "/com/floober/engine/core/renderEngine/shaders/shadercode/particle/particleVertexLight.glsl";
-	private static final String FRAGMENT_FILE = "/com/floober/engine/core/renderEngine/shaders/shadercode/particle/particleFragmentLight.glsl";
+	private static final String VERTEX_FILE = SHADER_PATH + "particle/particleVertexLight.glsl";
+	private static final String FRAGMENT_FILE = SHADER_PATH + "particle/particleFragmentLight.glsl";
 
 	public ParticleLightShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);

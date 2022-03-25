@@ -7,8 +7,8 @@ import org.joml.Vector3f;
 
 public class RectLightShader extends ShaderProgram {
 
-	private static final String VERTEX_FILE = "/com/floober/engine/core/renderEngine/shaders/shadercode/geometry/rectVertex.glsl";
-	private static final String FRAGMENT_FILE = "/com/floober/engine/core/renderEngine/shaders/shadercode/geometry/rectLightFragment.glsl";
+	private static final String VERTEX_FILE = SHADER_PATH + "geometry/rectVertex.glsl";
+	private static final String FRAGMENT_FILE = SHADER_PATH + "geometry/rectLightFragment.glsl";
 
 	private int location_color;
 	private int location_transformationMatrix;

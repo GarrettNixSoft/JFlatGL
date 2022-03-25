@@ -7,8 +7,8 @@ import org.joml.Vector4f;
 
 public class CircleShader extends ShaderProgram {
 
-	private static final String VERTEX_FILE = "/com/floober/engine/core/renderEngine/shaders/shadercode/geometry/circleVertex.glsl";
-	private static final String FRAGMENT_FILE = "/com/floober/engine/core/renderEngine/shaders/shadercode/geometry/circleFragment.glsl";
+	private static final String VERTEX_FILE = SHADER_PATH + "geometry/circleVertex.glsl";
+	private static final String FRAGMENT_FILE = SHADER_PATH + "geometry/circleFragment.glsl";
 
 	private int location_color;
 	private int location_transformationMatrix;

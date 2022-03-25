@@ -15,12 +15,12 @@ import static org.lwjgl.opengl.GL20.GL_VERTEX_SHADER;
 
 public class TextureShader extends ShaderProgram {
 
-	private static final String VERTEX_FILE = "/com/floober/engine/core/renderEngine/shaders/shadercode/texture/textureVertex.glsl";
-	private static final String FRAGMENT_FILE = "/com/floober/engine/core/renderEngine/shaders/shadercode/texture/textureFragment.glsl";
-	private static final String COLOR_SWAP_FILE = "/com/floober/engine/core/renderEngine/shaders/shadercode/texture/textureColorSwap.glsl";
-	private static final String LIGHT_FRAGMENT_FILE = "/com/floober/engine/core/renderEngine/shaders/shadercode/texture/textureLight.glsl";
-	private static final String GLITCH_FRAGMENT_FILE = "/com/floober/engine/core/renderEngine/shaders/shadercode/texture/textureGlitch.glsl";
-	private static final String FADE_FRAGMENT_FILE = "/com/floober/engine/core/renderEngine/shaders/shadercode/texture/textureFade.glsl";
+	private static final String VERTEX_FILE = SHADER_PATH + "texture/textureVertex.glsl";
+	private static final String FRAGMENT_FILE = SHADER_PATH + "texture/textureFragment.glsl";
+	private static final String COLOR_SWAP_FILE = SHADER_PATH + "texture/textureColorSwap.glsl";
+	private static final String LIGHT_FRAGMENT_FILE = SHADER_PATH + "texture/textureLight.glsl";
+	private static final String GLITCH_FRAGMENT_FILE = SHADER_PATH + "texture/textureGlitch.glsl";
+	private static final String FADE_FRAGMENT_FILE = SHADER_PATH + "texture/textureFade.glsl";
 
 	// standard texture shader
 	private int location_transformationMatrix;

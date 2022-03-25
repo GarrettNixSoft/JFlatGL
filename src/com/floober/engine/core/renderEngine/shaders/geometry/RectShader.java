@@ -7,8 +7,8 @@ import org.joml.Vector4f;
 
 public class RectShader extends ShaderProgram {
 
-	private static final String VERTEX_FILE = "/com/floober/engine/core/renderEngine/shaders/shadercode/geometry/rectVertex.glsl";
-	private static final String FRAGMENT_FILE = "/com/floober/engine/core/renderEngine/shaders/shadercode/geometry/rectFragment.glsl";
+	private static final String VERTEX_FILE = SHADER_PATH + "geometry/rectVertex.glsl";
+	private static final String FRAGMENT_FILE = SHADER_PATH + "geometry/rectFragment.glsl";
 
 	private int location_roundRadius;
 	private int location_roundMode;

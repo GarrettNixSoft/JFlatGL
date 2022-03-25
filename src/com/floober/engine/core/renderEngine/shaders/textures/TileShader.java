@@ -10,8 +10,8 @@ import java.util.List;
 
 public class TileShader extends ShaderProgram {
 
-	private static final String VERTEX_FILE = "/com/floober/engine/core/renderEngine/shaders/shadercode/tileVertex.glsl";
-	private static final String FRAGMENT_FILE = "/com/floober/engine/core/renderEngine/shaders/shadercode/tileFragment.glsl";
+	private static final String VERTEX_FILE = SHADER_PATH + "tileVertex.glsl";
+	private static final String FRAGMENT_FILE = SHADER_PATH + "tileFragment.glsl";
 
 	private int location_numRows;
 

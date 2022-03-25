@@ -2,8 +2,8 @@ package com.floober.engine.core.renderEngine.shaders;
 
 public class ParticleShader extends ShaderProgram {
 
-	private static final String VERTEX_FILE = "/com/floober/engine/core/renderEngine/shaders/shadercode/particle/particleVertex.glsl";
-	private static final String FRAGMENT_FILE = "/com/floober/engine/core/renderEngine/shaders/shadercode/particle/particleFragment.glsl";
+	private static final String VERTEX_FILE = SHADER_PATH + "particle/particleVertex.glsl";
+	private static final String FRAGMENT_FILE = SHADER_PATH + "particle/particleFragment.glsl";
 
 	private int location_numRows;
 

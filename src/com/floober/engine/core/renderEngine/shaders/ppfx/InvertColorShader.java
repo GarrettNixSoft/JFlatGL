@@ -4,8 +4,8 @@ import com.floober.engine.core.renderEngine.shaders.ShaderProgram;
 
 public class InvertColorShader extends ShaderProgram {
 
-	private static final String VERTEX_FILE = "/com/floober/engine/core/renderEngine/shaders/shadercode/ppfx/vertexGeneric.glsl";
-	private static final String FRAGMENT_FILE = "/com/floober/engine/core/renderEngine/shaders/shadercode/ppfx/invertColorFragment.glsl";
+	private static final String VERTEX_FILE = SHADER_PATH + "ppfx/vertexGeneric.glsl";
+	private static final String FRAGMENT_FILE = SHADER_PATH + "ppfx/invertColorFragment.glsl";
 
 	public InvertColorShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);

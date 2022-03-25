@@ -4,8 +4,8 @@ import com.floober.engine.core.renderEngine.shaders.ShaderProgram;
 
 public class HorizontalBlurShader extends ShaderProgram {
 
-	private static final String VERTEX_FILE = "/com/floober/engine/core/renderEngine/shaders/shadercode/ppfx/blur/horizontalBlurVertex.glsl";
-	private static final String FRAGMENT_FILE = "/com/floober/engine/core/renderEngine/shaders/shadercode/ppfx/blur/blurFragment.glsl";
+	private static final String VERTEX_FILE = SHADER_PATH + "blur/horizontalBlurVertex.glsl";
+	private static final String FRAGMENT_FILE = SHADER_PATH + "blur/blurFragment.glsl";
 
 	int location_targetWidth;
 

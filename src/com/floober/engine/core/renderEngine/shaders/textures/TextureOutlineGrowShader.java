@@ -6,8 +6,8 @@ import org.joml.Vector4f;
 
 public class TextureOutlineGrowShader extends ShaderProgram {
 
-	private static final String VERTEX_FILE = "/com/floober/engine/core/renderEngine/shaders/shadercode/texture/textureOutlineGrowVertex.glsl";
-	private static final String FRAGMENT_FILE = "/com/floober/engine/core/renderEngine/shaders/shadercode/texture/textureOutlineGrowFragment.glsl";
+	private static final String VERTEX_FILE = SHADER_PATH + "texture/textureOutlineGrowVertex.glsl";
+	private static final String FRAGMENT_FILE = SHADER_PATH + "texture/textureOutlineGrowFragment.glsl";
 
 	private int location_textureOffset;
 	private int location_stepSize;

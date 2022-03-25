@@ -4,8 +4,8 @@ import com.floober.engine.core.renderEngine.shaders.ShaderProgram;
 
 public class ContrastShader extends ShaderProgram  {
 
-	private static final String VERTEX_FILE = "/com/floober/engine/core/renderEngine/shaders/shadercode/ppfx/vertexGeneric.glsl";
-	private static final String FRAGMENT_FILE = "/com/floober/engine/core/renderEngine/shaders/shadercode/ppfx/contrastFragment.glsl";
+	private static final String VERTEX_FILE = SHADER_PATH + "ppfx/vertexGeneric.glsl";
+	private static final String FRAGMENT_FILE = SHADER_PATH + "ppfx/contrastFragment.glsl";
 
 	private int location_contrastChangeAmount;
 

@@ -24,6 +24,8 @@ public abstract class ShaderProgram {
 
 	private static FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
 
+	protected static final String SHADER_PATH = "/com/floober/engine/core/renderEngine/shaders/shadercode/";
+
 	public ShaderProgram(String vertexFile, String fragmentFile) {
 		vertexShaderIDs = new Integer[1];
 		vertexShaderIDs[0] = loadShader(vertexFile, GL_VERTEX_SHADER);

@@ -10,8 +10,8 @@ import java.util.List;
 
 public class TextureShader extends ShaderProgram {
 
-	private static final String VERTEX_FILE = "/com/floober/engine/core/renderEngine/shaders/shadercode/textureVertex.glsl";
-	private static final String FRAGMENT_FILE = "/com/floober/engine/core/renderEngine/shaders/shadercode/textureFragment.glsl";
+	private static final String VERTEX_FILE = SHADER_PATH + "textureVertex.glsl";
+	private static final String FRAGMENT_FILE = "textureFragment.glsl";
 
 	private int location_transformationMatrix;
 	private int location_textureOffset;

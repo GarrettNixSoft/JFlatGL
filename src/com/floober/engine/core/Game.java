@@ -6,6 +6,14 @@ import com.floober.engine.core.assets.loaders.GameLoader;
 import com.floober.engine.core.audio.AudioMaster;
 import com.floober.engine.core.audio.Sound;
 import com.floober.engine.core.renderEngine.display.DisplayManager;
+import com.floober.engine.core.renderEngine.fonts.fontRendering.FontRenderer;
+import com.floober.engine.core.renderEngine.renderers.GeometryRenderer;
+import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
+import com.floober.engine.core.renderEngine.renderers.TextureRenderer;
+import com.floober.engine.core.util.input.KeyInput;
+import com.floober.engine.core.util.input.MouseInput;
+import com.floober.engine.core.util.time.TimeScale;
+import com.floober.engine.gui.GUIManager;
 import com.floober.gametitle.gameState.GameStateManager;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.FontType;
 import com.floober.engine.core.renderEngine.fonts.fontRendering.TextMaster;
@@ -17,6 +25,9 @@ import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.Session;
 
 import java.util.HashMap;
+
+import static com.floober.engine.core.renderEngine.display.DisplayManager.primaryWindowID;
+import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
 
 /**
  * This class represents the Game itself. It provides convenience
@@ -92,13 +103,20 @@ public class Game {
 	// RUN GAME LOGIC
 
 	/**
-	 * Update the Game instance. Calls {@code update()} on
-	 * the GameStateManager, Music, and SFX objects.
+	 * Update the Game instance. Polls input, calls {@code update()} on
+	 * the TimeScale, then the GameStateManager, Music, and SFX objects, and
+	 * finally updates the GUIManager.
 	 */
 	public static void update() {
+		pollInput();
+		// time
+		TimeScale.update();
+		// game components
 		instance.gsm.update();
 		instance.music.update();
 		instance.sfx.update();
+		// GUI components
+		GUIManager.update();
 	}
 
 	// RENDER GAME INTERNALLY
@@ -111,6 +129,7 @@ public class Game {
 	 */
 	public static void render() {
 		instance.gsm.render();
+		GUIManager.render();
 	}
 
 	// request game exit
@@ -120,6 +139,34 @@ public class Game {
 	 */
 	public static void quit() {
 		instance.closeRequest = true;
+	}
+
+	/**
+	 * Run the game loop to completion.
+	 */
+	public static void runGameLoop() {
+		while (!(glfwWindowShouldClose(primaryWindowID) || closeRequested())) {
+
+			// run game logic
+			update();
+
+			// clear window
+			MasterRenderer.primaryWindowRenderer.prepare();
+
+			// render game internally
+			render();
+
+			// render to the screen
+			MasterRenderer.primaryWindowRenderer.render();
+
+			// update display and poll events
+			DisplayManager.updateDisplay();
+		}
+	}
+
+	private static void pollInput() {
+		KeyInput.update();
+		MouseInput.update();
 	}
 
 	// ACTIONS
