@@ -61,9 +61,6 @@ public class GUITest {
 		// Initialize the game. (Also loads assets)
 		Game.init();
 
-		// game components
-		Sync sync = new Sync();
-
 		// SET UP DEBUG TEXT
 		GUIText fpsDisplay = new GUIText("FPS: ", 0.5f, Game.getFont("menu"),
 				new Vector3f(0, 0, 1), 1, false);

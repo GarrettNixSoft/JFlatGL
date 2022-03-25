@@ -79,7 +79,6 @@ public class MultiWindowTest {
 
 			// render to the screen
 			MasterRenderer.primaryWindowRenderer.render();
-			MasterRenderer.getTargetWindow().swapBuffers();
 
 			// Render to all other windows
 			for (Window window : DisplayManager.getWindows()) {
@@ -114,8 +113,6 @@ public class MultiWindowTest {
 					// render to the screen
 					windowRenderer.render();
 					// Post-processing is now handled automatically in the render call, no need to call it!
-
-					window.swapBuffers();
 				}
 			}
 

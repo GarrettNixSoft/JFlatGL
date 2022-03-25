@@ -282,7 +282,6 @@ public class MasterRenderer {
 			TextMaster.render(i);
 		}
 
-
 		// clear
 		clearBatches();
 
@@ -291,6 +290,8 @@ public class MasterRenderer {
 
 		// Do post-processing to complete the frame render
 		postProcessor.doPostProcessing(sceneBuffer.getColorTexture());
+
+		getTargetWindow().swapBuffers();
 
 	}
 

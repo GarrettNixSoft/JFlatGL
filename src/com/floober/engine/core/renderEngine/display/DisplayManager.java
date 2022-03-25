@@ -163,7 +163,6 @@ public class DisplayManager {
 
 						// render to the screen
 						MasterRenderer.currentRenderTarget.render();
-						targetWindow.swapBuffers();
 
 					}
 
@@ -536,24 +535,24 @@ public class DisplayManager {
 
 	public static Vector2f convertToScreenPos(long window, Vector2f position) {
 		Window targetWindow = windowsByID.get(window);
-		Logger.log("Position " + position);
+//		Logger.log("Position " + position);
 		// invert y axis
 		float y = Config.INTERNAL_HEIGHT - position.y;
 		// convert pixel coordinates to OpenGL coordinates
 		float displayX = -1 + (2f / Config.INTERNAL_WIDTH) * position.x;
 		float displayY = -1 + (2f / Config.INTERNAL_HEIGHT) * y;
 		// return the result
-		Logger.log("Converted to position " + new Vector2f(displayX, displayY));
+//		Logger.log("Converted to position " + new Vector2f(displayX, displayY));
 		return new Vector2f(displayX, displayY);
 	}
 
 	public static Vector2f convertToTextScreenPos(Vector2f position) {
-		Logger.log("Position " + position);
+//		Logger.log("Position " + position);
 		// convert pixel coordinates to OpenGL coordinates
 		float displayX = (1f / Config.INTERNAL_WIDTH) * position.x;
 		float displayY = (1f / Config.INTERNAL_HEIGHT) * position.y;
 		// return the result
-		Logger.log("Converted to position " + new Vector2f(displayX, displayY));
+//		Logger.log("Converted to position " + new Vector2f(displayX, displayY));
 		return new Vector2f(displayX, displayY);
 	}
 

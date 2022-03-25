@@ -218,7 +218,6 @@ public class ParticleTest {
 
 			// render to the screen
 			MasterRenderer.primaryWindowRenderer.render();
-			MasterRenderer.getTargetWindow().swapBuffers();
 
 			// update display and poll events
 			DisplayManager.updateDisplay();

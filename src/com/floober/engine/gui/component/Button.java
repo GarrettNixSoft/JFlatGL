@@ -60,8 +60,7 @@ public class Button extends GUIComponent {
 		baseElement.setSize(getSize().mul(getScale()));
 		baseElement.transform();
 		baseElement.setColor(getPrimaryColor().mul(getOpacity()));
-		label.setPosition(new Vector3f(DisplayManager.convertToTextScreenPos(new Vector2f(getPosition().x(), getPosition().y())),
-				MasterRenderer.primaryWindowRenderer.getScreenZ((int) getPosition().z())));
+		label.setPosition(new Vector3f(DisplayManager.convertToTextScreenPos(new Vector2f(getPosition().x(), getPosition().y())), getPosition().z()));
 		label.center();
 		label.setFontSize(defaultTextSize * getScale());
 		label.setColor(getSecondaryColor().mul(getOpacity()));

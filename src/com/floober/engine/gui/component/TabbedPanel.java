@@ -347,8 +347,7 @@ public class TabbedPanel extends GUIPanel {
 			iconTexture.setPosition(getPosition().setComponent(2, getPosition().z() - 1));
 			iconTexture.setSize(getSize().mul(getScale()));
 			iconTexture.transform();
-			label.setPosition(new Vector3f(DisplayManager.convertToTextScreenPos(new Vector2f(getPosition().x(), getPosition().y() + getSize().y() / 2)),
-					MasterRenderer.primaryWindowRenderer.getScreenZ((int) getPosition().z())));
+			label.setPosition(new Vector3f(DisplayManager.convertToTextScreenPos(new Vector2f(getPosition().x(), getPosition().y() + getSize().y() / 2)), getPosition().z()));
 			label.center();
 			label.setFontSize(defaultTextSize * getScale());
 			label.setColor(getSecondaryColor().mul(getOpacity()));
