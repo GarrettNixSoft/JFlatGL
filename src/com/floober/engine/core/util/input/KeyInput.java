@@ -1,7 +1,6 @@
 package com.floober.engine.core.util.input;
 
 import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
-import com.floober.engine.keybinds.Keybinds;
 
 import java.util.HashMap;
 

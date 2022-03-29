@@ -1,4 +1,4 @@
-package com.floober.engine.keybinds;
+package com.floober.engine.core.util.input;
 
 import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.data.Pair;
