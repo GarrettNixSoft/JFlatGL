@@ -1,6 +1,7 @@
 package com.floober.engine.core.util.input;
 
 import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
+import com.floober.engine.keybinds.Keybinds;
 
 import java.util.HashMap;
 
@@ -249,6 +250,11 @@ public class KeyInput {
 		return false;
 	}
 
+	public static boolean isHeld(Keybinds.INPUT input) {
+		int key = Keybinds.getBind(input);
+		return isHeld(key);
+	}
+
 	// CHECK FOR NEW KEY PRESS
 	public static boolean isPressed(int key) {
 		return 	windowKeyboardAdapters.get(MasterRenderer.getTargetWindowID()).keyState[key] &&
@@ -259,6 +265,19 @@ public class KeyInput {
 		for (int i : keys) {
 			if (windowKeyboardAdapters.get(MasterRenderer.getTargetWindowID()).keyState[i] &&
 				!windowKeyboardAdapters.get(MasterRenderer.getTargetWindowID()).prevKeyState[i]) return true;
+		}
+		return false;
+	}
+
+	public static boolean isPressed(Keybinds.INPUT input) {
+		int key = Keybinds.getBind(input);
+		return isPressed(key);
+	}
+
+	public static boolean isPressed(Keybinds.INPUT... inputs) {
+		for (Keybinds.INPUT i : inputs) {
+			int key = Keybinds.getBind(i);
+			if (isPressed(key)) return true;
 		}
 		return false;
 	}
