@@ -54,8 +54,8 @@ public class Collisions {
 	}
 
 	public static boolean contains(Vector4f bounds1, Vector4f bounds2) {
-		return bounds1.x < bounds2.x && bounds1.y < bounds2.y &&
-				bounds1.z > bounds2.z && bounds1.w > bounds2.w;
+		return bounds1.x <= bounds2.x && bounds1.y <= bounds2.y &&
+				bounds1.z >= bounds2.z && bounds1.w >= bounds2.w;
 	}
 
 	public static boolean intersects(Vector2f location1, Vector2f size1, Vector2f location2, Vector2f size2) {

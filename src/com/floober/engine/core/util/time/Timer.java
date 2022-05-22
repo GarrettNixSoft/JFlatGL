@@ -58,7 +58,14 @@ public class Timer {
 	}
 
 	/**
-	 * Restart the timer with a new time target. Calls {@code reset()}, {@code setTime()} and {@code start()}.
+	 * Restart the timer with a new time target.
+	 * Equivalent to calling:
+	 * <ul>
+	 *   {@code reset()},<br>
+	 * 	 {@code setTime(newTime)}, and<br>
+	 * 	 {@code start()}.
+	 * </ul>
+	 *
 	 * @param newTime The new duration.
 	 */
 	public void restart(float newTime) {
