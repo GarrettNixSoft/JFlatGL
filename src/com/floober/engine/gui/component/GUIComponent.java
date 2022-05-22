@@ -2,12 +2,12 @@ package com.floober.engine.gui.component;
 
 import com.floober.engine.event.MultiEventQueue;
 import com.floober.engine.gui.GUIAction;
-import com.floober.engine.gui.event.ClosedEvent;
-import com.floober.engine.gui.event.GUIEvent;
-import com.floober.engine.gui.event.ReadyEvent;
 import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.input.MouseInput;
 import com.floober.engine.core.util.math.Collisions;
+import com.floober.engine.gui.event.ClosedEvent;
+import com.floober.engine.gui.event.GUIEvent;
+import com.floober.engine.gui.event.ReadyEvent;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;

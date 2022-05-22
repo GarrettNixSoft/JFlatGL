@@ -9,7 +9,6 @@ import com.floober.engine.core.renderEngine.Render;
 import com.floober.engine.core.renderEngine.elements.TextureElement;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.FontType;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.GUIText;
-import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.core.renderEngine.textures.TextureComponent;
 import com.floober.engine.core.util.Logger;
 import org.joml.Vector2f;

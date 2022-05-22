@@ -111,4 +111,29 @@ public class Queue<T> {
 		return size == 0;
 	}
 
+	/**
+	 * Retrieve all elements from this Queue in order.
+	 * @return an array containing all elements in the Queue
+	 */
+	public T[] getElements() {
+
+		Object[] result = new Object[size];
+		Stack<T> other = new Stack<>(size);
+
+		int i = 0;
+		while (!isEmpty()) {
+			T element = poll();
+			result[i++] = element;
+			other.push(element);
+		}
+
+		// now put everything back into this queue
+		while (!other.isEmpty()) {
+			push(other.poll());
+		}
+
+		return (T[]) result;
+
+	}
+
 }

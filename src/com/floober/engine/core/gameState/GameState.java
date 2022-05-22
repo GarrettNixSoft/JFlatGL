@@ -1,14 +1,12 @@
-package com.floober.gametitle.gameState;
+package com.floober.engine.core.gameState;
 
 import com.floober.engine.core.Game;
 
 public abstract class GameState {
 
-	protected Game game;
 	protected GameStateManager gsm;
 
-	public GameState(Game game, GameStateManager gsm) {
-		this.game = game;
+	public GameState(GameStateManager gsm) {
 		this.gsm = gsm;
 	}
 

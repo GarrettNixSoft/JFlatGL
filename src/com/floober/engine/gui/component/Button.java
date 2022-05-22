@@ -6,7 +6,6 @@ import com.floober.engine.core.renderEngine.Render;
 import com.floober.engine.core.renderEngine.elements.geometry.RectElement;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.FontType;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.GUIText;
-import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 

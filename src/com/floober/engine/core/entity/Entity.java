@@ -2,7 +2,6 @@ package com.floober.engine.core.entity;
 
 import com.floober.engine.animation.Animation;
 import com.floober.engine.core.renderEngine.display.DisplayManager;
-import com.floober.gametitle.entity.attachments.EntityAttachableTo;
 import com.floober.engine.core.entity.projectile.Projectile;
 import com.floober.engine.core.renderEngine.elements.TextureElement;
 import com.floober.engine.core.renderEngine.util.Layers;
@@ -46,7 +45,7 @@ public abstract class Entity {
 	protected float time;
 
 	// attaching this entity to another
-	protected EntityAttachableTo entityAttachedTo;
+//	protected EntityAttachableTo entityAttachedTo;
 
 	public Entity() {
 		this.x = 0;

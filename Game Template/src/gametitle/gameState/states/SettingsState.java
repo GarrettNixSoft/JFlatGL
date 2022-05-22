@@ -1,13 +1,13 @@
-package com.floober.gametitle.gameState.states;
+package gametitle.gameState.states;
 
 import com.floober.engine.core.Game;
-import com.floober.gametitle.gameState.GameState;
-import com.floober.gametitle.gameState.GameStateManager;
+import com.floober.engine.core.gameState.GameState;
+import com.floober.engine.core.gameState.GameStateManager;
 
 public class SettingsState extends GameState {
 
-	public SettingsState(Game game, GameStateManager gsm) {
-		super(game, gsm);
+	public SettingsState(GameStateManager gsm) {
+		super(gsm);
 	}
 
 	@Override

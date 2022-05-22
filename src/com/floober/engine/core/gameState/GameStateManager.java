@@ -1,9 +1,6 @@
-package com.floober.gametitle.gameState;
+package com.floober.engine.core.gameState;
 
 import com.floober.engine.core.Game;
-import com.floober.gametitle.gameState.states.MainMenuState;
-import com.floober.gametitle.gameState.states.PlayState;
-import com.floober.gametitle.gameState.states.SettingsState;
 
 public class GameStateManager {
 
@@ -31,15 +28,19 @@ public class GameStateManager {
 		unloadState(currentState);
 		currentState = state;
 		loadState(currentState);
+		if (gameStates[currentState] != null) // TODO remove
 		gameStates[currentState].init();
 	}
 
 	private void loadState(int state) {
-		switch (state) {
-			case MAIN_MENU_STATE -> gameStates[state] = new MainMenuState(game, this);
-			case SETTINGS_STATE -> gameStates[state] = new SettingsState(game, this);
-			case PLAY_STATE -> gameStates[state] = new PlayState(game, this);
-		}
+		// TODO: implement on a per-project basis
+		// Example:
+//		switch (state) {
+//			case MAIN_MENU_STATE -> gameStates[state] = new MainMenuState(game, this);
+//			case SETTINGS_STATE -> gameStates[state] = new SettingsState(game, this);
+//			case PLAY_STATE -> gameStates[state] = new PlayState(game, this);
+//		}
+		gameStates[state] = new TestState(this);
 	}
 
 	private void unloadState(int state) {

@@ -1,48 +1,79 @@
 package com.floober.engine.core.util.data;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * A simple Stack implementation.
  * @param <T> the type of data to store
  */
 public class Stack<T> {
 
-	private final List<T> elements;
+	class Node {
+		T data;
+		Node next;
+	}
+
+	private Node first;
+	private int size;
+	private int capacity = 100;
 
 	public Stack() {
-		elements = new ArrayList<>();
+		this.size = 0;
+		this.first = null;
+	}
+
+	public Stack(int capacity) {
+		this.capacity = capacity;
+		this.size = 0;
+		this.first = null;
 	}
 
 	public void push(T element) {
-		elements.add(element);
+		if (size == capacity) throw new IndexOutOfBoundsException("This stack is full!");
+		Node newFirst = new Node();
+		newFirst.data = element;
+		newFirst.next = first;
+		first = newFirst;
 	}
 
 	public T peek() {
-		return elements.get(elements.size() - 1);
+		return first.data;
 	}
 
 	public T poll() {
 		T result = peek();
-		elements.remove(elements.size() - 1);
+		remove();
 		return result;
 	}
 
 	public void remove() {
-		elements.remove(elements.size() - 1);
+		first = first.next;
 	}
 
 	public int size() {
-		return elements.size();
+		return size;
 	}
 
 	public boolean isEmpty() {
-		return elements.isEmpty();
+		return size == 0;
 	}
 
-	public List<T> getElements() {
-		return elements;
+	public T[] getElements() {
+
+		Object[] result = new Object[size];
+		Stack<T> other = new Stack<>(size);
+
+		int i = 0;
+		while (!isEmpty()) {
+			T element = poll();
+			result[i++] = element;
+			other.push(element);
+		}
+
+		// now put everything back into this stack
+		while (!other.isEmpty()) {
+			push(other.poll());
+		}
+
+		return (T[]) result;
 	}
 
 }

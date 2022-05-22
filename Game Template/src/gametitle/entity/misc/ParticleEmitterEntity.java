@@ -1,4 +1,4 @@
-package com.floober.gametitle.entity.misc;
+package gametitle.entity.misc;
 
 import com.floober.engine.core.entity.Entity;
 import com.floober.engine.core.renderEngine.particles.emitters.ParticleEmitter;

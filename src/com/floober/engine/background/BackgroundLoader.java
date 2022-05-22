@@ -1,4 +1,4 @@
-package com.floober.engine.core.assets.loaders.object;
+package com.floober.engine.background;
 
 import com.floober.engine.background.Background;
 import com.floober.engine.background.BackgroundBase;

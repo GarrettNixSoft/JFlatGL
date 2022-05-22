@@ -1,7 +1,6 @@
 package com.floober.engine.test.tests;
 
 import com.floober.engine.core.assets.loaders.Loader;
-import com.floober.engine.core.audio.AudioMaster;
 import com.floober.engine.core.renderEngine.display.DisplayManager;
 import com.floober.engine.core.renderEngine.display.Window;
 import com.floober.engine.core.Game;
@@ -16,7 +15,6 @@ import com.floober.engine.gui.event.*;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.floober.engine.core.renderEngine.fonts.fontRendering.FontRenderer;
 import com.floober.engine.core.renderEngine.fonts.fontRendering.TextMaster;
-import com.floober.engine.core.renderEngine.particles.ParticleMaster;
 import com.floober.engine.core.renderEngine.renderers.GeometryRenderer;
 import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.core.renderEngine.renderers.TextureRenderer;
@@ -28,7 +26,6 @@ import com.floober.engine.core.util.configuration.Settings;
 import com.floober.engine.core.util.exception.GUIException;
 import com.floober.engine.core.util.input.KeyInput;
 import com.floober.engine.core.util.input.MouseInput;
-import com.floober.engine.core.util.time.Sync;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;

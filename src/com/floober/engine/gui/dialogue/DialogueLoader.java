@@ -1,7 +1,6 @@
-package com.floober.engine.core.assets.loaders.object;
+package com.floober.engine.gui.dialogue;
 
 import com.floober.engine.core.Game;
-import com.floober.engine.gui.dialogue.*;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.FontType;
 import com.floober.engine.core.renderEngine.textures.TextureComponent;
 import com.floober.engine.core.util.Logger;

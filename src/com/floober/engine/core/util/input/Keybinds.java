@@ -2,7 +2,6 @@ package com.floober.engine.core.util.input;
 
 import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.data.Pair;
-import com.floober.engine.core.util.input.KeyInput;
 
 import java.util.HashMap;
 
