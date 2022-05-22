@@ -1,5 +1,7 @@
 package com.floober.engine.core.util.data;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
@@ -7,7 +9,7 @@ import java.util.NoSuchElementException;
  * capacity.
  * @param <T> the type of data to store
  */
-public class Queue<T> {
+public class Queue<T> extends DataStructure<T> {
 
 	class Node {
 		T data;
@@ -17,8 +19,6 @@ public class Queue<T> {
 
 	private Node first;
 	private Node last;
-	private int size;
-	private int capacity = 100;
 
 	/**
 	 * Create an empty queue. The default capacity is 100.
@@ -27,6 +27,7 @@ public class Queue<T> {
 		first = null;
 		last = null;
 		size = 0;
+		capacity = 100;
 	}
 
 	/**
@@ -40,40 +41,6 @@ public class Queue<T> {
 		last = null;
 		size = 0;
 		this.capacity = capacity;
-	}
-
-	/**
-	 * Get the element at the head of the queue.
-	 * @return the next element
-	 */
-	public T peek() {
-		if (first != null) return first.data;
-		else return null;
-	}
-
-	/**
-	 * Get the element at the head of the queue,
-	 * and remove it from the queue.
-	 * @return the next element
-	 */
-	public T poll() {
-		if (first != null) {
-			T result = peek();
-			remove();
-			return result;
-		}
-		else throw new NoSuchElementException("There are no elements in this queue!");
-	}
-
-	/**
-	 * Remove the element at the head of this queue.
-	 */
-	public void remove() {
-		if (first != null) {
-			first = first.next;
-			size--;
-		}
-		else throw new NoSuchElementException("There are no elements in the queue!");
 	}
 
 	/**
@@ -96,6 +63,89 @@ public class Queue<T> {
 	}
 
 	/**
+	 * Get the element at the head of the queue.
+	 * @return the next element
+	 */
+	public T peek() {
+		if (first != null) return first.data;
+		else return null;
+	}
+
+	/**
+	 * Get the element at the end of the queue.
+	 * @return the last element
+	 */
+	public T peekBack() {
+		if (last != null) return last.data;
+		else return null;
+	}
+
+	/**
+	 * Get the element at the head of the queue,
+	 * and remove it from the queue.
+	 * @return the next element
+	 */
+	public T poll() {
+		if (first != null) {
+			T result = peek();
+			remove();
+			return result;
+		}
+		else throw new NoSuchElementException("There are no elements in this queue!");
+	}
+
+	/**
+	 * Get the element at the back of the queue,
+	 * and remove it from the queue.
+	 * @return the last element
+	 */
+	public T pollBack() {
+		if (first != null) {
+			T result = peekBack();
+			removeBack();
+			return result;
+		}
+		else throw new NoSuchElementException("There are no elements in this queue!");
+	}
+
+	/**
+	 * Remove the element at the head of this queue.
+	 */
+	public void remove() {
+		if (first != null) {
+			first = first.next;
+			size--;
+		}
+		else throw new NoSuchElementException("There are no elements in the queue!");
+	}
+
+	/**
+	 * Remove the element at the end of the queue.
+	 */
+	public void removeBack() {
+		if (last != null) {
+			last.previous.next = null;
+			size--;
+		}
+		else throw new NoSuchElementException("There are no elements in the queue!");
+	}
+
+	/**
+	 * {@code popBack()} is an alias for {@code removeBack()}.
+	 */
+	public void popBack() {
+		removeBack();
+	}
+
+	/**
+	 * Clear the queue. Removes all elements and sets the size to 0 in O(1) time.
+	 */
+	public void clear() {
+		size = 0;
+		first = last = null;
+	}
+
+	/**
 	 * Get the number of elements currently in the queue.
 	 * @return the size of the queue
 	 */
@@ -115,15 +165,14 @@ public class Queue<T> {
 	 * Retrieve all elements from this Queue in order.
 	 * @return an array containing all elements in the Queue
 	 */
-	public T[] getElements() {
+	public List<T> getElements() {
 
-		Object[] result = new Object[size];
-		Stack<T> other = new Stack<>(size);
+		List<T> result = new ArrayList<>(size);
+		Queue<T> other = new Queue<>(size);
 
-		int i = 0;
 		while (!isEmpty()) {
 			T element = poll();
-			result[i++] = element;
+			result.add(element);
 			other.push(element);
 		}
 
@@ -132,7 +181,7 @@ public class Queue<T> {
 			push(other.poll());
 		}
 
-		return (T[]) result;
+		return result;
 
 	}
 

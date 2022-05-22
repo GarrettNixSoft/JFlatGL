@@ -1,8 +1,12 @@
 package com.floober.engine.core.util.input;
 
 import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
+import com.floober.engine.core.util.data.Queue;
+import com.floober.engine.core.util.time.TimeScale;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -14,6 +18,12 @@ public class KeyInput {
 
 	public boolean[] keyState = new boolean[NUM_KEYS];
 	public boolean[] prevKeyState = new boolean[NUM_KEYS];
+	public long[] keyPressTime = new long[NUM_KEYS];
+
+	public static final int KEY_HOLD_DELAY = 500;
+
+	public Queue<Character> characterQueue = new Queue<>();
+	public List<Character> textInput = new ArrayList<>();
 
 	// LETTER KEYS
 	public static final int A = 1;
@@ -133,163 +143,175 @@ public class KeyInput {
 		// get window target
 		long windowTarget = MasterRenderer.getTargetWindowID();
 		KeyInput keyboardAdapter = windowKeyboardAdapters.get(windowTarget);
+		// flush text input to the list, and clear the queue
+		keyboardAdapter.textInput = keyboardAdapter.characterQueue.getElements();
+		keyboardAdapter.characterQueue.clear();
+		// get key state arrays
 		boolean[] keyState = keyboardAdapter.keyState;
 		boolean[] prevKeyState = keyboardAdapter.prevKeyState;
 		// update key states
 		System.arraycopy(keyState, 0, prevKeyState, 0, NUM_KEYS);
-		keyState[A]				 = glfwGetKey(windowTarget, GLFW_KEY_A) == GLFW_PRESS;
-		keyState[B]				 = glfwGetKey(windowTarget, GLFW_KEY_B) == GLFW_PRESS;
-		keyState[C]				 = glfwGetKey(windowTarget, GLFW_KEY_C) == GLFW_PRESS;
-		keyState[D]				 = glfwGetKey(windowTarget, GLFW_KEY_D) == GLFW_PRESS;
-		keyState[E]				 = glfwGetKey(windowTarget, GLFW_KEY_E) == GLFW_PRESS;
-		keyState[F]				 = glfwGetKey(windowTarget, GLFW_KEY_F) == GLFW_PRESS;
-		keyState[G]				 = glfwGetKey(windowTarget, GLFW_KEY_G) == GLFW_PRESS;
-		keyState[H]				 = glfwGetKey(windowTarget, GLFW_KEY_H) == GLFW_PRESS;
-		keyState[I]				 = glfwGetKey(windowTarget, GLFW_KEY_I) == GLFW_PRESS;
-		keyState[J]				 = glfwGetKey(windowTarget, GLFW_KEY_J) == GLFW_PRESS;
-		keyState[K]				 = glfwGetKey(windowTarget, GLFW_KEY_K) == GLFW_PRESS;
-		keyState[L]				 = glfwGetKey(windowTarget, GLFW_KEY_L) == GLFW_PRESS;
-		keyState[M]				 = glfwGetKey(windowTarget, GLFW_KEY_M) == GLFW_PRESS;
-		keyState[N]				 = glfwGetKey(windowTarget, GLFW_KEY_N) == GLFW_PRESS;
-		keyState[O]				 = glfwGetKey(windowTarget, GLFW_KEY_O) == GLFW_PRESS;
-		keyState[P]				 = glfwGetKey(windowTarget, GLFW_KEY_P) == GLFW_PRESS;
-		keyState[Q]				 = glfwGetKey(windowTarget, GLFW_KEY_Q) == GLFW_PRESS;
-		keyState[R]				 = glfwGetKey(windowTarget, GLFW_KEY_R) == GLFW_PRESS;
-		keyState[S]				 = glfwGetKey(windowTarget, GLFW_KEY_S) == GLFW_PRESS;
-		keyState[T]				 = glfwGetKey(windowTarget, GLFW_KEY_T) == GLFW_PRESS;
-		keyState[U]				 = glfwGetKey(windowTarget, GLFW_KEY_U) == GLFW_PRESS;
-		keyState[V]				 = glfwGetKey(windowTarget, GLFW_KEY_V) == GLFW_PRESS;
-		keyState[W]				 = glfwGetKey(windowTarget, GLFW_KEY_W) == GLFW_PRESS;
-		keyState[X]				 = glfwGetKey(windowTarget, GLFW_KEY_X) == GLFW_PRESS;
-		keyState[Y]				 = glfwGetKey(windowTarget, GLFW_KEY_Y) == GLFW_PRESS;
-		keyState[Z]				 = glfwGetKey(windowTarget, GLFW_KEY_Z) == GLFW_PRESS;
-		keyState[UP]			 = glfwGetKey(windowTarget, GLFW_KEY_UP) == GLFW_PRESS;
-		keyState[DOWN]			 = glfwGetKey(windowTarget, GLFW_KEY_DOWN) == GLFW_PRESS;
-		keyState[LEFT]			 = glfwGetKey(windowTarget, GLFW_KEY_LEFT) == GLFW_PRESS;
-		keyState[RIGHT]			 = glfwGetKey(windowTarget, GLFW_KEY_RIGHT) == GLFW_PRESS;
-		keyState[SPACE]			 = glfwGetKey(windowTarget, GLFW_KEY_SPACE) == GLFW_PRESS;
-		keyState[ENTER]			 = glfwGetKey(windowTarget, GLFW_KEY_ENTER) == GLFW_PRESS;
-		keyState[LSHIFT]		 = glfwGetKey(windowTarget, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS;
-		keyState[RSHIFT]		 = glfwGetKey(windowTarget, GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS;
-		keyState[LCONTROL]		 = glfwGetKey(windowTarget, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS;
-		keyState[RCONTROL]		 = glfwGetKey(windowTarget, GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS;
-		keyState[ESC]			 = glfwGetKey(windowTarget, GLFW_KEY_ESCAPE) == GLFW_PRESS;
-		keyState[KEY_1]			 = glfwGetKey(windowTarget, GLFW_KEY_1) == GLFW_PRESS;
-		keyState[KEY_2]			 = glfwGetKey(windowTarget, GLFW_KEY_2) == GLFW_PRESS;
-		keyState[KEY_3]			 = glfwGetKey(windowTarget, GLFW_KEY_3) == GLFW_PRESS;
-		keyState[KEY_4]			 = glfwGetKey(windowTarget, GLFW_KEY_4) == GLFW_PRESS;
-		keyState[KEY_5]			 = glfwGetKey(windowTarget, GLFW_KEY_5) == GLFW_PRESS;
-		keyState[KEY_6]			 = glfwGetKey(windowTarget, GLFW_KEY_6) == GLFW_PRESS;
-		keyState[KEY_7]			 = glfwGetKey(windowTarget, GLFW_KEY_7) == GLFW_PRESS;
-		keyState[KEY_8]			 = glfwGetKey(windowTarget, GLFW_KEY_8) == GLFW_PRESS;
-		keyState[KEY_9]			 = glfwGetKey(windowTarget, GLFW_KEY_9) == GLFW_PRESS;
-		keyState[KEY_0]			 = glfwGetKey(windowTarget, GLFW_KEY_0) == GLFW_PRESS;
-		keyState[BACKSPACE]		 = glfwGetKey(windowTarget, GLFW_KEY_BACKSPACE) == GLFW_PRESS;
-		keyState[F1]			 = glfwGetKey(windowTarget, GLFW_KEY_F1) == GLFW_PRESS;
-		keyState[F2]			 = glfwGetKey(windowTarget, GLFW_KEY_F2) == GLFW_PRESS;
-		keyState[F3]			 = glfwGetKey(windowTarget, GLFW_KEY_F3) == GLFW_PRESS;
-		keyState[F4]			 = glfwGetKey(windowTarget, GLFW_KEY_F4) == GLFW_PRESS;
-		keyState[F5]			 = glfwGetKey(windowTarget, GLFW_KEY_F5) == GLFW_PRESS;
-		keyState[F6]			 = glfwGetKey(windowTarget, GLFW_KEY_F6) == GLFW_PRESS;
-		keyState[F7]			 = glfwGetKey(windowTarget, GLFW_KEY_F7) == GLFW_PRESS;
-		keyState[F8]			 = glfwGetKey(windowTarget, GLFW_KEY_F8) == GLFW_PRESS;
-		keyState[F9]			 = glfwGetKey(windowTarget, GLFW_KEY_F9) == GLFW_PRESS;
-		keyState[F10]			 = glfwGetKey(windowTarget, GLFW_KEY_F10) == GLFW_PRESS;
-		keyState[F11]			 = glfwGetKey(windowTarget, GLFW_KEY_F11) == GLFW_PRESS;
-		keyState[F12]			 = glfwGetKey(windowTarget, GLFW_KEY_F12) == GLFW_PRESS;
-		keyState[PLUS]			 = glfwGetKey(windowTarget, GLFW_KEY_KP_ADD) == GLFW_PRESS;
-		keyState[MINUS]			 = glfwGetKey(windowTarget, GLFW_KEY_KP_SUBTRACT) == GLFW_PRESS;
-		keyState[KP_ENTER]		 = glfwGetKey(windowTarget, GLFW_KEY_KP_ENTER) == GLFW_PRESS;
-		keyState[LBRACKET]		 = glfwGetKey(windowTarget, GLFW_KEY_LEFT_BRACKET) == GLFW_PRESS;
-		keyState[RBRACKET]		 = glfwGetKey(windowTarget, GLFW_KEY_RIGHT_BRACKET) == GLFW_PRESS;
-		keyState[BACKSLASH]		 = glfwGetKey(windowTarget, GLFW_KEY_BACKSLASH) == GLFW_PRESS;
-		keyState[GRAVE]			 = glfwGetKey(windowTarget, GLFW_KEY_GRAVE_ACCENT) == GLFW_PRESS;
-		keyState[INSERT]		 = glfwGetKey(windowTarget, GLFW_KEY_INSERT) == GLFW_PRESS;
-		keyState[DELETE]		 = glfwGetKey(windowTarget, GLFW_KEY_DELETE) == GLFW_PRESS;
-		keyState[KP_0]			 = glfwGetKey(windowTarget, GLFW_KEY_KP_0) == GLFW_PRESS;
-		keyState[KP_1]			 = glfwGetKey(windowTarget, GLFW_KEY_KP_1) == GLFW_PRESS;
-		keyState[KP_2]			 = glfwGetKey(windowTarget, GLFW_KEY_KP_2) == GLFW_PRESS;
-		keyState[KP_3]			 = glfwGetKey(windowTarget, GLFW_KEY_KP_3) == GLFW_PRESS;
-		keyState[KP_4]			 = glfwGetKey(windowTarget, GLFW_KEY_KP_4) == GLFW_PRESS;
-		keyState[KP_5]			 = glfwGetKey(windowTarget, GLFW_KEY_KP_5) == GLFW_PRESS;
-		keyState[KP_6]			 = glfwGetKey(windowTarget, GLFW_KEY_KP_6) == GLFW_PRESS;
-		keyState[KP_7]			 = glfwGetKey(windowTarget, GLFW_KEY_KP_7) == GLFW_PRESS;
-		keyState[KP_8]			 = glfwGetKey(windowTarget, GLFW_KEY_KP_8) == GLFW_PRESS;
-		keyState[KP_9]			 = glfwGetKey(windowTarget, GLFW_KEY_KP_9) == GLFW_PRESS;
-		keyState[KP_PLUS]		 = glfwGetKey(windowTarget, GLFW_KEY_KP_ADD) == GLFW_PRESS;
-		keyState[KP_MINUS]		 = glfwGetKey(windowTarget, GLFW_KEY_KP_SUBTRACT) == GLFW_PRESS;
-		keyState[KP_ASTERISK]	 = glfwGetKey(windowTarget, GLFW_KEY_KP_MULTIPLY) == GLFW_PRESS;
-		keyState[KP_SLASH]		 = glfwGetKey(windowTarget, GLFW_KEY_KP_DIVIDE) == GLFW_PRESS;
-		keyState[KP_DECIMAL]	 = glfwGetKey(windowTarget, GLFW_KEY_KP_DECIMAL) == GLFW_PRESS;
-		keyState[SEMICOLON]		 = glfwGetKey(windowTarget, GLFW_KEY_SEMICOLON) == GLFW_PRESS;
-		keyState[APOSTROPHE]	 = glfwGetKey(windowTarget, GLFW_KEY_APOSTROPHE) == GLFW_PRESS;
-		keyState[COMMA]			 = glfwGetKey(windowTarget, GLFW_KEY_COMMA) == GLFW_PRESS;
-		keyState[PERIOD]		 = glfwGetKey(windowTarget, GLFW_KEY_PERIOD) == GLFW_PRESS;
-		keyState[SLASH]			 = glfwGetKey(windowTarget, GLFW_KEY_SLASH) == GLFW_PRESS;
-		keyState[TAB]			 = glfwGetKey(windowTarget, GLFW_KEY_TAB) == GLFW_PRESS;
-		keyState[PRINT_SCREEN]	 = glfwGetKey(windowTarget, GLFW_KEY_PRINT_SCREEN) == GLFW_PRESS;
-		keyState[SCROLL_LOCK]	 = glfwGetKey(windowTarget, GLFW_KEY_SCROLL_LOCK) == GLFW_PRESS;
-		keyState[PAUSE_BREAK]	 = glfwGetKey(windowTarget, GLFW_KEY_PAUSE) == GLFW_PRESS;
-		keyState[HOME]			 = glfwGetKey(windowTarget, GLFW_KEY_HOME) == GLFW_PRESS;
-		keyState[END]			 = glfwGetKey(windowTarget, GLFW_KEY_END) == GLFW_PRESS;
-		keyState[PAGE_UP]		 = glfwGetKey(windowTarget, GLFW_KEY_PAGE_UP) == GLFW_PRESS;
-		keyState[PAGE_DOWN]		 = glfwGetKey(windowTarget, GLFW_KEY_PAGE_DOWN) == GLFW_PRESS;
-		keyState[MENU]			 = glfwGetKey(windowTarget, GLFW_KEY_MENU) == GLFW_PRESS;
+		keyState[A] = glfwGetKey(windowTarget, GLFW_KEY_A) == GLFW_PRESS;
+		keyState[B] = glfwGetKey(windowTarget, GLFW_KEY_B) == GLFW_PRESS;
+		keyState[C] = glfwGetKey(windowTarget, GLFW_KEY_C) == GLFW_PRESS;
+		keyState[D] = glfwGetKey(windowTarget, GLFW_KEY_D) == GLFW_PRESS;
+		keyState[E] = glfwGetKey(windowTarget, GLFW_KEY_E) == GLFW_PRESS;
+		keyState[F] = glfwGetKey(windowTarget, GLFW_KEY_F) == GLFW_PRESS;
+		keyState[G] = glfwGetKey(windowTarget, GLFW_KEY_G) == GLFW_PRESS;
+		keyState[H] = glfwGetKey(windowTarget, GLFW_KEY_H) == GLFW_PRESS;
+		keyState[I] = glfwGetKey(windowTarget, GLFW_KEY_I) == GLFW_PRESS;
+		keyState[J] = glfwGetKey(windowTarget, GLFW_KEY_J) == GLFW_PRESS;
+		keyState[K] = glfwGetKey(windowTarget, GLFW_KEY_K) == GLFW_PRESS;
+		keyState[L] = glfwGetKey(windowTarget, GLFW_KEY_L) == GLFW_PRESS;
+		keyState[M] = glfwGetKey(windowTarget, GLFW_KEY_M) == GLFW_PRESS;
+		keyState[N] = glfwGetKey(windowTarget, GLFW_KEY_N) == GLFW_PRESS;
+		keyState[O] = glfwGetKey(windowTarget, GLFW_KEY_O) == GLFW_PRESS;
+		keyState[P] = glfwGetKey(windowTarget, GLFW_KEY_P) == GLFW_PRESS;
+		keyState[Q] = glfwGetKey(windowTarget, GLFW_KEY_Q) == GLFW_PRESS;
+		keyState[R] = glfwGetKey(windowTarget, GLFW_KEY_R) == GLFW_PRESS;
+		keyState[S] = glfwGetKey(windowTarget, GLFW_KEY_S) == GLFW_PRESS;
+		keyState[T] = glfwGetKey(windowTarget, GLFW_KEY_T) == GLFW_PRESS;
+		keyState[U] = glfwGetKey(windowTarget, GLFW_KEY_U) == GLFW_PRESS;
+		keyState[V] = glfwGetKey(windowTarget, GLFW_KEY_V) == GLFW_PRESS;
+		keyState[W] = glfwGetKey(windowTarget, GLFW_KEY_W) == GLFW_PRESS;
+		keyState[X] = glfwGetKey(windowTarget, GLFW_KEY_X) == GLFW_PRESS;
+		keyState[Y] = glfwGetKey(windowTarget, GLFW_KEY_Y) == GLFW_PRESS;
+		keyState[Z] = glfwGetKey(windowTarget, GLFW_KEY_Z) == GLFW_PRESS;
+		keyState[UP] = glfwGetKey(windowTarget, GLFW_KEY_UP) == GLFW_PRESS;
+		keyState[DOWN] = glfwGetKey(windowTarget, GLFW_KEY_DOWN) == GLFW_PRESS;
+		keyState[LEFT] = glfwGetKey(windowTarget, GLFW_KEY_LEFT) == GLFW_PRESS;
+		keyState[RIGHT] = glfwGetKey(windowTarget, GLFW_KEY_RIGHT) == GLFW_PRESS;
+		keyState[SPACE] = glfwGetKey(windowTarget, GLFW_KEY_SPACE) == GLFW_PRESS;
+		keyState[ENTER] = glfwGetKey(windowTarget, GLFW_KEY_ENTER) == GLFW_PRESS;
+		keyState[LSHIFT] = glfwGetKey(windowTarget, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS;
+		keyState[RSHIFT] = glfwGetKey(windowTarget, GLFW_KEY_RIGHT_SHIFT) == GLFW_PRESS;
+		keyState[LCONTROL] = glfwGetKey(windowTarget, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS;
+		keyState[RCONTROL] = glfwGetKey(windowTarget, GLFW_KEY_RIGHT_CONTROL) == GLFW_PRESS;
+		keyState[ESC] = glfwGetKey(windowTarget, GLFW_KEY_ESCAPE) == GLFW_PRESS;
+		keyState[KEY_1] = glfwGetKey(windowTarget, GLFW_KEY_1) == GLFW_PRESS;
+		keyState[KEY_2] = glfwGetKey(windowTarget, GLFW_KEY_2) == GLFW_PRESS;
+		keyState[KEY_3] = glfwGetKey(windowTarget, GLFW_KEY_3) == GLFW_PRESS;
+		keyState[KEY_4] = glfwGetKey(windowTarget, GLFW_KEY_4) == GLFW_PRESS;
+		keyState[KEY_5] = glfwGetKey(windowTarget, GLFW_KEY_5) == GLFW_PRESS;
+		keyState[KEY_6] = glfwGetKey(windowTarget, GLFW_KEY_6) == GLFW_PRESS;
+		keyState[KEY_7] = glfwGetKey(windowTarget, GLFW_KEY_7) == GLFW_PRESS;
+		keyState[KEY_8] = glfwGetKey(windowTarget, GLFW_KEY_8) == GLFW_PRESS;
+		keyState[KEY_9] = glfwGetKey(windowTarget, GLFW_KEY_9) == GLFW_PRESS;
+		keyState[KEY_0] = glfwGetKey(windowTarget, GLFW_KEY_0) == GLFW_PRESS;
+		keyState[BACKSPACE] = glfwGetKey(windowTarget, GLFW_KEY_BACKSPACE) == GLFW_PRESS;
+		keyState[F1] = glfwGetKey(windowTarget, GLFW_KEY_F1) == GLFW_PRESS;
+		keyState[F2] = glfwGetKey(windowTarget, GLFW_KEY_F2) == GLFW_PRESS;
+		keyState[F3] = glfwGetKey(windowTarget, GLFW_KEY_F3) == GLFW_PRESS;
+		keyState[F4] = glfwGetKey(windowTarget, GLFW_KEY_F4) == GLFW_PRESS;
+		keyState[F5] = glfwGetKey(windowTarget, GLFW_KEY_F5) == GLFW_PRESS;
+		keyState[F6] = glfwGetKey(windowTarget, GLFW_KEY_F6) == GLFW_PRESS;
+		keyState[F7] = glfwGetKey(windowTarget, GLFW_KEY_F7) == GLFW_PRESS;
+		keyState[F8] = glfwGetKey(windowTarget, GLFW_KEY_F8) == GLFW_PRESS;
+		keyState[F9] = glfwGetKey(windowTarget, GLFW_KEY_F9) == GLFW_PRESS;
+		keyState[F10] = glfwGetKey(windowTarget, GLFW_KEY_F10) == GLFW_PRESS;
+		keyState[F11] = glfwGetKey(windowTarget, GLFW_KEY_F11) == GLFW_PRESS;
+		keyState[F12] = glfwGetKey(windowTarget, GLFW_KEY_F12) == GLFW_PRESS;
+		keyState[PLUS] = glfwGetKey(windowTarget, GLFW_KEY_KP_ADD) == GLFW_PRESS;
+		keyState[MINUS] = glfwGetKey(windowTarget, GLFW_KEY_KP_SUBTRACT) == GLFW_PRESS;
+		keyState[KP_ENTER] = glfwGetKey(windowTarget, GLFW_KEY_KP_ENTER) == GLFW_PRESS;
+		keyState[LBRACKET] = glfwGetKey(windowTarget, GLFW_KEY_LEFT_BRACKET) == GLFW_PRESS;
+		keyState[RBRACKET] = glfwGetKey(windowTarget, GLFW_KEY_RIGHT_BRACKET) == GLFW_PRESS;
+		keyState[BACKSLASH] = glfwGetKey(windowTarget, GLFW_KEY_BACKSLASH) == GLFW_PRESS;
+		keyState[GRAVE] = glfwGetKey(windowTarget, GLFW_KEY_GRAVE_ACCENT) == GLFW_PRESS;
+		keyState[INSERT] = glfwGetKey(windowTarget, GLFW_KEY_INSERT) == GLFW_PRESS;
+		keyState[DELETE] = glfwGetKey(windowTarget, GLFW_KEY_DELETE) == GLFW_PRESS;
+		keyState[KP_0] = glfwGetKey(windowTarget, GLFW_KEY_KP_0) == GLFW_PRESS;
+		keyState[KP_1] = glfwGetKey(windowTarget, GLFW_KEY_KP_1) == GLFW_PRESS;
+		keyState[KP_2] = glfwGetKey(windowTarget, GLFW_KEY_KP_2) == GLFW_PRESS;
+		keyState[KP_3] = glfwGetKey(windowTarget, GLFW_KEY_KP_3) == GLFW_PRESS;
+		keyState[KP_4] = glfwGetKey(windowTarget, GLFW_KEY_KP_4) == GLFW_PRESS;
+		keyState[KP_5] = glfwGetKey(windowTarget, GLFW_KEY_KP_5) == GLFW_PRESS;
+		keyState[KP_6] = glfwGetKey(windowTarget, GLFW_KEY_KP_6) == GLFW_PRESS;
+		keyState[KP_7] = glfwGetKey(windowTarget, GLFW_KEY_KP_7) == GLFW_PRESS;
+		keyState[KP_8] = glfwGetKey(windowTarget, GLFW_KEY_KP_8) == GLFW_PRESS;
+		keyState[KP_9] = glfwGetKey(windowTarget, GLFW_KEY_KP_9) == GLFW_PRESS;
+		keyState[KP_PLUS] = glfwGetKey(windowTarget, GLFW_KEY_KP_ADD) == GLFW_PRESS;
+		keyState[KP_MINUS] = glfwGetKey(windowTarget, GLFW_KEY_KP_SUBTRACT) == GLFW_PRESS;
+		keyState[KP_ASTERISK] = glfwGetKey(windowTarget, GLFW_KEY_KP_MULTIPLY) == GLFW_PRESS;
+		keyState[KP_SLASH] = glfwGetKey(windowTarget, GLFW_KEY_KP_DIVIDE) == GLFW_PRESS;
+		keyState[KP_DECIMAL] = glfwGetKey(windowTarget, GLFW_KEY_KP_DECIMAL) == GLFW_PRESS;
+		keyState[SEMICOLON] = glfwGetKey(windowTarget, GLFW_KEY_SEMICOLON) == GLFW_PRESS;
+		keyState[APOSTROPHE] = glfwGetKey(windowTarget, GLFW_KEY_APOSTROPHE) == GLFW_PRESS;
+		keyState[COMMA] = glfwGetKey(windowTarget, GLFW_KEY_COMMA) == GLFW_PRESS;
+		keyState[PERIOD] = glfwGetKey(windowTarget, GLFW_KEY_PERIOD) == GLFW_PRESS;
+		keyState[SLASH] = glfwGetKey(windowTarget, GLFW_KEY_SLASH) == GLFW_PRESS;
+		keyState[TAB] = glfwGetKey(windowTarget, GLFW_KEY_TAB) == GLFW_PRESS;
+		keyState[PRINT_SCREEN] = glfwGetKey(windowTarget, GLFW_KEY_PRINT_SCREEN) == GLFW_PRESS;
+		keyState[SCROLL_LOCK] = glfwGetKey(windowTarget, GLFW_KEY_SCROLL_LOCK) == GLFW_PRESS;
+		keyState[PAUSE_BREAK] = glfwGetKey(windowTarget, GLFW_KEY_PAUSE) == GLFW_PRESS;
+		keyState[HOME] = glfwGetKey(windowTarget, GLFW_KEY_HOME) == GLFW_PRESS;
+		keyState[END] = glfwGetKey(windowTarget, GLFW_KEY_END) == GLFW_PRESS;
+		keyState[PAGE_UP] = glfwGetKey(windowTarget, GLFW_KEY_PAGE_UP) == GLFW_PRESS;
+		keyState[PAGE_DOWN] = glfwGetKey(windowTarget, GLFW_KEY_PAGE_DOWN) == GLFW_PRESS;
+		keyState[MENU] = glfwGetKey(windowTarget, GLFW_KEY_MENU) == GLFW_PRESS;
+
+		// update press timings
+		long[] keyPressTime = keyboardAdapter.keyPressTime;
+		long time = System.nanoTime();
+		for (int i = 0; i < keyPressTime.length; i++) {
+			if (isPressed(i)) keyPressTime[i] = time;
+			else if (!isHeld(i)) keyPressTime[i] = -1;
+		}
+	}
+
+	private static KeyInput getInstance() {
+		return windowKeyboardAdapters.get(MasterRenderer.getTargetWindowID());
 	}
 
 	// CHECK IF A KEY IS HELD DOWN
 	public static boolean isHeld(int key) {
-		return windowKeyboardAdapters.get(MasterRenderer.getTargetWindowID()).keyState[key];
+		return getInstance().keyState[key];
 	}
 
 	public static boolean isHeld(int... keys) {
 		for (int i : keys) {
-			if (windowKeyboardAdapters.get(MasterRenderer.getTargetWindowID()).keyState[i]) return true;
+			if (getInstance().keyState[i]) return true;
 		}
 		return false;
 	}
 
-	public static boolean isHeld(Keybinds.INPUT input) {
-		int key = Keybinds.getBind(input);
-		return isHeld(key);
+	public static boolean isHeldDelay(int key) {
+		if (isHeld(key)) {
+			long start = getInstance().keyPressTime[key];
+			long time = TimeScale.getRawTime(start);
+			return time >= KEY_HOLD_DELAY;
+		} else return false;
 	}
 
 	// CHECK FOR NEW KEY PRESS
 	public static boolean isPressed(int key) {
-		return 	windowKeyboardAdapters.get(MasterRenderer.getTargetWindowID()).keyState[key] &&
+		return windowKeyboardAdapters.get(MasterRenderer.getTargetWindowID()).keyState[key] &&
 				!windowKeyboardAdapters.get(MasterRenderer.getTargetWindowID()).prevKeyState[key];
 	}
 
 	public static boolean isPressed(int... keys) {
 		for (int i : keys) {
 			if (windowKeyboardAdapters.get(MasterRenderer.getTargetWindowID()).keyState[i] &&
-				!windowKeyboardAdapters.get(MasterRenderer.getTargetWindowID()).prevKeyState[i]) return true;
-		}
-		return false;
-	}
-
-	public static boolean isPressed(Keybinds.INPUT input) {
-		int key = Keybinds.getBind(input);
-		return isPressed(key);
-	}
-
-	public static boolean isPressed(Keybinds.INPUT... inputs) {
-		for (Keybinds.INPUT i : inputs) {
-			int key = Keybinds.getBind(i);
-			if (isPressed(key)) return true;
+					!windowKeyboardAdapters.get(MasterRenderer.getTargetWindowID()).prevKeyState[i]) return true;
 		}
 		return false;
 	}
 
 	// CHECK FOR HOLDING SHIFT
 	public static boolean isShift() {
-		return 	windowKeyboardAdapters.get(MasterRenderer.getTargetWindowID()).keyState[LSHIFT] ||
+		return windowKeyboardAdapters.get(MasterRenderer.getTargetWindowID()).keyState[LSHIFT] ||
 				windowKeyboardAdapters.get(MasterRenderer.getTargetWindowID()).keyState[RSHIFT];
 	}
 
 	// CHECK FOR HOLDING CONTROL
 	public static boolean isCtrl() {
-		return 	windowKeyboardAdapters.get(MasterRenderer.getTargetWindowID()).keyState[LCONTROL] ||
+		return windowKeyboardAdapters.get(MasterRenderer.getTargetWindowID()).keyState[LCONTROL] ||
 				windowKeyboardAdapters.get(MasterRenderer.getTargetWindowID()).keyState[RCONTROL];
 	}
+
+	// CHECK FOR TEXT INPUT
+	public static List<Character> getCharacterInput() {
+		return windowKeyboardAdapters.get(MasterRenderer.getTargetWindowID()).textInput;
+	}
 }
+

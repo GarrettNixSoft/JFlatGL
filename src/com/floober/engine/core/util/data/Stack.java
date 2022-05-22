@@ -1,10 +1,14 @@
 package com.floober.engine.core.util.data;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
+
 /**
  * A simple Stack implementation.
  * @param <T> the type of data to store
  */
-public class Stack<T> {
+public class Stack<T> extends DataStructure<T> {
 
 	class Node {
 		T data;
@@ -12,12 +16,11 @@ public class Stack<T> {
 	}
 
 	private Node first;
-	private int size;
-	private int capacity = 100;
 
 	public Stack() {
 		this.size = 0;
 		this.first = null;
+		this.capacity = 100;
 	}
 
 	public Stack(int capacity) {
@@ -26,45 +29,86 @@ public class Stack<T> {
 		this.first = null;
 	}
 
-	public void push(T element) {
-		if (size == capacity) throw new IndexOutOfBoundsException("This stack is full!");
+	/**
+	 * Add an element to the top of this stack.
+	 * @param element the element to add
+	 * @return {@code true} if there is room in the stack and the element is added, or {@code false} if the stack is full.
+	 */
+	public boolean push(T element) {
+		if (size == capacity) return false;
 		Node newFirst = new Node();
 		newFirst.data = element;
 		newFirst.next = first;
 		first = newFirst;
+		size++;
+		return true;
 	}
 
+	/**
+	 * Get the element at the top of the stack.
+	 * @return the next element
+	 */
 	public T peek() {
-		return first.data;
+		if (first == null) throw new NoSuchElementException("This stack is empty!");
+		else return first.data;
 	}
 
+	/**
+	 * Get the element at the top of the stack,
+	 * and remove it from the stack.
+	 * @return the next element
+	 */
 	public T poll() {
 		T result = peek();
 		remove();
 		return result;
 	}
 
+	/**
+	 * Remove the element at the top of this stack.
+	 */
 	public void remove() {
+		if (first == null) throw new NoSuchElementException("This stack is empty!");
 		first = first.next;
+		size--;
 	}
 
+	/**
+	 * Clear the stack. Removes all elements and sets the size to 0 in O(1) time.
+	 */
+	public void clear() {
+		size = 0;
+		first = null;
+	}
+
+	/**
+	 * Get the number of elements currently in the stack.
+	 * @return the size of the stack
+	 */
 	public int size() {
 		return size;
 	}
 
+	/**
+	 * Check if the stack is empty.
+	 * @return {@code true} if there are zero elements in this stack
+	 */
 	public boolean isEmpty() {
 		return size == 0;
 	}
 
-	public T[] getElements() {
+	/**
+	 * Retrieve all elements from this Stack in order.
+	 * @return an array containing all elements in the Stack
+	 */
+	public List<T> getElements() {
 
-		Object[] result = new Object[size];
-		Stack<T> other = new Stack<>(size);
+		List<T> result = new ArrayList<>(size);
+		Queue<T> other = new Queue<>(size);
 
-		int i = 0;
 		while (!isEmpty()) {
 			T element = poll();
-			result[i++] = element;
+			result.add(element);
 			other.push(element);
 		}
 
@@ -73,7 +117,7 @@ public class Stack<T> {
 			push(other.poll());
 		}
 
-		return (T[]) result;
+		return result;
 	}
 
 }

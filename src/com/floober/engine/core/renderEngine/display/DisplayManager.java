@@ -224,8 +224,16 @@ public class DisplayManager {
 		}
 
 		// Step 4: Set up callbacks
-		glfwSetKeyCallback(primaryWindowID, (window, key, scancode, action, mods) -> {
+		glfwSetKeyCallback(primaryWindowID, (window, key, scancode, action, mods) -> {});
+
+		// Sub-step: Create a callback for text input
+		glfwSetCharCallback(primaryWindowID, (window, codepoint) -> {
+			char[] text = Character.toChars(codepoint);
+			for (char c : text) KeyInput.windowKeyboardAdapters.get(window).characterQueue.push(c);
 		});
+
+
+
 		if (glfwRawMouseMotionSupported())
 			glfwSetInputMode(primaryWindowID, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 		glfwSetScrollCallback(primaryWindowID, (theWindowID, xoffset, yoffset) -> MouseInput.windowMouseAdapters.get(primaryWindowID).WHEEL = yoffset);
