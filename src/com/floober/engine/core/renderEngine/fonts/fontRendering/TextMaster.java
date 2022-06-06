@@ -48,6 +48,7 @@ public class TextMaster {
 	}
 
 	public static void removeText(GUIText text) {
+		text.delete();
 		int layer = (int) text.getPosition().z();
 		List<GUIText> textBatch = texts[layer].get(text.getFont());
 		if (textBatch != null) {
@@ -60,6 +61,7 @@ public class TextMaster {
 	}
 
 	public static void removeText(GUIText text, FontType oldFont) {
+		text.delete();
 		int layer = (int) text.getPosition().z();
 		List<GUIText> textBatch = texts[layer].get(oldFont);
 		if (textBatch != null) {

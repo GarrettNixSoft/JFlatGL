@@ -47,7 +47,7 @@ public class Logger {
 		Logger.logWarnings = false;
 		Logger.logErrors = true;
 		// startup
-		Logger.logLoaders = false;
+		Logger.logLoaders = true;
 		Logger.logLoadSuccess = false;
 		Logger.logLoadErrors = true;
 		Logger.logLoadGeneral = false;

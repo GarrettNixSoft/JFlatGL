@@ -32,6 +32,9 @@ public class FrameBuffer {
 	// flag if the buffer has been deleted
 	private boolean deleted = false;
 
+	// Texture object for convenience
+	private Texture texture;
+
 	public FrameBuffer(Window window, int width, int height, int depthBufferType) {
 		this.window = window;
 		this.width = width;
@@ -55,6 +58,10 @@ public class FrameBuffer {
 		return height;
 	}
 	public boolean isDeleted() { return deleted; }
+
+	public Texture getTexture() {
+		return texture;
+	}
 
 	/**
 	 * @return The ID of the texture containing the colour buffer of the FBO.
@@ -154,6 +161,8 @@ public class FrameBuffer {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTexture, 0);
+		// convenience object
+		texture = new Texture(colorTexture, width, height);
 	}
 
 	/**

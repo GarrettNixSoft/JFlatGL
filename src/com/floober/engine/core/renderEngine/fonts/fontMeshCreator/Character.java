@@ -35,7 +35,7 @@ package com.floober.engine.core.renderEngine.fonts.fontMeshCreator;
  * NOTE: I've also turned this class into a Record.
  * - Floober
  */
-public record Character(int id, double xTextureCoord, double yTextureCoord, double xTexSize, double yTexSize,
+public record Character(int id, char c, double xTextureCoord, double yTextureCoord, double xTexSize, double yTexSize,
 					   double xOffset, double yOffset, double sizeX, double sizeY, double xAdvance) {
 
 	public double xMaxTextureCoord() {

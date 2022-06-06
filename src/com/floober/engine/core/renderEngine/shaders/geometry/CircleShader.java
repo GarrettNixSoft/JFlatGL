@@ -12,7 +12,6 @@ public class CircleShader extends ShaderProgram {
 
 	private int location_color;
 	private int location_transformationMatrix;
-	private int location_center;
 	private int location_innerRadius;
 	private int location_outerRadius;
 	private int location_portion;
@@ -26,7 +25,6 @@ public class CircleShader extends ShaderProgram {
 	protected void getAllUniformLocations() {
 		location_color = super.getUniformLocation("color");
 		location_transformationMatrix = super.getUniformLocation("transformationMatrix");
-		location_center = super.getUniformLocation("center");
 		location_innerRadius = super.getUniformLocation("innerRadius");
 		location_outerRadius = super.getUniformLocation("outerRadius");
 		location_portion = super.getUniformLocation("portion");
@@ -44,10 +42,6 @@ public class CircleShader extends ShaderProgram {
 
 	public void loadTransformationMatrix(Matrix4f transformationMatrix) {
 		super.loadMatrix(location_transformationMatrix, transformationMatrix);
-	}
-
-	public void loadCenter(Vector2f center) {
-		super.loadVector(location_center, center);
 	}
 
 	public void loadInnerRadius(float innerRadius) {

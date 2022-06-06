@@ -19,6 +19,8 @@ import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.ShortBuffer;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public record WaveData(ByteBuffer data, int format, int samplerate, boolean stereo) {
 
@@ -26,9 +28,9 @@ public record WaveData(ByteBuffer data, int format, int samplerate, boolean ster
 		this.data.clear();
 	}
 
-	public static WaveData create(URL path) {
+	public static WaveData create(Path path) {
 		try {
-			return create(AudioSystem.getAudioInputStream(new BufferedInputStream(path.openStream())));
+			return create(AudioSystem.getAudioInputStream(new BufferedInputStream(path.toFile().toURI().toURL().openStream())));
 		} catch (Exception var2) {
 //			LWJGLUtil.log("Unable to create from: " + path);
 			var2.printStackTrace();
@@ -37,7 +39,7 @@ public record WaveData(ByteBuffer data, int format, int samplerate, boolean ster
 	}
 
 	public static WaveData create(String path) {
-		return create(WaveData.class.getClassLoader().getResource(path));
+		return create(Paths.get(path));
 	}
 
 	public static WaveData create(InputStream is) {

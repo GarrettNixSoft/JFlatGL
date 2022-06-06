@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL12.glDrawRangeElements;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
@@ -44,10 +45,6 @@ public class FontRenderer {
 
 	}
 
-	public void cleanUp(){
-		shader.cleanUp();
-	}
-	
 	private void prepare() {
 		shader.start();
 		glEnable(GL_BLEND);
@@ -55,8 +52,12 @@ public class FontRenderer {
 		glEnable(GL_DEPTH_TEST);
 		glDepthMask(false);
 	}
-	
+
 	private void renderText(GUIText text) {
+		if (text.isUseStencil()) {
+			glEnable(GL_STENCIL_TEST);
+			glStencilFunc(GL_EQUAL, 1, 0xFF);
+		}
 		glBindVertexArray(text.getMesh());
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
@@ -72,13 +73,21 @@ public class FontRenderer {
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
 		glBindVertexArray(0);
+		if (text.isUseStencil()) {
+			glDisable(GL_STENCIL_TEST);
+			glStencilFunc(GL_EQUAL, 1, 0x00);
+		}
 	}
-	
+
 	private void endRendering() {
 		shader.stop();
 		glDisable(GL_BLEND);
 		glDisable(GL_DEPTH_TEST);
 		glDepthMask(true);
+	}
+
+	public void cleanUp(){
+		shader.cleanUp();
 	}
 
 }

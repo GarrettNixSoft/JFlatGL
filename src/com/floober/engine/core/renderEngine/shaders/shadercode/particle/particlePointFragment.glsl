@@ -8,6 +8,8 @@ out vec4 out_color;
 in vec2 pos;
 in float blend;
 
+uniform float numRows;
+
 void main() {
 
 //    vec2 scaledPos = pos * 2;
@@ -16,5 +18,7 @@ void main() {
     alpha -= blend;
     alpha = pow(alpha, 16);
     out_color = vec4(pass_color.xyz, alpha);
+
+    if (numRows == 1000) out_color += vec4(1);
 
 }

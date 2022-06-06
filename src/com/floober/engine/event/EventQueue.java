@@ -11,6 +11,7 @@ import com.floober.engine.core.util.data.Queue;
 public class EventQueue<T extends QueuedEvent> {
 
 	protected Queue<T> events;
+	protected boolean running;
 
 	/**
 	 * Create a new empty EventQueue.
@@ -26,6 +27,18 @@ public class EventQueue<T extends QueuedEvent> {
 	public void queueEvent(T e) {
 		if (!events.push(e)) Logger.logWarning("[EventQueue] An element was not" +
 				"added to the queue because it is full (" + events.size() + " elements)");
+	}
+
+	public void start() {
+		if (events.isEmpty()) {
+			Logger.logError("Attempted to start empty EventQueue!");
+		}
+		else {
+			Logger.logEvent("[EventQueue] Starting first event, of type " + events.peek().getClass());
+			running = true;
+			assert events.peek() != null;
+			events.peek().start();
+		}
 	}
 
 	/**

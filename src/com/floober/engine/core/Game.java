@@ -148,13 +148,13 @@ public class Game {
 			update();
 
 			// clear window
-			MasterRenderer.primaryWindowRenderer.prepare();
+			MasterRenderer.primaryWindowRenderer.prepare(true);
 
 			// render game internally
 			render();
 
 			// render to the screen
-			MasterRenderer.primaryWindowRenderer.render();
+			MasterRenderer.primaryWindowRenderer.render(true);
 
 			// update display and poll events
 			DisplayManager.updateDisplay();

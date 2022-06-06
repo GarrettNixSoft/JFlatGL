@@ -3,6 +3,8 @@ package com.floober.engine.core.renderEngine.renderers;
 import com.floober.engine.core.assets.loaders.ImageLoader;
 import com.floober.engine.core.assets.loaders.Loader;
 import com.floober.engine.core.renderEngine.display.DisplayManager;
+import com.floober.engine.core.renderEngine.fonts.fontRendering.TextMaster;
+import com.floober.engine.core.renderEngine.util.Layers;
 import com.floober.engine.core.scenario.GameFlags;
 import com.floober.engine.core.renderEngine.Render;
 import com.floober.engine.core.renderEngine.elements.TextureElement;
@@ -20,6 +22,7 @@ import com.floober.engine.core.renderEngine.particles.emitters.ParticleEmitter;
 import com.floober.engine.core.renderEngine.textures.TextureComponent;
 import com.floober.engine.core.util.Globals;
 import com.floober.engine.core.util.color.Colors;
+import com.floober.engine.core.util.configuration.Config;
 import com.floober.engine.core.util.configuration.Settings;
 import com.floober.engine.core.util.interpolators.FadeFloat;
 import com.floober.engine.core.util.interpolators.FadeInFloat;
@@ -66,19 +69,20 @@ public class LoadRenderer {
 	 * Loads the resources necessary for the loading screen.
 	 */
 	public LoadRenderer init() {
+		TextMaster.init();
 		// width and height convenience variables
-		int WIDTH = DisplayManager.getPrimaryGameWindow().getWidth();
-		int HEIGHT = DisplayManager.getPrimaryGameWindow().getHeight();
+		int WIDTH = Config.INTERNAL_WIDTH;
+		int HEIGHT = Config.INTERNAL_HEIGHT;
 		// positions
 		float screenCenterX = WIDTH / 2f;
 		float screenCenterY = HEIGHT / 2f;
 		// load assets
 		// loading screen assets
 		TextureComponent logo = ImageLoader.loadTexture("res/icon/icon512.png");
-		logoElement = new TextureElement(logo, screenCenterX, screenCenterY - 200, 0, 256, 256, true);
+		logoElement = new TextureElement(logo, screenCenterX, screenCenterY - 200, Layers.DEFAULT_LAYER, 256, 256, true);
 		logoElement.setHasTransparency(true);
 		TextureComponent check = Loader.loadTexture("menu/load/load_check.png");
-		checkElement = new TextureElement(check, screenCenterX, screenCenterY + 200, 0, 64, 64, true);
+		checkElement = new TextureElement(check, screenCenterX, screenCenterY + 200, Layers.DEFAULT_LAYER, 64, 64, true);
 		checkElement.setHasTransparency(true);
 		FontType loadingFont = Loader.loadFont("aller");
 		// set colors
@@ -98,13 +102,13 @@ public class LoadRenderer {
 		int barWidth = 500;
 		int barHeight = 10;
 		// base bar
-		baseBar = new RectElement(baseColor, WIDTH / 2f, HEIGHT / 2f + 30, 200, barWidth, barHeight, true);
-		progressBar = new RectElement(barColor, WIDTH / 2f - barWidth / 2f, HEIGHT / 2f + 30 - barHeight / 2f, 100, 0, barHeight, false);
+		baseBar = new RectElement(baseColor, WIDTH / 2f, HEIGHT / 2f + 30, Layers.DEFAULT_LAYER, barWidth, barHeight, true);
+		progressBar = new RectElement(barColor, WIDTH / 2f - barWidth / 2f, HEIGHT / 2f + 30 - barHeight / 2f, Layers.DEFAULT_LAYER + 1, 0, barHeight, false);
 		// particle effect
 		TextureComponent particleTex = ImageLoader.loadTexture("res/textures/particles/glow_map.png");
 		// particle effect
 		ParticleTexture particleTexture = new ParticleTexture(particleTex, 1, true);
-		Vector3f sourcePosition = new Vector3f(WIDTH / 2f - barWidth / 2f, HEIGHT / 2f + 30 - barHeight / 2f, 0);
+		Vector3f sourcePosition = new Vector3f(WIDTH / 2f - barWidth / 2f, HEIGHT / 2f + 30 - barHeight / 2f, Layers.TOP_LAYER);
 		MovementBehavior movementBehavior = new FlameBehavior(-90, 20);
 		movementBehavior.initSpeed(10, 80);
 		AppearanceBehavior appearanceBehavior = new FadeOutBehavior(1, 0);
@@ -125,6 +129,8 @@ public class LoadRenderer {
 	}
 
 	public void render() {
+		// prepare
+		MasterRenderer.primaryWindowRenderer.prepare(false);
 		// invert colors?
 		boolean invertColors = !GameFlags.getFlagValue("prologue_shown");
 		// render white background
@@ -242,6 +248,7 @@ public class LoadRenderer {
 		Vector4f baseColor = new Vector4f(baseAlpha);
 		if (invertColors) baseColor = Colors.invert(baseColor);
 		baseBar.setColor(baseColor);
+		baseBar.transform();
 		Render.drawRect(baseBar);
 		// draw bar
 		Vector4f infoColor = new Vector4f(1 - infoAlpha);
@@ -253,7 +260,7 @@ public class LoadRenderer {
 		progressBar.getColor().set(copy);
 		Render.drawRect(progressBar);
 		// update particle source position, generate some particles
-		particleSource.setPosition(progressBar.getX() + progressBar.getWidth(), progressBar.getY() + progressBar.getHeight() / 2, 0);
+		particleSource.setPosition(progressBar.getX() + progressBar.getWidth(), progressBar.getY() + progressBar.getHeight() / 2, Layers.TOP_LAYER);
 //		particleSource.update(); // TODO decide if this looks better without the particles (it probably does; less jittery)
 		// draw text, report percentage
 		float percentage = complete + portion * progress;
@@ -281,8 +288,19 @@ public class LoadRenderer {
 	}
 
 	private void renderFrame() {
-		MasterRenderer.primaryWindowRenderer.prepare();
-		MasterRenderer.primaryWindowRenderer.render();
+		/*
+			- Target window is correct
+			- Buffers are swapping (?)
+			- prepare is called before this
+			- updateDisplay is called after this
+			- is post-processing working?
+
+			I HAD FORGOTTEN THAT I CHANGED HOW TRANSFORMATION MATRICES ARE GENERATED
+			ALL THE QUADS WEREN'T BEING SCALED TO SCREEN SPACE COORDINATES
+			THEY WERE BEING RENDERED LIKE 5000 TIMES THE SIZE OF THE SCREEN
+		 */
+		MasterRenderer.primaryWindowRenderer.render(true);
+		MasterRenderer.getTargetWindow().swapBuffers();
 	}
 
 	/**

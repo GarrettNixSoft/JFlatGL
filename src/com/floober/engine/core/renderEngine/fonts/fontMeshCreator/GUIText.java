@@ -51,6 +51,8 @@ public class GUIText {
 	private boolean hidden;
 	private boolean processed;
 	private boolean needsReload;
+	private boolean useStencil;
+
 
 	public GUIText() {
 		this.textString = "";
@@ -134,10 +136,41 @@ public class GUIText {
 		TextMaster.processText(this);
 	}
 
+	/**
+	 * Create a new GUIText with new text, copying all other settings
+	 * from another GUIText object.
+	 * @param other the GUIText to copy settings from
+	 * @param newTextString the new text to display
+	 */
+	public GUIText(GUIText other, String newTextString) {
+		this.textString = newTextString;
+		this.fontSize = other.fontSize;
+		this.font = other.font;
+		this.position = other.position;
+		this.lineMaxSize = other.lineMaxSize;
+		this.centerText = other.centerText;
+		this.firstCharVisible = 0;
+		this.lastCharVisible = newTextString.length();
+		// text display values
+		this.width = other.width;
+		this.edge = other.edge;
+		this.borderWidth = other.borderWidth;
+		this.borderEdge = other.borderEdge;
+		this.shadowOffset = other.shadowOffset;
+		this.outlineColor = other.outlineColor;
+		this.hidden = other.hidden;
+		// create mesh data
+		TextMaster.processText(this);
+	}
+
 	// GETTERS
+	public float getLineWidth() {
+		return lineMaxSize;
+	}
 	public float getWidth() {
 		return width;
 	}
+	public float getHeight() { return textMeshData.textHeight(); }
 	public float getEdge() {
 		return edge;
 	}
@@ -165,6 +198,10 @@ public class GUIText {
 	}
 
 	public boolean isProcessed() { return processed; }
+
+	public boolean nextCharNotWhitespace(int charIndex) {
+		return (charIndex < getTextString().length() && getTextString().charAt(charIndex) != ' ') || charIndex == getTextString().length();
+	}
 
 	// SETTERS
 
@@ -197,9 +234,21 @@ public class GUIText {
 		this.lastCharVisible = lastCharVisible;
 	}
 	public void setProcessed(boolean processed) { this.processed = processed; }
+	public void setUseStencil(boolean useStencil) {this.useStencil = useStencil; }
+
+	public void setAlpha(float alpha) { color.setComponent(3, alpha); }
 
 	public void revealNextChar() {
 		lastCharVisible++;
+	}
+
+	/**
+	 * Move this GUIText by the given offset. The offset
+	 * will be added to the current position.
+	 * @param offset the offset to move by
+	 */
+	public void move(Vector2f offset) {
+		this.position.add(offset.x(), offset.y(), 0);
 	}
 
 	// Category 2: Damaging Setters (vertex data must be updated)
@@ -317,7 +366,7 @@ public class GUIText {
 	/**
 	 * @return the font size of the text (a font size of 1 is normal).
 	 */
-	protected float getFontSize() {
+	public float getFontSize() {
 		return fontSize;
 	}
 
@@ -334,7 +383,7 @@ public class GUIText {
 	/**
 	 * @return {@code true} if the text should be centered.
 	 */
-	protected boolean isCentered() {
+	public boolean isCentered() {
 		return centerText;
 	}
 
@@ -358,6 +407,11 @@ public class GUIText {
 	public boolean isHidden() {
 		return hidden;
 	}
+
+	/**
+	 * @return Whether this text currently uses the stencil test.
+	 */
+	public boolean isUseStencil() { return useStencil; }
 
 	// ACTIONS
 	/**
@@ -446,7 +500,6 @@ public class GUIText {
 			try {
 				float textHeight = textMeshData.textHeight();
 				position.y -= textHeight / 2;
-				if (textString.startsWith("Floober101")) Logger.log("text y = " + position.y);
 			} catch (Exception e) {
 				// guess we're not ready for that yet
 				Logger.logWarning("Maybe don't center this text yet, if you can help it");
@@ -464,4 +517,8 @@ public class GUIText {
 		textMeshVbos.add(vbo);
 	}
 
+	@Override
+	public String toString() {
+		return "[GUIText] @" + position + ", color=" + color + "; " + textString;
+	}
 }

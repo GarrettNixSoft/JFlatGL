@@ -11,7 +11,9 @@ import com.floober.engine.core.renderEngine.textures.TextureComponent;
 import com.floober.engine.core.renderEngine.textures.TextureSet;
 import com.floober.engine.core.util.Globals;
 import com.floober.engine.core.util.Logger;
+import com.floober.engine.core.util.configuration.Config;
 import com.floober.engine.core.util.file.FileUtil;
+import com.floober.engine.test.RunGame;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -85,7 +87,7 @@ public class TextureLoader extends AssetLoader {
 			// report the load count
 			Globals.texCount++;
 			// render the load screen
-//			RunGame.loadRenderer.render();
+			if (Config.USE_LOAD_RENDERER) RunGame.loadRenderer.render();
 			// done
 		}
 	}
@@ -125,7 +127,7 @@ public class TextureLoader extends AssetLoader {
 			// report the load count
 			Globals.texCount++;
 			// render the load screen
-//			RunGame.loadRenderer.render();
+			if (Config.USE_LOAD_RENDERER) RunGame.loadRenderer.render();
 			// done
 		}
 	}
@@ -170,7 +172,7 @@ public class TextureLoader extends AssetLoader {
 			// report the load count
 			Globals.texCount++;
 			// render the loading screen
-//			RunGame.loadRenderer.render();
+			if (Config.USE_LOAD_RENDERER) RunGame.loadRenderer.render();
 			// done
 		}
 	}
@@ -208,7 +210,7 @@ public class TextureLoader extends AssetLoader {
 			// report the load count
 			Globals.texCount++;
 			// render the load screen
-//			RunGame.loadRenderer.render();
+			if (Config.USE_LOAD_RENDERER) RunGame.loadRenderer.render();
 			// done
 		}
 	}

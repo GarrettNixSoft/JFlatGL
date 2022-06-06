@@ -11,6 +11,7 @@ import com.floober.engine.core.renderEngine.particles.systems.FireScreenParticle
 import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.color.Colors;
+import com.floober.engine.core.util.configuration.Config;
 import com.floober.engine.core.util.input.KeyInput;
 import com.floober.engine.core.util.input.MouseInput;
 import com.floober.engine.core.util.time.Sync;
@@ -25,6 +26,8 @@ import static org.lwjgl.glfw.GLFW.*;
 public class FireScreenTest {
 
 	public static void main(String[] args) {
+
+		Config.load();
 
 		// Set up logging.
 		Logger.setLoggerConfig();
@@ -50,7 +53,7 @@ public class FireScreenTest {
 		// Run the game loop!
 		while (!glfwWindowShouldClose(primaryWindowID)) {
 			// clear window
-			MasterRenderer.primaryWindowRenderer.prepare();
+			MasterRenderer.primaryWindowRenderer.prepare(true);
 
 			// poll input
 			KeyInput.update();
@@ -72,7 +75,7 @@ public class FireScreenTest {
 			fpsDisplay.replaceText("FPS: " + fps + "\nParticles: " + MasterRenderer.getParticleCount());
 
 			// render to the screen
-			MasterRenderer.primaryWindowRenderer.render();
+			MasterRenderer.primaryWindowRenderer.render(true);
 
 			// update display and poll events
 			DisplayManager.updateDisplay();

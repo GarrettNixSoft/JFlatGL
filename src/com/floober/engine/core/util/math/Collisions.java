@@ -11,12 +11,35 @@ public class Collisions {
 
 	/**
 	 * Create a Vector4f representation of an entity collision box, in absolute coordinates.
+	 * @param x the x position (center)
+	 * @param y the y position (center)
+	 * @param width the width of the box
+	 * @param height the height of the box
+	 * @return a Vector4f representing {x1,y1,x2,y2} (NOT {x,y,w,h})
+	 */
+	public static Vector4f createCollisionBox(float x, float y, float width, float height) {
+		return new Vector4f(x - width / 2, y - height / 2, x + width / 2, y + height / 2);
+	}
+
+	/**
+	 * Create a Vector4f representation of an entity collision box, in absolute coordinates.
 	 * @param position the entity position
 	 * @param size the entity size
 	 * @return a Vector4f representing {x1,y1,x2,y2} (NOT {x,y,w,h})
 	 */
 	public static Vector4f createCollisionBox(Vector2f position, Vector2f size) {
 		return new Vector4f(position.x - size.x / 2, position.y - size.y / 2, position.x + size.x / 2, position.y + size.y / 2);
+	}
+
+	/**
+	 * Create a Vector4f representation of an entity collision box, in absolute coordinates.
+	 * @param position the entity position (center)
+	 * @param size the entity size
+	 * @return a Vector4f representing {x1,y1,x2,y2} (NOT {x,y,w,h})
+	 */
+	public static Vector4f createCollisionBox(Vector2f position, Vector2f size, float scale) {
+		Vector2f scaledSize = new Vector2f(size.x * scale, size.y * scale);
+		return new Vector4f(position.x - scaledSize.x / 2, position.y - scaledSize.y / 2, position.x + scaledSize.x / 2, position.y + scaledSize.y / 2);
 	}
 
 	/**

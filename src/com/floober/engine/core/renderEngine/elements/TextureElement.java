@@ -1,5 +1,6 @@
 package com.floober.engine.core.renderEngine.elements;
 
+import com.floober.engine.core.Game;
 import com.floober.engine.core.renderEngine.display.DisplayManager;
 import com.floober.engine.core.renderEngine.textures.Texture;
 import com.floober.engine.core.renderEngine.textures.TextureComponent;
@@ -56,32 +57,56 @@ public class TextureElement extends RenderElement {
 	 */
 	public TextureElement() {
 		super(0, 0, 0, true);
-		this.textureComponent = null;
+		this.textureComponent = Game.getTexture("default");
 		this.width = 0;
 		this.height = 0;
+//		setTextureOffset(new Vector4f(0, 0, 1, 1));
+	}
+
+	public TextureElement(TextureComponent textureComponent) {
+		super(0, 0, 0, true);
+		this.textureComponent = textureComponent;
+		this.width = 0;
+		this.height = 0;
+		transform();
+		setTextureOffset(new Vector4f(0, 0, 1, 1));
 	}
 
 	public TextureElement(TextureComponent texture, float x, float y, int layer, float width, float height, boolean centered) {
 		super(x, y, layer, centered);
+		assert texture != null;
 		this.textureComponent = texture;
 		this.width = width;
 		this.height = height;
 		transform();
+		setTextureOffset(new Vector4f(0, 0, 1, 1));
 	}
 
 	public TextureElement(TextureComponent texture, float x, float y, int layer, boolean centered) {
 		super(x, y, layer, centered);
+		assert texture != null;
 		this.textureComponent = texture;
 		this.width = texture.width();
 		this.height = texture.height();
 		transform();
+		setTextureOffset(new Vector4f(0, 0, 1, 1));
+	}
+
+	public TextureElement(float x, float y, int layer, float width, float height, boolean centered) {
+		super(x, y, layer, centered);
+		this.textureComponent = Game.getTexture("default");
+		this.width = width;
+		this.height = height;
+		transform();
+		setTextureOffset(new Vector4f(0, 0, 1, 1));
 	}
 
 	// COPY CONSTRUCTOR
 	public TextureElement(TextureElement other) {
 		super(other.x, other.y, other.layer, other.centered);
+		assert other.textureComponent != null;
 		// texture and size
-		this.textureComponent = other.textureComponent;
+		this.textureComponent = new TextureComponent(other.textureComponent);
 		this.width = other.width;
 		this.height = other.height;
 		// effect toggle
@@ -115,13 +140,13 @@ public class TextureElement extends RenderElement {
 		this.fadeDirection = other.fadeDirection;
 		// finalize
 		transform();
+//		setTextureOffset(new Vector4f(0, 0, 1, 1));
 	}
 
 	// GETTERS
 	public TextureComponent getTextureComponent() {
 		return textureComponent;
 	}
-
 	// shortcuts
 	public Texture getRawTexture() { return textureComponent.texture(); }
 	public Vector4f getTextureComponentOffset() { return textureComponent.getTextureOffset(); }
@@ -151,7 +176,6 @@ public class TextureElement extends RenderElement {
 	public Vector4f getaChannelColor() {
 		return aChannelColor;
 	}
-
 	public Vector4f getColor() { return color; }
 	public float getMix() { return mix; }
 
@@ -180,10 +204,10 @@ public class TextureElement extends RenderElement {
 	public int getFadeDirection() { return fadeDirection; }
 
 	// SETTERS
-	public void setTexture(TextureComponent texture) {
-		this.textureComponent = texture;
-		this.width = texture.width();
-		this.height = texture.height();
+	public void setTexture(TextureComponent textureComponent) {
+		this.textureComponent = textureComponent;
+		this.width = textureComponent.width();
+		this.height = textureComponent.height();
 	}
 
 	public void setTexture(TextureComponent texture, int width, int height) {

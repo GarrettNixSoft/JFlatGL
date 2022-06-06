@@ -7,7 +7,9 @@ import com.floober.engine.core.Game;
 import com.floober.engine.core.renderEngine.renderers.LoadRenderer;
 import com.floober.engine.core.util.Globals;
 import com.floober.engine.core.util.Logger;
+import com.floober.engine.core.util.configuration.Config;
 import com.floober.engine.core.util.file.FileUtil;
+import com.floober.engine.test.RunGame;
 
 import java.io.File;
 
@@ -57,7 +59,7 @@ public class SfxLoader extends AssetLoader {
 			// report load count
 			Globals.sfxCount++;
 			// render load screen
-//			RunGame.loadRenderer.render();
+			if (Config.USE_LOAD_RENDERER) RunGame.loadRenderer.render();
 			// done
 		}
 	}

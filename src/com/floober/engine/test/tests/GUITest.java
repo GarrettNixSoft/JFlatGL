@@ -41,6 +41,7 @@ public class GUITest {
 	public static void main(String[] args) throws GUIException {
 
 		// Load user preferences/settings and game flags
+		Config.load();
 		Settings.load();
 		GameFlags.init();
 
@@ -189,7 +190,7 @@ public class GUITest {
 
 		while (!(glfwWindowShouldClose(primaryWindowID) || Game.closeRequested())) {
 			// clear window
-			MasterRenderer.primaryWindowRenderer.prepare();
+			MasterRenderer.primaryWindowRenderer.prepare(true);
 
 			// poll input
 			KeyInput.update();
@@ -215,7 +216,8 @@ public class GUITest {
 					"\nText: " + FontRenderer.ELEMENT_COUNT);
 
 			// render to the screen
-			MasterRenderer.primaryWindowRenderer.render();
+			MasterRenderer.primaryWindowRenderer.render(true);
+			MasterRenderer.getTargetWindow().swapBuffers();
 
 			// update display and poll events
 			DisplayManager.updateDisplay();

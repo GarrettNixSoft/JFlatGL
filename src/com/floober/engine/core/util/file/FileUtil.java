@@ -2,6 +2,7 @@ package com.floober.engine.core.util.file;
 
 import com.floober.engine.core.util.Globals;
 import com.floober.engine.core.util.Logger;
+import com.floober.engine.core.util.StringUtils;
 import com.floober.engine.core.util.conversion.StringConverter;
 import org.json.JSONObject;
 
@@ -28,7 +29,7 @@ public class FileUtil {
 		return builder.toString();
 	}
 
-	public static ArrayList<String> getFileData(String path) {
+	public static ArrayList<String> getFileDataDirectly(String path) {
 		path = path.replace("\\", "/");
 		Logger.logLoad("Loading file: " + path);
 		ArrayList<String> data = new ArrayList<>();
@@ -49,6 +50,12 @@ public class FileUtil {
 			return data;
 		}
 		return data;
+	}
+
+	public static ArrayList<String> getFileData(String path) {
+		path = path.replace("\\", "/");
+		File file = getFile(path);
+		return getFileData(file);
 	}
 
 	public static ArrayList<String> getFileData(File file) {
@@ -73,17 +80,58 @@ public class FileUtil {
 		return data;
 	}
 
+	public static ArrayList<String> getResourceDataFile(String path) {
+		path = path.replace("\\", "/");
+		File file = new File("resourceData/" + path);
+		try {
+			ArrayList<String> data = getFileData(file);
+			if (data.isEmpty() || (data.size() == 1 && data.get(0).isEmpty())) throw new RuntimeException();
+			else return data;
+		} catch (Exception e) {
+			file = new File("/resourceData/" + path);
+			return getFileData(file);
+		}
+	}
+
+	public static ArrayList<String> getResDataFile(String path) {
+		path = path.replace("\\", "/");
+		File file = new File("res/" + path);
+		try {
+			ArrayList<String> data = getFileData(file);
+			if (data.isEmpty() || (data.size() == 1 && data.get(0).isEmpty())) throw new RuntimeException();
+			else return data;
+		} catch (Exception e) {
+			file = new File("/res/" + path);
+			return getFileData(file);
+		}
+	}
+
 	public static File getFile(String path) {
 		path = path.replace("\\", "/");
 		File file = new File(path);
 		if (!file.exists()) {
 			file = new File("/" + path);
-			if (!file.exists())
-				file = new File("res/" + path);
 			if (!file.exists()) {
-				file = new File("/res/" + path);
-				if (!file.exists())
-					throw new RuntimeException("File " + path + " couldn't be found.");
+				file = new File("res/" + path);
+				if (!file.exists()) {
+					file = new File("/res/" + path);
+					if (!file.exists()) {
+						file = new File("resourceData/" + path);
+						if (!file.exists()) {
+							file = new File("/resourceData/" + path);
+							if (!file.exists())
+								throw new RuntimeException("File " + path + " couldn't be found.");
+						} else {
+							System.out.println("Succeeded at: " + file.getPath());
+						}
+					} else {
+						System.out.println("Succeeded at: " + file.getPath());
+					}
+				} else {
+					System.out.println("Succeeded at: " + file.getPath());
+				}
+			} else {
+				System.out.println("Succeeded at: " + file.getPath());
 			}
 		}
 		return file;
@@ -107,8 +155,14 @@ public class FileUtil {
 	// LOAD METHODS
 	public static JSONObject getJSON(String file) {
 		// load file data
-		ArrayList<String> fileData = getFileData(file);
+		ArrayList<String> fileData =
+				file.contains("assets") || file.endsWith("config.json") ?
+					getResourceDataFile(file) :
+						StringUtils.containsAny(file, ".fnt", ".png", ".wav") ?
+							getResDataFile(file) :
+							getFileData(file);
 		String combined = StringConverter.combineAll(fileData);
+		System.out.println(combined);
 		// create JSON parser
 		return new JSONObject(combined);
 	}

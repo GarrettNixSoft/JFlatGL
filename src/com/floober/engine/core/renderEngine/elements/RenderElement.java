@@ -1,7 +1,8 @@
 package com.floober.engine.core.renderEngine.elements;
 
-import com.floober.engine.core.renderEngine.display.DisplayManager;
 import com.floober.engine.core.renderEngine.Render;
+import com.floober.engine.core.renderEngine.display.DisplayManager;
+import com.floober.engine.core.renderEngine.elements.TextureElement;
 import com.floober.engine.core.renderEngine.elements.geometry.*;
 import com.floober.engine.core.renderEngine.framebuffers.FrameBuffer;
 import com.floober.engine.core.renderEngine.framebuffers.FrameBuffers;
@@ -19,6 +20,7 @@ public abstract class RenderElement implements Comparable<RenderElement> {
 	protected Vector3f position;
 	protected Vector2f scale;
 	protected boolean centered;
+	protected boolean stencilWrite;
 
 	public RenderElement(float x, float y, int layer, boolean centered) {
 		assert layer <= Layers.TOP_LAYER && layer >= Layers.BOTTOM_LAYER;
@@ -35,22 +37,9 @@ public abstract class RenderElement implements Comparable<RenderElement> {
 	 */
 	public void transform() {
 		position = DisplayManager.convertToDisplayPosition(x, y, layer, width, height, centered);
-//		Logger.log("Position converted from (" + x + ", " + y + ") to " + position);
-//		scale = Display.convertToDisplayScale(width, height);
-		// TEST
+//		if (centered) Logger.log("Position converted from (" + x + ", " + y + ") to " + position);
+//		else Logger.log("Position converted from (" + (x+width/2) + ", " + (y+height/2) + ") to " + position);
 		scale = new Vector2f(width, height);
-		// END_TEST
-	}
-
-	/**
-	 * Apply any changes to this element's position or size
-	 * to its appearance within the given FrameBuffer by converting
-	 * their current values from pixel units to screen units.
-	 * @param buffer The FrameBuffer to use for reference.
-	 */
-	public void transform(FrameBuffer buffer) {
-		position = FrameBuffers.convertToFramebufferPosition(x, y, layer, width, height, centered, buffer);
-		scale = FrameBuffers.convertToFramebufferScale(width, height, buffer);
 	}
 
 	/**
@@ -67,6 +56,18 @@ public abstract class RenderElement implements Comparable<RenderElement> {
 			case TextureElement tex -> Render.drawImage(tex);
 			default -> throw new IllegalStateException("Unexpected value: " + this);
 		}
+	}
+
+	/**
+	 * Apply any changes to this element's position or size
+	 * to its appearance within the given FrameBuffer by converting
+	 * their current values from pixel units to screen units.
+	 * @param buffer The FrameBuffer to use for reference.
+	 */
+	public void transform(FrameBuffer buffer) {
+		position = FrameBuffers.convertToFramebufferPosition(x, y, layer, width, height, centered, buffer);
+		scale = FrameBuffers.convertToFramebufferScale(width, height, buffer);
+//		scale = new Vector2f(width, height); // TODO ?
 	}
 
 	// GETTERS
@@ -88,6 +89,9 @@ public abstract class RenderElement implements Comparable<RenderElement> {
 	public float getRotation() { return rotation; }
 	public boolean isCentered() {
 		return centered;
+	}
+	public boolean isStencilWrite() {
+		return stencilWrite;
 	}
 	public Vector3f getPosition() {
 		return position;
@@ -123,6 +127,9 @@ public abstract class RenderElement implements Comparable<RenderElement> {
 	public void setRotation(float rotation) { this.rotation = rotation; }
 	public void setCentered(boolean centered) {
 		this.centered = centered;
+	}
+	public void setStencilWrite(boolean stencilWrite) {
+		this.stencilWrite = stencilWrite;
 	}
 
 	public void setPosition(float x, float y, int layer) {

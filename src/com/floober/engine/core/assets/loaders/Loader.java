@@ -32,12 +32,12 @@ public class Loader {
 	}
 
 	public static Sound loadMusic(String path) {
-		path = "music" + SEPARATOR + path;
+		path = "res" + SEPARATOR + "music" + SEPARATOR + path;
 		return AudioMaster.loadSound(path);
 	}
 
 	public static Sound loadSfx(String path) {
-		path = "sfx" + SEPARATOR + path;
+		path = "res" + SEPARATOR + "sfx" + SEPARATOR + path;
 		return AudioMaster.loadSound(path);
 	}
 

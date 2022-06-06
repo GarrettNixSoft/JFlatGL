@@ -8,10 +8,12 @@ import com.floober.engine.core.renderEngine.batches.opaque.*;
 import com.floober.engine.core.renderEngine.batches.transparent.*;
 import com.floober.engine.core.renderEngine.elements.TextureElement;
 import com.floober.engine.core.renderEngine.elements.geometry.*;
+import com.floober.engine.core.renderEngine.elements.tile.TileElement;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.floober.engine.core.renderEngine.fonts.fontRendering.FontRenderer;
 import com.floober.engine.core.renderEngine.fonts.fontRendering.TextMaster;
 import com.floober.engine.core.renderEngine.framebuffers.FrameBuffer;
+import com.floober.engine.core.renderEngine.framebuffers.FrameBuffers;
 import com.floober.engine.core.renderEngine.particles.ParticleMaster;
 import com.floober.engine.core.renderEngine.particles.ParticleTexture;
 import com.floober.engine.core.renderEngine.particles.types.Particle;
@@ -31,7 +33,6 @@ import static org.lwjgl.opengl.GL11.*;
  */
 public class MasterRenderer {
 
-	// master components
 	public static final HashMap<Long, MasterRenderer> instances = new HashMap<>();
 	public static MasterRenderer primaryWindowRenderer;
 	public static MasterRenderer currentRenderTarget;
@@ -45,6 +46,7 @@ public class MasterRenderer {
 	// element renderers
 	private final TextureRenderer textureRenderer;
 	private final GeometryRenderer geometryRenderer;
+	private final TileRenderer tileRenderer;
 
 	private final ParticleMaster particleMaster;
 
@@ -55,6 +57,8 @@ public class MasterRenderer {
 	// Render batches; mapped by layer index
 	private final Map<Integer, TextureBatchOpaque> opaqueTextureBatches = new HashMap<>();
 	private final Map<Integer, TextureBatchTransparent> transparentTextureBatches = new HashMap<>();
+	private final Map<Integer, TileBatchOpaque> opaqueTileBatches = new HashMap<>();
+	private final Map<Integer, TileBatchTransparent> transparentTileBatches = new HashMap<>();
 	private final Map<Integer, RectBatchOpaque> opaqueRectBatches = new HashMap<>();
 	private final Map<Integer, RectBatchTransparent> transparentRectBatches = new HashMap<>();
 	private final Map<Integer, CircleBatchOpaque> opaqueCircleBatches = new HashMap<>();
@@ -82,13 +86,14 @@ public class MasterRenderer {
 		// determine the number of layers available
 		RENDER_LAYERS = DisplayManager.getPrimaryGameWindow() == window ? Layers.NUM_LAYERS : Layers.EXTERN_LAYERS;
 		// create the scene buffer
-		sceneBuffer = new FrameBuffer(window, Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT, FrameBuffer.DEPTH_RENDER_BUFFER);
+		sceneBuffer = FrameBuffers.createFullScreenFrameBuffer();
 		// create the renderers
 		textureRenderer = new TextureRenderer();
 		geometryRenderer = new GeometryRenderer();
+		tileRenderer = new TileRenderer();
 		particleMaster = new ParticleMaster(RENDER_LAYERS);
 		particleMaster.init();
-		layers = new RenderLayer[RENDER_LAYERS];
+		layers = new RenderLayer[Layers.NUM_LAYERS];
 		initLayers();
 		// create the post-processor
 		postProcessor = new PostProcessing(window.getWindowID());
@@ -143,6 +148,8 @@ public class MasterRenderer {
 			// create the batches that will be used to populate the layer
 			opaqueTextureBatches.put(i, new TextureBatchOpaque(i, textureRenderer));
 			transparentTextureBatches.put(i, new TextureBatchTransparent(i, textureRenderer));
+			opaqueTileBatches.put(i, new TileBatchOpaque(i, tileRenderer));
+			transparentTileBatches.put(i, new TileBatchTransparent(i, tileRenderer));
 			opaqueRectBatches.put(i, new RectBatchOpaque(i, geometryRenderer));
 			transparentRectBatches.put(i, new RectBatchTransparent(i, geometryRenderer));
 			opaqueCircleBatches.put(i, new CircleBatchOpaque(i, geometryRenderer));
@@ -157,12 +164,12 @@ public class MasterRenderer {
 	}
 
 	public float getScreenZ(int layer) {
-		int trueLayer = RENDER_LAYERS - layer;
-		return ((float) trueLayer / RENDER_LAYERS);
+		int trueLayer = Layers.NUM_LAYERS - layer;
+		return ((float) trueLayer / Layers.NUM_LAYERS);
 	}
 
 	public int getLayerByZ(float z) {
-		return (int) (RENDER_LAYERS - (z * 10));
+		return (int) (Layers.NUM_LAYERS - (z * 10));
 	}
 
 	// *** ADDING ELEMENTS ***
@@ -175,6 +182,16 @@ public class MasterRenderer {
 			transparentTextureBatches.get(layer).addElement(element);
 		else
 			opaqueTextureBatches.get(layer).addElement(element);
+	}
+
+	public void addTileElement(TileElement element) {
+		// get the layer this element will be rendered in
+		int layer = element.getLayer();
+		// add this element to the appropriate batch
+		if (element.hasTransparency())
+			transparentTileBatches.get(layer).addElement(element);
+		else
+			opaqueTileBatches.get(layer).addElement(element);
 	}
 
 	public void addTextElement(GUIText text) {
@@ -239,19 +256,19 @@ public class MasterRenderer {
 	}
 
 	// *** RENDERING ***
-	public void prepare() {
+	public void prepare(boolean useSceneBuffer) {
 		currentRenderTarget = this;
-		if (GameLoader.LOAD_COMPLETE) sceneBuffer.bindFrameBuffer();
+		if (GameLoader.LOAD_COMPLETE && useSceneBuffer) sceneBuffer.bindFrameBuffer();
 		glDepthMask(true);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		if (GameLoader.LOAD_COMPLETE) sceneBuffer.unbindFrameBuffer();
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		if (GameLoader.LOAD_COMPLETE && useSceneBuffer) sceneBuffer.unbindFrameBuffer();
 
 		// target the current window
 		glfwMakeContextCurrent(windowTarget);
-		getTargetWindow().setViewport();
+		if (useSceneBuffer) getTargetWindow().setViewport();
 	}
 
-	public void render() {
+	public void render(boolean useSceneBuffer) {
 
 		// target the current window
 //		glfwMakeContextCurrent(windowTarget);
@@ -265,7 +282,7 @@ public class MasterRenderer {
 		FontRenderer.ELEMENT_COUNT = 0;
 
 		// render to scene buffer
-		if (GameLoader.LOAD_COMPLETE) sceneBuffer.bindFrameBuffer();
+		if (GameLoader.LOAD_COMPLETE && useSceneBuffer) sceneBuffer.bindFrameBuffer();
 
 		// prepare
 		prepareLayers();
@@ -286,12 +303,11 @@ public class MasterRenderer {
 		clearBatches();
 
 		// unbind scene buffer
-		if (GameLoader.LOAD_COMPLETE) sceneBuffer.unbindFrameBuffer();
+		if (GameLoader.LOAD_COMPLETE && useSceneBuffer) sceneBuffer.unbindFrameBuffer();
 
 		// Do post-processing to complete the frame render
-		postProcessor.doPostProcessing(sceneBuffer.getColorTexture());
-
-		getTargetWindow().swapBuffers();
+		if (GameLoader.LOAD_COMPLETE && useSceneBuffer) postProcessor.doPostProcessing(sceneBuffer.getColorTexture());
+		// TODO re-enable this when I figure out the rendering problems
 
 	}
 
@@ -307,11 +323,13 @@ public class MasterRenderer {
 		for (int i = 0; i < RENDER_LAYERS; ++i) {
 			RenderLayer layer = layers[i];
 			layer.addOpaqueBatch(opaqueTextureBatches.get((i)));
+			layer.addOpaqueBatch(opaqueTileBatches.get((i)));
 			layer.addOpaqueBatch(opaqueRectBatches.get((i)));
 			layer.addOpaqueBatch(opaqueCircleBatches.get((i)));
 			layer.addOpaqueBatch(opaqueLineBatches.get((i)));
 			layer.addOpaqueBatch(opaqueOutlineBatches.get((i)));
 			layer.addTransparentBatch(transparentTextureBatches.get(i));
+			layer.addTransparentBatch(transparentTileBatches.get(i));
 			layer.addTransparentBatch(transparentRectBatches.get(i));
 			layer.addTransparentBatch(transparentCircleBatches.get(i));
 			layer.addTransparentBatch(transparentLineBatches.get(i));
@@ -321,9 +339,11 @@ public class MasterRenderer {
 	}
 
 	private void clearBatches() {
-		for (int i = 0; i < RENDER_LAYERS; ++i) {
+		for (int i = 0; i < Layers.NUM_LAYERS; ++i) {
 			opaqueTextureBatches.get(i).clear();
 			transparentTextureBatches.get(i).clear();
+			opaqueTileBatches.get(i).clear();
+			transparentTileBatches.get(i).clear();
 			opaqueRectBatches.get(i).clear();
 			transparentRectBatches.get(i).clear();
 			opaqueCircleBatches.get(i).clear();
@@ -342,6 +362,7 @@ public class MasterRenderer {
 			windowRenderer.sceneBuffer.cleanUp();
 			windowRenderer.textureRenderer.cleanUp();
 			windowRenderer.geometryRenderer.cleanUp();
+			windowRenderer.tileRenderer.cleanUp();
 			windowRenderer.particleMaster.cleanUp();
 		}
 

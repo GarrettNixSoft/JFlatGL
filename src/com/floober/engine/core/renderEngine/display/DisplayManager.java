@@ -9,6 +9,7 @@ import com.floober.engine.core.renderEngine.particles.ParticleMaster;
 import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.core.renderEngine.textures.RawTextureData;
 import com.floober.engine.core.renderEngine.util.Layers;
+import com.floober.engine.core.renderEngine.util.Stencil;
 import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.color.Colors;
 import com.floober.engine.core.util.configuration.Config;
@@ -117,8 +118,8 @@ public class DisplayManager {
 					targetWindow.updateRatio(width, width * aspectRatio);
 					targetWindow.setMouseOffset(0, -bottomY);
 					Logger.log(	"Resizing to fit width! Window resized to [" + width + " x " + height + "]; " +
-								"Viewport is now [" + width + " x " + (int) (width * aspectRatio) + "], " +
-								"Mouse Offset is now (0, " + (-bottomY / 2) + "); Scale used was width: " + scaleToFitWidth);
+							"Viewport is now [" + width + " x " + (int) (width * aspectRatio) + "], " +
+							"Mouse Offset is now (0, " + (-bottomY / 2) + "); Scale used was width: " + scaleToFitWidth);
 				} else {
 					// scale to fit height
 					float aspectRatio = (float) Config.INTERNAL_WIDTH / Config.INTERNAL_HEIGHT;
@@ -127,8 +128,8 @@ public class DisplayManager {
 					targetWindow.updateRatio(height * aspectRatio, height);
 					targetWindow.setMouseOffset(-leftX, 0);
 					Logger.log(	"Resizing to fit height! Window resized to [" + width + " x " + height + "]; " +
-								"Viewport is now [" + (int) (height * aspectRatio) + " x " + height + "], " +
-								"Mouse Offset is now (" + -leftX + ", 0); Scale used was height: " + scaleToFitHeight);
+							"Viewport is now [" + (int) (height * aspectRatio) + " x " + height + "], " +
+							"Mouse Offset is now (" + -leftX + ", 0); Scale used was height: " + scaleToFitHeight);
 				}
 
 				// TEST
@@ -149,7 +150,7 @@ public class DisplayManager {
 					if (targetWindow.isReady()) {
 
 						// Set target
-						targetWindow.getWindowRenderer().prepare();
+						targetWindow.getWindowRenderer().prepare(true);
 
 						// update inputs for this window
 						KeyInput.update();
@@ -157,12 +158,13 @@ public class DisplayManager {
 
 						// render game internally
 						Game.render();
-						Render.fillScreen(Colors.GRAY);
-						if (targetWindow.getWindowID() == DisplayManager.primaryWindowID) Render.drawRect(Colors.RED, 1920/2f, 1080/2f, 0, 300, 300, true);
-						Render.drawRect(Colors.GREEN, MouseInput.getX(), MouseInput.getY(), 0, 80, 80, true);
+//						Render.fillScreen(Colors.GRAY);
+//						if (targetWindow.getWindowID() == DisplayManager.primaryWindowID) Render.drawRect(Colors.RED, 1920/2f, 1080/2f, 5, 300, 300, true);
+//						Render.drawRect(Colors.GREEN, MouseInput.getX(), MouseInput.getY(), 5, 80, 80, true);
 
 						// render to the screen
-						MasterRenderer.currentRenderTarget.render();
+						MasterRenderer.currentRenderTarget.render(true);
+						targetWindow.swapBuffers();
 
 					}
 
@@ -232,8 +234,6 @@ public class DisplayManager {
 			for (char c : text) KeyInput.windowKeyboardAdapters.get(window).characterQueue.push(c);
 		});
 
-
-
 		if (glfwRawMouseMotionSupported())
 			glfwSetInputMode(primaryWindowID, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
 		glfwSetScrollCallback(primaryWindowID, (theWindowID, xoffset, yoffset) -> MouseInput.windowMouseAdapters.get(primaryWindowID).WHEEL = yoffset);
@@ -263,6 +263,8 @@ public class DisplayManager {
 		initResizeCallback();
 		initCloseCallback();
 
+
+
 		// The primary window only reacts to resize events; the close callback is for auxiliary windows.
 		glfwSetWindowSizeCallback(primaryWindowID, windowResizeCallback);
 
@@ -270,11 +272,18 @@ public class DisplayManager {
 		GL.createCapabilities();
 
 		glDepthFunc(GL_LEQUAL);
-		glDepthRange(0, 1000000);
+		glDepthRange(0, 1); // TODO mark
 
 		glClearColor(0, 0, 0, 1);
 		glClearDepth(1);
 
+		// STENCIL SETTINGS
+		glStencilFunc(GL_EQUAL, 1, 0xFF);
+		glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+
+		Stencil.disableStencilWrite();
+
+		// DEBUG MESSAGES
 		GLUtil.setupDebugMessageCallback();
 		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, (IntBuffer) null, false);
 
@@ -592,8 +601,8 @@ public class DisplayManager {
 		return new Vector2f(displayWidth, displayHeight);
 	}
 
-	public static float convertToScreenSize(long window, float pixels) {
-		return pixels / windowsByID.get(window).getWidth();
+	public static float convertToScreenSize(float pixels, boolean vertical) {
+		return vertical ? pixels / Config.INTERNAL_HEIGHT : pixels / Config.INTERNAL_WIDTH;
 	}
 
 }

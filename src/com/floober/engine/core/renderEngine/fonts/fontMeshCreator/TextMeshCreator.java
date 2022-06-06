@@ -21,6 +21,11 @@ public class TextMeshCreator {
 
 	protected TextMeshData createTextMesh(GUIText text) {
 		List<Line> lines = createStructure(text);
+
+//		int words = 0;
+//		for (Line line : lines) words += line.getWords().size();
+//		Logger.log("Lines generated: " + lines.size() + ", total words: " + words);
+
 		TextMeshData textMeshData = createQuadVertices(text, lines);
 		text.setTextMeshData(textMeshData);
 		return textMeshData;
@@ -75,7 +80,7 @@ public class TextMeshCreator {
 					currentLine = new Line(metaData.getSpaceWidth(), text.getFontSize(), text.getMaxLineSize());
 					subwords = subwords.data2().getMaxLengthSubword(lineSize);
 					currentLine.attemptToAddWord(subwords.data1());
-					lines.add(currentLine);
+					if (subwords.data2().getWordWidth() > 0) lines.add(currentLine);
 				}
 			}
 		}
@@ -104,6 +109,7 @@ public class TextMeshCreator {
 			cursorX = 0;
 			cursorY += LINE_HEIGHT * text.getFontSize();
 		}
+//		if (lines.size() > 1) cursorY -= LINE_HEIGHT * text.getFontSize();
 		return new TextMeshData(listToArray(vertices), listToArray(textureCoords), (float) cursorY);
 	}
 

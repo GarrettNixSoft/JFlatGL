@@ -3,7 +3,6 @@
 out vec4 out_color;
 
 uniform vec4 color;
-uniform vec2 center;
 uniform float innerRadius;
 uniform float outerRadius;
 uniform vec2 portion;

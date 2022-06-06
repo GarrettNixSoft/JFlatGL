@@ -1,6 +1,7 @@
 package com.floober.engine.core.renderEngine.shaders;
 
 import com.floober.engine.core.util.Logger;
+import com.floober.engine.core.util.conversion.StringConverter;
 import com.floober.engine.core.util.file.FileUtil;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
@@ -67,7 +68,9 @@ public abstract class ShaderProgram {
 	protected abstract void getAllUniformLocations();
 
 	protected int getUniformLocation(String uniformName) {
-		return glGetUniformLocation(programID, uniformName);
+		int location = glGetUniformLocation(programID, uniformName);
+		if (location == -1) throw new RuntimeException("Uniform " + uniformName + " does not exist!");
+		return location;
 	}
 	
 	public void start() {
@@ -127,11 +130,8 @@ public abstract class ShaderProgram {
 	}
 
 	private static int loadShader(String file, int type) {
-		List<String> lines = FileUtil.getFileData(file);
-		StringBuilder shaderSource = new StringBuilder();
-		for (String line : lines) {
-			shaderSource.append(line).append("//\n");
-		}
+		List<String> lines = FileUtil.getFileDataDirectly(file);
+		String shaderSource = StringConverter.combineAll(lines);
 		int shaderID = GL20.glCreateShader(type);
 		GL20.glShaderSource(shaderID, shaderSource);
 		GL20.glCompileShader(shaderID);

@@ -1,6 +1,8 @@
 package com.floober.engine.core.util.configuration;
 
+import com.floober.engine.core.util.file.FileUtil;
 import org.joml.Vector4f;
+import org.json.JSONObject;
 
 /**
 	The Config class contains all configurable settings that should be
@@ -9,26 +11,50 @@ import org.joml.Vector4f;
  */
 public class Config {
 
-	public static String WINDOW_TITLE = "Floober Engine Development";
+	public static String WINDOW_TITLE;
 
-	public static boolean DEBUG_MODE = true; // development use
+	public static boolean DEBUG_MODE; // development use
 
 	// 3 image files for the game window icons
-	public static final String ICON_PATH_64 = "icon/icon64.png";
-	public static final String ICON_PATH_48 = "icon/icon48.png";
-	public static final String ICON_PATH_32 = "icon/icon32.png";
+	public static String ICON_PATH_64;
+	public static String ICON_PATH_48;
+	public static String ICON_PATH_32;
 
 	// The internal resolution at which the game is rendered;
 	// for game logic purposes, these are the bounds of the window
-	public static final int INTERNAL_WIDTH = 1920;
-	public static final int INTERNAL_HEIGHT = 1080;
+	public static int INTERNAL_WIDTH;
+	public static int INTERNAL_HEIGHT;
 
 	// The default size of the game window.
 	// The game will be stretched to this size.
-	public static final int DEFAULT_WIDTH = 1920;
-	public static final int DEFAULT_HEIGHT = 1080;
+	public static int DEFAULT_WIDTH;
+	public static int DEFAULT_HEIGHT;
 
-	public static boolean FULLSCREEN = false;
+	public static boolean USE_LOAD_RENDERER;
+
+	public static boolean FULLSCREEN;
+
+	public static void load() {
+		JSONObject configJSON = FileUtil.getJSON("/config/config.json");
+
+		WINDOW_TITLE = configJSON.getString("window_title");
+
+		DEBUG_MODE = configJSON.getBoolean("debug_mode");
+
+		ICON_PATH_64 = configJSON.getString("icon_path_64");
+		ICON_PATH_48 = configJSON.getString("icon_path_48");
+		ICON_PATH_32 = configJSON.getString("icon_path_32");
+
+		INTERNAL_WIDTH = configJSON.getInt("internal_width");
+		INTERNAL_HEIGHT = configJSON.getInt("internal_height");
+
+		DEFAULT_WIDTH = configJSON.getInt("default_width");
+		DEFAULT_HEIGHT = configJSON.getInt("default_height");
+
+		USE_LOAD_RENDERER = configJSON.getBoolean("use_load_renderer");
+
+		FULLSCREEN = configJSON.getBoolean("fullscreen");
+	}
 
 	public static Vector4f getScreenBounds() {
 		return new Vector4f(0, 0, INTERNAL_WIDTH, INTERNAL_HEIGHT);

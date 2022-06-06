@@ -8,6 +8,8 @@ public class Layers {
 	public static final int TOP_LAYER = NUM_LAYERS - 1;
 	public static final int BOTTOM_LAYER = 0;
 
+	public static final int TILE_LAYER = DEFAULT_LAYER - 3;
+
 	// Secondary windows
 	public static final int EXTERN_LAYERS = 4;
 

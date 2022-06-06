@@ -16,12 +16,15 @@ public class Word {
 	private double width = 0;
 	private final double fontSize;
 
+	private String wordString;
+
 	/**
 	 * Create a new empty word.
 	 * @param fontSize - the font size of the text which this word is in.
 	 */
 	protected Word(double fontSize){
 		this.fontSize = fontSize;
+		this.wordString = "";
 	}
 
 	/**
@@ -31,6 +34,7 @@ public class Word {
 	protected void addCharacter(Character character){
 		characters.add(character);
 		width += character.xAdvance() * fontSize;
+		wordString += character.c();
 	}
 	
 	/**
@@ -59,14 +63,16 @@ public class Word {
 		Word subword = new Word(fontSize);
 		int index = 0;
 		while (true) {
-			subword.addCharacter(characters.get(index));
-			index++;
 			// break if next character will put it over the limit
-			if (index < characters.size() - 1 && subword.getWordWidth() + characters.get(index + 1).sizeX() * fontSize > length) {
+			if (index < characters.size() && subword.getWordWidth() + characters.get(index).sizeX() * fontSize > length) {
 				break;
 			}
 			// else break if that's the last char
 			else if (index >= characters.size()) break;
+			else {
+				subword.addCharacter(characters.get(index));
+				index++;
+			}
 		}
 		// get rest
 		Word rest = new Word(fontSize);
@@ -78,4 +84,8 @@ public class Word {
 		return new Pair<>(subword, rest);
 	}
 
+	@Override
+	public String toString() {
+		return wordString;
+	}
 }

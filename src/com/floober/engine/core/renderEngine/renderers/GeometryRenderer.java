@@ -7,6 +7,7 @@ import com.floober.engine.core.renderEngine.shaders.geometry.CircleShader;
 import com.floober.engine.core.renderEngine.shaders.geometry.OutlineShader;
 import com.floober.engine.core.renderEngine.shaders.geometry.RectLightShader;
 import com.floober.engine.core.renderEngine.shaders.geometry.RectShader;
+import com.floober.engine.core.renderEngine.util.Stencil;
 import com.floober.engine.core.util.math.MathUtil;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
@@ -56,15 +57,23 @@ public class GeometryRenderer {
 
 		prepareRectangles(depthWritingEnabled);
 
-		for (RectElement rectElement : rectangles) {
+		for (RectElement element : rectangles) {
 
-			Matrix4f transformationMatrix = MathUtil.createTransformationMatrix(rectElement.getRenderPosition(), rectElement.getScale(), rectElement.getRotation());
-			rectShader.loadRoundRadius(rectElement.getRoundRadius());
-			rectShader.loadRoundMode(rectElement.getRoundingMode());
-			rectShader.loadDimensions(new Vector2f(rectElement.getHeight(), rectElement.getWidth()));
-			rectShader.loadColor(rectElement.getColor());
+			if (element.isStencilWrite()) {
+				Stencil.enableStencilWrite();
+			}
+
+			Matrix4f transformationMatrix = MathUtil.createTransformationMatrix(element.getRenderPosition(), element.getScale(), element.getRotation());
+			rectShader.loadRoundRadius(element.getRoundRadius());
+			rectShader.loadRoundMode(element.getRoundingMode());
+			rectShader.loadDimensions(new Vector2f(element.getHeight(), element.getWidth()));
+			rectShader.loadColor(element.getColor());
 			rectShader.loadTransformationMatrix(transformationMatrix);
 			glDrawArrays(GL_TRIANGLE_STRIP, 0, quad.vertexCount());
+
+			if (element.isStencilWrite()) {
+				Stencil.disableStencilWrite();
+			}
 
 		}
 
@@ -79,6 +88,13 @@ public class GeometryRenderer {
 		prepareLightRectangles(false);
 
 		for (RectElementLight element : elements) {
+
+			if (element.isStencilWrite()) {
+				Stencil.enableStencilWrite();
+			}
+			else {
+				Stencil.disableStencilWrite();
+			}
 
 			Matrix4f transformationMatrix = MathUtil.createTransformationMatrix(element.getPosition(), element.getScale(), element.getRotation());
 			rectLightShader.loadColor(element.getLightColor());
@@ -102,17 +118,23 @@ public class GeometryRenderer {
 
 		prepareCircles(depthWritingEnabled);
 
-		for (CircleElement circleElement : circles) {
+		for (CircleElement element : circles) {
 
-			Matrix4f transformationMatrix = MathUtil.createTransformationMatrix(circleElement.getPosition(), circleElement.getScale(), circleElement.getRotation());
-			circleShader.loadColor(circleElement.getColor());
+			if (element.isStencilWrite()) {
+				Stencil.enableStencilWrite();
+			}
+			else {
+				Stencil.disableStencilWrite();
+			}
+
+			Matrix4f transformationMatrix = MathUtil.createTransformationMatrix(element.getPosition(), element.getScale(), element.getRotation());
+			circleShader.loadColor(element.getColor());
 			circleShader.loadTransformationMatrix(transformationMatrix);
-			circleShader.loadCenter(circleElement.getCenter());
-			circleShader.loadInnerRadius(circleElement.getInnerRadius());
+			circleShader.loadInnerRadius(element.getInnerRadius());
 //			Logger.log("Inner radius = " + circleElement.getInnerRadius());
-			circleShader.loadOuterRadius(circleElement.getOuterRadius());
-			circleShader.loadPortion(circleElement.getPortion());
-			circleShader.loadSmoothness(circleElement.getSmoothness());
+			circleShader.loadOuterRadius(element.getOuterRadius());
+			circleShader.loadPortion(element.getPortion());
+			circleShader.loadSmoothness(element.getSmoothness());
 			glDrawArrays(GL_TRIANGLE_STRIP, 0, quad.vertexCount());
 
 		}
@@ -141,13 +163,20 @@ public class GeometryRenderer {
 
 		prepareOutlines(depthWritingEnabled);
 
-		for (OutlineElement outlineElement : outlines) {
+		for (OutlineElement element : outlines) {
 
-			Matrix4f transformationMatrix = MathUtil.createTransformationMatrix(outlineElement.getRenderPosition(), outlineElement.getScale(), outlineElement.getRotation());
-			outlineShader.loadRoundRadius(outlineElement.getRoundRadius());
-			outlineShader.loadDimensions(new Vector2f(outlineElement.getHeight(), outlineElement.getWidth()));
-			outlineShader.loadColor(outlineElement.getColor());
-			outlineShader.loadLineWidth(outlineElement.getLineWidth() / outlineElement.getWidth());
+			if (element.isStencilWrite()) {
+				Stencil.enableStencilWrite();
+			}
+			else {
+				Stencil.disableStencilWrite();
+			}
+
+			Matrix4f transformationMatrix = MathUtil.createTransformationMatrix(element.getRenderPosition(), element.getScale(), element.getRotation());
+			outlineShader.loadRoundRadius(element.getRoundRadius());
+			outlineShader.loadDimensions(new Vector2f(element.getHeight(), element.getWidth()));
+			outlineShader.loadColor(element.getColor());
+			outlineShader.loadLineWidth(element.getLineWidth() / element.getWidth());
 			outlineShader.loadTransformationMatrix(transformationMatrix);
 			glDrawArrays(GL_TRIANGLE_STRIP, 0, quad.vertexCount());
 

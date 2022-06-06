@@ -5,8 +5,8 @@ import org.joml.Vector4f;
 
 public class CircleElement extends GeometryElement {
 
-	private final float innerRadius;
-	private final float outerRadius;
+	private float innerRadius;
+	private float outerRadius;
 	private final Vector2f center;
 	private final Vector2f portion;
 	private float smoothness;
@@ -59,6 +59,13 @@ public class CircleElement extends GeometryElement {
 	public float getSmoothness() { return smoothness; }
 
 	// SETTERS
+	public void setInnerRadius(float innerRadius) {
+		this.innerRadius = innerRadius;
+	}
+
+	public void setOuterRadius(float outerRadius) {
+		this.outerRadius = outerRadius;
+	}
 
 	/**
 	 * Set the portion of this circle that will be rendered, as a

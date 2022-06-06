@@ -7,7 +7,9 @@ import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.FontType;
 import com.floober.engine.core.renderEngine.renderers.LoadRenderer;
 import com.floober.engine.core.util.Globals;
 import com.floober.engine.core.util.Logger;
+import com.floober.engine.core.util.configuration.Config;
 import com.floober.engine.core.util.file.FileUtil;
+import com.floober.engine.test.RunGame;
 
 public class FontLoader extends AssetLoader {
 
@@ -39,7 +41,7 @@ public class FontLoader extends AssetLoader {
 			// report the load count
 			Globals.fontCount++;
 			// render the loading screen
-//			RunGame.loadRenderer.render();
+			if (Config.USE_LOAD_RENDERER) RunGame.loadRenderer.render();
 			// done
 		}
 	}

@@ -45,12 +45,13 @@ public class RunGame {
 
 	public static void main(String[] args) {
 
-		// Load user preferences/settings and game flags
-		Settings.load();
-		GameFlags.init();
-
 		// Set up logging.
 		Logger.setLoggerConfig();
+
+		// Load user preferences/settings and game flags
+		Config.load();
+		Settings.load();
+		GameFlags.init();
 
 		// TESTING GAME
 		Config.FULLSCREEN = false;
@@ -96,7 +97,7 @@ public class RunGame {
 			GUIManager.update();
 
 			// clear window
-			MasterRenderer.primaryWindowRenderer.prepare();
+			MasterRenderer.primaryWindowRenderer.prepare(true);
 
 			// render game internally
 			Game.render();
@@ -114,7 +115,7 @@ public class RunGame {
 			handleInput();
 
 			// render to the screen
-			MasterRenderer.primaryWindowRenderer.render();
+			MasterRenderer.primaryWindowRenderer.render(true);
 
 			// update display and poll events
 			DisplayManager.updateDisplay();

@@ -2,6 +2,7 @@ package com.floober.engine.core.renderEngine;
 
 import com.floober.engine.core.renderEngine.elements.TextureElement;
 import com.floober.engine.core.renderEngine.elements.geometry.*;
+import com.floober.engine.core.renderEngine.elements.tile.TileElement;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.core.renderEngine.util.Layers;
@@ -40,6 +41,10 @@ public class Render {
 
 	public static void drawOutline(OutlineElement outlineElement) {
 		MasterRenderer.currentRenderTarget.addOutlineElement(outlineElement);
+	}
+
+	public static void drawTile(TileElement tileElement) {
+		MasterRenderer.currentRenderTarget.addTileElement(tileElement);
 	}
 
 

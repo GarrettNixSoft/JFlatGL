@@ -63,6 +63,8 @@ public class ParticleTest {
 
 	public static void main(String[] args) {
 
+		Config.load();
+
 		// Set up logging.
 		Logger.setLoggerConfig();
 
@@ -196,7 +198,7 @@ public class ParticleTest {
 		// Run the game loop!
 		while (!glfwWindowShouldClose(primaryWindowID)) {
 			// clear window
-			MasterRenderer.primaryWindowRenderer.prepare();
+			MasterRenderer.primaryWindowRenderer.prepare(true);
 
 			// poll input
 			KeyInput.update();
@@ -211,7 +213,7 @@ public class ParticleTest {
 			runParticleTest();
 
 			// render to the screen
-			MasterRenderer.primaryWindowRenderer.render();
+			MasterRenderer.primaryWindowRenderer.render(true);
 
 			// update display and poll events
 			DisplayManager.updateDisplay();

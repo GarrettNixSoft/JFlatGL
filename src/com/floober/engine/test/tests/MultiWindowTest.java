@@ -27,6 +27,7 @@ import static org.lwjgl.opengl.GL11.glGetIntegerv;
 public class MultiWindowTest {
 
 	public static void main(String[] args) {
+		Config.load();
 
 		// Set up logging.
 		Logger.setLoggerConfig();
@@ -40,7 +41,7 @@ public class MultiWindowTest {
 		while (!glfwWindowShouldClose(primaryWindowID)) {
 
 			// clear window and make window context current
-			MasterRenderer.primaryWindowRenderer.prepare();
+			MasterRenderer.primaryWindowRenderer.prepare(true);
 
 			// poll input
 			KeyInput.update();
@@ -70,7 +71,7 @@ public class MultiWindowTest {
 			Render.drawRect(Colors.GREEN, MouseInput.getX(), MouseInput.getY(), 5, 80, 80, true);
 
 			// render to the screen
-			MasterRenderer.primaryWindowRenderer.render();
+			MasterRenderer.primaryWindowRenderer.render(true);
 
 			// Render to all other windows
 			for (Window window : DisplayManager.getWindows()) {
@@ -78,7 +79,7 @@ public class MultiWindowTest {
 
 					MasterRenderer windowRenderer = window.getWindowRenderer();
 
-					windowRenderer.prepare();
+					windowRenderer.prepare(true);
 
 					// re-compute mouse position for this window
 					MouseInput.update();
@@ -103,7 +104,7 @@ public class MultiWindowTest {
 					}
 
 					// render to the screen
-					windowRenderer.render();
+					windowRenderer.render(true);
 					// Post-processing is now handled automatically in the render call, no need to call it!
 				}
 			}

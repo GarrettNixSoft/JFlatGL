@@ -13,8 +13,6 @@ public class TileShader extends ShaderProgram {
 	private static final String VERTEX_FILE = SHADER_PATH + "tileVertex.glsl";
 	private static final String FRAGMENT_FILE = SHADER_PATH + "tileFragment.glsl";
 
-	private int location_numRows;
-
 	// lights!
 	private int location_screenRatio;
 	private int location_ambientLight;
@@ -31,7 +29,6 @@ public class TileShader extends ShaderProgram {
 
 	@Override
 	protected void getAllUniformLocations() {
-		location_numRows = super.getUniformLocation("numRows");
 		location_screenRatio = super.getUniformLocation("screenRatio");
 		location_ambientLight = super.getUniformLocation("ambientLight");
 		// light properties
@@ -67,7 +64,6 @@ public class TileShader extends ShaderProgram {
 	}
 
 	// load uniforms
-	public void loadNumRows(float numRows) { super.loadFloat(location_numRows, numRows); }
 	public void loadScreenRatio(Vector2f ratio) { super.loadVector(location_screenRatio, ratio); }
 	public void loadAmbientLight(float ambientLight) { super.loadFloat(location_ambientLight, ambientLight); }
 

@@ -46,6 +46,8 @@ public class AudioMaster {
 	}
 
 	public static Sound loadSound(String file) {
+		Logger.logLoad("Loading sound: " + file);
+		file = file.replace("/", "\\");
 		long start = System.nanoTime();
 		int buffer = alGenBuffers();
 		buffers.add(buffer);
