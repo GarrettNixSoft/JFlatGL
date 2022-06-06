@@ -23,6 +23,8 @@ public class Colors {
 	public static final Vector4f PINK = new Vector4f(1, 0.69f, 0.69f, 1);
 	public static final Vector4f MAGENTA = new Vector4f(1, 0, 0.9f, 1);
 
+	public static final Vector4f INVISIBLE = new Vector4f(0);
+
 	// standard colors (Vec3)
 	public static final Vector3f WHITE_3 = new Vector3f(1);
 	public static final Vector3f BLACK_3 = new Vector3f(0, 0, 0);

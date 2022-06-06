@@ -35,6 +35,14 @@ public class FadeFloat extends FloatInterpolator {
 		min = 0;
 	}
 
+	public FadeFloat(float time, float max) {
+		timer = new ScaledTimer(time);
+		this.time = time;
+		this.max = max;
+		value = max;
+		min = 0;
+	}
+
 	// GETTERS
 	public boolean isRunning() {
 		return running;

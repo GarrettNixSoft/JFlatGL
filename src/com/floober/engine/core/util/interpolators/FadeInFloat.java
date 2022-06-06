@@ -11,6 +11,11 @@ public class FadeInFloat extends FadeFloat {
 		super(time);
 		value = 0;
 	}
+
+	public FadeInFloat(float time, float max) {
+		super(time, max);
+		value = 0;
+	}
 	
 	@Override
 	public boolean finished() {
