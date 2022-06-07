@@ -1,10 +1,12 @@
 package com.floober.engine.gui;
 
+import com.floober.engine.gui.component.GUIComponent;
 import com.floober.engine.gui.component.GUILayer;
 import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.data.Stack;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class GUI {
 
@@ -15,10 +17,48 @@ public class GUI {
 	private final HashMap<String, GUILayer> layerStore;
 	private final Stack<GUILayer> layerStack;
 
+	// component IDs must be unique within a GUI
+	private final HashSet<String> componentIDs;
+
 	public GUI(String id) {
+		if (GUIManager.GUI_BANK.containsKey(id)) throw new RuntimeException("A GUI with this ID (" + id + ") already exists!");
+		else GUIManager.GUI_BANK.put(id, this);
 		this.id = id;
 		layerStore = new HashMap<>();
 		layerStack = new Stack<>();
+		componentIDs = new HashSet<>();
+	}
+
+	/**
+	 * Get a component by its ID.
+	 * @param componentID the ID of the component to fetch
+	 * @return the GUIComponent with the matching ID, or null if none exists
+	 */
+	public GUIComponent getComponentByID(String componentID) {
+		// preemptively fail if the ID has not been registered
+		if (!componentIDs.contains(componentID)) return null;
+		for (GUILayer layer : layerStack.getElements()) {
+			for (GUIComponent component : layer.getAllComponents()) {
+				if (component.getComponentID().equals(componentID)) return component;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Register a GUIComponent for this GUI.
+	 * @param component the component to add
+	 * @return {@code true} if the component's ID is unique and has been registered,
+	 * 			{@code false} otherwise.
+	 */
+	public boolean registerComponent(GUIComponent component) {
+		String componentID = component.getComponentID();
+		if (componentIDs.contains(componentID)) {
+			return false;
+		} else {
+			componentIDs.add(componentID);
+			return true;
+		}
 	}
 
 	public void addLayer(GUILayer layer) {

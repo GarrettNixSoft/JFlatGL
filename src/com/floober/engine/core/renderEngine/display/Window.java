@@ -211,6 +211,8 @@ public class Window {
 		glViewport(xOffset, yOffset, viewportWidth, viewportHeight);
 	}
 
+	public static Vector2f mainCenter() { return DisplayManager.getPrimaryGameWindow().center(); }
+
 	public static float mainCenterX() { return DisplayManager.getPrimaryGameWindow().centerX(); }
 
 	public static float mainCenterY() { return DisplayManager.getPrimaryGameWindow().centerY(); }

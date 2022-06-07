@@ -65,9 +65,9 @@ public class GUITest {
 		Window gameWindow = DisplayManager.getPrimaryGameWindow();
 
 		GUI gui = new GUI("test_gui");
-		GUILayer layer = new GUILayer("test_layer");
+		GUILayer layer = new GUILayer("test_layer", gui);
 
-		TabbedPanel tabbedPanel = new TabbedPanel("tabbed_panel_test");
+		TabbedPanel tabbedPanel = new TabbedPanel("tabbed_panel_test", gui);
 		tabbedPanel.listPosition(TabbedPanel.ListPosition.TOP).borderPadding(10)
 				.buttonSize(new Vector2f(120, 120)).buttonSpacing(50)
 				.closeTime(0.3f)
@@ -77,7 +77,7 @@ public class GUITest {
 						.addPerformActionOnTrigger(() -> tabbedPanel.queueEvent(new FadeComponentEvent(tabbedPanel, 0, 0.2f)))
 						.addPerformActionOnTrigger(() -> tabbedPanel.queueEvent(new ScaleEvent(tabbedPanel, -0.2f, 0.2f))));
 
-		layer.addPanel(tabbedPanel);
+		layer.addComponent(tabbedPanel);
 		gui.addLayer(layer);
 
 		// create main test tab
@@ -90,7 +90,7 @@ public class GUITest {
 		tabbedPanel.finalizeLayout();
 
 		// create the button
-		Button button = new Button("quit_button");
+		Button button = new Button("quit_button", gui);
 		// set the button's parameters
 		button.label("Quit").rounded(0.15f).textSize(1.2f)
 				.location(new Vector3f(gameWindow.centerX(), gameWindow.centerY() + 120, Layers.TOP_LAYER))
@@ -121,7 +121,7 @@ public class GUITest {
 		// add the button to the GUI panel
 		tab.addComponent(button);
 
-		Button otherButton = new Button("click_button");
+		Button otherButton = new Button("click_button", gui);
 		otherButton.label("Click").rounded(0.15f).textSize(1.2f)
 				.location(gameWindow.center(), Layers.TOP_LAYER).size(new Vector2f(250, 100))
 				.primaryColor(Colors.WHITE).secondaryColor(Colors.BLACK)
@@ -146,7 +146,7 @@ public class GUITest {
 		tab.addComponent(otherButton);
 
 		// create a sample button for the second test tab
-		Button testButton = new Button("test_button");
+		Button testButton = new Button("test_button", gui);
 		testButton.label("Test").rounded(0.15f).textSize(1.2f)
 				.location(gameWindow.center().add(300, 0), Layers.TOP_LAYER).size(new Vector2f(250, 100))
 				.primaryColor(Colors.WHITE).secondaryColor(Colors.BLACK)

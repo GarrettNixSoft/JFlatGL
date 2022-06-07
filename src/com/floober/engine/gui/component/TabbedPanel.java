@@ -3,6 +3,7 @@ package com.floober.engine.gui.component;
 import com.floober.engine.core.renderEngine.display.DisplayManager;
 import com.floober.engine.core.renderEngine.display.Window;
 import com.floober.engine.core.Game;
+import com.floober.engine.gui.GUI;
 import com.floober.engine.gui.GUIAction;
 import com.floober.engine.gui.event.BlockingDelayEvent;
 import com.floober.engine.core.renderEngine.Render;
@@ -42,8 +43,8 @@ public class TabbedPanel extends GUIPanel {
 	private GUIAction onMouseExitAction;
 	private float closeTime;
 
-	public TabbedPanel(String componentID) {
-		super(componentID);
+	public TabbedPanel(String componentID, GUI parent) {
+		super(componentID, parent);
 		tabButtons = new ArrayList<>();
 		tabs = new ArrayList<>();
 		listPosition = ListPosition.TOP;
@@ -119,11 +120,11 @@ public class TabbedPanel extends GUIPanel {
 
 	public TabContentPanel generateTab(String tabLabel, TextureComponent tabIcon) {
 		// generate the tab
-		TabContentPanel tab = new TabContentPanel(tabLabel, closeTime);
+		TabContentPanel tab = new TabContentPanel(tabLabel, getParent(), closeTime);
 		// make it wait on close
 		tab.onClose(new GUIAction().addPerformActionOnTrigger(() -> tab.queueEvent(new BlockingDelayEvent(closeTime))));
 		// generate a button for it
-		TabButton button = new TabButton(tab.getComponentID() + "_button", tabIcon);
+		TabButton button = new TabButton(tab.getComponentID() + "_button", getParent(), tabIcon);
 		button.label(tabLabel)
 				.location(getPosition())
 				.primaryColor(getPrimaryColor())
@@ -286,8 +287,8 @@ public class TabbedPanel extends GUIPanel {
 
 		private final float closeTime;
 
-		public TabContentPanel(String componentID, float closeTime) {
-			super(componentID);
+		public TabContentPanel(String componentID, GUI parent, float closeTime) {
+			super(componentID, parent);
 			this.closeTime = closeTime;
 		}
 
@@ -314,8 +315,8 @@ public class TabbedPanel extends GUIPanel {
 
 		private float defaultTextSize = 1.5f;
 
-		public TabButton(String componentID, TextureComponent icon) {
-			super(componentID);
+		public TabButton(String componentID, GUI parent, TextureComponent icon) {
+			super(componentID, parent);
 			label = new GUIText("Tab", defaultTextSize, Game.getFont("default"), new Vector3f(0,0,10), 1, true);
 			iconTexture = new TextureElement();
 			iconTexture.setTexture(icon);
@@ -356,6 +357,11 @@ public class TabbedPanel extends GUIPanel {
 		public void render() {
 			if (label.isHidden()) label.show();
 			Render.drawImage(iconTexture);
+		}
+
+		@Override
+		public void remove() {
+			label.remove();
 		}
 	}
 

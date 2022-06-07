@@ -1,6 +1,7 @@
 package com.floober.engine.gui.component;
 
 import com.floober.engine.event.MultiEventQueue;
+import com.floober.engine.gui.GUI;
 import com.floober.engine.gui.GUIAction;
 import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.input.MouseInput;
@@ -18,6 +19,7 @@ public abstract class GUIComponent {
 
 	// addressing this component
 	private final String componentID;
+	private final GUI parent;
 
 	// location on screen
 	private final Vector3f position = new Vector3f(), originalPosition = new Vector3f();
@@ -56,8 +58,10 @@ public abstract class GUIComponent {
 	 * have an ID.
 	 * @param componentID this component's ID
 	 */
-	public GUIComponent(String componentID) {
+	public GUIComponent(String componentID, GUI parent) {
 		this.componentID = componentID;
+		this.parent = parent;
+		if (!parent.registerComponent(this)) throw new RuntimeException("Failed to register component id (" + componentID + "), ID is not unique!");
 		onOpen(new GUIAction());
 		onClose(new GUIAction());
 	}
@@ -73,8 +77,18 @@ public abstract class GUIComponent {
 		return this;
 	}
 
+	public GUIComponent location(float x, float y, int layer) {
+		setPosition(x, y, layer);
+		return this;
+	}
+
 	public GUIComponent size(Vector2f size) {
 		setSize(size);
+		return this;
+	}
+
+	public GUIComponent size(float width, float height) {
+		setSize(width, height);
 		return this;
 	}
 
@@ -149,6 +163,8 @@ public abstract class GUIComponent {
 	public String getComponentID() {
 		return componentID;
 	}
+
+	public GUI getParent() {return parent; }
 
 	public boolean isActive() { return active; }
 
@@ -251,6 +267,10 @@ public abstract class GUIComponent {
 		this.originalPosition.set(position);
 	}
 
+	public void setPosition(float x, float y, int layer) {
+		setPosition(new Vector3f(x, y, layer));
+	}
+
 	public void setPosition(Vector2f position, float z) {
 		this.position.set(position, z);
 		this.originalPosition.set(position, z);
@@ -271,6 +291,8 @@ public abstract class GUIComponent {
 	public void setSize(Vector2f size) {
 		this.size.set(size);
 	}
+
+	public void setSize(float width, float height) { this.size.set(width, height); }
 
 	public void setScale(float scale) {
 		this.scale = scale;
@@ -329,6 +351,8 @@ public abstract class GUIComponent {
 			trigger(ON_RIGHT_CLICK);
 		}
 	}
+
+	public abstract void remove();
 
 	private void trigger(int actionID) {
 		if (actions[actionID] != null) actions[actionID].trigger();

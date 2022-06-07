@@ -2,7 +2,11 @@ package com.floober.engine.gui;
 
 import com.floober.engine.core.util.Logger;
 
+import java.util.HashMap;
+
 public class GUIManager {
+
+	public static final HashMap<String, GUI> GUI_BANK = new HashMap<>();
 
 	private static GUI activeGUI;
 	private static GUI nextGUI;

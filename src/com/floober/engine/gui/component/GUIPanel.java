@@ -1,5 +1,6 @@
 package com.floober.engine.gui.component;
 
+import com.floober.engine.gui.GUI;
 import com.floober.engine.gui.event.ClosedEvent;
 import com.floober.engine.core.util.Logger;
 
@@ -10,8 +11,12 @@ public class GUIPanel extends GUIComponent {
 
 	private final List<GUIComponent> components = new ArrayList<>();
 
-	public GUIPanel(String componentID) {
-		super(componentID);
+	public GUIPanel(String componentID, GUI parent) {
+		super(componentID, parent);
+	}
+
+	public List<GUIComponent> getComponents() {
+		return components;
 	}
 
 	public void addComponent(GUIComponent component) {
@@ -21,7 +26,7 @@ public class GUIPanel extends GUIComponent {
 	@Override
 	public boolean isClosed() {
 		if (components.isEmpty()) return false;
- 		for (GUIComponent component : components) {
+		for (GUIComponent component : components) {
 			if (!component.isClosed()) {
 //				Logger.log("Panel not closed; component " + component.getComponentID() + " is still open");
 				return false;
@@ -116,6 +121,13 @@ public class GUIPanel extends GUIComponent {
 	public void render() {
 		for (GUIComponent component : components) {
 			component.render();
+		}
+	}
+
+	@Override
+	public void remove() {
+		for (GUIComponent component : components) {
+			component.remove();
 		}
 	}
 }

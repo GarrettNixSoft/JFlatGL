@@ -6,6 +6,7 @@ import com.floober.engine.core.renderEngine.Render;
 import com.floober.engine.core.renderEngine.elements.geometry.RectElement;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.FontType;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.GUIText;
+import com.floober.engine.gui.GUI;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
@@ -16,8 +17,8 @@ public class Button extends GUIComponent {
 
 	private float defaultTextSize = 1.5f;
 
-	public Button(String componentID) {
-		super(componentID);
+	public Button(String componentID, GUI parent) {
+		super(componentID, parent);
 		label = new GUIText("Button", defaultTextSize, Game.getFont("default"), new Vector3f(0,0,10), 1, true);
 		label.setWidth(0.5f);
 		label.setEdge(0.2f);
@@ -71,4 +72,8 @@ public class Button extends GUIComponent {
 		Render.drawRect(baseElement);
 	}
 
+	@Override
+	public void remove() {
+		label.remove();
+	}
 }

@@ -1,26 +1,42 @@
 package com.floober.engine.gui.component;
 
 import com.floober.engine.core.util.Logger;
+import com.floober.engine.gui.GUI;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GUILayer extends GUIComponent {
 
-	private final List<GUIPanel> panels = new ArrayList<>();
+	private final List<GUIComponent> components = new ArrayList<>();
 
-	public GUILayer(String componentID) {
-		super(componentID);
+	public GUILayer(String componentID, GUI parent) {
+		super(componentID, parent);
 	}
 
-	public void addPanel(GUIPanel panel) {
-		panels.add(panel);
+	/**
+	 * Retrieve all components stored in this layer.
+	 * @return an ArrayList of GUIComponents
+	 */
+	public List<GUIComponent> getAllComponents() {
+		List<GUIComponent> allComponents = new ArrayList<>();
+		for (GUIComponent component : components) {
+			if (component instanceof GUIPanel panel)
+				allComponents.addAll(panel.getComponents());
+			else
+				allComponents.add(component);
+		}
+		return allComponents;
+	}
+
+	public void addComponent(GUIComponent component) {
+		components.add(component);
 	}
 
 	@Override
 	public boolean isClosed() {
-		for (GUIPanel panel : panels) {
-			if (!panel.isClosed()) return false;
+		for (GUIComponent component : components) {
+			if (!component.isClosed()) return false;
 		}
 		return true;
 	}
@@ -29,8 +45,8 @@ public class GUILayer extends GUIComponent {
 	public void open() {
 		Logger.log("Opening GUILayer");
 		super.open();
-		for (GUIPanel panel : panels) {
-			panel.open();
+		for (GUIComponent component : components) {
+			component.open();
 		}
 	}
 
@@ -38,54 +54,61 @@ public class GUILayer extends GUIComponent {
 	public void close() {
 		Logger.log("Layer close called");
 		super.close();
-		for (GUIPanel panel : panels) {
-			panel.close();
+		for (GUIComponent component : components) {
+			component.close();
 		}
 	}
 
 	@Override
 	public void lock() {
 		super.lock();
-		for (GUIPanel panel : panels) {
-			panel.lock();
+		for (GUIComponent component : components) {
+			component.lock();
 		}
 	}
 
 	@Override
 	public void unlock() {
 		super.unlock();
-		for (GUIPanel panel : panels) {
-			panel.unlock();
+		for (GUIComponent component : components) {
+			component.unlock();
 		}
 	}
 
 	@Override
 	public void update() {
-		for (GUIPanel panel : panels) {
-			panel.updateEvents();
-			if (!panel.isActive() || panel.isLocked()) {
+		for (GUIComponent component : components) {
+			component.updateEvents();
+			if (!component.isActive() || component.isLocked()) {
 				// ^ this skips updating the panel if: false | x OR x | true is printed from the following log call
 				// if the panel is set not active, or if it's locked, it will not be updated or check for input
 //				Logger.log("Panel " + panel.getComponentID() + " skipped; ready? " + panel.isActive() + " | locked? " + panel.isLocked());
 				continue;
 			}
 //			Logger.log("Updating panel " + panel.getComponentID());
-			panel.checkInput();
-			panel.update();
+			component.checkInput();
+			component.update();
 		}
 	}
 
 	@Override
 	public void doTransform() {
-		for (GUIPanel panel : panels) {
-			panel.doTransform();
+		for (GUIComponent component : components) {
+			component.doTransform();
 		}
 	}
 
 	@Override
 	public void render() {
-		for (GUIPanel panel : panels) {
-			panel.render();
+		for (GUIComponent component : components) {
+			component.render();
+		}
+	}
+
+	@Override
+	public void remove() {
+		for (GUIComponent component : components) {
+			component.remove();
 		}
 	}
 }
