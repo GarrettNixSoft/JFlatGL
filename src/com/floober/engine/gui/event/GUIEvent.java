@@ -1,9 +1,12 @@
 package com.floober.engine.gui.event;
 
 import com.floober.engine.event.QueuedEvent;
+import com.floober.engine.gui.GUI;
 import com.floober.engine.gui.component.GUIComponent;
 
 public abstract class GUIEvent extends QueuedEvent {
+
+	private final GUI gui;
 
 	protected final GUIComponent sourceComponent;
 	protected final GUIComponent targetComponent;
@@ -14,6 +17,18 @@ public abstract class GUIEvent extends QueuedEvent {
 	 */
 	public GUIEvent(boolean blocking) {
 		super(blocking);
+		this.gui = null;
+		sourceComponent = null;
+		targetComponent = null;
+	}
+
+	/**
+	 * Create a GUIEvent that is not tied to any
+	 * specific components.
+	 */
+	public GUIEvent(GUI gui, boolean blocking) {
+		super(blocking);
+		this.gui = gui;
 		sourceComponent = null;
 		targetComponent = null;
 	}
@@ -25,6 +40,7 @@ public abstract class GUIEvent extends QueuedEvent {
 	 */
 	public GUIEvent(boolean blocking, GUIComponent targetComponent) {
 		super(blocking);
+		this.gui = targetComponent.getParent();
 		this.sourceComponent = null;
 		this.targetComponent = targetComponent;
 	}
@@ -38,8 +54,13 @@ public abstract class GUIEvent extends QueuedEvent {
 	 */
 	public GUIEvent(boolean blocking, GUIComponent sourceComponent, GUIComponent targetComponent) {
 		super(blocking);
+		this.gui = targetComponent.getParent();
 		this.sourceComponent = sourceComponent;
 		this.targetComponent = targetComponent;
+	}
+
+	public GUI getGUI() {
+		return gui;
 	}
 
 	public String toString() {
