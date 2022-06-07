@@ -46,6 +46,18 @@ public class GUI {
 	}
 
 	/**
+	 * Get a layer by its ID.
+	 * @param componentID the ID of the layer to fetch
+	 * @return the GUILayer with the matching ID, or null if none exists
+	 */
+	public GUILayer getLayerByID(String componentID) {
+		for (GUILayer layer : layerStack.getElements()) {
+			if (layer.getComponentID().equals(componentID)) return layer;
+		}
+		return null;
+	}
+
+	/**
 	 * Register a GUIComponent for this GUI.
 	 * @param component the component to add
 	 * @return {@code true} if the component's ID is unique and has been registered,
