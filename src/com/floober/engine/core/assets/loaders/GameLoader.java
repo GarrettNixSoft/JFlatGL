@@ -36,7 +36,14 @@ public class GameLoader {
 
 	public void load() {
 		for (AssetLoader loader : loaders) {
+
+			long start = System.nanoTime();
+
 			loader.load();
+
+			long elapsed = (System.nanoTime() - start) / 1_000_000;
+			Logger.log("Ran loader " + loader.getClass().getName() + " in " + elapsed + "ms");
+
 		}
 //		animateEndLoadRenderer();
 		// Loading process done; put something fancy in the log to make this point easy to find

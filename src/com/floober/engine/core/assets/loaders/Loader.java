@@ -53,7 +53,7 @@ public class Loader {
 	}
 
 	private static String loadFontFile(String path) {
-		return StringConverter.combineAll(FileUtil.getFileData(path));
+		return StringConverter.combineAll(FileUtil.getResDataFile(path));
 	}
 
 	// SHUTDOWN
