@@ -251,10 +251,12 @@ public class TabbedPanel extends GUIPanel {
 
 	@Override
 	public void update() {
+//		Logger.log("Updating tabbed panel " + getComponentID() + ", active: " + isActive());
 		updateEvents();
 		for (TabButton button : tabButtons) {
 			button.updateEvents();
 			if (!button.isActive() || button.isLocked()) continue;
+//			Logger.log("Updating tab button " + button.getComponentID());
 			button.checkInput();
 			button.update();
 		}

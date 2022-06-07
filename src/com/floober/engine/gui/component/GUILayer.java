@@ -77,6 +77,7 @@ public class GUILayer extends GUIComponent {
 
 	@Override
 	public void update() {
+//		Logger.log("Updating layer " + getComponentID());
 		for (GUIComponent component : components) {
 			component.updateEvents();
 			if (!component.isActive() || component.isLocked()) {

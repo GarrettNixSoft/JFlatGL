@@ -1,7 +1,10 @@
 package com.floober.engine.core.util.input;
 
+import com.floober.engine.core.renderEngine.display.DisplayManager;
 import com.floober.engine.core.renderEngine.display.Window;
 import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
+import com.floober.engine.core.util.Logger;
+import com.floober.engine.core.util.conversion.VectorConverter;
 import com.floober.engine.core.util.math.Collisions;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
@@ -21,7 +24,7 @@ public class MouseInput {
 
 	public boolean[] buttonState = new boolean[NUM_BUTTONS];
 	public boolean[] prevButtonState = new boolean[NUM_BUTTONS];
-	public Vector2i mouseLocation = new Vector2i(), prevLocation = new Vector2i();
+	public Vector2f mouseLocation = new Vector2f(), prevLocation = new Vector2f();
 	
 	public static final int LEFT = 0;
 	public static final int RIGHT = 1;
@@ -30,11 +33,11 @@ public class MouseInput {
 	public boolean WHEEL_UP;
 	public boolean WHEEL_DOWN;
 
-	private static int DX, DY;
+	private float DX, DY;
 	
 	public static void update() {
 		// get the target window's mouse adapter and its attributes
-		long windowTarget = MasterRenderer.getTargetWindowID();
+		long windowTarget = DisplayManager.primaryWindowID;
 		MouseInput windowMouseAdapter = windowMouseAdapters.get(windowTarget);
 		boolean[] buttonState = windowMouseAdapter.buttonState;
 		boolean[] prevButtonState = windowMouseAdapter.prevButtonState;
@@ -53,9 +56,9 @@ public class MouseInput {
 //		if (currentWindow.getWindowID() != MasterRenderer.primaryWindowRenderer.getTargetWindow().getWindowID())
 //			Logger.log("Position in window: (" + xRaw + ", " + yRaw + ")");
 		windowMouseAdapter.prevLocation = windowMouseAdapter.mouseLocation;
-		windowMouseAdapter.mouseLocation = new Vector2i((int) xPos, (int) yPos);
-		DX = windowMouseAdapter.mouseLocation.x - windowMouseAdapter.prevLocation.x;
-		DY = windowMouseAdapter.mouseLocation.y - windowMouseAdapter.prevLocation.y;
+		windowMouseAdapter.mouseLocation = new Vector2f((float) xPos, (float) yPos);
+		windowMouseAdapter.DX = (float) xPos - windowMouseAdapter.prevLocation.x;
+		windowMouseAdapter.DY = (float) yPos - windowMouseAdapter.prevLocation.y;
 		// TEST
 //		if (leftClick()) {
 //			xBuffer = BufferUtils.createDoubleBuffer(1);
@@ -74,49 +77,57 @@ public class MouseInput {
 	}
 	
 	public static boolean isPressed(int button) {
-		return windowMouseAdapters.get(MasterRenderer.getTargetWindowID()).buttonState[button];
+		return windowMouseAdapters.get(DisplayManager.primaryWindowID).buttonState[button];
 	}
 	public static boolean isClicked(int button) {
-		return 	windowMouseAdapters.get(MasterRenderer.getTargetWindowID()).buttonState[button] &&
-				!windowMouseAdapters.get(MasterRenderer.getTargetWindowID()).prevButtonState[button];
+		return 	windowMouseAdapters.get(DisplayManager.primaryWindowID).buttonState[button] &&
+				!windowMouseAdapters.get(DisplayManager.primaryWindowID).prevButtonState[button];
 	}
 	public static boolean leftClick() {
-		return 	windowMouseAdapters.get(MasterRenderer.getTargetWindowID()).buttonState[LEFT] &&
-				!windowMouseAdapters.get(MasterRenderer.getTargetWindowID()).prevButtonState[LEFT];
+		return 	windowMouseAdapters.get(DisplayManager.primaryWindowID).buttonState[LEFT] &&
+				!windowMouseAdapters.get(DisplayManager.primaryWindowID).prevButtonState[LEFT];
 	}
 	public static boolean rightClick() {
-		return 	windowMouseAdapters.get(MasterRenderer.getTargetWindowID()).buttonState[RIGHT] &&
-				!windowMouseAdapters.get(MasterRenderer.getTargetWindowID()).prevButtonState[RIGHT];
+		return 	windowMouseAdapters.get(DisplayManager.primaryWindowID).buttonState[RIGHT] &&
+				!windowMouseAdapters.get(DisplayManager.primaryWindowID).prevButtonState[RIGHT];
 	}
 
 	public static Vector2i getMousePosi() {
-		return windowMouseAdapters.get(MasterRenderer.getTargetWindowID()).mouseLocation;
+		return VectorConverter.vec2fToVec2i(windowMouseAdapters.get(DisplayManager.primaryWindowID).mouseLocation);
 	}
-	public static Vector2i getPrevPosi() { return windowMouseAdapters.get(MasterRenderer.getTargetWindowID()).prevLocation; }
+
+	public static Vector2i getPrevPosi() {
+		return VectorConverter.vec2fToVec2i(windowMouseAdapters.get(DisplayManager.primaryWindowID).prevLocation);
+	}
 
 	public static Vector2f getMousePos() {
-		return new Vector2f(windowMouseAdapters.get(MasterRenderer.getTargetWindowID()).mouseLocation);
-	}
-	public static Vector2f getPrevPos() { return new Vector2f(windowMouseAdapters.get(MasterRenderer.getTargetWindowID()).prevLocation); }
-	
-	public static int getX() { return windowMouseAdapters.get(MasterRenderer.getTargetWindowID()).mouseLocation.x(); }
-	public static int getY() {
-		return windowMouseAdapters.get(MasterRenderer.getTargetWindowID()).mouseLocation.y();
+		return new Vector2f(windowMouseAdapters.get(DisplayManager.primaryWindowID).mouseLocation);
 	}
 
-	public static int getDX() { return DX; }
-	public static int getDY() { return DY; }
+	public static Vector2f getPrevPos() {
+		return new Vector2f(windowMouseAdapters.get(DisplayManager.primaryWindowID).prevLocation);
+	}
+
+	public static boolean mouseMoved() {
+		return getDX() != 0 || getDY() != 0;
+	}
+	
+	public static int getX() { return (int) windowMouseAdapters.get(DisplayManager.primaryWindowID).mouseLocation.x(); }
+	public static int getY() { return (int) windowMouseAdapters.get(DisplayManager.primaryWindowID).mouseLocation.y(); }
+
+	public static float getDX() { return windowMouseAdapters.get(DisplayManager.primaryWindowID).DX; }
+	public static float getDY() { return windowMouseAdapters.get(DisplayManager.primaryWindowID).DY; }
 
 	public static boolean mouseOver(Vector4f bounds) {
-		return Collisions.contains(bounds, windowMouseAdapters.get(MasterRenderer.getTargetWindowID()).mouseLocation);
+		return Collisions.contains(bounds, windowMouseAdapters.get(DisplayManager.primaryWindowID).mouseLocation);
 	}
 
 	public static boolean wheelUp() {
-		return windowMouseAdapters.get(MasterRenderer.getTargetWindowID()).WHEEL_UP;
+		return windowMouseAdapters.get(DisplayManager.primaryWindowID).WHEEL_UP;
 	}
 
 	public static boolean wheelDown() {
-		return windowMouseAdapters.get(MasterRenderer.getTargetWindowID()).WHEEL_DOWN;
+		return windowMouseAdapters.get(DisplayManager.primaryWindowID).WHEEL_DOWN;
 	}
 	
 }

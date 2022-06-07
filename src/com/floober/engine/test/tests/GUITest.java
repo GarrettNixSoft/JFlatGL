@@ -5,6 +5,7 @@ import com.floober.engine.core.renderEngine.display.DisplayManager;
 import com.floober.engine.core.renderEngine.display.Window;
 import com.floober.engine.core.Game;
 import com.floober.engine.core.scenario.GameFlags;
+import com.floober.engine.core.util.conversion.StringConverter;
 import com.floober.engine.gui.GUI;
 import com.floober.engine.gui.GUIAction;
 import com.floober.engine.gui.GUIManager;
@@ -192,10 +193,6 @@ public class GUITest {
 			// clear window
 			MasterRenderer.primaryWindowRenderer.prepare(true);
 
-			// poll input
-			KeyInput.update();
-			MouseInput.update();
-
 			DisplayManager.checkToggleFullscreen();
 
 			// run game logic
@@ -213,7 +210,8 @@ public class GUITest {
 			fpsDisplay.replaceText("FPS: " + fps +
 					"\nGeom: " + GeometryRenderer.ELEMENT_COUNT +
 					"\nTxtr: " + TextureRenderer.ELEMENT_COUNT +
-					"\nText: " + FontRenderer.ELEMENT_COUNT);
+					"\nText: " + FontRenderer.ELEMENT_COUNT +
+					"\nmPos: " + StringConverter.vec2fToString(MouseInput.getMousePos()));
 
 			// render to the screen
 			MasterRenderer.primaryWindowRenderer.render(true);

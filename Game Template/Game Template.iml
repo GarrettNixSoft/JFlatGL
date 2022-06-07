@@ -7,7 +7,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="2D Game Engine v2" />
-    <orderEntry type="library" name="lwjgl-release-3.3" level="project" />
+    <orderEntry type="module" module-name="FlooberEngine" />
+    <orderEntry type="library" name="LWJGL" level="project" />
   </component>
 </module>

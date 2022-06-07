@@ -1,5 +1,6 @@
 package com.floober.engine.gui.component;
 
+import com.floober.engine.core.util.conversion.StringConverter;
 import com.floober.engine.event.MultiEventQueue;
 import com.floober.engine.gui.GUI;
 import com.floober.engine.gui.GUIAction;
@@ -356,6 +357,7 @@ public abstract class GUIComponent {
 
 	private void trigger(int actionID) {
 		if (actions[actionID] != null) actions[actionID].trigger();
+		if (actionID == ON_LEFT_CLICK) Logger.log("Triggered left click!");
 	}
 
 	// ABSTRACT METHODS
