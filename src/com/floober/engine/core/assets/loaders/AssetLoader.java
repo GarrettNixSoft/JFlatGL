@@ -42,4 +42,6 @@ public abstract class AssetLoader {
 	protected abstract void loadRecursive();
 	protected abstract void loadDirectory();
 
+	public abstract void finish();
+
 }

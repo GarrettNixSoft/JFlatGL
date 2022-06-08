@@ -17,7 +17,7 @@ public class Tiles {
 		// DEFAULT TILE
 		mappedTileValues.put(-1, new TileSettings(-1, 0, true, false, null, null, null, null, false, null, 0, 0));
 		// BOUNCE TILES
-		TextureComponent bounceOverlay = Loader.loadTexture("tilesets/effects/arrow_glow.png");
+		TextureComponent bounceOverlay = Loader.loadTextureConverted("tilesets/effects/arrow_glow.png");
 		mappedTileValues.put(42, new TileSettings(42, 0, false, true, Colors.BLACK, Colors.CYAN, Colors.GOLD, new Vector4f(0), true, bounceOverlay, 0.5f, -0));
 		mappedTileValues.put(43, new TileSettings(42, -90, false, true, Colors.BLACK, Colors.CYAN, Colors.GOLD, new Vector4f(0), true, bounceOverlay, 0.5f, -90));
 		mappedTileValues.put(44, new TileSettings(42, -180, false, true, Colors.BLACK, Colors.CYAN, Colors.GOLD, new Vector4f(0), true, bounceOverlay, 0.5f, -180));

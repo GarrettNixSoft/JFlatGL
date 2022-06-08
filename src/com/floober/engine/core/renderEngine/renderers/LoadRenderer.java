@@ -88,13 +88,13 @@ public class LoadRenderer {
 		float screenCenterY = HEIGHT / 2f;
 		// load assets
 		// loading screen assets
-		TextureComponent logo = ImageLoader.loadTexture(logoPath);
+		TextureComponent logo = ImageLoader.loadTextureConverted(logoPath);
 		logoElement = new TextureElement(logo, screenCenterX, screenCenterY - 200, Layers.DEFAULT_LAYER, 256, 256, true);
 		logoElement.setHasTransparency(true);
-		TextureComponent check = Loader.loadTexture(checkPath);
+		TextureComponent check = Loader.loadTextureConverted(checkPath);
 		checkElement = new TextureElement(check, screenCenterX, screenCenterY + 200, Layers.DEFAULT_LAYER, 64, 64, true);
 		checkElement.setHasTransparency(true);
-		FontType loadingFont = Loader.loadFont(fontName);
+		FontType loadingFont = Loader.loadFont(fontName, "").convert();
 		// set colors
 		Vector4f baseColor = new Vector4f(1);
 		Vector4f barColor = new Vector4f(1, 1, 1, 0);
@@ -115,7 +115,7 @@ public class LoadRenderer {
 		baseBar = new RectElement(baseColor, WIDTH / 2f, HEIGHT / 2f + 30, Layers.DEFAULT_LAYER, barWidth, barHeight, true);
 		progressBar = new RectElement(barColor, WIDTH / 2f - barWidth / 2f, HEIGHT / 2f + 30 - barHeight / 2f, Layers.DEFAULT_LAYER + 1, 0, barHeight, false);
 		// particle effect
-		TextureComponent particleTex = ImageLoader.loadTexture("res/textures/particles/glow_map.png");
+		TextureComponent particleTex = ImageLoader.loadTextureConverted("res/textures/particles/glow_map.png");
 		// particle effect
 		ParticleTexture particleTexture = new ParticleTexture(particleTex, 1, true);
 		Vector3f sourcePosition = new Vector3f(WIDTH / 2f - barWidth / 2f, HEIGHT / 2f + 30 - barHeight / 2f, Layers.TOP_LAYER);

@@ -11,7 +11,7 @@ import com.floober.engine.core.util.time.TimeScale;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameLoader {
+public class GameLoader extends Thread {
 
 	public static boolean LOAD_COMPLETE = false;
 
@@ -31,6 +31,18 @@ public class GameLoader {
 		// set modes
 		for (AssetLoader assetLoader : loaders) {
 			assetLoader.setMode(mode);
+		}
+	}
+
+	@Override
+	public void run() {
+		// perform all load tasks that don't need the OpenGL context
+		load();
+	}
+
+	public void finish() {
+		for (AssetLoader assetLoader : loaders) {
+			assetLoader.finish();
 		}
 	}
 

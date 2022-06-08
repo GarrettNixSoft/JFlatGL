@@ -14,6 +14,7 @@ import com.floober.engine.core.renderEngine.shaders.textures.TextureOutlineGrowS
 import com.floober.engine.core.renderEngine.shaders.textures.TextureOutlineShader;
 import com.floober.engine.core.renderEngine.shaders.textures.TextureShader;
 import com.floober.engine.core.renderEngine.textures.Texture;
+import com.floober.engine.core.renderEngine.textures.TextureComponent;
 import com.floober.engine.core.util.math.MathUtil;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
@@ -38,7 +39,7 @@ public class TextureRenderer {
 
 	// assets to provide to shaders
 	private final QuadModel quad;
-	private final Texture glitchNoise;
+	private final TextureComponent glitchNoise;
 
 	// debug
 	public static int ELEMENT_COUNT = 0;

@@ -52,9 +52,6 @@ public class RunGame {
 		Config.FULLSCREEN = false;
 		// FOR EFFICIENCY IN RUNNING MULTIPLE TIMES TO CHECK THINGS
 
-		// Create the window and set up OpenGL and GLFW.
-		DisplayManager.initPrimaryGameWindow();
-
 		// game components
 //		Sync sync = new Sync(); // this is optional; it's meant to sync framerates to a constant speed but is rather buggy
 

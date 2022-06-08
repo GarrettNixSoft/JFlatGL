@@ -1,5 +1,7 @@
 package com.floober.engine.core.assets.loaders;
 
+import com.floober.engine.core.assets.loaders.gameassets.temp.RawFontType;
+import com.floober.engine.core.assets.loaders.gameassets.temp.RawTextureAtlas;
 import com.floober.engine.core.audio.AudioMaster;
 import com.floober.engine.core.audio.Sound;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.FontType;
@@ -14,18 +16,23 @@ import static com.floober.engine.core.util.file.FileUtil.SEPARATOR;
 
 public class Loader {
 
-	public static TextureComponent loadTexture(String path) {
+	public static RawTexture loadTexture(String path) {
 		path = "textures" + SEPARATOR + path;
 		return ImageLoader.loadTexture(path);
 	}
 
-	public static TextureComponent[] loadTextureArray(String path, int width) {
+	public static TextureComponent loadTextureConverted(String path) {
+		path = "textures" + SEPARATOR + path;
+		return ImageLoader.loadTextureConverted(path);
+	}
+
+	public static RawTexture[] loadTextureArray(String path, int width) {
 		path = "textures" + SEPARATOR + path;
 		BufferedImage bufferedImage = ImageLoader.loadBufferedImage(path);
 		return ImageConverter.convertToTextureArray(bufferedImage, width);
 	}
 
-	public static TextureComponent[] loadTextureArray(String path, int width, int height) {
+	public static RawTexture[] loadTextureArray(String path, int width, int height) {
 		path = "textures" + SEPARATOR + path;
 		BufferedImage bufferedImage = ImageLoader.loadBufferedImage(path);
 		return ImageConverter.convertToTextureArray(bufferedImage, width, height);
@@ -41,15 +48,16 @@ public class Loader {
 		return AudioMaster.loadSound(path);
 	}
 
-	public static FontType loadFont(String font) {
-		String path = "fonts" + SEPARATOR + font + SEPARATOR + font;
-		int fontAtlas = loadFontAtlas(path + ".png");
-		String fontFile = loadFontFile(SEPARATOR + path + ".fnt");
-		return new FontType(fontAtlas, fontFile);
+	public static FontType loadFontConverted(String font) {
+		return loadFont(font, "").convert();
 	}
 
-	private static int loadFontAtlas(String path) {
-		return ImageLoader.loadTexture(path).id();
+	public static RawFontType loadFont(String font, String key) {
+		String path = "fonts" + SEPARATOR + font + SEPARATOR + font;
+		RawTexture rawTexture = ImageLoader.loadTexture(path + ".png");
+		RawTextureAtlas fontAtlas = new RawTextureAtlas(key, rawTexture, 1, true);
+		String fontFile = loadFontFile(SEPARATOR + path + ".fnt");
+		return new RawFontType(key, fontAtlas, fontFile);
 	}
 
 	private static String loadFontFile(String path) {

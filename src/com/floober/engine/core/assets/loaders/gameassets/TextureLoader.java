@@ -5,6 +5,11 @@ import com.floober.engine.core.assets.loaders.AssetLoader;
 import com.floober.engine.core.assets.loaders.ImageLoader;
 import com.floober.engine.core.assets.loaders.Loader;
 import com.floober.engine.core.Game;
+import com.floober.engine.core.assets.loaders.RawTexture;
+import com.floober.engine.core.assets.loaders.gameassets.temp.RawTextureArray;
+import com.floober.engine.core.assets.loaders.gameassets.temp.RawTextureAtlas;
+import com.floober.engine.core.assets.loaders.gameassets.temp.RawTextureComponent;
+import com.floober.engine.core.assets.loaders.gameassets.temp.RawTextureSet;
 import com.floober.engine.core.renderEngine.renderers.LoadRenderer;
 import com.floober.engine.core.renderEngine.textures.TextureAtlas;
 import com.floober.engine.core.renderEngine.textures.TextureComponent;
@@ -17,11 +22,23 @@ import com.floober.engine.test.RunGame;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class TextureLoader extends AssetLoader {
 
+	private final List<RawTextureComponent> rawTextureComponents;
+	private final List<RawTextureSet> rawTextureSets;
+	private final List<RawTextureArray> rawTextureArrays;
+	private final List<RawTextureAtlas> rawTextureAtlases;
+
 	public TextureLoader() {
 		directory = FileUtil.getJSON("/assets/texture_directory.json");
+		rawTextureComponents = new ArrayList<>();
+		rawTextureSets = new ArrayList<>();
+		rawTextureArrays = new ArrayList<>();
+		rawTextureAtlases = new ArrayList<>();
 	}
 
 	@Override
@@ -39,8 +56,8 @@ public class TextureLoader extends AssetLoader {
 			}
 			else if (file.getName().toLowerCase().endsWith(".png")) {
 				String key = file.getName().substring(0, file.getName().lastIndexOf('.'));
-				TextureComponent texture = ImageLoader.loadTexture(file.getPath());
-				Game.getTextures().addTexture(key, texture);
+				RawTexture texture = ImageLoader.loadTexture(file.getPath());
+				Game.getTextures().addTexture(key, texture.convertToOpenGLTexture());
 			}
 		}
 	}
@@ -69,21 +86,24 @@ public class TextureLoader extends AssetLoader {
 			String path = textureDirectory.getString(key).replace("/", FileUtil.SEPARATOR);
 			// log the load attempt
 			Logger.logLoad("Loading texture: " + path);
-			// load the file at that location
-			TextureComponent texture = Loader.loadTexture(path);
+
+			boolean hasTransparency;
 
 			// check whether this texture is known
 			if (TextureAnalyzer.isKnown(key)) { // if it is, set its transparency value to the known one
 //				Logger.log("Found data for this texture in the cache!");
-				texture.setHasTransparency(TextureAnalyzer.knownTransparencyValue(key));
+				hasTransparency = TextureAnalyzer.knownTransparencyValue(key);
 			}
 			else { 								// otherwise, analyze it to determine whether it contains transparency
 //				Logger.log("No data found, analyzing texture");
-				texture.setHasTransparency(TextureAnalyzer.findTransparencyInTexture(path, key));
+				hasTransparency = TextureAnalyzer.findTransparencyInTexture(path, key);
 			}
+			// load the file at that location
+			RawTexture texture = Loader.loadTexture(path);
 
-			// add it to the game
-			Game.getTextures().addTexture(key, texture);
+			RawTextureComponent textureComponent = new RawTextureComponent(key, texture, hasTransparency);
+			rawTextureComponents.add(textureComponent);
+
 			// report the load count
 			Globals.texCount++;
 			// render the load screen
@@ -104,26 +124,28 @@ public class TextureLoader extends AssetLoader {
 			// get the associated path
 			String path = setObject.getString("path").replace("/", FileUtil.SEPARATOR);
 			// pre-load the texture
-			TextureComponent rawTex = Loader.loadTexture(path);
+			RawTexture rawTex = Loader.loadTexture(path);
+
+			boolean hasTransparency;
 
 			// check whether this texture set is known
 			if (TextureAnalyzer.isKnown(key)) { // if it is, set its transparency value to the known one
 //				Logger.log("Found data for this texture in the cache!");
-				rawTex.setHasTransparency(TextureAnalyzer.knownTransparencyValue(key));
+				hasTransparency = TextureAnalyzer.knownTransparencyValue(key);
 			}
 			else { 								// otherwise, analyze it to determine whether it contains transparency
 //				Logger.log("No data found, analyzing texture");
-				rawTex.setHasTransparency(TextureAnalyzer.findTransparencyInTexture(path, key));
+				hasTransparency = TextureAnalyzer.findTransparencyInTexture(path, key);
 			}
 
 			// get the width and height
 			int width = setObject.getInt("tex_width");
 			int height = setObject.optInt("tex_height", rawTex.height());
-			// get optional transparency flag
-			boolean hasTransparency = setObject.optBoolean("transparent", false);
+
 			// build the object and add it
-			TextureSet textureSet = new TextureSet(rawTex, width, height, rawTex.hasTransparency());
-			Game.getTextures().addTextureSet(key, textureSet);
+			RawTextureSet textureSet = new RawTextureSet(key, rawTex, width, height, hasTransparency);
+			rawTextureSets.add(textureSet);
+
 			// report the load count
 			Globals.texCount++;
 			// render the load screen
@@ -148,27 +170,29 @@ public class TextureLoader extends AssetLoader {
 			// get the optional height
 			int height = arrayObject.optInt("height");
 			// load the array based on whether the height key exists
-			TextureComponent[] textureArray;
+			RawTexture[] rawArray;
 			if (height != 0)
-				textureArray = Loader.loadTextureArray(path, width, height);
+				rawArray = Loader.loadTextureArray(path, width, height);
 			else
-				textureArray = Loader.loadTextureArray(path, width);
+				rawArray = Loader.loadTextureArray(path, width);
+
+			boolean[] hasTransparency = new boolean[rawArray.length];
 
 			// check whether this texture array is known
 			if (TextureAnalyzer.isKnown(key)) { // if it is, set its transparency value to the known one
 //				Logger.log("Found data for this texture in the cache!");
 				boolean transparency = TextureAnalyzer.knownTransparencyValue(key);
-				for (TextureComponent component : textureArray) component.setHasTransparency(transparency);
+				Arrays.fill(hasTransparency, transparency);
 			}
 			else { 								// otherwise, analyze it to determine whether it contains transparency
 //				Logger.log("No data found, analyzing texture");
 				boolean transparency = TextureAnalyzer.findTransparencyInTexture(path, key);
-				for (TextureComponent component : textureArray) component.setHasTransparency(transparency);
+				Arrays.fill(hasTransparency, transparency);
 			}
 
+			RawTextureArray textureArray = new RawTextureArray(key, rawArray, hasTransparency);
+			rawTextureArrays.add(textureArray);
 
-			// add it to the game
-			Game.getTextures().addTextureArray(key, textureArray);
 			// report the load count
 			Globals.texCount++;
 			// render the loading screen
@@ -191,28 +215,66 @@ public class TextureLoader extends AssetLoader {
 			// get the number of rows
 			int numRows = atlasObject.getInt("rows");
 			// load the atlas
-			TextureComponent texture = Loader.loadTexture(path);
+			RawTexture texture = Loader.loadTexture(path);
+
+			boolean hasTransparency;
 
 			// check whether this texture is known
 			if (TextureAnalyzer.isKnown(key)) { // if it is, set its transparency value to the known one
 //				Logger.log("Found data for this texture in the cache!");
-				texture.setHasTransparency(TextureAnalyzer.knownTransparencyValue(key));
+				hasTransparency = TextureAnalyzer.knownTransparencyValue(key);
 			}
 			else { 								// otherwise, analyze it to determine whether it contains transparency
 //				Logger.log("No data found, analyzing texture");
-				texture.setHasTransparency(TextureAnalyzer.findTransparencyInTexture(path, key));
+				hasTransparency = TextureAnalyzer.findTransparencyInTexture(path, key);
 			}
 
 			// convert it to an atlas
-			TextureAtlas textureAtlas = new TextureAtlas(texture.id(), texture.width(), texture.height(), numRows);
-			// add it to the game
-			Game.getTextures().addTextureAtlas(key, textureAtlas);
+			RawTextureAtlas textureAtlas = new RawTextureAtlas(key, texture, numRows, hasTransparency);
+			rawTextureAtlases.add(textureAtlas);
+
 			// report the load count
 			Globals.texCount++;
 			// render the load screen
 			if (Config.USE_LOAD_RENDERER) LoadRenderer.instance.render();
 			// done
 		}
+	}
+
+	public void convertAndAddAll() {
+		convertTextures();
+		convertTextureSets();
+		convertTextureArrays();
+		convertTextureAtlases();
+	}
+
+	private void convertTextures() {
+		for (RawTextureComponent textureComponent : rawTextureComponents) {
+			textureComponent.addToGame();
+		}
+	}
+
+	private void convertTextureSets() {
+		for (RawTextureSet textureSet : rawTextureSets) {
+			textureSet.addToGame();
+		}
+	}
+
+	private void convertTextureArrays() {
+		for (RawTextureArray textureArray : rawTextureArrays) {
+			textureArray.addToGame();
+		}
+	}
+
+	private void convertTextureAtlases() {
+		for (RawTextureAtlas textureAtlas : rawTextureAtlases) {
+			textureAtlas.addToGame();
+		}
+	}
+
+	@Override
+	public void finish() {
+		convertAndAddAll();
 	}
 
 }

@@ -63,4 +63,9 @@ public class SfxLoader extends AssetLoader {
 			// done
 		}
 	}
+
+	@Override
+	public void finish() {
+		// nothing
+	}
 }

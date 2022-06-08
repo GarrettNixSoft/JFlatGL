@@ -1,5 +1,6 @@
 package com.floober.engine.core.assets.loaders;
 
+import com.floober.engine.core.assets.loaders.gameassets.temp.RawTextureComponent;
 import com.floober.engine.core.renderEngine.textures.RawTextureData;
 import com.floober.engine.core.renderEngine.textures.Texture;
 import com.floober.engine.core.renderEngine.textures.TextureComponent;
@@ -28,17 +29,24 @@ public class ImageLoader {
 
 	private static final List<Integer> textures = new ArrayList<>();
 
+	private static final List<RawTexture> rawImages = new ArrayList<>();
+
+	public static void createOpenGLTextures() {
+		for (RawTexture rawTexture : rawImages) {
+			TextureComponent textureComponent = rawTexture.convertToOpenGLTexture();
+			textures.add(textureComponent.texture().id());
+			//
+		}
+	}
+
 	/**
 	 * Load a texture from disk, and send it to the GPU.
 	 * @param path The path to the texture file.
 	 * @return A Texture to reference the loaded image.
 	 */
-	public static TextureComponent loadTexture(String path) {
+	public static RawTexture loadTexture(String path) {
 		// report load
 		Logger.logLoad("Loading texture: " + path);
-		// init OpenGL texture
-		int textureID = glGenTextures();
-		glBindTexture(GL_TEXTURE_2D, textureID);
 		// load from file
 		MemoryStack stack = MemoryStack.stackPush();
 		IntBuffer w = stack.mallocInt(1);
@@ -47,21 +55,13 @@ public class ImageLoader {
 		ByteBuffer buffer = tryLoad(path, w, h, comp);
 		int width = w.get();
 		int height = h.get();
-		// set OpenGL texture settings for this texture
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		// load the texture for OpenGL
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-		// unbind the texture
-		glBindTexture(GL_TEXTURE_2D, 0);
-		// add to list to clean up
-		textures.add(textureID);
-		// create the Texture object
-		Texture texture = new Texture(textureID, width, height);
-		// wrap it in a TextureComponent and return it
-		return new TextureComponent(texture);
+		// create the RawTexture and return it
+		return new RawTexture(buffer, width, height);
+	}
+
+	public static TextureComponent loadTextureConverted(String path) {
+		RawTexture rawTexture = loadTexture(path);
+		return rawTexture.convertToOpenGLTexture();
 	}
 
 	public static TextureComponent loadTexture(ByteBuffer textureData) {
@@ -100,7 +100,7 @@ public class ImageLoader {
 	 * @param path The path to the texture file.
 	 * @return A Texture to reference the loaded image.
 	 */
-	public static Texture loadTexture(String path, int wrapMode) {
+	public static TextureComponent loadTexture(String path, int wrapMode) {
 		// report load
 		Logger.logLoad("Loading texture: " + path);
 		// init OpenGL texture
@@ -127,7 +127,7 @@ public class ImageLoader {
 		// add to list to clean up
 		textures.add(textureID);
 		// create the Texture object and return it
-		return new Texture(textureID, width, height);
+		return new TextureComponent(textureID, width, height);
 	}
 
 	/**

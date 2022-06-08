@@ -76,7 +76,7 @@ public class ParticleTest {
 		// TEST
 		// Use a GUIText to display the number of particles currently in existence.
 //		FontType guiFont = new FontType(loader.loadFontAtlas("aller/aller.png"), StringConverter.combineAll(FileUtil.getFileData("/fonts/aller/aller.fnt")));
-		guiFont = Loader.loadFont("aller");
+		guiFont = Loader.loadFontConverted("aller");
 		Vector4f textColor = new Vector4f(1,1,1,0.8f);
 		Vector4f shadowColor = new Vector4f(0);
 		particleCountDisplay = new GUIText("Particles: 0", 1.5f, guiFont, new Vector3f(0), 1, false);
@@ -129,9 +129,9 @@ public class ParticleTest {
 
 		// Particles
 
-		TextureComponent explosionTexture = ImageLoader.loadTexture("textures/particles/explosion.png");
-		TextureComponent glowTexture = ImageLoader.loadTexture("textures/particles/glow.png");
-		TextureComponent defaultTex = ImageLoader.loadTexture("textures/complex_sample.png");
+		TextureComponent explosionTexture = ImageLoader.loadTextureConverted("textures/particles/explosion.png");
+		TextureComponent glowTexture = ImageLoader.loadTextureConverted("textures/particles/glow.png");
+		TextureComponent defaultTex = ImageLoader.loadTextureConverted("textures/complex_sample.png");
 
 		explosionParticleTex = new ParticleTexture(explosionTexture, 4, true);
 		glowParticleTex = new ParticleTexture(glowTexture, 1, true);

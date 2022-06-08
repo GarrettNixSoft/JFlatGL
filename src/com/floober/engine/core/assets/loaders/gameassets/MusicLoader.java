@@ -64,4 +64,9 @@ public class MusicLoader extends AssetLoader {
 		}
 	}
 
+	@Override
+	public void finish() {
+		// nothing
+	}
+
 }

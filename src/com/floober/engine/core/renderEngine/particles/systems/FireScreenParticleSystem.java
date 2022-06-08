@@ -64,7 +64,7 @@ public class FireScreenParticleSystem extends ParticleSystem {
 
 	private void initEmitter() {
 		// get the glow texture
-		ParticleTexture particleTexture = new ParticleTexture(ImageLoader.loadTexture("textures/particles/glow.png"), 1, true);
+		ParticleTexture particleTexture = new ParticleTexture(ImageLoader.loadTextureConverted("textures/particles/glow.png"), 1, true);
 		// create and configure the particle behavior attributes
 		ParticleBehavior particleBehavior = new ParticleBehavior(this.particleBehavior = new FireScreenBehavior(this),
 																new FadeInOutBehavior(1, 0.15f, 0.5f));

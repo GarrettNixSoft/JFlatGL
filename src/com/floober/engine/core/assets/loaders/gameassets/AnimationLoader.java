@@ -146,4 +146,9 @@ public class AnimationLoader extends AssetLoader {
 		}
 		return animationSet;
 	}
+
+	@Override
+	public void finish() {
+		// nothing
+	}
 }

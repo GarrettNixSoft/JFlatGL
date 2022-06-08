@@ -94,11 +94,13 @@ public class Game {
 	 * Load the game. Run on the game's instance.
 	 */
 	private void load() {
-		LoadRenderer loadRenderer = new LoadRenderer();
-		loadRenderer.init();
 		GameLoader gameLoader = new GameLoader();
-		gameLoader.load();
-		if (loadRenderer == LoadRenderer.instance) LoadRenderer.instance.cleanUp();
+		gameLoader.start();
+		while (!GameLoader.LOAD_COMPLETE) {
+			Logger.log("Waiting for load complete flag...");
+		}
+		Logger.log("Load complete flag set!");
+		gameLoader.finish();
 	}
 
 	// RUN GAME LOGIC
