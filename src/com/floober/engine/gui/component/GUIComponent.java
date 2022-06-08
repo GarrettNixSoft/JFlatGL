@@ -58,6 +58,7 @@ public abstract class GUIComponent {
 	 * Construct a GUIComponent. All GUIComponents must
 	 * have an ID.
 	 * @param componentID this component's ID
+	 * @param parent the top-level GUI parent of this component
 	 */
 	public GUIComponent(String componentID, GUI parent) {
 		this.componentID = componentID;
@@ -381,18 +382,19 @@ public abstract class GUIComponent {
 		}
 	}
 
-	public abstract void remove();
-
 	private void trigger(int actionID) {
 		if (actions[actionID] != null) actions[actionID].trigger();
 		if (actionID == ON_LEFT_CLICK) Logger.log("Triggered left click!");
 	}
 
-	// ABSTRACT METHODS
 
+	// ABSTRACT METHODS
 	public abstract void update();
 	public abstract void doTransform();
 	public abstract void render();
+
+	// force implement this in case any component uses a GUIText
+	public abstract void remove();
 
 	/**
 	 * Check if the mouse has entered this component's

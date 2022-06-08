@@ -1,5 +1,7 @@
 package com.floober.engine.gui;
 
+import com.floober.engine.core.util.color.Colors;
+import com.floober.engine.gui.component.BackgroundComponent;
 import com.floober.engine.gui.component.GUIComponent;
 import com.floober.engine.gui.component.GUILayer;
 import com.floober.engine.core.util.Logger;
@@ -12,6 +14,10 @@ public class GUI {
 
 	// addressing this GUI
 	private final String id;
+
+	// special component: the BG
+	private BackgroundComponent background;
+	private final BackgroundComponent noBackground;
 
 	// storing layers: all, and active
 	private final HashMap<String, GUILayer> layerStore;
@@ -27,6 +33,9 @@ public class GUI {
 		layerStore = new HashMap<>();
 		layerStack = new Stack<>();
 		componentIDs = new HashSet<>();
+		// no background object to avoid using a null
+		noBackground = new BackgroundComponent("background_empty", this, Colors.INVISIBLE);
+		background = noBackground;
 	}
 
 	/**
@@ -73,33 +82,67 @@ public class GUI {
 		}
 	}
 
+	/**
+	 * Add a layer to the layer store and stack it immediately.
+	 * @param layer the layer to add
+	 */
 	public void addLayer(GUILayer layer) {
 		storeLayer(layer);
-		layerStack.push(layer);
+		stackLayer(layer);
 	}
 
+	/**
+	 * Add a GUI layer to the layer store.
+	 * @param layer the layer to store
+	 */
 	public void storeLayer(GUILayer layer) {
 		layerStore.put(layer.getComponentID(), layer);
 	}
 
+	/**
+	 * Place a GUILayer onto the layer stack. If the given layer
+	 * is not already in the layer stack, it will be added to it.
+	 * @param layer the layer to stack
+	 */
 	public void stackLayer(GUILayer layer) {
-		layerStack.push(layer);
-		layer.open();
+		String layerID = layer.getComponentID();
+		if (!layerStore.containsKey(layerID)) layerStore.put(layerID, layer);
+		stackLayer(layerID);
 	}
 
+	/**
+	 * Fetch a layer from the layer store by its ID and place
+	 * it onto the layer stack. Throws a {@code RuntimeException} if no
+	 * layer with the given ID exists, or if the layer is already
+	 * on the layer stack.
+	 * @param layerID the ID of the layer to stack
+	 */
 	public void stackLayer(String layerID) {
 		if (layerStore.containsKey(layerID)) {
+			GUILayer layer = layerStore.get(layerID);
+			if (layerStack.getElements().contains(layer)) throw new RuntimeException("Layer " + layerID + " is already on the layer stack!");
 			if (!layerStack.isEmpty()) layerStack.peek().lock();
-			layerStack.push(layerStore.get(layerID));
-			layerStore.get(layerID).open();
+			layerStack.push(layer);
+			layer.open();
 			Logger.log("Layer stack succeeded");
 		}
+		else throw new RuntimeException("GUI layer " + layerID + " does not exist!");
 	}
 
+	/**
+	 * Close the top layer of this GUI. When the top layer
+	 * finishes its close operation, it will be automatically
+	 * removed and the layer beneath will activate.
+	 */
 	public void removeTopLayer() {
 		layerStack.peek().close();
 	}
 
+	/**
+	 * Check if this GUI is completely closed.
+	 * @return {@code true} if all layers report having completed
+	 * 			their close operation.
+	 */
 	public boolean isClosed() {
 		for (GUILayer layer : layerStack.getElements()) {
 			if (!layer.isClosed()) return false;
@@ -107,6 +150,25 @@ public class GUI {
 		return true;
 	}
 
+	/**
+	 * Add or replace a background component to this GUI.
+	 * @param background the background to use
+	 */
+	public void setBackground(BackgroundComponent background) {
+		this.background = background;
+	}
+
+	/**
+	 * Remove this GUI's background component. Sets the active
+	 * background component to the invisible one.
+	 */
+	public void removeBackground() {
+		this.background = noBackground;
+	}
+
+	/**
+	 * Open this GUI. Automatically opens all layers.
+	 */
 	public void open() {
 		Logger.log("Opening GUI");
 		for (GUILayer layer : layerStack.getElements()) {
@@ -114,6 +176,9 @@ public class GUI {
 		}
 	}
 
+	/**
+	 * Close this GUI. Automatically closes all layers.
+	 */
 	public void close() {
 		for (GUILayer layer : layerStack.getElements()) {
 			layer.close();
@@ -121,6 +186,9 @@ public class GUI {
 		}
 	}
 
+	/**
+	 * Lock all layers of this GUI.
+	 */
 	public void lock() {
 		for (GUILayer layer : layerStack.getElements()) {
 			layer.lock();
