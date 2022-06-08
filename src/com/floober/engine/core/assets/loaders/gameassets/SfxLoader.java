@@ -59,7 +59,7 @@ public class SfxLoader extends AssetLoader {
 			// report load count
 			Globals.sfxCount++;
 			// render load screen
-			if (Config.USE_LOAD_RENDERER) RunGame.loadRenderer.render();
+			if (Config.USE_LOAD_RENDERER) LoadRenderer.instance.render();
 			// done
 		}
 	}

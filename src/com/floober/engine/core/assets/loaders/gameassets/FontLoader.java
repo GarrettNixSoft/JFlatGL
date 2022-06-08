@@ -41,7 +41,7 @@ public class FontLoader extends AssetLoader {
 			// report the load count
 			Globals.fontCount++;
 			// render the loading screen
-			if (Config.USE_LOAD_RENDERER) RunGame.loadRenderer.render();
+			if (Config.USE_LOAD_RENDERER) LoadRenderer.instance.render();
 			// done
 		}
 	}

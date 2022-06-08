@@ -162,7 +162,7 @@ public class FileUtil {
 							getResDataFile(file) :
 							getFileData(file);
 		String combined = StringConverter.combineAll(fileData);
-		System.out.println(combined);
+//		System.out.println(combined);
 		// create JSON parser
 		return new JSONObject(combined);
 	}

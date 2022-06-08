@@ -22,10 +22,12 @@ import com.floober.engine.core.util.Globals;
 import com.floober.engine.core.util.color.Colors;
 import com.floober.engine.core.util.configuration.Config;
 import com.floober.engine.core.util.configuration.Settings;
+import com.floober.engine.core.util.file.FileUtil;
 import com.floober.engine.core.util.interpolators.FadeFloat;
 import com.floober.engine.core.util.interpolators.FadeInFloat;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
+import org.json.JSONObject;
 
 import static com.floober.engine.core.util.Globals.*;
 
@@ -39,6 +41,8 @@ import static com.floober.engine.core.util.Globals.*;
  * with the current progress.
  */
 public class LoadRenderer {
+
+	public static LoadRenderer instance;
 
 	// loading stages
 	public static final int FONTS = 0, TEXTURES = 1, ANIMATIONS = 2, SFX = 3, MUSIC = 4, FADE_IN = 5, DONE = 6, FADE_OUT = 7;
@@ -58,6 +62,7 @@ public class LoadRenderer {
 	private ParticleEmitter particleSource;
 
 	public LoadRenderer() {
+		if (instance == null) instance = this;
 		fadeIn = new FadeInFloat(1);
 		fadeInCheck = new FadeInFloat(0.75f);
 		fadeOut = new FadeFloat(1);
@@ -67,6 +72,11 @@ public class LoadRenderer {
 	 * Loads the resources necessary for the loading screen.
 	 */
 	public LoadRenderer init() {
+		// get settings
+		String fontName = Config.LOAD_RENDER_SETTINGS.getString("font");
+		String logoPath = Config.LOAD_RENDER_SETTINGS.getString("logo");
+		String checkPath = Config.LOAD_RENDER_SETTINGS.getString("check");
+		// prepare the text master
 		TextMaster.init();
 		// width and height convenience variables
 		int WIDTH = Config.INTERNAL_WIDTH;
@@ -76,13 +86,13 @@ public class LoadRenderer {
 		float screenCenterY = HEIGHT / 2f;
 		// load assets
 		// loading screen assets
-		TextureComponent logo = ImageLoader.loadTexture("res/icon/icon512.png");
+		TextureComponent logo = ImageLoader.loadTexture(logoPath);
 		logoElement = new TextureElement(logo, screenCenterX, screenCenterY - 200, Layers.DEFAULT_LAYER, 256, 256, true);
 		logoElement.setHasTransparency(true);
-		TextureComponent check = Loader.loadTexture("menu/load/load_check.png");
+		TextureComponent check = Loader.loadTexture(checkPath);
 		checkElement = new TextureElement(check, screenCenterX, screenCenterY + 200, Layers.DEFAULT_LAYER, 64, 64, true);
 		checkElement.setHasTransparency(true);
-		FontType loadingFont = Loader.loadFont("aller");
+		FontType loadingFont = Loader.loadFont(fontName);
 		// set colors
 		Vector4f baseColor = new Vector4f(1);
 		Vector4f barColor = new Vector4f(1, 1, 1, 0);

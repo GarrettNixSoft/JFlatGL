@@ -77,7 +77,7 @@ public class GUITest {
 						.addPerformActionOnTrigger(() -> tabbedPanel.queueEvent(new ScaleEvent(tabbedPanel, -0.2f, 0.2f))));
 
 		layer.addComponent(tabbedPanel);
-		gui.addLayer(layer);
+		gui.storeLayer(layer);
 
 		// create main test tab
 		TabbedPanel.TabContentPanel tab = tabbedPanel.generateTab("tab_1", Game.getTexture("default"));
@@ -181,6 +181,7 @@ public class GUITest {
 									.addPerformActionOnTrigger(() -> tabButton.setPrimaryColor(Colors.WHITE)));
 		}
 
+		gui.stackLayer(layer);
 
 		// activate the GUI
 		GUIManager.setActiveGUI(gui);

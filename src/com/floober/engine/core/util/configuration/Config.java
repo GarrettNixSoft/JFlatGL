@@ -34,6 +34,8 @@ public class Config {
 
 	public static boolean FULLSCREEN;
 
+	public static JSONObject LOAD_RENDER_SETTINGS;
+
 	public static void load() {
 		JSONObject configJSON = FileUtil.getJSON("/config/config.json");
 
@@ -54,6 +56,8 @@ public class Config {
 		USE_LOAD_RENDERER = configJSON.getBoolean("use_load_renderer");
 
 		FULLSCREEN = configJSON.getBoolean("fullscreen");
+
+		LOAD_RENDER_SETTINGS = configJSON.getJSONObject("load_render_settings");
 	}
 
 	public static Vector4f getScreenBounds() {

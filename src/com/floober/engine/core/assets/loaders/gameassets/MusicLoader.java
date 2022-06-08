@@ -59,7 +59,7 @@ public class MusicLoader extends AssetLoader {
 			// report the load count
 			Globals.musicCount++;
 			// render the load screen
-			if (Config.USE_LOAD_RENDERER) RunGame.loadRenderer.render();
+			if (Config.USE_LOAD_RENDERER) LoadRenderer.instance.render();
 			// done
 		}
 	}
