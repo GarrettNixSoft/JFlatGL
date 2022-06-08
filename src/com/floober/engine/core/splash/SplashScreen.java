@@ -1,10 +1,13 @@
 package com.floober.engine.core.splash;
 
 import com.floober.engine.core.assets.TextureAnalyzer;
+import com.floober.engine.core.renderEngine.Render;
 import com.floober.engine.core.renderEngine.display.DisplayManager;
 import com.floober.engine.core.renderEngine.display.Window;
 import com.floober.engine.core.renderEngine.fonts.fontRendering.TextMaster;
 import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
+import com.floober.engine.core.renderEngine.util.Layers;
+import com.floober.engine.core.util.color.Colors;
 import com.floober.engine.core.util.configuration.Config;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
@@ -62,6 +65,7 @@ public class SplashScreen {
 		glfwMakeContextCurrent(windowID);
 		glClear(GL_COLOR_BUFFER_BIT);
 		splashRenderer.prepare(true);
+		Render.drawRect(Colors.RED, 100, 100, Layers.BOTTOM_LAYER, 100, 100, false);
 		splashRenderer.render(true);
 		splashWindow.swapBuffers();
 	}

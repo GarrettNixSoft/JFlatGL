@@ -6,10 +6,13 @@ import com.floober.engine.core.assets.loaders.GameLoader;
 import com.floober.engine.core.audio.AudioMaster;
 import com.floober.engine.core.audio.Sound;
 import com.floober.engine.core.gameState.GameStateManager;
+import com.floober.engine.core.renderEngine.Render;
 import com.floober.engine.core.renderEngine.display.DisplayManager;
 import com.floober.engine.core.renderEngine.renderers.LoadRenderer;
 import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
+import com.floober.engine.core.renderEngine.util.Layers;
 import com.floober.engine.core.splash.SplashScreen;
+import com.floober.engine.core.util.color.Colors;
 import com.floober.engine.core.util.input.KeyInput;
 import com.floober.engine.core.util.input.MouseInput;
 import com.floober.engine.core.util.time.TimeScale;
@@ -98,7 +101,7 @@ public class Game {
 		loader.start();
 
 		while (!GameLoader.LOAD_COMPLETE) {
-			Logger.log("Waiting for load complete flag...");
+//			Logger.log("Waiting for load complete flag...");
 			SplashScreen.render();
 		}
 

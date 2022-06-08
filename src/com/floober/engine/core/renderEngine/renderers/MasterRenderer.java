@@ -19,6 +19,7 @@ import com.floober.engine.core.renderEngine.particles.ParticleTexture;
 import com.floober.engine.core.renderEngine.particles.types.Particle;
 import com.floober.engine.core.renderEngine.ppfx.PostProcessing;
 import com.floober.engine.core.renderEngine.util.Layers;
+import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.configuration.Config;
 
 import java.util.HashMap;
@@ -190,13 +191,13 @@ public class MasterRenderer {
 		}
 	}
 
-	public float getScreenZ(int layer) {
+	public static float getScreenZ(int layer) {
 		int trueLayer = Layers.NUM_LAYERS - layer;
 		return ((float) trueLayer / Layers.NUM_LAYERS);
 	}
 
 	public int getLayerByZ(float z) {
-		return (int) (Layers.NUM_LAYERS - (z * 10));
+		return (int) (RENDER_LAYERS - (z * 10));
 	}
 
 	// *** ADDING ELEMENTS ***
