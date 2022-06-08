@@ -33,6 +33,19 @@ public class GUILayer extends GUIComponent {
 		components.add(component);
 	}
 
+	/**
+	 * Set the opacity of all components within this GUILayer
+	 * to either 1 or 0, based on the corresponding boolean value
+	 * passed.
+	 * @param visible {@code true} for 1, {@code false} for 0
+	 */
+	public void setAllVisible(boolean visible) {
+		float opacity = visible ? 1 : 0;
+		for (GUIComponent component : components) {
+			component.setOpacity(opacity);
+		}
+	}
+
 	@Override
 	public boolean isClosed() {
 		for (GUIComponent component : components) {

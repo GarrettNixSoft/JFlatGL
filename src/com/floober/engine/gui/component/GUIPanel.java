@@ -24,6 +24,13 @@ public class GUIPanel extends GUIComponent {
 	}
 
 	@Override
+	public void setOpacity(float opacity) {
+		for (GUIComponent component : components) {
+			component.setOpacity(opacity);
+		}
+	}
+
+	@Override
 	public boolean isClosed() {
 		if (components.isEmpty()) return false;
 		for (GUIComponent component : components) {
