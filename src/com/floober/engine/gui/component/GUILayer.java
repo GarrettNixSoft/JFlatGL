@@ -92,6 +92,24 @@ public class GUILayer extends GUIComponent {
 		}
 	}
 
+	/**
+	 * Update all components in this layer without calling
+	 * {@code checkInput()} on any of them.
+	 */
+	public void updateNoInput() {
+		for (GUIComponent component : components) {
+			component.updateEvents();
+			if (!component.isActive() || component.isLocked()) {
+				// ^ this skips updating the panel if: false | x OR x | true is printed from the following log call
+				// if the panel is set not active, or if it's locked, it will not be updated or check for input
+//				Logger.log("Panel " + panel.getComponentID() + " skipped; ready? " + panel.isActive() + " | locked? " + panel.isLocked());
+				continue;
+			}
+//			Logger.log("Updating panel " + panel.getComponentID());
+			component.update();
+		}
+	}
+
 	@Override
 	public void doTransform() {
 		for (GUIComponent component : components) {

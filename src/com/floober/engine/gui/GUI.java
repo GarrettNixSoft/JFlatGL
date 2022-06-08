@@ -137,11 +137,18 @@ public class GUI {
 			if (!layerStack.isEmpty()) layerStack.peek().unlock();
 			else return; // return if the last layer was just removed
 		}
-		// update sub-components
+		// fully update top layer
 		GUILayer topLayer = layerStack.peek();
 		topLayer.updateEvents();
 		topLayer.checkInput();
 		topLayer.update();
+		// update everything except input for layers below
+		for (GUILayer layer : layerStack.getElements()) {
+			if (layer != topLayer) {
+				layer.updateEvents();
+				layer.updateNoInput();
+			}
+		}
 	}
 
 	public void doTransform() {

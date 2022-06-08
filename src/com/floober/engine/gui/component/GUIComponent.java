@@ -202,6 +202,18 @@ public abstract class GUIComponent {
 
 	public Vector3f getOriginalPosition() { return new Vector3f(originalPosition); }
 
+	public float getX() {
+		return position.x;
+	}
+
+	public float getY() {
+		return position.y;
+	}
+
+	public int getLayer() {
+		return (int) position.z;
+	}
+
 	public Vector2f getOffset() {
 		Vector3f offset3 = getPosition().sub(getOriginalPosition());
 		return new Vector2f(offset3.x, offset3.y);
@@ -209,6 +221,14 @@ public abstract class GUIComponent {
 
 	public Vector2f getSize() {
 		return new Vector2f(size);
+	}
+
+	public float getWidth() {
+		return size.x;
+	}
+
+	public float getHeight() {
+		return size.y;
 	}
 
 	public float getScale() {
@@ -275,6 +295,14 @@ public abstract class GUIComponent {
 	public void setPosition(Vector2f position, float z) {
 		this.position.set(position, z);
 		this.originalPosition.set(position, z);
+	}
+
+	public void setX(float x) {
+		this.position.setComponent(0, x);
+	}
+
+	public void setY(float y) {
+		this.position.setComponent(1, y);
 	}
 
 	public void setOffsetPosition(Vector2f offsetPosition) {
@@ -373,7 +401,7 @@ public abstract class GUIComponent {
 	 * the mouse's previous position but does contain the
 	 * mouse's current position, or false otherwise
 	 */
-	private boolean mouseOver() {
+	protected boolean mouseOver() {
 		return !Collisions.contains(getCollisionBox(), MouseInput.getPrevPos()) &&
 				Collisions.contains(getCollisionBox(), MouseInput.getMousePos());
 	}
@@ -385,7 +413,7 @@ public abstract class GUIComponent {
 	 * mouse's previous position but does not contain
 	 * the mouse's current position, or false otherwise
 	 */
-	private boolean mouseExit() {
+	protected boolean mouseExit() {
 		return Collisions.contains(getCollisionBox(), MouseInput.getPrevPos()) &&
 				!Collisions.contains(getCollisionBox(), MouseInput.getMousePos());
 	}
@@ -397,7 +425,7 @@ public abstract class GUIComponent {
 	 * mouse's current position and the left mouse button
 	 * is clicked
 	 */
-	private boolean leftClick() {
+	protected boolean leftClick() {
 		return MouseInput.leftClick() && Collisions.contains(getCollisionBox(), MouseInput.getMousePos());
 	}
 
@@ -408,7 +436,7 @@ public abstract class GUIComponent {
 	 * mouse's current position and the right mouse button
 	 * is clicked
 	 */
-	private boolean rightClick() {
+	protected boolean rightClick() {
 		return MouseInput.rightClick() && Collisions.contains(getCollisionBox(), MouseInput.getMousePos());
 	}
 
