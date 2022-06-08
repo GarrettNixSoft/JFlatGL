@@ -21,18 +21,17 @@ public class SplashScreen {
 	private static long windowID;
 
 	public static void init() {
-
+		// do not decorate the window
+		glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
+		glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+		glfwWindowHint(GLFW_FOCUSED, GLFW_TRUE);
+		glfwWindowHint(GLFW_FLOATING, GLFW_TRUE);
 		// create the window with GLFW
 		windowID = glfwCreateWindow(Config.SPLASH_WIDTH, Config.SPLASH_HEIGHT, "", NULL, NULL);
 		// confirm that the window was created, or log an error otherwise
 		if (windowID == NULL) {
 			throw new IllegalStateException("Unable to create GLFW window.");
 		}
-		// do not decorate the window
-		glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
-		glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
-		glfwWindowHint(GLFW_FOCUSED, GLFW_TRUE);
-		glfwWindowHint(GLFW_FLOATING, GLFW_TRUE);
 		// center the window
 		long primaryMonitor = glfwGetPrimaryMonitor();
 		GLFWVidMode videoMode = glfwGetVideoMode(primaryMonitor);
