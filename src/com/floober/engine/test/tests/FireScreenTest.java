@@ -29,9 +29,6 @@ public class FireScreenTest {
 
 		Config.load();
 
-		// Set up logging.
-		Logger.setLoggerConfig();
-
 		// Initialize the game.
 		Game.init();
 		// game components

@@ -7,6 +7,7 @@ import com.floober.engine.core.audio.AudioMaster;
 import com.floober.engine.core.audio.Sound;
 import com.floober.engine.core.gameState.GameStateManager;
 import com.floober.engine.core.renderEngine.display.DisplayManager;
+import com.floober.engine.core.renderEngine.renderers.LoadRenderer;
 import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.core.util.input.KeyInput;
 import com.floober.engine.core.util.input.MouseInput;
@@ -93,8 +94,10 @@ public class Game {
 	 * Load the game. Run on the game's instance.
 	 */
 	private void load() {
+		new LoadRenderer().init();
 		GameLoader gameLoader = new GameLoader(this);
 		gameLoader.load();
+		LoadRenderer.instance.cleanUp();
 	}
 
 	// RUN GAME LOGIC

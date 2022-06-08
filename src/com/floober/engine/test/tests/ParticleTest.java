@@ -65,9 +65,6 @@ public class ParticleTest {
 
 		Config.load();
 
-		// Set up logging.
-		Logger.setLoggerConfig();
-
 		Config.WINDOW_TITLE += " (Particle Test)";
 		Config.FULLSCREEN = false;
 

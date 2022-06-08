@@ -27,10 +27,8 @@ import static org.lwjgl.opengl.GL11.glGetIntegerv;
 public class MultiWindowTest {
 
 	public static void main(String[] args) {
-		Config.load();
 
-		// Set up logging.
-		Logger.setLoggerConfig();
+		Config.load();
 
 		Config.FULLSCREEN = false;
 

@@ -43,9 +43,6 @@ public class RenderingTest {
 
 		Config.load();
 
-		// Set up logging.
-		Logger.setLoggerConfig();
-
 		Config.FULLSCREEN = false;
 
 		// Initialize the game.

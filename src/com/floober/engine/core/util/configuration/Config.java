@@ -1,5 +1,6 @@
 package com.floober.engine.core.util.configuration;
 
+import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.file.FileUtil;
 import org.joml.Vector4f;
 import org.json.JSONObject;
@@ -35,6 +36,7 @@ public class Config {
 	public static boolean FULLSCREEN;
 
 	public static JSONObject LOAD_RENDER_SETTINGS;
+	public static JSONObject LOGGER_SETTINGS;
 
 	public static void load() {
 		JSONObject configJSON = FileUtil.getJSON("/config/config.json");
@@ -58,6 +60,10 @@ public class Config {
 		FULLSCREEN = configJSON.getBoolean("fullscreen");
 
 		LOAD_RENDER_SETTINGS = configJSON.getJSONObject("load_render_settings");
+
+		LOGGER_SETTINGS = configJSON.getJSONObject("logger_settings");
+
+		Logger.setLoggerConfig();
 	}
 
 	public static Vector4f getScreenBounds() {

@@ -19,6 +19,7 @@ import com.floober.engine.core.renderEngine.particles.behavior.movement.Movement
 import com.floober.engine.core.renderEngine.particles.emitters.ParticleEmitter;
 import com.floober.engine.core.renderEngine.textures.TextureComponent;
 import com.floober.engine.core.util.Globals;
+import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.color.Colors;
 import com.floober.engine.core.util.configuration.Config;
 import com.floober.engine.core.util.configuration.Settings;
@@ -63,6 +64,7 @@ public class LoadRenderer {
 
 	public LoadRenderer() {
 		if (instance == null) instance = this;
+		Logger.log("instance hashCode: " + instance.hashCode());
 		fadeIn = new FadeInFloat(1);
 		fadeInCheck = new FadeInFloat(0.75f);
 		fadeOut = new FadeFloat(1);
@@ -315,6 +317,7 @@ public class LoadRenderer {
 	 * Removes any components from the renderer.
 	 */
 	public void cleanUp() {
+		Logger.log("Cleaning up hashCode: " + hashCode());
 		progressText.remove();
 	}
 

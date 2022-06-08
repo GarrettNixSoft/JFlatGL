@@ -44,9 +44,6 @@ public class GUITest {
 		Config.load();
 		Settings.load();
 
-		// Set up logging.
-		Logger.setLoggerConfig();
-
 		Config.FULLSCREEN = false;
 
 		// Initialize the game. (Also loads assets)

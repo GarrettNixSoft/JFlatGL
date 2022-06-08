@@ -44,9 +44,6 @@ public class RunGame {
 
 	public static void main(String[] args) {
 
-		// Set up logging.
-		Logger.setLoggerConfig();
-
 		// Load user preferences/settings and game flags
 		Config.load();
 		Settings.load();

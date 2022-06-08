@@ -1,5 +1,6 @@
 package com.floober.engine.core.util;
 
+import com.floober.engine.core.util.configuration.Config;
 import com.floober.engine.core.util.conversion.StringConverter;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
@@ -33,8 +34,8 @@ public class Logger {
 	public static boolean logEnemyDebug;
 	public static boolean logPlayerDebug;
 	// UI
-	public static boolean logUIEvents;
-	public static boolean logUIInteractions;
+	public static boolean logGUIEvents;
+	public static boolean logGUIInteractions;
 	// audio
 	public static boolean logAudioStart;
 	// event systems
@@ -43,28 +44,28 @@ public class Logger {
 
 	public static void setLoggerConfig() {
 		// main
-		Logger.logAnything = true;
-		Logger.logWarnings = false;
-		Logger.logErrors = true;
+		logAnything = Config.LOGGER_SETTINGS.getBoolean("log_anything");
+		logWarnings = Config.LOGGER_SETTINGS.getBoolean("log_warnings");
+		logErrors = Config.LOGGER_SETTINGS.getBoolean("log_errors");
 		// startup
-		Logger.logLoaders = true;
-		Logger.logLoadSuccess = false;
-		Logger.logLoadErrors = true;
-		Logger.logLoadGeneral = false;
+		logLoaders = Config.LOGGER_SETTINGS.getBoolean("log_loaders");
+		logLoadSuccess = Config.LOGGER_SETTINGS.getBoolean("log_load_success");
+		logLoadErrors = Config.LOGGER_SETTINGS.getBoolean("log_load_errors");
+		logLoadGeneral = Config.LOGGER_SETTINGS.getBoolean("log_load_general");
 		// in-game
-		Logger.logEntityDebug = true;
-		Logger.logEnemyDebug = false;
-		Logger.logPlayerDebug = false;
+		logEntityDebug = Config.LOGGER_SETTINGS.getBoolean("log_entity_debug");
+		logEnemyDebug = Config.LOGGER_SETTINGS.getBoolean("log_enemy_debug");
+		logPlayerDebug = Config.LOGGER_SETTINGS.getBoolean("log_player_debug");
 		// event
-		Logger.logEvents = false;
-		Logger.logCutscenes = true;
+		logEvents = Config.LOGGER_SETTINGS.getBoolean("log_events");
+		logCutscenes = Config.LOGGER_SETTINGS.getBoolean("log_cutscenes");
 		// UI
-		Logger.logUIEvents = true;
-		Logger.logUIInteractions = true;
+		logGUIEvents = Config.LOGGER_SETTINGS.getBoolean("log_gui_events");
+		logGUIInteractions = Config.LOGGER_SETTINGS.getBoolean("log_gui_interactions");
 		// audio
-		Logger.logAudioStart = true;
+		logAudioStart = Config.LOGGER_SETTINGS.getBoolean("log_audio_start");
 		// set all to false if log anything is disabled
-		Logger.init();
+		init();
 	}
 
 	public static void init() {
@@ -191,12 +192,12 @@ public class Logger {
 
 	// UI debug
 	public static void logUIEvent(String message) {
-		if (!logUIEvents) return;
+		if (!logGUIEvents) return;
 		outStream.println("[UI EVENT] " + message);
 	}
 
 	public static void logUIInteraction(String message) {
-		if (!logUIInteractions) return;
+		if (!logGUIInteractions) return;
 		outStream.println("[UI INTERACTION] " + message);
 	}
 	
