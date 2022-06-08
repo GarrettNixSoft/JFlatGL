@@ -17,7 +17,7 @@ public class GameLoader {
 
 	private final List<AssetLoader> loaders = new ArrayList<>();
 
-	public GameLoader(Game game) {
+	public GameLoader() {
 		// fade in the loading screen
 //		animateLoadRenderer();
 		// begin the loading process

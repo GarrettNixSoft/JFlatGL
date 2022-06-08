@@ -96,7 +96,7 @@ public class Game {
 	private void load() {
 		LoadRenderer loadRenderer = new LoadRenderer();
 		loadRenderer.init();
-		GameLoader gameLoader = new GameLoader(this);
+		GameLoader gameLoader = new GameLoader();
 		gameLoader.load();
 		if (loadRenderer == LoadRenderer.instance) LoadRenderer.instance.cleanUp();
 	}
