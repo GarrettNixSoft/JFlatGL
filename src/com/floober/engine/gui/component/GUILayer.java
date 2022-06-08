@@ -33,6 +33,22 @@ public class GUILayer extends GUIComponent {
 		components.add(component);
 	}
 
+	public boolean deleteComponentByID(String componentID) {
+		GUIComponent target = null;
+		for (GUIComponent component : components) {
+			if (component.getComponentID().equals(componentID)) {
+				target = component;
+			}
+		}
+		if (target == null) return false;
+		else {
+			target.remove();
+			components.remove(target);
+			getParent().unregisterComponent(target);
+			return true;
+		}
+	}
+
 	/**
 	 * Set the opacity of all components within this GUILayer
 	 * to either 1 or 0, based on the corresponding boolean value

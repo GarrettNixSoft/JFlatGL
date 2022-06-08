@@ -7,6 +7,7 @@ import com.floober.engine.gui.component.GUILayer;
 import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.data.Stack;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -80,6 +81,28 @@ public class GUI {
 			componentIDs.add(componentID);
 			return true;
 		}
+	}
+
+	/**
+	 * Remove a component's ID from the set of registered IDs.
+	 * First attempts to get the component from this GUI by the
+	 * ID given, and throws a {@code RuntimeException} if the component
+	 * is found ({@code getComponentByID()} returns a non-null value).
+	 * @param component the component to unregister
+	 */
+	public void unregisterComponent(GUIComponent component) {
+		if (getComponentByID(component.getComponentID()) != null) throw new RuntimeException("Cannot unregister a component that still exists in this GUI!");
+		componentIDs.remove(component.getComponentID());
+	}
+
+	public boolean deleteComponentByID(String componentID) {
+		// fail fast if the component doesn't exist
+		if (!componentIDs.contains(componentID)) return false;
+		// search each layer for the component
+		for (GUILayer layer : layerStore.values()) {
+			if (layer.deleteComponentByID(componentID)) return true;
+		}
+		return false;
 	}
 
 	/**
