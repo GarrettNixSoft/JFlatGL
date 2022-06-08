@@ -94,10 +94,11 @@ public class Game {
 	 * Load the game. Run on the game's instance.
 	 */
 	private void load() {
-		new LoadRenderer().init();
+		LoadRenderer loadRenderer = new LoadRenderer();
+		loadRenderer.init();
 		GameLoader gameLoader = new GameLoader(this);
 		gameLoader.load();
-		LoadRenderer.instance.cleanUp();
+		if (loadRenderer == LoadRenderer.instance) LoadRenderer.instance.cleanUp();
 	}
 
 	// RUN GAME LOGIC

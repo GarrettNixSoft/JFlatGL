@@ -63,7 +63,8 @@ public class AnimationLoader extends AssetLoader {
 					Game.getAnimations().addAnimation(key, animation);
 				}
 				Globals.animationCount++;
-				RunGame.loadRenderer.render();
+				// render the load screen
+				LoadRenderer.instance.render();
 			} catch (Exception e) {
 				System.out.println("Failed to load Animation [key=" + key + "], error: " + e);
 			}
@@ -92,7 +93,8 @@ public class AnimationLoader extends AssetLoader {
 					Logger.logLoadSuccess(key + ", with " + animationSet.size() + " animations");
 				}
 				Globals.animationCount++;
-				RunGame.loadRenderer.render();
+				// render the load screen
+				LoadRenderer.instance.render();
 			} catch (Exception e) {
 				System.out.println("Failed to load Animation Set [key=" + key + "], error: " + e);
 			}
