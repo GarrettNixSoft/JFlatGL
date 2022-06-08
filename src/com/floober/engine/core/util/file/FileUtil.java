@@ -155,14 +155,14 @@ public class FileUtil {
 	// LOAD METHODS
 	public static JSONObject getJSON(String file) {
 		// load file data
-		Logger.log("Getting JSON: " + file);
+//		Logger.log("Getting JSON: " + file);
 		ArrayList<String> fileData =
 				file.contains("assets") || file.endsWith("config.json") ?
 					getResourceDataFile(file) :
 						StringUtils.containsAny(file, ".fnt", ".png", ".wav") ?
 							getResDataFile(file) :
 							getFileData(file);
-		Logger.log("Got JSON: " + file);
+//		Logger.log("Got JSON: " + file);
 		String combined = StringConverter.combineAll(fileData);
 //		System.out.println(combined);
 		// create JSON parser
