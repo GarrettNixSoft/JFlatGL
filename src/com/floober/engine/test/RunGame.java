@@ -108,6 +108,7 @@ public class RunGame {
 
 			// render to the screen
 			MasterRenderer.primaryWindowRenderer.render(true);
+			MasterRenderer.getTargetWindow().swapBuffers();
 
 			// update display and poll events
 			DisplayManager.updateDisplay();
