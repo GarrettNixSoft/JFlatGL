@@ -195,6 +195,15 @@ public class GUI {
 		}
 	}
 
+	/**
+	 * Unlock the top layer of this GUI.
+	 */
+	public void unlock() {
+		for (GUILayer layer : layerStack.getElements()) {
+			layerStack.peek().unlock();
+		}
+	}
+
 	public void update() {
 //		Logger.log("Updating GUI");
 		if (layerStack.isEmpty()) return;
