@@ -37,13 +37,27 @@ public class GameLoader extends Thread {
 	@Override
 	public void run() {
 		// perform all load tasks that don't need the OpenGL context
+		Logger.log("RUNNING GAME LOADER THREAD");
 		load();
+		Logger.log("GAME LOADER THREAD FINISHED, SLEEPING FOR 5 SECONDS");
+
+		// TEST
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		// END_TEST
+
+		LOAD_COMPLETE = true;
 	}
 
 	public void finish() {
 		for (AssetLoader assetLoader : loaders) {
 			assetLoader.finish();
 		}
+
+		Logger.log("Loaded " + Globals.texTotal + " textures and " + Globals.fontTotal + " fonts");
 	}
 
 	public void load() {
@@ -64,7 +78,6 @@ public class GameLoader extends Thread {
 		Logger.log("*    ****    LOADING DONE    ****    *");
 		Logger.log("*                                    *");
 		Logger.log("**************************************");
-		LOAD_COMPLETE = true;
 	}
 
 	private void animateLoadRenderer() {

@@ -41,7 +41,7 @@ public class MasterRenderer {
 	private final long windowTarget;
 
 	// game scene frame buffer
-	private final FrameBuffer sceneBuffer;
+	private FrameBuffer sceneBuffer;
 
 	// element renderers
 	private final TextureRenderer textureRenderer;
@@ -71,7 +71,7 @@ public class MasterRenderer {
 	private final Map<Integer, RectLightBatchTransparent> rectLightBatches = new HashMap<>();
 
 	// Post-processing stage
-	private final PostProcessing postProcessor;
+	private PostProcessing postProcessor;
 
 	/**
 	 * Create a new MasterRenderer.
@@ -100,6 +100,33 @@ public class MasterRenderer {
 		// add to instance list
 		instances.put(window.getWindowID(), this);
 		this.windowTarget = window.getWindowID();
+	}
+
+	public MasterRenderer(Window window, boolean registered) {
+		// make this window's context current before creating any assets, buffers, etc.
+		glfwMakeContextCurrent(window.getWindowID());
+		// determine the number of layers available
+		RENDER_LAYERS = DisplayManager.getPrimaryGameWindow() == window ? Layers.NUM_LAYERS : Layers.EXTERN_LAYERS;
+		// create the scene buffer
+		if (registered)
+			sceneBuffer = FrameBuffers.createFullScreenFrameBuffer();
+		// create the renderers
+		textureRenderer = new TextureRenderer();
+		geometryRenderer = new GeometryRenderer();
+		tileRenderer = new TileRenderer();
+		particleMaster = new ParticleMaster(RENDER_LAYERS);
+		particleMaster.init();
+		layers = new RenderLayer[Layers.NUM_LAYERS];
+		initLayers();
+		// add to instance list
+		instances.put(window.getWindowID(), this);
+		this.windowTarget = window.getWindowID();
+	}
+
+	public void generateUnregisteredSceneBuffer(Window window) {
+		sceneBuffer = FrameBuffers.createFullScreenFrameBufferUnregistered(window);
+		// create the post-processor
+		postProcessor = new PostProcessing(window.getWindowID());
 	}
 
 	public static long getTargetWindowID() {
@@ -339,7 +366,7 @@ public class MasterRenderer {
 	}
 
 	private void clearBatches() {
-		for (int i = 0; i < Layers.NUM_LAYERS; ++i) {
+		for (int i = 0; i < RENDER_LAYERS; ++i) {
 			opaqueTextureBatches.get(i).clear();
 			transparentTextureBatches.get(i).clear();
 			opaqueTileBatches.get(i).clear();

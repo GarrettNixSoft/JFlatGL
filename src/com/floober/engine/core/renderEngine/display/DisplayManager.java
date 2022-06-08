@@ -41,6 +41,8 @@ public class DisplayManager {
 	public static GLFWWindowSizeCallback windowResizeCallback;
 	public static GLFWWindowCloseCallback windowCloseCallback;
 
+	public static GLFWVidMode primaryMonitorVideoMode;
+
 	// Global settings
 	public static int FPS_CAP = 144;
 
@@ -71,7 +73,7 @@ public class DisplayManager {
 		return windowsByID.get(windowID);
 	}
 
-	private static void addWindow(Window window) {
+	public static void addWindow(Window window) {
 		windows.add(window);
 		windowsByID.put(window.getWindowID(), window);
 		KeyInput.windowKeyboardAdapters.put(window.getWindowID(), new KeyInput());
@@ -190,7 +192,7 @@ public class DisplayManager {
 		return windowsByID.get(primaryWindowID);
 	}
 
-	public static void initPrimaryGameWindow() {
+	public static void initOpenGL() {
 		// Pre-startup: Set up error printing.
 		GLFWErrorCallback.createPrint(System.err).set();
 
@@ -199,6 +201,14 @@ public class DisplayManager {
 			throw new IllegalStateException("GLFW failed to initialize.");
 		}
 
+	}
+
+	public static void initPrimaryGameWindow() {
+
+		// DEBUG MESSAGES
+		GLUtil.setupDebugMessageCallback();
+		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, (IntBuffer) null, false);
+
 		// Step 2: Set the window hints (settings).
 		glfwDefaultWindowHints();
 		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
@@ -206,19 +216,21 @@ public class DisplayManager {
 		glfwWindowHint(GLFW_AUTO_ICONIFY, GL_FALSE);
 
 		// Step 3: Create the window. The process depends on whether we're creating a fullscreen window or not.
+		primaryMonitorVideoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 		if (Config.FULLSCREEN) {
-			GLFWVidMode videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-			assert videoMode != null;
+			assert primaryMonitorVideoMode != null;
 			glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
-			glfwWindowHint(GLFW_RED_BITS, videoMode.redBits());
-			glfwWindowHint(GLFW_GREEN_BITS, videoMode.greenBits());
-			glfwWindowHint(GLFW_BLUE_BITS, videoMode.blueBits());
-			glfwWindowHint(GLFW_REFRESH_RATE, videoMode.refreshRate());
-			primaryWindowID = glfwCreateWindow(videoMode.width(), videoMode.height(), Config.WINDOW_TITLE, glfwGetPrimaryMonitor(), NULL);
+			glfwWindowHint(GLFW_RED_BITS, primaryMonitorVideoMode.redBits());
+			glfwWindowHint(GLFW_GREEN_BITS, primaryMonitorVideoMode.greenBits());
+			glfwWindowHint(GLFW_BLUE_BITS, primaryMonitorVideoMode.blueBits());
+			glfwWindowHint(GLFW_REFRESH_RATE, primaryMonitorVideoMode.refreshRate());
+			primaryWindowID = glfwCreateWindow(primaryMonitorVideoMode.width(), primaryMonitorVideoMode.height(), Config.WINDOW_TITLE, glfwGetPrimaryMonitor(), NULL);
 			glfwSetInputMode(primaryWindowID, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		} else {
 			primaryWindowID = glfwCreateWindow(Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT, Config.WINDOW_TITLE, NULL, NULL);
 		}
+
+		Logger.log("CREATED PRIMARY GAME WINDOW: " + primaryWindowID);
 
 		// Step 3.5: Test to make sure the window creation succeeded. If it fails, die.
 		if (primaryWindowID == NULL) {
@@ -268,9 +280,6 @@ public class DisplayManager {
 		// The primary window only reacts to resize events; the close callback is for auxiliary windows.
 		glfwSetWindowSizeCallback(primaryWindowID, windowResizeCallback);
 
-		// Step 8: Init OpenGL.
-		GL.createCapabilities();
-
 		glDepthFunc(GL_LEQUAL);
 		glDepthRange(0, 1); // TODO mark
 
@@ -282,10 +291,6 @@ public class DisplayManager {
 		glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
 		Stencil.disableStencilWrite();
-
-		// DEBUG MESSAGES
-		GLUtil.setupDebugMessageCallback();
-		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, (IntBuffer) null, false);
 
 		// CREATE THE WINDOW OBJECT AND STORE IT
 		Window mainGameWindow = new Window(primaryWindowID, null, Config.DEFAULT_WIDTH, Config.DEFAULT_HEIGHT, 0, 0, 0, 0);

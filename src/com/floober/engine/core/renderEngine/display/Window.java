@@ -44,17 +44,17 @@ public class Window {
 		this.viewportHeight = viewportHeight;
 	}
 
-//	public Window(long windowID, int width, int height, int xOffset, int yOffset, int viewportWidth, int viewportHeight) {
-//		this.windowID = windowID;
-//		this.width = width;
-//		this.height = height;
-//		this.xOffset = xOffset;
-//		this.yOffset = yOffset;
-//		this.viewportWidth = viewportWidth;
-//		this.viewportHeight = viewportHeight;
-//		// create a new renderer
-//		windowRenderer = new MasterRenderer(this);
-//	}
+	public Window(long windowID, int width, int height, int xOffset, int yOffset, int viewportWidth, int viewportHeight) {
+		this.windowID = windowID;
+		this.width = width;
+		this.height = height;
+		this.xOffset = xOffset;
+		this.yOffset = yOffset;
+		this.viewportWidth = viewportWidth;
+		this.viewportHeight = viewportHeight;
+		// create a new renderer
+		windowRenderer = new MasterRenderer(this, false);
+	}
 
 	public void makeContextCurrent() {
 		glfwMakeContextCurrent(windowID);

@@ -31,6 +31,10 @@ public class Config {
 	public static int DEFAULT_WIDTH;
 	public static int DEFAULT_HEIGHT;
 
+	// Splash screen dimensions
+	public static int SPLASH_WIDTH;
+	public static int SPLASH_HEIGHT;
+
 	public static boolean USE_LOAD_RENDERER;
 
 	public static boolean FULLSCREEN;
@@ -54,6 +58,9 @@ public class Config {
 
 		DEFAULT_WIDTH = configJSON.getInt("default_width");
 		DEFAULT_HEIGHT = configJSON.getInt("default_height");
+
+		SPLASH_WIDTH = configJSON.getInt("splash_width");
+		SPLASH_HEIGHT = configJSON.getInt("splash_height");
 
 		USE_LOAD_RENDERER = configJSON.getBoolean("use_load_renderer");
 

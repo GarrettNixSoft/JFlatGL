@@ -9,6 +9,7 @@ import com.floober.engine.core.gameState.GameStateManager;
 import com.floober.engine.core.renderEngine.display.DisplayManager;
 import com.floober.engine.core.renderEngine.renderers.LoadRenderer;
 import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
+import com.floober.engine.core.splash.SplashScreen;
 import com.floober.engine.core.util.input.KeyInput;
 import com.floober.engine.core.util.input.MouseInput;
 import com.floober.engine.core.util.time.TimeScale;
@@ -73,19 +74,21 @@ public class Game {
 	 * the GameStateManager will be initialized.
 	 */
 	public static void init() {
-		// Create the window and set up OpenGL and GLFW.
-		DisplayManager.initPrimaryGameWindow();
+		DisplayManager.initOpenGL();
 		// Set up OpenAL.
 		AudioMaster.init();
 		AudioMaster.setListenerData(0, 0, 0);
-		// master components
-		TextMaster.init();
-		TextureAnalyzer.init();
 		// initialize the instance
 		instance = new Game();
 		// the game itself (load assets)
-		instance.load();
+		GameLoader gameLoader = new GameLoader();
+		instance.load(gameLoader);
 		instance.gsm = new GameStateManager(instance);
+		// Create the window and set up OpenGL and GLFW.
+		DisplayManager.initPrimaryGameWindow();
+		// master components
+		TextMaster.init();
+		TextureAnalyzer.init();
 		// load particles AFTER textures are loaded (some particles need to load textures from the game's pool)
 		ParticleMaster.initGlobals();
 	}
@@ -93,14 +96,23 @@ public class Game {
 	/**
 	 * Load the game. Run on the game's instance.
 	 */
-	private void load() {
-		GameLoader gameLoader = new GameLoader();
-		gameLoader.start();
+	private void load(GameLoader loader) {
+		SplashScreen.init();
+		loader.start();
+
 		while (!GameLoader.LOAD_COMPLETE) {
 			Logger.log("Waiting for load complete flag...");
+			SplashScreen.render();
 		}
+
+		finishLoad(loader);
+
+		SplashScreen.close();
+	}
+
+	private void finishLoad(GameLoader loader) {
 		Logger.log("Load complete flag set!");
-		gameLoader.finish();
+		loader.finish();
 	}
 
 	// RUN GAME LOGIC
