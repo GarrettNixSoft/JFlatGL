@@ -5,13 +5,11 @@ import com.floober.engine.core.assets.loaders.Loader;
 import com.floober.engine.core.renderEngine.display.DisplayManager;
 import com.floober.engine.core.renderEngine.fonts.fontRendering.TextMaster;
 import com.floober.engine.core.renderEngine.util.Layers;
-import com.floober.engine.core.scenario.GameFlags;
 import com.floober.engine.core.renderEngine.Render;
 import com.floober.engine.core.renderEngine.elements.TextureElement;
 import com.floober.engine.core.renderEngine.elements.geometry.RectElement;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.FontType;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.GUIText;
-import com.floober.engine.core.renderEngine.particles.ParticleMaster;
 import com.floober.engine.core.renderEngine.particles.ParticleTexture;
 import com.floober.engine.core.renderEngine.particles.behavior.ParticleBehavior;
 import com.floober.engine.core.renderEngine.particles.behavior.appearance.AppearanceBehavior;
@@ -132,7 +130,7 @@ public class LoadRenderer {
 		// prepare
 		MasterRenderer.primaryWindowRenderer.prepare(false);
 		// invert colors?
-		boolean invertColors = !GameFlags.getFlagValue("prologue_shown");
+		boolean invertColors = false;
 		// render white background
 		Render.fillScreen(invertColors ? Colors.BLACK : Colors.WHITE);
 		// bar size

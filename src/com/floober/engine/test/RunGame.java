@@ -4,7 +4,6 @@ import com.floober.engine.core.Game;
 import com.floober.engine.core.assets.loaders.Loader;
 import com.floober.engine.core.audio.AudioMaster;
 import com.floober.engine.core.renderEngine.display.DisplayManager;
-import com.floober.engine.core.scenario.GameFlags;
 import com.floober.engine.gui.GUIManager;
 import com.floober.engine.core.renderEngine.Screenshot;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.GUIText;
@@ -51,7 +50,6 @@ public class RunGame {
 		// Load user preferences/settings and game flags
 		Config.load();
 		Settings.load();
-		GameFlags.init();
 
 		// TESTING GAME
 		Config.FULLSCREEN = false;
@@ -141,7 +139,6 @@ public class RunGame {
 
 		// save user settings/preferences and game flags
 		Settings.save();
-		GameFlags.save();
 
 	}
 

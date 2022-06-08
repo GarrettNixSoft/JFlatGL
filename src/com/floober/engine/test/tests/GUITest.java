@@ -4,7 +4,6 @@ import com.floober.engine.core.assets.loaders.Loader;
 import com.floober.engine.core.renderEngine.display.DisplayManager;
 import com.floober.engine.core.renderEngine.display.Window;
 import com.floober.engine.core.Game;
-import com.floober.engine.core.scenario.GameFlags;
 import com.floober.engine.core.util.conversion.StringConverter;
 import com.floober.engine.gui.GUI;
 import com.floober.engine.gui.GUIAction;
@@ -44,7 +43,6 @@ public class GUITest {
 		// Load user preferences/settings and game flags
 		Config.load();
 		Settings.load();
-		GameFlags.init();
 
 		// Set up logging.
 		Logger.setLoggerConfig();
