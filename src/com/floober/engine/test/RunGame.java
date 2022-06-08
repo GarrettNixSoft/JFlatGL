@@ -3,7 +3,10 @@ package com.floober.engine.test;
 import com.floober.engine.core.Game;
 import com.floober.engine.core.assets.loaders.Loader;
 import com.floober.engine.core.audio.AudioMaster;
+import com.floober.engine.core.renderEngine.Render;
 import com.floober.engine.core.renderEngine.display.DisplayManager;
+import com.floober.engine.core.renderEngine.display.Window;
+import com.floober.engine.core.renderEngine.util.Layers;
 import com.floober.engine.gui.GUIManager;
 import com.floober.engine.core.renderEngine.Screenshot;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.GUIText;
@@ -94,6 +97,8 @@ public class RunGame {
 			// render game internally
 			Game.render();
 			GUIManager.render();
+
+			Render.drawRect(Colors.RED, Window.mainCenterX(), Window.mainCenterY(), Layers.DEFAULT_LAYER, 200, 200, true);
 
 			// Debug!
 			float fps = 1.0f / DisplayManager.getFrameTimeRaw();

@@ -335,7 +335,6 @@ public class MasterRenderer {
 
 		// Do post-processing to complete the frame render
 		if (GameLoader.LOAD_COMPLETE && useSceneBuffer) postProcessor.doPostProcessing(sceneBuffer.getColorTexture());
-		// TODO re-enable this when I figure out the rendering problems
 
 	}
 

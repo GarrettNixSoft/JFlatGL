@@ -208,10 +208,10 @@ public class ImageLoader {
 		}
 		catch (Exception e1) {
 			try {
-				Logger.logError("Export-load failed, trying in-development load...");
+				Logger.logLoadError("Export-load failed, trying in-development load...");
 				in = ResourceLoader.getResourceAsStream("res" + FileUtil.SEPARATOR + path); // in development
 			} catch (Exception e2) {
-				Logger.logError("In-development load failed. Resource could not be found.");
+				Logger.logLoadError("In-development load failed. Resource could not be found.");
 			}
 		}
 		Logger.logLoad("Load success!");
