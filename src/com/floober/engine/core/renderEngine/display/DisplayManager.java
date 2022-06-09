@@ -521,6 +521,25 @@ public class DisplayManager {
 		return new Vector3f(displayX, displayY, displayZ);
 	}
 
+	public static Vector3f convertToDisplayPosition(Window window, float x, float y, float z, float width, float height, boolean centered) {
+		// translate to top left
+		if (!centered) {
+			x += width / 2;
+			y += height / 2;
+		}
+		// invert y axis
+		y = window.getHeight() - y;
+		// convert pixel coordinates to OpenGL coordinates
+		float displayX = -1 + (2f / window.getWidth()) * x;
+		float displayY = -1 + (2f / window.getHeight()) * y;
+//		Logger.log("Scale was calculated using screen dimensions [" + Config.INTERNAL_WIDTH + " x " + Config.INTERNAL_HEIGHT + "]");
+		// convert Z position to [0 ... 1]
+		float displayZ = 1 - MathUtil.interpolateBounded(0, Layers.TOP_LAYER, z);
+//		Logger.log("Layer " + z + " converted to z-position " + displayZ);
+		// return the result
+		return new Vector3f(displayX, displayY, displayZ);
+	}
+
 	public static Vector2f convertToDisplayPosition2D(Vector2f position) {
 		return convertToDisplayPosition2D(MasterRenderer.getTargetWindowID(), position);
 	}

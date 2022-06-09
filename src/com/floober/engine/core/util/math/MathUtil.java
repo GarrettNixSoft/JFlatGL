@@ -1,6 +1,7 @@
 package com.floober.engine.core.util.math;
 
 import com.floober.engine.core.util.configuration.Config;
+import com.floober.engine.core.renderEngine.display.Window;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -58,6 +59,27 @@ public class MathUtil {
 		Matrix4f projectionMatrix = new Matrix4f();
 		projectionMatrix.m00(1.0f / Config.INTERNAL_WIDTH);
 		projectionMatrix.m11(1.0f / Config.INTERNAL_HEIGHT);
+//		projectionMatrix.translation(translation);
+//		projectionMatrix.rotate((float) Math.toRadians(rz), new Vector3f(0,0,1));
+//		projectionMatrix.scale(new Vector3f(scale, 1));
+		projectionMatrix.m30(translation.x);
+		projectionMatrix.m31(translation.y);
+		projectionMatrix.m32(translation.z);
+		// model matrix it
+		Matrix4f modelMatrix = new Matrix4f();
+//		modelMatrix.translation(translation);
+		modelMatrix.rotate((float) Math.toRadians(rz), new Vector3f(0,0,1));
+		modelMatrix.scale(new Vector3f(scale, 1));
+		// multiply them
+		return projectionMatrix.mul(modelMatrix);
+	}
+
+	public static Matrix4f createTransformationMatrix(Window window, Vector3f translation, Vector2f scale, float rz) {
+//		Logger.log("Translation: " + translation);
+		// create a projection matrix
+		Matrix4f projectionMatrix = new Matrix4f();
+		projectionMatrix.m00(1.0f / window.getWidth());
+		projectionMatrix.m11(1.0f / window.getHeight());
 //		projectionMatrix.translation(translation);
 //		projectionMatrix.rotate((float) Math.toRadians(rz), new Vector3f(0,0,1));
 //		projectionMatrix.scale(new Vector3f(scale, 1));

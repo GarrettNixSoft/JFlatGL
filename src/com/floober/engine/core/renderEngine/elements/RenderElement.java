@@ -2,6 +2,7 @@ package com.floober.engine.core.renderEngine.elements;
 
 import com.floober.engine.core.renderEngine.Render;
 import com.floober.engine.core.renderEngine.display.DisplayManager;
+import com.floober.engine.core.renderEngine.display.Window;
 import com.floober.engine.core.renderEngine.elements.TextureElement;
 import com.floober.engine.core.renderEngine.elements.geometry.*;
 import com.floober.engine.core.renderEngine.framebuffers.FrameBuffer;
@@ -39,6 +40,11 @@ public abstract class RenderElement implements Comparable<RenderElement> {
 		position = DisplayManager.convertToDisplayPosition(x, y, layer, width, height, centered);
 //		if (centered) Logger.log("Position converted from (" + x + ", " + y + ") to " + position);
 //		else Logger.log("Position converted from (" + (x+width/2) + ", " + (y+height/2) + ") to " + position);
+		scale = new Vector2f(width, height);
+	}
+
+	public void transform(Window window) {
+		position = DisplayManager.convertToDisplayPosition(window, x, y, layer, width, height, centered);
 		scale = new Vector2f(width, height);
 	}
 

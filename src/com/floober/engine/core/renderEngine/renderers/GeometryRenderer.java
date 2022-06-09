@@ -8,6 +8,7 @@ import com.floober.engine.core.renderEngine.shaders.geometry.OutlineShader;
 import com.floober.engine.core.renderEngine.shaders.geometry.RectLightShader;
 import com.floober.engine.core.renderEngine.shaders.geometry.RectShader;
 import com.floober.engine.core.renderEngine.util.Stencil;
+import com.floober.engine.core.splash.SplashScreen;
 import com.floober.engine.core.util.math.MathUtil;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
@@ -63,7 +64,9 @@ public class GeometryRenderer {
 				Stencil.enableStencilWrite();
 			}
 
-			Matrix4f transformationMatrix = MathUtil.createTransformationMatrix(element.getRenderPosition(), element.getScale(), element.getRotation());
+			Matrix4f transformationMatrix = SplashScreen.SPLASH_RENDER ?
+												MathUtil.createTransformationMatrix(SplashScreen.splashWindow, element.getRenderPosition(), element.getScale(), element.getRotation()) :
+												MathUtil.createTransformationMatrix(element.getRenderPosition(), element.getScale(), element.getRotation());
 			rectShader.loadRoundRadius(element.getRoundRadius());
 			rectShader.loadRoundMode(element.getRoundingMode());
 			rectShader.loadDimensions(new Vector2f(element.getHeight(), element.getWidth()));

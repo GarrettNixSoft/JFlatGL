@@ -4,9 +4,11 @@ import com.floober.engine.core.assets.TextureAnalyzer;
 import com.floober.engine.core.renderEngine.Render;
 import com.floober.engine.core.renderEngine.display.DisplayManager;
 import com.floober.engine.core.renderEngine.display.Window;
+import com.floober.engine.core.renderEngine.elements.geometry.RectElement;
 import com.floober.engine.core.renderEngine.fonts.fontRendering.TextMaster;
 import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.core.renderEngine.util.Layers;
+import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.color.Colors;
 import com.floober.engine.core.util.configuration.Config;
 import org.lwjgl.glfw.GLFWVidMode;
@@ -20,8 +22,10 @@ public class SplashScreen {
 
 	private static MasterRenderer splashRenderer;
 
-	private static Window splashWindow;
-	private static long windowID;
+	public static boolean SPLASH_RENDER = false;
+
+	public static Window splashWindow;
+	public static long windowID;
 
 	public static void init() {
 		// do not decorate the window
@@ -45,8 +49,11 @@ public class SplashScreen {
 		glfwSwapInterval(0);
 		// Step 8: Init OpenGL.
 		GL.createCapabilities();
-		// set the clear color to black
+		// configure render settings
+		glDepthFunc(GL_LEQUAL);
+		glDepthRange(0, 1);
 		glClearColor(0, 0, 0, 1);
+		glClearDepth(1);
 		// show the window
 		glfwShowWindow(windowID);
 
@@ -58,19 +65,26 @@ public class SplashScreen {
 		TextMaster.init();
 		TextureAnalyzer.init();
 
+		glViewport(0, 0, Config.SPLASH_WIDTH, Config.SPLASH_HEIGHT);
+
 		// I think that's all?
 	}
 
 	public static void render() {
-		glfwMakeContextCurrent(windowID);
-		glClear(GL_COLOR_BUFFER_BIT);
-		splashRenderer.prepare(true);
-		Render.drawRect(Colors.RED, 100, 100, Layers.BOTTOM_LAYER, 100, 100, false);
-		splashRenderer.render(true);
+		SPLASH_RENDER = true;
+		splashRenderer.prepare(false);
+//		glfwMakeContextCurrent(windowID);
+
+		RectElement redRect = new RectElement(Colors.RED, Config.SPLASH_WIDTH / 2f, Config.SPLASH_HEIGHT / 2f, Layers.BOTTOM_LAYER + 1, 400, 250, true);
+		redRect.transform(splashWindow);
+		Render.drawRect(redRect);
+
+		splashRenderer.render(false);
 		splashWindow.swapBuffers();
 	}
 
 	public static void close() {
+		SPLASH_RENDER = false;
 		glfwDestroyWindow(windowID);
 	}
 

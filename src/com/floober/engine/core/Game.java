@@ -91,6 +91,10 @@ public class Game {
 		DisplayManager.initPrimaryGameWindow();
 		// load particles AFTER textures are loaded (some particles need to load textures from the game's pool)
 		ParticleMaster.initGlobals();
+
+		// Re-initialize the TextMaster on the proper context
+		TextMaster.cleanUp();
+		TextMaster.init();
 	}
 
 	/**
