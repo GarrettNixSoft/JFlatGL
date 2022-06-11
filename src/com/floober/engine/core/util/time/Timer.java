@@ -1,5 +1,6 @@
 package com.floober.engine.core.util.time;
 
+import com.floober.engine.core.renderEngine.display.DisplayManager;
 import com.floober.engine.core.util.Logger;
 
 /*
@@ -90,6 +91,10 @@ public class Timer {
 	 */
 	public long getTimeElapsed() {
 		return TimeScale.getRawTime(start);
+	}
+
+	public float getTimeElapsedSeconds() {
+		return getTimeElapsed() / 1000f;
 	}
 
 	/**

@@ -6,6 +6,7 @@ import com.floober.engine.core.audio.AudioMaster;
 import com.floober.engine.core.audio.Sound;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.FontType;
 import com.floober.engine.core.renderEngine.textures.TextureComponent;
+import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.conversion.ImageConverter;
 import com.floober.engine.core.util.conversion.StringConverter;
 import com.floober.engine.core.util.file.FileUtil;
@@ -55,6 +56,7 @@ public class Loader {
 	public static RawFontType loadFont(String font, String key) {
 		String path = "fonts" + SEPARATOR + font + SEPARATOR + font;
 		RawTexture rawTexture = ImageLoader.loadTexture(path + ".png");
+		Logger.log("Loaded raw texture: " + path + ".png");
 		RawTextureAtlas fontAtlas = new RawTextureAtlas(key, rawTexture, 1, true);
 		String fontFile = loadFontFile(SEPARATOR + path + ".fnt");
 		return new RawFontType(key, fontAtlas, fontFile);

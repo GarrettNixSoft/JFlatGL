@@ -89,6 +89,9 @@ public class Game {
 		instance.gsm = new GameStateManager(instance);
 		// Create the window and set up OpenGL and GLFW.
 		DisplayManager.initPrimaryGameWindow();
+
+		// finish loading
+		instance.finishLoad(gameLoader);
 		// load particles AFTER textures are loaded (some particles need to load textures from the game's pool)
 		ParticleMaster.initGlobals();
 
@@ -108,8 +111,6 @@ public class Game {
 //			Logger.log("Waiting for load complete flag...");
 			SplashScreen.render();
 		}
-
-		finishLoad(loader);
 
 		SplashScreen.close();
 	}

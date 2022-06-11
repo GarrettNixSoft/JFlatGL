@@ -14,6 +14,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -29,16 +30,6 @@ public class ImageLoader {
 
 	private static final List<Integer> textures = new ArrayList<>();
 
-	private static final List<RawTexture> rawImages = new ArrayList<>();
-
-	public static void createOpenGLTextures() {
-		for (RawTexture rawTexture : rawImages) {
-			TextureComponent textureComponent = rawTexture.convertToOpenGLTexture();
-			textures.add(textureComponent.texture().id());
-			//
-		}
-	}
-
 	/**
 	 * Load a texture from disk, and send it to the GPU.
 	 * @param path The path to the texture file.
@@ -48,15 +39,16 @@ public class ImageLoader {
 		// report load
 		Logger.logLoad("Loading texture: " + path);
 		// load from file
-		MemoryStack stack = MemoryStack.stackPush();
-		IntBuffer w = stack.mallocInt(1);
-		IntBuffer h = stack.mallocInt(1);
-		IntBuffer comp = stack.mallocInt(1);
-		ByteBuffer buffer = tryLoad(path, w, h, comp);
-		int width = w.get();
-		int height = h.get();
-		// create the RawTexture and return it
-		return new RawTexture(buffer, width, height);
+		try (MemoryStack stack = MemoryStack.stackPush()) {
+			IntBuffer w = stack.mallocInt(1);
+			IntBuffer h = stack.mallocInt(1);
+			IntBuffer comp = stack.mallocInt(1);
+			ByteBuffer buffer = tryLoad(path, w, h, comp);
+			int width = w.get();
+			int height = h.get();
+			// create the RawTexture and return it
+			return new RawTexture(buffer, width, height);
+		}
 	}
 
 	public static TextureComponent loadTextureConverted(String path) {
@@ -71,28 +63,29 @@ public class ImageLoader {
 		int textureID = glGenTextures();
 		glBindTexture(GL_TEXTURE_2D, textureID);
 		// get image parameters
-		MemoryStack stack = MemoryStack.stackPush();
-		IntBuffer w = stack.mallocInt(1);
-		IntBuffer h = stack.mallocInt(1);
-		IntBuffer comp = stack.mallocInt(1);
-		// put the data into a texture ByteBuffer
-		ByteBuffer buffer = stbi_load_from_memory(textureData, w, h, comp, 4);
-		// do the OpenGL stuff and return the Texture
-		int width = w.get();
-		int height = h.get();
-		// set OpenGL texture settings for this texture
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		// load the texture for OpenGL
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-		// unbind the texture
-		glBindTexture(GL_TEXTURE_2D, 0);
-		// add to list to clean up
-		textures.add(textureID);
-		// create the Texture object and return it
-		return new TextureComponent(new Texture(textureID, width, height));
+		try (MemoryStack stack = MemoryStack.stackPush()) {
+			IntBuffer w = stack.mallocInt(1);
+			IntBuffer h = stack.mallocInt(1);
+			IntBuffer comp = stack.mallocInt(1);
+			// put the data into a texture ByteBuffer
+			ByteBuffer buffer = stbi_load_from_memory(textureData, w, h, comp, 4);
+			// do the OpenGL stuff and return the Texture
+			int width = w.get();
+			int height = h.get();
+			// set OpenGL texture settings for this texture
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			// load the texture for OpenGL
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+			// unbind the texture
+			glBindTexture(GL_TEXTURE_2D, 0);
+			// add to list to clean up
+			textures.add(textureID);
+			// create the Texture object and return it
+			return new TextureComponent(new Texture(textureID, width, height));
+		}
 	}
 
 	/**
@@ -107,27 +100,28 @@ public class ImageLoader {
 		int textureID = glGenTextures();
 		glBindTexture(GL_TEXTURE_2D, textureID);
 		// load from file
-		MemoryStack stack = MemoryStack.stackPush();
-		IntBuffer w = stack.mallocInt(1);
-		IntBuffer h = stack.mallocInt(1);
-		IntBuffer comp = stack.mallocInt(1);
-		ByteBuffer buffer = tryLoad(path, w, h, comp);
-		int width = w.get();
-		int height = h.get();
-		// check for transparency
-		// set OpenGL texture settings for this texture
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapMode);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapMode);
-		// load the texture for OpenGL
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-		// unbind the texture
-		glBindTexture(GL_TEXTURE_2D, 0);
-		// add to list to clean up
-		textures.add(textureID);
-		// create the Texture object and return it
-		return new TextureComponent(textureID, width, height);
+		try (MemoryStack stack = MemoryStack.stackPush()) {
+			IntBuffer w = stack.mallocInt(1);
+			IntBuffer h = stack.mallocInt(1);
+			IntBuffer comp = stack.mallocInt(1);
+			ByteBuffer buffer = tryLoad(path, w, h, comp);
+			int width = w.get();
+			int height = h.get();
+			// check for transparency
+			// set OpenGL texture settings for this texture
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapMode);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapMode);
+			// load the texture for OpenGL
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+			// unbind the texture
+			glBindTexture(GL_TEXTURE_2D, 0);
+			// add to list to clean up
+			textures.add(textureID);
+			// create the Texture object and return it
+			return new TextureComponent(textureID, width, height);
+		}
 	}
 
 	/**
@@ -140,14 +134,15 @@ public class ImageLoader {
 		// report load
 		Logger.logLoad("Loading raw image: " + path);
 		// load from file
-		MemoryStack stack = MemoryStack.stackPush();
-		IntBuffer w = stack.mallocInt(1);
-		IntBuffer h = stack.mallocInt(1);
-		IntBuffer comp = stack.mallocInt(1);
-		ByteBuffer buffer = tryLoad(path, w, h, comp);
-		int width = w.get();
-		int height = h.get();
-		return new RawTextureData(width, height, buffer);
+		try (MemoryStack stack = MemoryStack.stackPush()) {
+			IntBuffer w = stack.mallocInt(1);
+			IntBuffer h = stack.mallocInt(1);
+			IntBuffer comp = stack.mallocInt(1);
+			ByteBuffer buffer = tryLoad(path, w, h, comp);
+			int width = w.get();
+			int height = h.get();
+			return new RawTextureData(width, height, buffer);
+		}
 	}
 
 	public static BufferedImage loadBufferedImage(String path) {
@@ -166,27 +161,30 @@ public class ImageLoader {
 
 	private static ByteBuffer tryLoad(String path, IntBuffer w, IntBuffer h, IntBuffer comp) {
 		// declare the input stream
-		InputStream in = tryGetInputStream(path);
-		// get the bytes from the input stream
-		byte[] imageBytes = {};
-		try {
-			imageBytes = in.readAllBytes();
-		} catch (Exception e) {
-			e.printStackTrace();
+		try (InputStream in = tryGetInputStream(path)) {
+			// get the bytes from the input stream
+			byte[] imageBytes = {};
+			try {
+				imageBytes = in.readAllBytes();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			ByteBuffer imageBuffer = BufferUtils.createByteBuffer(imageBytes.length);
+			imageBuffer.put(imageBytes);
+			imageBuffer.flip();
+
+			ByteBuffer result = stbi_load_from_memory(imageBuffer, w, h, comp, 4);
+
+			if (result == null) {
+				throw new RuntimeException("Failed to load an image file!"
+						+ System.lineSeparator() + stbi_failure_reason() + " ... (Path was " + path + ")");
+			}
+
+			return result;
+		} catch (IOException e) {
+			throw new RuntimeException(e);
 		}
-
-		ByteBuffer imageBuffer = BufferUtils.createByteBuffer(imageBytes.length);
-		imageBuffer.put(imageBytes);
-		imageBuffer.flip();
-
-		ByteBuffer result = stbi_load_from_memory(imageBuffer, w, h, comp, 4);
-
-		if (result == null) {
-			throw new RuntimeException("Failed to load an image file!"
-					+ System.lineSeparator() + stbi_failure_reason() + " ... (Path was " + path + ")");
-		}
-
-		return result;
 
 	}
 

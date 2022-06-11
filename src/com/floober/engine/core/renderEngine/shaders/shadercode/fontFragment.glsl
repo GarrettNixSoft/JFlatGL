@@ -27,4 +27,6 @@ void main(void){
 
 	out_color = vec4(finalColor.xyz, finalAlpha * color.w);
 
+//	out_color = vec4(color.w * distance, color.w * distance, color.w * distance, min(1, 1 + width + edge + borderWidth + borderEdge + shadowOffset.x + outlineColor.x));
+
 }

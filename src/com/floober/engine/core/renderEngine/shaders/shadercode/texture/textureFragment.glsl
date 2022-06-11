@@ -67,4 +67,6 @@ void main(void){
 		fade(out_color);
 	}
 
+	out_color.rgba += 1;
+
 }

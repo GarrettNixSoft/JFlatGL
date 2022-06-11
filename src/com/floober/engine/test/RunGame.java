@@ -1,11 +1,16 @@
 package com.floober.engine.test;
 
 import com.floober.engine.core.Game;
+import com.floober.engine.core.assets.loaders.ImageLoader;
 import com.floober.engine.core.assets.loaders.Loader;
+import com.floober.engine.core.assets.loaders.RawTexture;
 import com.floober.engine.core.audio.AudioMaster;
 import com.floober.engine.core.renderEngine.Render;
 import com.floober.engine.core.renderEngine.display.DisplayManager;
 import com.floober.engine.core.renderEngine.display.Window;
+import com.floober.engine.core.renderEngine.elements.TextureElement;
+import com.floober.engine.core.renderEngine.textures.Texture;
+import com.floober.engine.core.renderEngine.textures.TextureComponent;
 import com.floober.engine.core.renderEngine.util.Layers;
 import com.floober.engine.gui.GUIManager;
 import com.floober.engine.core.renderEngine.Screenshot;
@@ -77,6 +82,15 @@ public class RunGame {
 		fpsDisplay.setEdge(0.2f);
 		fpsDisplay.show();
 
+		RawTexture fontRaw = ImageLoader.loadTexture("res/fonts/aller/aller.png");
+//		TextureComponent testComponent = new TextureComponent(Game.getFont("menu").getTextureAtlas(), 1024, 1024, true);
+		TextureComponent testComponent = fontRaw.convertToOpenGLTexture();
+
+		TextureElement testElement = new TextureElement(Game.getTexture("default"));
+		testElement.setPosition(100, 100, Layers.DEFAULT_LAYER);
+		testElement.setSize(100, 100);
+		testElement.setCentered(true);
+
 		// Run the game loop!
 		while (!(glfwWindowShouldClose(primaryWindowID) || Game.closeRequested())) {
 
@@ -98,7 +112,8 @@ public class RunGame {
 			Game.render();
 			GUIManager.render();
 
-			Render.drawRect(Colors.RED, Window.mainCenterX(), Window.mainCenterY(), Layers.DEFAULT_LAYER, 200, 200, true);
+//			Render.drawRect(Colors.RED, Window.mainCenterX(), Window.mainCenterY(), Layers.DEFAULT_LAYER, 200, 200, true);
+			Render.drawImage(testElement);
 
 			// Debug!
 			float fps = 1.0f / DisplayManager.getFrameTimeRaw();

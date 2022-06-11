@@ -11,6 +11,7 @@ import com.floober.engine.core.renderEngine.util.Layers;
 import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.color.Colors;
 import com.floober.engine.core.util.configuration.Config;
+import com.floober.engine.core.util.time.Timer;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 
@@ -26,6 +27,8 @@ public class SplashScreen {
 
 	public static Window splashWindow;
 	public static long windowID;
+
+	private static final Timer timer = new Timer(-1);
 
 	public static void init() {
 		// do not decorate the window
@@ -71,11 +74,14 @@ public class SplashScreen {
 	}
 
 	public static void render() {
+		if (!timer.started()) timer.start();
+
 		SPLASH_RENDER = true;
 		splashRenderer.prepare(false);
 //		glfwMakeContextCurrent(windowID);
 
-		RectElement redRect = new RectElement(Colors.RED, Config.SPLASH_WIDTH / 2f, Config.SPLASH_HEIGHT / 2f, Layers.BOTTOM_LAYER + 1, 400, 250, true);
+		float size = Config.SPLASH_WIDTH * timer.getTimeElapsedSeconds() / 5;
+		RectElement redRect = new RectElement(Colors.RED, 0, Config.SPLASH_HEIGHT - 50, Layers.BOTTOM_LAYER + 1, size, 50, false);
 		redRect.transform(splashWindow);
 		Render.drawRect(redRect);
 
