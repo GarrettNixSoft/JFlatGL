@@ -1,5 +1,6 @@
 package com.floober.engine.core.util.configuration;
 
+import com.floober.engine.core.splash.SplashRenderer;
 import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.file.FileUtil;
 import org.joml.Vector4f;
@@ -36,6 +37,8 @@ public class Config {
 	public static int SPLASH_HEIGHT;
 	public static boolean SPLASH_TRANSPARENT;
 
+	public static float SPLASH_FAKE_LATENCY;
+
 	public static boolean USE_SPLASH_SCREEN;
 
 	public static boolean FULLSCREEN;
@@ -63,6 +66,8 @@ public class Config {
 		SPLASH_WIDTH = configJSON.getInt("splash_width");
 		SPLASH_HEIGHT = configJSON.getInt("splash_height");
 		SPLASH_TRANSPARENT = configJSON.getBoolean("splash_transparent");
+
+		SPLASH_FAKE_LATENCY = configJSON.getFloat("splash_screen_fake_latency");
 
 		USE_SPLASH_SCREEN = configJSON.getBoolean("use_splash_screen");
 
