@@ -33,7 +33,7 @@ public abstract class ShaderProgram {
 		fragmentShaderIDs = new Integer[1];
 		fragmentShaderIDs[0] = loadShader(fragmentFile, GL_FRAGMENT_SHADER);
 		programID = glCreateProgram();
-		Logger.log("Created shader program with id: " + programID);
+//		Logger.log("Created shader program with id: " + programID);
 		glAttachShader(programID, vertexShaderIDs[0]);
 		glAttachShader(programID, fragmentShaderIDs[0]);
 		bindAttributes();
@@ -83,7 +83,7 @@ public abstract class ShaderProgram {
 	}
 	
 	public void cleanUp() {
-		Logger.log("Cleaning up shader program with ID: " + programID);
+//		Logger.log("Cleaning up shader program with ID: " + programID);
 		stop();
 		for (int vertexShaderID : vertexShaderIDs) {
 			glDetachShader(programID, vertexShaderID);

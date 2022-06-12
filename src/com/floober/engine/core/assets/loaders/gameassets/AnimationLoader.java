@@ -6,7 +6,6 @@ import com.floober.engine.core.assets.loaders.AssetLoader;
 import com.floober.engine.core.Game;
 import com.floober.engine.core.assets.loaders.GameLoader;
 import com.floober.engine.core.renderEngine.textures.TextureSet;
-import com.floober.engine.core.util.Globals;
 import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.file.FileUtil;
 import org.json.JSONObject;
@@ -29,12 +28,12 @@ public class AnimationLoader extends AssetLoader {
 
 	@Override
 	protected void loadDirectory() {
-		Globals.LOAD_STAGE = GameLoader.ANIMATIONS;
+		GameLoader.LOAD_STAGE = GameLoader.ANIMATIONS;
 		// load files
 		JSONObject json_animations = directory.getJSONObject("animations");
 		JSONObject json_animation_sets = directory.getJSONObject("animation_sets");
 		// report counts (animation sets counted as animations
-		Globals.animationTotal = json_animations.keySet().size() + json_animation_sets.keySet().size();
+		GameLoader.animationTotal = json_animations.keySet().size() + json_animation_sets.keySet().size();
 		// PHASE 1: LOAD EVERY ANIMATION
 		loadAnimations(json_animations);
 		// PHASE 2: LOAD AND CREATE ANIMATION SETS
@@ -47,7 +46,7 @@ public class AnimationLoader extends AssetLoader {
 		for (String key : keys) {
 			try {
 				// report current asset
-				Globals.currentAsset = key;
+				GameLoader.currentAsset = key;
 				// load asset
 				Logger.logLoad("Loading animation: " + key);
 				// for each key, get the texture array name and delay values
@@ -60,7 +59,7 @@ public class AnimationLoader extends AssetLoader {
 					Animation animation = parseAnimation(animationObj);
 					Game.getAnimations().addAnimation(key, animation);
 				}
-				Globals.animationCount++;
+				GameLoader.animationCount++;
 			} catch (Exception e) {
 				System.out.println("Failed to load Animation [key=" + key + "], error: " + e);
 			}
@@ -73,7 +72,7 @@ public class AnimationLoader extends AssetLoader {
 		for (String key : keys) {
 			try {
 				// report current asset
-				Globals.currentAsset = key;
+				GameLoader.currentAsset = key;
 				// load asset
 				Logger.logLoad("Loading animation set: " + key);
 				JSONObject setObject = json.getJSONObject(key);
@@ -88,7 +87,7 @@ public class AnimationLoader extends AssetLoader {
 					Game.getAnimations().addAnimationSet(key, animationSet);
 					Logger.logLoadSuccess(key + ", with " + animationSet.size() + " animations");
 				}
-				Globals.animationCount++;
+				GameLoader.animationCount++;
 			} catch (Exception e) {
 				System.out.println("Failed to load Animation Set [key=" + key + "], error: " + e);
 			}

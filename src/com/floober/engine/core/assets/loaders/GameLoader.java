@@ -1,18 +1,33 @@
 package com.floober.engine.core.assets.loaders;
 
 import com.floober.engine.core.assets.loaders.gameassets.*;
-import com.floober.engine.core.splash.SplashRenderer;
-import com.floober.engine.core.util.Globals;
 import com.floober.engine.core.util.Logger;
+import com.floober.engine.core.util.configuration.Config;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameLoader extends Thread {
 	// loading stages
-	public static final int FONTS = 0, TEXTURES = 1, ANIMATIONS = 2, SFX = 3, MUSIC = 4, FADE_IN = 5, DONE = 6, FADE_OUT = 7;
+	public static final int FONTS = 0, TEXTURES = 1, ANIMATIONS = 2, SFX = 3, MUSIC = 4;
 
 	public static boolean LOAD_COMPLETE = false;
+
+	// LOADING
+	// stage
+	public static int LOAD_STAGE = -1;
+	// counters
+	public static int fontCount;
+	public static int fontTotal;
+	public static int texCount;
+	public static int texTotal;
+	public static int animationCount;
+	public static int animationTotal;
+	public static int sfxCount;
+	public static int sfxTotal;
+	public static int musicCount;
+	public static int musicTotal;
+	public static String currentAsset = "";
 
 	private final List<AssetLoader> loaders = new ArrayList<>();
 
@@ -42,7 +57,7 @@ public class GameLoader extends Thread {
 
 		// TEST
 		try {
-			Thread.sleep(5000);
+			Thread.sleep((long) (Config.SPLASH_FAKE_LATENCY * 1000));
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -56,7 +71,7 @@ public class GameLoader extends Thread {
 			assetLoader.finish();
 		}
 
-		Logger.log("Loaded " + Globals.texTotal + " textures and " + Globals.fontTotal + " fonts");
+		Logger.log("Loaded " + texTotal + " textures and " + fontTotal + " fonts");
 	}
 
 	public void load() {
@@ -77,6 +92,39 @@ public class GameLoader extends Thread {
 		Logger.log("*    ****    LOADING DONE    ****    *");
 		Logger.log("*                                    *");
 		Logger.log("**************************************");
+	}
+
+	public static String getLoadString() {
+
+		StringBuilder result = new StringBuilder();
+		result.append("Loading ");
+
+		switch (LOAD_STAGE) {
+			case FONTS -> {
+				result.append("Fonts: [");
+				result.append(fontCount).append(" / ").append(fontTotal).append(']');
+			}
+			case TEXTURES -> {
+				result.append("Textures: [");
+				result.append(texCount).append(" / ").append(texTotal).append(']');
+			}
+			case ANIMATIONS -> {
+				result.append("Animations: [");
+				result.append(animationCount).append(" / ").append(animationTotal).append(']');
+			}
+			case SFX -> {
+				result.append("SFX: [");
+				result.append(sfxCount).append(" / ").append(sfxTotal).append(']');
+			}
+			case MUSIC -> {
+				result.append("Music: [");
+				result.append(musicCount).append(" / ").append(musicTotal).append(']');
+			}
+			default -> {}
+		}
+
+		return result.toString();
+
 	}
 
 //	private void animateLoadRenderer() {

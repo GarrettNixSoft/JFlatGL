@@ -5,9 +5,7 @@ import com.floober.engine.core.assets.loaders.GameLoader;
 import com.floober.engine.core.assets.loaders.Loader;
 import com.floober.engine.core.audio.Sound;
 import com.floober.engine.core.Game;
-import com.floober.engine.core.util.Globals;
 import com.floober.engine.core.util.Logger;
-import com.floober.engine.core.util.configuration.Config;
 import com.floober.engine.core.util.file.FileUtil;
 
 import java.io.File;
@@ -41,12 +39,12 @@ public class MusicLoader extends AssetLoader {
 
 	@Override
 	protected void loadDirectory() {
-		Globals.musicTotal = directory.keySet().size();
-		Globals.LOAD_STAGE = GameLoader.MUSIC;
+		GameLoader.musicTotal = directory.keySet().size();
+		GameLoader.LOAD_STAGE = GameLoader.MUSIC;
 		// iterate over the directory's key set
 		for (String key : directory.keySet()) {
 			// report current asset
-			Globals.currentAsset = key;
+			GameLoader.currentAsset = key;
 			// get the path for this file
 			String path = directory.getString(key);
 			// Report the load attempt
@@ -56,7 +54,7 @@ public class MusicLoader extends AssetLoader {
 			// add it to the game
 			Game.getMusic().addMusic(key, sound);
 			// report the load count
-			Globals.musicCount++;
+			GameLoader.musicCount++;
 			// done
 		}
 	}
