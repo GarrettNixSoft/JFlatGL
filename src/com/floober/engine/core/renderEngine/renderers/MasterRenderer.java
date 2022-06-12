@@ -387,13 +387,16 @@ public class MasterRenderer {
 	public static void cleanUp() {
 		for (Window window : DisplayManager.getWindows()) {
 			MasterRenderer windowRenderer = window.getWindowRenderer();
-			windowRenderer.sceneBuffer.cleanUp();
-			windowRenderer.textureRenderer.cleanUp();
-			windowRenderer.geometryRenderer.cleanUp();
-			windowRenderer.tileRenderer.cleanUp();
-			windowRenderer.particleMaster.cleanUp();
+			windowRenderer.cleanUpInstance();
 		}
+	}
 
+	public void cleanUpInstance() {
+		sceneBuffer.cleanUp();
+		textureRenderer.cleanUp();
+		geometryRenderer.cleanUp();
+		tileRenderer.cleanUp();
+		particleMaster.cleanUp();
 	}
 
 }

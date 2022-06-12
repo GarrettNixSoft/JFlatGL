@@ -80,6 +80,13 @@ public class DisplayManager {
 		MouseInput.windowMouseAdapters.put(window.getWindowID(), new MouseInput());
 	}
 
+	public static void removeWindow(Window window) {
+		windows.remove(window);
+		windowsByID.remove(window.getWindowID());
+		KeyInput.windowKeyboardAdapters.remove(window.getWindowID());
+		MouseInput.windowMouseAdapters.remove(window.getWindowID());
+	}
+
 	// INITIALIZING
 	private static void initWindowIcons() {
 		// allocate memory
@@ -205,10 +212,6 @@ public class DisplayManager {
 
 	public static void initPrimaryGameWindow() {
 
-		// DEBUG MESSAGES
-		GLUtil.setupDebugMessageCallback();
-		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, (IntBuffer) null, false);
-
 		// Step 2: Set the window hints (settings).
 		glfwDefaultWindowHints();
 		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
@@ -230,7 +233,16 @@ public class DisplayManager {
 			primaryWindowID = glfwCreateWindow(Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT, Config.WINDOW_TITLE, NULL, NULL);
 		}
 
+		glfwMakeContextCurrent(primaryWindowID);
+
 		Logger.log("CREATED PRIMARY GAME WINDOW: " + primaryWindowID);
+
+		// Create capabilities for this context if the Splash Screen did not already do so
+		if (!Config.USE_SPLASH_SCREEN) GL.createCapabilities();
+
+		// DEBUG MESSAGES
+		GLUtil.setupDebugMessageCallback();
+		glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DEBUG_SEVERITY_NOTIFICATION, (IntBuffer) null, false);
 
 		// Step 3.5: Test to make sure the window creation succeeded. If it fails, die.
 		if (primaryWindowID == NULL) {

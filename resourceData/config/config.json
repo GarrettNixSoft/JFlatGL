@@ -1,0 +1,39 @@
+{
+	"window_title": "FlooberEngine Development",
+	"debug_mode": true,
+	"icon_path_64": "icon/icon64.png",
+	"icon_path_48": "icon/icon48.png",
+	"icon_path_32": "icon/icon32.png",
+	"internal_width": 1920,
+	"internal_height": 1080,
+	"default_width": 1920,
+	"default_height": 1080,
+	"splash_width": 800,
+	"splash_height": 500,
+	"splash_transparent": true,
+	"use_splash_screen": true,
+	"fullscreen": false,
+	"load_render_settings": {
+		"font": "aller",
+		"logo": "res/icon/icon512.png",
+		"check": "default.png",
+		"check_inverted": "menu/load/load_check_black.png"
+	},
+	"logger_settings": {
+		"log_anything": true,
+		"log_warnings": false,
+		"log_errors": true,
+		"log_loaders": false,
+		"log_load_success": false,
+		"log_load_errors": false,
+		"log_load_general": false,
+		"log_entity_debug": false,
+		"log_enemy_debug": false,
+		"log_player_debug": false,
+		"log_events": false,
+		"log_cutscenes": true,
+		"log_gui_events": false,
+		"log_gui_interactions": false,
+		"log_audio_start": true
+	}
+}

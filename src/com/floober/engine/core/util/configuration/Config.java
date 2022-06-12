@@ -34,8 +34,9 @@ public class Config {
 	// Splash screen dimensions
 	public static int SPLASH_WIDTH;
 	public static int SPLASH_HEIGHT;
+	public static boolean SPLASH_TRANSPARENT;
 
-	public static boolean USE_LOAD_RENDERER;
+	public static boolean USE_SPLASH_SCREEN;
 
 	public static boolean FULLSCREEN;
 
@@ -61,8 +62,9 @@ public class Config {
 
 		SPLASH_WIDTH = configJSON.getInt("splash_width");
 		SPLASH_HEIGHT = configJSON.getInt("splash_height");
+		SPLASH_TRANSPARENT = configJSON.getBoolean("splash_transparent");
 
-		USE_LOAD_RENDERER = configJSON.getBoolean("use_load_renderer");
+		USE_SPLASH_SCREEN = configJSON.getBoolean("use_splash_screen");
 
 		FULLSCREEN = configJSON.getBoolean("fullscreen");
 

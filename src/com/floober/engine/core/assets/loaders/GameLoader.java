@@ -1,17 +1,16 @@
 package com.floober.engine.core.assets.loaders;
 
 import com.floober.engine.core.assets.loaders.gameassets.*;
-import com.floober.engine.core.Game;
-import com.floober.engine.test.RunGame;
-import com.floober.engine.core.renderEngine.renderers.LoadRenderer;
+import com.floober.engine.core.splash.SplashRenderer;
 import com.floober.engine.core.util.Globals;
 import com.floober.engine.core.util.Logger;
-import com.floober.engine.core.util.time.TimeScale;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameLoader extends Thread {
+	// loading stages
+	public static final int FONTS = 0, TEXTURES = 1, ANIMATIONS = 2, SFX = 3, MUSIC = 4, FADE_IN = 5, DONE = 6, FADE_OUT = 7;
 
 	public static boolean LOAD_COMPLETE = false;
 
@@ -80,26 +79,26 @@ public class GameLoader extends Thread {
 		Logger.log("**************************************");
 	}
 
-	private void animateLoadRenderer() {
-		long start = System.nanoTime();
-		Globals.LOAD_STAGE = LoadRenderer.FADE_IN;
-		while (TimeScale.getScaledTime(start) < 1000) {
-			RunGame.loadRenderer.render();
-		}
-	}
+//	private void animateLoadRenderer() {
+//		long start = System.nanoTime();
+//		Globals.LOAD_STAGE = LoadRenderer.FADE_IN;
+//		while (TimeScale.getScaledTime(start) < 1000) {
+//			RunGame.loadRenderer.render();
+//		}
+//	}
 
-	private void animateEndLoadRenderer() {
-		long start = System.nanoTime();
-		// FADE IN CHECK MARK
-		Globals.LOAD_STAGE = LoadRenderer.DONE;
-		while (TimeScale.getScaledTime(start) < 1000) {
-			RunGame.loadRenderer.render();
-		}
-		// FADE OUT LOAD BAR
-		Globals.LOAD_STAGE = LoadRenderer.FADE_OUT;
-		while (TimeScale.getScaledTime(start) < 2000) {
-			RunGame.loadRenderer.render();
-		}
-	}
+//	private void animateEndLoadRenderer() {
+//		long start = System.nanoTime();
+//		// FADE IN CHECK MARK
+//		Globals.LOAD_STAGE = LoadRenderer.DONE;
+//		while (TimeScale.getScaledTime(start) < 1000) {
+//			RunGame.loadRenderer.render();
+//		}
+//		// FADE OUT LOAD BAR
+//		Globals.LOAD_STAGE = LoadRenderer.FADE_OUT;
+//		while (TimeScale.getScaledTime(start) < 2000) {
+//			RunGame.loadRenderer.render();
+//		}
+//	}
 
 }

@@ -1,16 +1,13 @@
 package com.floober.engine.core.assets.loaders.gameassets;
 
 import com.floober.engine.core.assets.loaders.AssetLoader;
+import com.floober.engine.core.assets.loaders.GameLoader;
 import com.floober.engine.core.assets.loaders.Loader;
-import com.floober.engine.core.Game;
 import com.floober.engine.core.assets.loaders.gameassets.temp.RawFontType;
-import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.FontType;
-import com.floober.engine.core.renderEngine.renderers.LoadRenderer;
 import com.floober.engine.core.util.Globals;
 import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.configuration.Config;
 import com.floober.engine.core.util.file.FileUtil;
-import com.floober.engine.test.RunGame;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,11 +29,11 @@ public class FontLoader extends AssetLoader {
 	@Override
 	protected void loadDirectory() {
 		Globals.fontTotal = directory.keySet().size();
-		Globals.LOAD_STAGE = LoadRenderer.FONTS;
+		Globals.LOAD_STAGE = GameLoader.FONTS;
 		// iterate over the directory's key set
 		for (String key : directory.keySet()) {
 			// report current asset
-			LoadRenderer.reportCurrentAsset(key);
+			Globals.currentAsset = key;
 			// get the path for this file
 			String path = directory.getString(key);
 			// Report the load attempt
@@ -46,8 +43,6 @@ public class FontLoader extends AssetLoader {
 			rawFontTypes.add(font);
 			// report the load count
 			Globals.fontCount++;
-			// render the loading screen
-			if (Config.USE_LOAD_RENDERER) LoadRenderer.instance.render();
 			// done
 		}
 	}

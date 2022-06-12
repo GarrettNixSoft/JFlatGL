@@ -26,6 +26,7 @@ import com.floober.engine.core.util.configuration.Settings;
 import com.floober.engine.core.util.exception.GUIException;
 import com.floober.engine.core.util.input.KeyInput;
 import com.floober.engine.core.util.input.MouseInput;
+import com.floober.engine.test.splash.TestSplashRenderer;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -46,8 +47,10 @@ public class GUITest {
 
 		Config.FULLSCREEN = false;
 
-		// Initialize the game. (Also loads assets)
-		Game.init();
+		TestSplashRenderer splashRenderer = new TestSplashRenderer();
+
+		// Initialize the game.
+		Game.init(splashRenderer);
 
 		// SET UP DEBUG TEXT
 		GUIText fpsDisplay = new GUIText("FPS: ", 0.5f, Game.getFont("menu"),

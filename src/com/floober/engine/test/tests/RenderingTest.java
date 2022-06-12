@@ -28,6 +28,7 @@ import com.floober.engine.core.util.input.MouseInput;
 import com.floober.engine.core.util.math.Collisions;
 import com.floober.engine.core.util.time.Sync;
 import com.floober.engine.core.util.time.Timer;
+import com.floober.engine.test.splash.TestSplashRenderer;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.glfw.Callbacks;
@@ -45,8 +46,10 @@ public class RenderingTest {
 
 		Config.FULLSCREEN = false;
 
+		TestSplashRenderer splashRenderer = new TestSplashRenderer();
+
 		// Initialize the game.
-		Game.init();
+		Game.init(splashRenderer);
 		// game components
 		Sync sync = new Sync();
 

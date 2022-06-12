@@ -8,7 +8,6 @@ import com.floober.engine.core.renderEngine.elements.geometry.RectElement;
 import com.floober.engine.core.renderEngine.fonts.fontRendering.TextMaster;
 import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.core.renderEngine.util.Layers;
-import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.color.Colors;
 import com.floober.engine.core.util.configuration.Config;
 import com.floober.engine.core.util.time.Timer;
@@ -21,14 +20,13 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class SplashScreen {
 
-	private static MasterRenderer splashRenderer;
+	private static MasterRenderer renderer;
+	private static SplashRenderer splashRenderer;
 
 	public static boolean SPLASH_RENDER = false;
 
 	public static Window splashWindow;
 	public static long windowID;
-
-	private static final Timer timer = new Timer(-1);
 
 	public static void init() {
 		// do not decorate the window
@@ -36,6 +34,7 @@ public class SplashScreen {
 		glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 		glfwWindowHint(GLFW_FOCUSED, GLFW_TRUE);
 		glfwWindowHint(GLFW_FLOATING, GLFW_TRUE);
+		glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, Config.SPLASH_TRANSPARENT ? GLFW_TRUE : GLFW_FALSE);
 		// create the window with GLFW
 		windowID = glfwCreateWindow(Config.SPLASH_WIDTH, Config.SPLASH_HEIGHT, "", NULL, NULL);
 		// confirm that the window was created, or log an error otherwise
@@ -55,43 +54,58 @@ public class SplashScreen {
 		// configure render settings
 		glDepthFunc(GL_LEQUAL);
 		glDepthRange(0, 1);
-		glClearColor(0, 0, 0, 1);
+		glClearColor(0, 0, 0, Config.SPLASH_TRANSPARENT ? 0 : 1);
 		glClearDepth(1);
 		// show the window
 		glfwShowWindow(windowID);
 
-		// make a renderer to use
+		// make a window handle and a renderer to use
 		splashWindow = new Window(windowID, Config.SPLASH_WIDTH, Config.SPLASH_HEIGHT, 0, 0, 0, 0);
 		DisplayManager.addWindow(splashWindow);
-		splashRenderer = splashWindow.getWindowRenderer();
-		splashRenderer.generateUnregisteredSceneBuffer(splashWindow);
+		renderer = splashWindow.getWindowRenderer();
+		renderer.generateUnregisteredSceneBuffer(splashWindow);
+
+		// initialize the text master so text can be rendered on the splash screen
 		TextMaster.init();
+
+		// The texture analyzer only needs to be initialized once so do it before loading anything
 		TextureAnalyzer.init();
 
+		// Set the viewport so that everything gets properly rendered in the splash window
 		glViewport(0, 0, Config.SPLASH_WIDTH, Config.SPLASH_HEIGHT);
 
 		// I think that's all?
 	}
 
+	/**
+	 * Assign the SplashRenderer to use when drawing to the
+	 * splash screen window.
+	 * @param newSplashRenderer the renderer to use
+	 */
+	public static void prepare(SplashRenderer newSplashRenderer) {
+		splashRenderer = newSplashRenderer;
+		splashRenderer.init();
+	}
+
 	public static void render() {
-		if (!timer.started()) timer.start();
-
 		SPLASH_RENDER = true;
-		splashRenderer.prepare(false);
-//		glfwMakeContextCurrent(windowID);
+		renderer.prepare(false);
 
-		float size = Config.SPLASH_WIDTH * timer.getTimeElapsedSeconds() / 5;
-		RectElement redRect = new RectElement(Colors.RED, 0, Config.SPLASH_HEIGHT - 50, Layers.BOTTOM_LAYER + 1, size, 50, false);
-		redRect.transform(splashWindow);
-		Render.drawRect(redRect);
+		splashRenderer.render();
 
-		splashRenderer.render(false);
+		renderer.render(false);
 		splashWindow.swapBuffers();
+
 	}
 
 	public static void close() {
+		splashRenderer.cleanUp();
+		renderer.cleanUpInstance();
+
 		SPLASH_RENDER = false;
 		glfwDestroyWindow(windowID);
+
+		DisplayManager.removeWindow(splashWindow);
 	}
 
 }

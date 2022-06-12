@@ -1,24 +1,16 @@
 package com.floober.engine.core.assets.loaders.gameassets;
 
 import com.floober.engine.core.assets.TextureAnalyzer;
-import com.floober.engine.core.assets.loaders.AssetLoader;
-import com.floober.engine.core.assets.loaders.ImageLoader;
-import com.floober.engine.core.assets.loaders.Loader;
+import com.floober.engine.core.assets.loaders.*;
 import com.floober.engine.core.Game;
-import com.floober.engine.core.assets.loaders.RawTexture;
 import com.floober.engine.core.assets.loaders.gameassets.temp.RawTextureArray;
 import com.floober.engine.core.assets.loaders.gameassets.temp.RawTextureAtlas;
 import com.floober.engine.core.assets.loaders.gameassets.temp.RawTextureComponent;
 import com.floober.engine.core.assets.loaders.gameassets.temp.RawTextureSet;
-import com.floober.engine.core.renderEngine.renderers.LoadRenderer;
-import com.floober.engine.core.renderEngine.textures.TextureAtlas;
-import com.floober.engine.core.renderEngine.textures.TextureComponent;
-import com.floober.engine.core.renderEngine.textures.TextureSet;
 import com.floober.engine.core.util.Globals;
 import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.configuration.Config;
 import com.floober.engine.core.util.file.FileUtil;
-import com.floober.engine.test.RunGame;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -68,7 +60,7 @@ public class TextureLoader extends AssetLoader {
 							directory.getJSONObject("texture_sets").keySet().size() +
 							directory.getJSONObject("texture_arrays").keySet().size() +
 							directory.getJSONObject("texture_atlases").keySet().size();
-		Globals.LOAD_STAGE = LoadRenderer.TEXTURES;
+		Globals.LOAD_STAGE = GameLoader.TEXTURES;
 		loadTextures();
 		loadTextureSets();
 		loadTextureArrays();
@@ -81,7 +73,7 @@ public class TextureLoader extends AssetLoader {
 		// iterate over the directory's key set
 		for (String key : textureDirectory.keySet()) {
 			// report current asset
-			LoadRenderer.reportCurrentAsset(key);
+			Globals.currentAsset = key;
 			// get the associated path
 			String path = textureDirectory.getString(key).replace("/", FileUtil.SEPARATOR);
 			// log the load attempt
@@ -106,8 +98,6 @@ public class TextureLoader extends AssetLoader {
 
 			// report the load count
 			Globals.texCount++;
-			// render the load screen
-			if (Config.USE_LOAD_RENDERER) LoadRenderer.instance.render();
 			// done
 		}
 	}
@@ -118,7 +108,7 @@ public class TextureLoader extends AssetLoader {
 		// iterate over the directory's key set
 		for (String key : textureSetDirectory.keySet()) {
 			// report current asset
-			LoadRenderer.reportCurrentAsset(key);
+			Globals.currentAsset = key;
 			// get the texture set object
 			JSONObject setObject = textureSetDirectory.getJSONObject(key);
 			// get the associated path
@@ -148,8 +138,6 @@ public class TextureLoader extends AssetLoader {
 
 			// report the load count
 			Globals.texCount++;
-			// render the load screen
-			if (Config.USE_LOAD_RENDERER) LoadRenderer.instance.render();
 			// done
 		}
 	}
@@ -160,7 +148,7 @@ public class TextureLoader extends AssetLoader {
 		// iterate over the directory's key set
 		for (String key : textureArrayDirectory.keySet()) {
 			// report current asset
-			LoadRenderer.reportCurrentAsset(key);
+			Globals.currentAsset = key;
 			// get the texture array object
 			JSONObject arrayObject = textureArrayDirectory.getJSONObject(key);
 			// get the associated path
@@ -195,8 +183,6 @@ public class TextureLoader extends AssetLoader {
 
 			// report the load count
 			Globals.texCount++;
-			// render the loading screen
-			if (Config.USE_LOAD_RENDERER) LoadRenderer.instance.render();
 			// done
 		}
 	}
@@ -207,7 +193,7 @@ public class TextureLoader extends AssetLoader {
 		// iterate over the directory's key set
 		for (String key : textureAtlasDirectory.keySet()) {
 			// report current asset
-			LoadRenderer.reportCurrentAsset(key);
+			Globals.currentAsset = key;
 			// get the texture atlas object
 			JSONObject atlasObject = textureAtlasDirectory.getJSONObject(key);
 			// get the associated path
@@ -235,8 +221,6 @@ public class TextureLoader extends AssetLoader {
 
 			// report the load count
 			Globals.texCount++;
-			// render the load screen
-			if (Config.USE_LOAD_RENDERER) LoadRenderer.instance.render();
 			// done
 		}
 	}

@@ -6,13 +6,11 @@ import com.floober.engine.core.assets.loaders.GameLoader;
 import com.floober.engine.core.audio.AudioMaster;
 import com.floober.engine.core.audio.Sound;
 import com.floober.engine.core.gameState.GameStateManager;
-import com.floober.engine.core.renderEngine.Render;
 import com.floober.engine.core.renderEngine.display.DisplayManager;
-import com.floober.engine.core.renderEngine.renderers.LoadRenderer;
 import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
-import com.floober.engine.core.renderEngine.util.Layers;
+import com.floober.engine.core.splash.SplashRenderer;
 import com.floober.engine.core.splash.SplashScreen;
-import com.floober.engine.core.util.color.Colors;
+import com.floober.engine.core.util.configuration.Config;
 import com.floober.engine.core.util.input.KeyInput;
 import com.floober.engine.core.util.input.MouseInput;
 import com.floober.engine.core.util.time.TimeScale;
@@ -76,51 +74,73 @@ public class Game {
 	 * resourceData/assets. Once loading is complete,
 	 * the GameStateManager will be initialized.
 	 */
-	public static void init() {
+	public static void init(SplashRenderer splashRenderer) {
+
+		// initialize OpenGL now to prepare it for a splash render window if necessary
 		DisplayManager.initOpenGL();
+
 		// Set up OpenAL.
 		AudioMaster.init();
 		AudioMaster.setListenerData(0, 0, 0);
+
 		// initialize the instance
 		instance = new Game();
+
 		// the game itself (load assets)
 		GameLoader gameLoader = new GameLoader();
-		instance.load(gameLoader);
+		instance.load(gameLoader, splashRenderer);
+
+		// create and assign the GSM
 		instance.gsm = new GameStateManager(instance);
+
+		// Clear the text master if it was used
+		if (Config.USE_SPLASH_SCREEN) {
+			TextMaster.cleanUp();
+		}
+
 		// Create the window and set up OpenGL and GLFW.
 		DisplayManager.initPrimaryGameWindow();
 
-		// finish loading
-		instance.finishLoad(gameLoader);
+		// finish loading (after creating the main game window! this ensures OpenGL assets are properly loaded)
+		gameLoader.finish();
+
 		// load particles AFTER textures are loaded (some particles need to load textures from the game's pool)
 		ParticleMaster.initGlobals();
 
 		// Re-initialize the TextMaster on the proper context
-		TextMaster.cleanUp();
 		TextMaster.init();
+
 	}
 
 	/**
 	 * Load the game. Run on the game's instance.
 	 */
-	private void load(GameLoader loader) {
-		SplashScreen.init();
-		loader.start();
+	private void load(GameLoader loader, SplashRenderer splashRenderer) {
 
-		while (!GameLoader.LOAD_COMPLETE) {
-//			Logger.log("Waiting for load complete flag...");
-			SplashScreen.render();
+		// if the splash screen is enabled, initialize it
+		if (Config.USE_SPLASH_SCREEN) {
+			SplashScreen.init();
+			SplashScreen.prepare(splashRenderer);
+		} else {
+			// Initialize the texture analyzer if the splash screen did not already do so
+			TextureAnalyzer.init();
 		}
 
-		SplashScreen.close();
-	}
+		// begin the loader thread
+		loader.start();
 
-	private void finishLoad(GameLoader loader) {
-		Logger.log("Load complete flag set!");
-		loader.finish();
-	}
+		// if the splash screen is enabled,
+		if (Config.USE_SPLASH_SCREEN) {
 
-	// RUN GAME LOGIC
+			// render to it while the game loads
+			while (!GameLoader.LOAD_COMPLETE) {
+				SplashScreen.render();
+			}
+
+			// then close the splash screen once loading completes
+			SplashScreen.close();
+		}
+	}
 
 	/**
 	 * Update the Game instance. Polls input, calls {@code update()} on
