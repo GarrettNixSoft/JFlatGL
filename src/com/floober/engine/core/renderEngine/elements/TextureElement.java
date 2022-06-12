@@ -68,7 +68,7 @@ public class TextureElement extends RenderElement {
 		this.textureComponent = textureComponent;
 		this.width = 0;
 		this.height = 0;
-		transform();
+//		transform();
 		setTextureOffset(new Vector4f(0, 0, 1, 1));
 	}
 
