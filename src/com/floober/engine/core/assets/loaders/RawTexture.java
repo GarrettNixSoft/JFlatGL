@@ -19,7 +19,7 @@ public record RawTexture(ByteBuffer imageData, int width, int height) {
 		int textureID = glGenTextures();
 		glBindTexture(GL_TEXTURE_2D, textureID);
 
-		Logger.log("Generated texture ID: " + textureID);
+//		Logger.log("Generated texture ID: " + textureID);
 
 		// set OpenGL texture settings for this texture
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
