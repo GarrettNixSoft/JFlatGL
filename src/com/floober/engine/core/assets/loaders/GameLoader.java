@@ -127,6 +127,30 @@ public class GameLoader extends Thread {
 
 	}
 
+	/**
+	 * Get the total number of assets that need to be loaded.
+	 * @return the sum of fontTotal, texTotal, animationTotal, sfxTotal, and musicTotal
+	 */
+	public static int getTotalAssets() {
+		return fontTotal + texTotal + animationTotal + sfxTotal + musicTotal;
+	}
+
+	/**
+	 * Get the number of assets that have been loaded so far.
+	 * @return the sum of fontCount, texCount, animationCount, sfxCount, and musicCount
+	 */
+	public static int getTotalAssetsLoaded() {
+		return fontCount + texCount + animationCount + sfxCount + musicCount;
+	}
+
+	/**
+	 * Get the ratio of assets loaded to total assets.
+	 * @return the ratio of {@code getAssetsLoaded()} to {@code getTotalAssets()}
+	 */
+	public static float getLoadProgress() {
+		return (float) getTotalAssetsLoaded() / (float) getTotalAssets();
+	}
+
 //	private void animateLoadRenderer() {
 //		long start = System.nanoTime();
 //		Globals.LOAD_STAGE = LoadRenderer.FADE_IN;
