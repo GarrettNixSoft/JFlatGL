@@ -15,6 +15,7 @@ import com.floober.engine.core.renderEngine.shaders.textures.TextureOutlineShade
 import com.floober.engine.core.renderEngine.shaders.textures.TextureShader;
 import com.floober.engine.core.renderEngine.textures.Texture;
 import com.floober.engine.core.renderEngine.textures.TextureComponent;
+import com.floober.engine.core.splash.SplashScreen;
 import com.floober.engine.core.util.math.MathUtil;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
@@ -76,17 +77,19 @@ public class TextureRenderer {
 
 //			Logger.log("Element position: " + element.getPosition());
 
-			Matrix4f mat = MathUtil.createTransformationMatrix(element.getPosition(), element.getScale(), element.getRotation());
+//			Matrix4f mat = MathUtil.createTransformationMatrix(element.getPosition(), element.getScale(), element.getRotation());
 
 			// if outline is on, render it under the element
 			if (element.doOutline()) {
 				bindTexture(element.getOutlineTexture());
-				Matrix4f matrix = MathUtil.createTransformationMatrix(element.getPosition(), element.getOutlineScale(), element.getRotation());
+				Matrix4f matrix = SplashScreen.SPLASH_RENDER ?
+						MathUtil.createTransformationMatrix(SplashScreen.splashWindow, element.getRenderPosition(), element.getScale(), element.getRotation()) :
+						MathUtil.createTransformationMatrix(element.getRenderPosition(), element.getScale(), element.getRotation());
 				shader.loadTransformationMatrix(matrix);
 				glDrawArrays(GL_TRIANGLE_STRIP, 0, quad.vertexCount());
 			}
 
-			shader.loadTransformationMatrix(mat);
+//			shader.loadTransformationMatrix(mat);
 
 			// bind the current texture
 			bindTexture(element.getRawTexture());
@@ -189,7 +192,9 @@ public class TextureRenderer {
 	
 	private void loadTextureUniforms(TextureElement element) {
 		// standard texture data
-		Matrix4f matrix = MathUtil.createTransformationMatrix(element.getPosition(), element.getScale(), element.getRotation());
+		Matrix4f matrix = SplashScreen.SPLASH_RENDER ?
+				MathUtil.createTransformationMatrix(SplashScreen.splashWindow, element.getRenderPosition(), element.getScale(), element.getRotation()) :
+				MathUtil.createTransformationMatrix(element.getRenderPosition(), element.getScale(), element.getRotation());
 		shader.loadTransformationMatrix(matrix);
 		shader.loadTextureOffset(element.getTextureComponentOffset());
 		shader.loadTextureAlpha(element.getTextureComponent().getAlpha());

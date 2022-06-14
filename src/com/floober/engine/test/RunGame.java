@@ -86,8 +86,8 @@ public class RunGame {
 
 		TextureElement testElement = new TextureElement(Game.getTexture("default"));
 		testElement.setPosition(100, 100, Layers.DEFAULT_LAYER);
-		testElement.setSize(100, 100);
-		testElement.setCentered(true);
+		testElement.setSize(200, 200);
+		testElement.setCentered(false);
 
 		// Run the game loop!
 		while (!(glfwWindowShouldClose(primaryWindowID) || Game.closeRequested())) {
