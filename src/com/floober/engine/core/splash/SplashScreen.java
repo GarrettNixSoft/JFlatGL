@@ -4,6 +4,7 @@ import com.floober.engine.core.assets.TextureAnalyzer;
 import com.floober.engine.core.renderEngine.Render;
 import com.floober.engine.core.renderEngine.display.DisplayManager;
 import com.floober.engine.core.renderEngine.display.Window;
+import com.floober.engine.core.renderEngine.elements.RenderElement;
 import com.floober.engine.core.renderEngine.elements.geometry.RectElement;
 import com.floober.engine.core.renderEngine.fonts.fontRendering.TextMaster;
 import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
@@ -75,6 +76,15 @@ public class SplashScreen {
 		glViewport(0, 0, Config.SPLASH_WIDTH, Config.SPLASH_HEIGHT);
 
 		// I think that's all?
+	}
+
+	/**
+	 * Transform a RenderElement to scale properly on the
+	 * Splash Screen window.
+	 * @param renderElement the render element to transform
+	 */
+	public static void transform(RenderElement renderElement) {
+		renderElement.transform(splashWindow);
 	}
 
 	/**

@@ -1,5 +1,6 @@
 package com.floober.engine.core.renderEngine.elements;
 
+import com.floober.engine.core.assets.loaders.GameLoader;
 import com.floober.engine.core.renderEngine.Render;
 import com.floober.engine.core.renderEngine.display.DisplayManager;
 import com.floober.engine.core.renderEngine.display.Window;
@@ -9,6 +10,7 @@ import com.floober.engine.core.renderEngine.framebuffers.FrameBuffer;
 import com.floober.engine.core.renderEngine.framebuffers.FrameBuffers;
 import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.core.renderEngine.util.Layers;
+import com.floober.engine.core.splash.SplashScreen;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
@@ -53,6 +55,25 @@ public abstract class RenderElement implements Comparable<RenderElement> {
 	 * to call the appropriate Render method for whatever type this RenderElement is.
 	 */
 	public void render() {
+		switch (this) {
+			case LineElement l -> Render.drawLine(l);
+			case CircleElement c -> Render.drawCircle(c);
+			case OutlineElement o -> Render.drawOutline(o);
+			case RectElementLight rl -> Render.drawLightRect(rl);
+			case RectElement r -> Render.drawRect(r);
+			case TextureElement tex -> Render.drawImage(tex);
+			default -> throw new IllegalStateException("Unexpected value: " + this);
+		}
+	}
+
+	/**
+	 * Call transform() and then render this element.
+	 */
+	public void renderTransformed() {
+		if (SplashScreen.SPLASH_RENDER)
+			SplashScreen.transform(this);
+		else transform();
+
 		switch (this) {
 			case LineElement l -> Render.drawLine(l);
 			case CircleElement c -> Render.drawCircle(c);

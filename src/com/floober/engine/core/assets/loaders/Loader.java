@@ -24,7 +24,8 @@ public class Loader {
 
 	public static TextureComponent loadTextureConverted(String path) {
 		path = "textures" + SEPARATOR + path;
-		return ImageLoader.loadTextureConverted(path);
+		Logger.log("Loaded raw texture: " + path);
+		return ImageLoader.loadTexture(path).convertToOpenGLTexture();
 	}
 
 	public static RawTexture[] loadTextureArray(String path, int width) {

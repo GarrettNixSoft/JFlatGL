@@ -111,7 +111,7 @@ public class RunGame {
 			GUIManager.render();
 
 //			Render.drawRect(Colors.RED, Window.mainCenterX(), Window.mainCenterY(), Layers.DEFAULT_LAYER, 200, 200, true);
-			Render.drawImage(testElement);
+			testElement.renderTransformed();
 
 			// Debug!
 			float fps = 1.0f / DisplayManager.getFrameTimeRaw();
