@@ -1,0 +1,10 @@
+{
+	"music_volume": "float",
+	"sfx_volume": "float",
+	"fullscreen": "boolean",
+	"cap_framerate": "boolean",
+	"max_framerate_index": "int",
+	"show_fps": "boolean",
+	"debug_mode": "boolean",
+	"show_player_debug": "boolean"
+}

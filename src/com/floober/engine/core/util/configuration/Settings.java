@@ -53,7 +53,7 @@ public class Settings {
 
 	// preferences interface
 	private static Preferences prefs;
-	private static final String PREF_PATH = "galactichorizon/settings"; // <-- customize this for your project!
+	private static final String PREF_PATH = "flooberEngine/settings"; // <-- customize this for your project!
 
 
 	// load (run this on startup)
