@@ -13,6 +13,7 @@ import com.floober.engine.core.renderEngine.util.Stencil;
 import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.color.Colors;
 import com.floober.engine.core.util.configuration.Config;
+import com.floober.engine.core.util.configuration.Settings;
 import com.floober.engine.core.util.input.KeyInput;
 import com.floober.engine.core.util.input.MouseInput;
 import com.floober.engine.core.util.math.MathUtil;
@@ -220,7 +221,7 @@ public class DisplayManager {
 
 		// Step 3: Create the window. The process depends on whether we're creating a fullscreen window or not.
 		primaryMonitorVideoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-		if (Config.FULLSCREEN) {
+		if (Settings.getSettingBoolean("fullscreen")) {
 			assert primaryMonitorVideoMode != null;
 			glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 			glfwWindowHint(GLFW_RED_BITS, primaryMonitorVideoMode.redBits());

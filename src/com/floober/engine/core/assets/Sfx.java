@@ -23,7 +23,7 @@ public class Sfx {
 		CHANNELS = new AudioChannel[NUM_CHANNELS];
 		for (int i = 0; i < CHANNELS.length; ++i) {
 			CHANNELS[i] = new AudioChannel(AudioMaster.generateSource());
-			CHANNELS[i].setVolume(Settings.sfxVolume);
+			CHANNELS[i].setVolume(Settings.getSettingFloat("sfx_volume"));
 		}
 	}
 

@@ -1,6 +1,9 @@
 {
+	"config_node": "flooberEngine/config",
+	"settings_node": "flooberEngine/settings",
 	"window_title": "FlooberEngine Development",
 	"debug_mode": true,
+	"crash_on_missing_shader_uniform": false,
 	"icon_path_64": "icon/icon64.png",
 	"icon_path_48": "icon/icon48.png",
 	"icon_path_32": "icon/icon32.png",
@@ -13,7 +16,6 @@
 	"splash_transparent": true,
 	"use_splash_screen": true,
 	"splash_screen_fake_latency": 3,
-	"fullscreen": false,
 	"load_render_settings": {
 		"font": "aller",
 		"logo": "res/icon/icon512.png",

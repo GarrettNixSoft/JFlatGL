@@ -13,9 +13,14 @@ import org.json.JSONObject;
  */
 public class Config {
 
+	public static String CONFIG_NODE;
+	public static String SETTINGS_NODE;
+
 	public static String WINDOW_TITLE;
 
 	public static boolean DEBUG_MODE; // development use
+
+	public static boolean CRASH_ON_MISSING_SHADER_UNIFORM;
 
 	// 3 image files for the game window icons
 	public static String ICON_PATH_64;
@@ -41,17 +46,20 @@ public class Config {
 
 	public static boolean USE_SPLASH_SCREEN;
 
-	public static boolean FULLSCREEN;
-
 	public static JSONObject LOAD_RENDER_SETTINGS;
 	public static JSONObject LOGGER_SETTINGS;
 
 	public static void load() {
 		JSONObject configJSON = FileUtil.getJSON("/config/config.json");
 
+		CONFIG_NODE = configJSON.getString("config_node");
+		SETTINGS_NODE = configJSON.getString("settings_node");
+
 		WINDOW_TITLE = configJSON.getString("window_title");
 
 		DEBUG_MODE = configJSON.getBoolean("debug_mode");
+
+		CRASH_ON_MISSING_SHADER_UNIFORM = configJSON.getBoolean("crash_on_missing_shader_uniform");
 
 		ICON_PATH_64 = configJSON.getString("icon_path_64");
 		ICON_PATH_48 = configJSON.getString("icon_path_48");
@@ -70,8 +78,6 @@ public class Config {
 		SPLASH_FAKE_LATENCY = configJSON.getFloat("splash_screen_fake_latency");
 
 		USE_SPLASH_SCREEN = configJSON.getBoolean("use_splash_screen");
-
-		FULLSCREEN = configJSON.getBoolean("fullscreen");
 
 		LOAD_RENDER_SETTINGS = configJSON.getJSONObject("load_render_settings");
 

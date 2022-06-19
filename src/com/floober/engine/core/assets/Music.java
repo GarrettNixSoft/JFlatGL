@@ -25,7 +25,7 @@ public class Music {
 		CHANNELS = new AudioChannel[NUM_CHANNELS];
 		for (int i = 0; i < CHANNELS.length; ++i) {
 			CHANNELS[i] = new AudioChannel(AudioMaster.generateSource());
-			CHANNELS[i].setVolume(Settings.musicVolume);
+			CHANNELS[i].setVolume(Settings.getSettingFloat("music_volume"));
 		}
 	}
 

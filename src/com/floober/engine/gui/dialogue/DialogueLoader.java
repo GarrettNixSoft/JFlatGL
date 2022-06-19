@@ -53,7 +53,7 @@ public class DialogueLoader {
 		FontType textFont = null, nameFont = null;
 		Vector4f textColor = new Vector4f(Colors.WHITE), nameColor = new Vector4f(Colors.WHITE), backgroundColor = new Vector4f(0.05f, 0.05f, 0.05f, 0.5f);
 		float textSize = 1, nameSize = 1;
-		int charDelay = Settings.dialogueCharDelay;
+		int charDelay = Settings.getSettingInt("dialogue_char_delay");
 		boolean auto = false;
 		// check for line data in JSON format at the start of the line
 		if (rawLine.startsWith("{")) {
@@ -78,7 +78,7 @@ public class DialogueLoader {
 			textSize = json.optFloat("textSize", 1);
 			nameSize = json.optFloat("nameSize", 1);
 			// get the character advance delay
-			charDelay = json.optInt("charDelay", Settings.dialogueCharDelay);
+			charDelay = json.optInt("charDelay", Settings.getSettingInt("dialogue_char_delay"));
 			// get the auto-advance flag
 			auto = json.optBoolean("auto", false);
 			// trim off the JSON data for the rest of the parsing process

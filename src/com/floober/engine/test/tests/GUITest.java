@@ -4,6 +4,7 @@ import com.floober.engine.core.assets.loaders.Loader;
 import com.floober.engine.core.renderEngine.display.DisplayManager;
 import com.floober.engine.core.renderEngine.display.Window;
 import com.floober.engine.core.Game;
+import com.floober.engine.core.util.configuration.Settings;
 import com.floober.engine.core.util.conversion.StringConverter;
 import com.floober.engine.gui.GUI;
 import com.floober.engine.gui.GUIAction;
@@ -19,10 +20,8 @@ import com.floober.engine.core.renderEngine.renderers.GeometryRenderer;
 import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.core.renderEngine.renderers.TextureRenderer;
 import com.floober.engine.core.renderEngine.util.Layers;
-import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.color.Colors;
 import com.floober.engine.core.util.configuration.Config;
-import com.floober.engine.core.util.configuration.Settings;
 import com.floober.engine.core.util.exception.GUIException;
 import com.floober.engine.core.util.input.KeyInput;
 import com.floober.engine.core.util.input.MouseInput;
@@ -45,7 +44,7 @@ public class GUITest {
 		Config.load();
 		Settings.load();
 
-		Config.FULLSCREEN = false;
+		Settings.setSettingValue("fullscreen", false);
 
 		TestSplashRenderer splashRenderer = new TestSplashRenderer();
 

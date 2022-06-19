@@ -5,11 +5,11 @@ import com.floober.engine.core.assets.loaders.ImageLoader;
 import com.floober.engine.core.assets.loaders.Loader;
 import com.floober.engine.core.assets.loaders.RawTexture;
 import com.floober.engine.core.audio.AudioMaster;
-import com.floober.engine.core.renderEngine.Render;
 import com.floober.engine.core.renderEngine.display.DisplayManager;
 import com.floober.engine.core.renderEngine.elements.TextureElement;
 import com.floober.engine.core.renderEngine.textures.TextureComponent;
 import com.floober.engine.core.renderEngine.util.Layers;
+import com.floober.engine.core.util.configuration.Settings;
 import com.floober.engine.gui.GUIManager;
 import com.floober.engine.core.renderEngine.Screenshot;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.GUIText;
@@ -22,7 +22,6 @@ import com.floober.engine.core.renderEngine.renderers.TextureRenderer;
 import com.floober.engine.core.renderEngine.textures.TextureOutliner;
 import com.floober.engine.core.util.color.Colors;
 import com.floober.engine.core.util.configuration.Config;
-import com.floober.engine.core.util.configuration.Settings;
 import com.floober.engine.core.util.input.KeyInput;
 import com.floober.engine.core.util.input.MouseInput;
 import com.floober.engine.core.util.time.TimeScale;
@@ -52,7 +51,7 @@ public class RunGame {
 		Settings.load();
 
 		// TESTING GAME
-		Config.FULLSCREEN = false;
+		Settings.setSettingValue("fullscreen", false);
 		// FOR EFFICIENCY IN RUNNING MULTIPLE TIMES TO CHECK THINGS
 
 		// game components
@@ -158,13 +157,13 @@ public class RunGame {
 	private static void handleInput() {
 		// F3 to show/hide FPS and/or debug info
 		if (KeyInput.isPressed(KeyInput.F3)) {
-			Settings.showFps = !Settings.showFps;
-			if (!Settings.showFps) fpsDisplay.hide();
+			Settings.toggleBooleanSetting("show_fps");
+			if (!Settings.getSettingBoolean("show_fps")) fpsDisplay.hide();
 			else fpsDisplay.show();
 		}
 		// Toggle debug mode: Ctrl + Shift + D
 		if (KeyInput.isShift() && KeyInput.isCtrl() && KeyInput.isPressed(KeyInput.D)) {
-			Settings.debugMode = !Settings.debugMode;
+			Settings.toggleBooleanSetting("debug_mode");
 		}
 		// Screenshots
 		if (KeyInput.isPressed(KeyInput.F2)) {

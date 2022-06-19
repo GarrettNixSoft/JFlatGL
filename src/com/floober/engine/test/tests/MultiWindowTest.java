@@ -1,21 +1,19 @@
 package com.floober.engine.test.tests;
 
 import com.floober.engine.core.assets.loaders.Loader;
-import com.floober.engine.core.audio.AudioMaster;
 import com.floober.engine.core.renderEngine.display.DisplayManager;
 import com.floober.engine.core.renderEngine.display.Window;
 import com.floober.engine.core.Game;
 import com.floober.engine.core.renderEngine.Render;
 import com.floober.engine.core.renderEngine.fonts.fontRendering.TextMaster;
-import com.floober.engine.core.renderEngine.particles.ParticleMaster;
 import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.color.Colors;
 import com.floober.engine.core.util.configuration.Config;
+import com.floober.engine.core.util.configuration.Settings;
 import com.floober.engine.core.util.input.KeyInput;
 import com.floober.engine.core.util.input.MouseInput;
 import com.floober.engine.core.util.math.RandomUtil;
-import com.floober.engine.core.util.time.Sync;
 import com.floober.engine.test.splash.TestSplashRenderer;
 
 import java.util.Objects;
@@ -30,8 +28,9 @@ public class MultiWindowTest {
 	public static void main(String[] args) {
 
 		Config.load();
+		Settings.load();
 
-		Config.FULLSCREEN = false;
+		Settings.setSettingValue("fullscreen", false);
 
 		TestSplashRenderer splashRenderer = new TestSplashRenderer();
 

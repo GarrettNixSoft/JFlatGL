@@ -1,6 +1,7 @@
 package com.floober.engine.core.renderEngine.shaders;
 
 import com.floober.engine.core.util.Logger;
+import com.floober.engine.core.util.configuration.Config;
 import com.floober.engine.core.util.conversion.StringConverter;
 import com.floober.engine.core.util.file.FileUtil;
 import org.joml.Matrix4f;
@@ -70,7 +71,12 @@ public abstract class ShaderProgram {
 
 	protected int getUniformLocation(String uniformName) {
 		int location = glGetUniformLocation(programID, uniformName);
-		if (location == -1) throw new RuntimeException("Uniform " + uniformName + " does not exist!");
+		if (location == -1) {
+			if (Config.CRASH_ON_MISSING_SHADER_UNIFORM)
+				throw new RuntimeException("Uniform " + uniformName + " does not exist!");
+			else
+				Logger.logError("Uniform " + uniformName + " does not exist!", Logger.MEDIUM);
+		}
 		return location;
 	}
 	

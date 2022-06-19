@@ -1,17 +1,15 @@
 package com.floober.engine.test.tests;
 
 import com.floober.engine.core.assets.loaders.Loader;
-import com.floober.engine.core.audio.AudioMaster;
 import com.floober.engine.core.renderEngine.display.DisplayManager;
 import com.floober.engine.core.Game;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.floober.engine.core.renderEngine.fonts.fontRendering.TextMaster;
-import com.floober.engine.core.renderEngine.particles.ParticleMaster;
 import com.floober.engine.core.renderEngine.particles.systems.FireScreenParticleSystem;
 import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
-import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.color.Colors;
 import com.floober.engine.core.util.configuration.Config;
+import com.floober.engine.core.util.configuration.Settings;
 import com.floober.engine.core.util.input.KeyInput;
 import com.floober.engine.core.util.input.MouseInput;
 import com.floober.engine.core.util.time.Sync;
@@ -29,6 +27,7 @@ public class FireScreenTest {
 	public static void main(String[] args) {
 
 		Config.load();
+		Settings.load();
 
 		TestSplashRenderer splashRenderer = new TestSplashRenderer();
 

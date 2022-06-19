@@ -9,7 +9,6 @@ import com.floober.engine.core.renderEngine.display.Window;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.FontType;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.floober.engine.core.renderEngine.fonts.fontRendering.TextMaster;
-import com.floober.engine.core.renderEngine.particles.ParticleMaster;
 import com.floober.engine.core.renderEngine.particles.ParticleTexture;
 import com.floober.engine.core.renderEngine.particles.behavior.ParticleBehavior;
 import com.floober.engine.core.renderEngine.particles.behavior.appearance.AppearanceBehavior;
@@ -26,9 +25,9 @@ import com.floober.engine.core.renderEngine.textures.TextureComponent;
 import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.color.Colors;
 import com.floober.engine.core.util.configuration.Config;
+import com.floober.engine.core.util.configuration.Settings;
 import com.floober.engine.core.util.input.KeyInput;
 import com.floober.engine.core.util.input.MouseInput;
-import com.floober.engine.core.util.time.Sync;
 import com.floober.engine.test.splash.TestSplashRenderer;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -65,9 +64,11 @@ public class ParticleTest {
 	public static void main(String[] args) {
 
 		Config.load();
+		Settings.load();
 
 		Config.WINDOW_TITLE += " (Particle Test)";
-		Config.FULLSCREEN = false;
+
+		Settings.setSettingValue("fullscreen", false);
 
 		TestSplashRenderer splashRenderer = new TestSplashRenderer();
 

@@ -42,7 +42,7 @@ public class Dialogue {
 	// transition times
 	private final int openTime = 300;
 	private final int closeTime = 300; // TODO determine if I even need this
-	private int charDelay = Settings.dialogueCharDelay;
+	private int charDelay = Settings.getSettingInt("dialogue_char_delay");
 
 	// timing
 	private long timer;
@@ -275,7 +275,7 @@ public class Dialogue {
 	 * and if it is, the current dialogue sequence will be skipped entirely.
 	 */
 	public void advance() {
-		if (Settings.showDialogueDebug && KeyInput.isShift()) {
+		if (Settings.getSettingBoolean("debug_mode") && KeyInput.isShift()) {
 			close();
 			return;
 		}
@@ -454,7 +454,7 @@ public class Dialogue {
 
 	private void handleInput() {
 		if (KeyInput.isPressed(KeyInput.SPACE, KeyInput.ENTER) || MouseInput.leftClick()) {
-			if (Settings.debugMode && KeyInput.isShift()) skipAll();
+			if (Settings.getSettingBoolean("debug_mode") && KeyInput.isShift()) skipAll();
 			else next();
 		}
 	}
