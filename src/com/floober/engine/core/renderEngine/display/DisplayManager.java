@@ -288,8 +288,6 @@ public class DisplayManager {
 		initResizeCallback();
 		initCloseCallback();
 
-
-
 		// The primary window only reacts to resize events; the close callback is for auxiliary windows.
 		glfwSetWindowSizeCallback(primaryWindowID, windowResizeCallback);
 
