@@ -157,7 +157,7 @@ public class FileUtil {
 		// load file data
 //		Logger.log("Getting JSON: " + file);
 		ArrayList<String> fileData =
-				file.contains("assets") || file.endsWith("config.json") ?
+				file.contains("assets") || file.endsWith("config.json") || file.endsWith("settings.json") ?
 					getResourceDataFile(file) :
 						StringUtils.containsAny(file, ".fnt", ".png", ".wav") ?
 							getResDataFile(file) :
