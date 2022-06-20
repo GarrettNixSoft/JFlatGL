@@ -11,6 +11,11 @@ public class SettingsState extends GameState {
 	}
 
 	@Override
+	public void init() {
+		// create stuff
+	}
+
+	@Override
 	public void update() {
 		// implement
 	}
@@ -23,5 +28,10 @@ public class SettingsState extends GameState {
 	@Override
 	public void handleInput() {
 		// implement
+	}
+
+	@Override
+	public void cleanUp() {
+		// remove stuff
 	}
 }

@@ -14,6 +14,7 @@ import com.floober.engine.core.util.configuration.Settings;
 import com.floober.engine.core.util.input.KeyInput;
 import com.floober.engine.core.util.input.MouseInput;
 import com.floober.engine.core.util.math.RandomUtil;
+import com.floober.engine.test.gameState.TestGameStateManager;
 import com.floober.engine.test.splash.TestSplashRenderer;
 
 import java.util.Objects;
@@ -35,7 +36,7 @@ public class MultiWindowTest {
 		TestSplashRenderer splashRenderer = new TestSplashRenderer();
 
 		// Initialize the game.
-		Game.init(splashRenderer);
+		Game.init(splashRenderer, new TestGameStateManager(1));
 
 		// Run the game loop!
 		while (!glfwWindowShouldClose(primaryWindowID)) {

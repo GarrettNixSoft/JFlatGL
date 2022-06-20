@@ -1,11 +1,17 @@
-package com.floober.engine.core.gameState;
+package com.floober.engine.test.gameState;
 
-import com.floober.engine.core.Game;
+import com.floober.engine.core.gameState.GameState;
+import com.floober.engine.core.gameState.GameStateManager;
 
 public class TestState extends GameState {
 
 	public TestState(GameStateManager gsm) {
 		super(gsm);
+	}
+
+	@Override
+	public void init() {
+		// TODO
 	}
 
 	@Override
@@ -20,6 +26,11 @@ public class TestState extends GameState {
 
 	@Override
 	public void handleInput() {
+		// TODO
+	}
+
+	@Override
+	public void cleanUp() {
 		// TODO
 	}
 }

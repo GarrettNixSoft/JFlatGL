@@ -23,6 +23,7 @@ import com.floober.engine.core.renderEngine.textures.TextureSet;
 import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.Session;
 import com.floober.engine.gui.GUIManager;
+import com.floober.engine.test.gameState.TestGameStateManager;
 
 import java.util.HashMap;
 
@@ -74,7 +75,7 @@ public class Game {
 	 * resourceData/assets. Once loading is complete,
 	 * the GameStateManager will be initialized.
 	 */
-	public static void init(SplashRenderer splashRenderer) {
+	public static void init(SplashRenderer splashRenderer, GameStateManager gsm) {
 
 		// initialize OpenGL now to prepare it for a splash render window if necessary
 		DisplayManager.initOpenGL();
@@ -85,18 +86,19 @@ public class Game {
 
 		// initialize the instance
 		instance = new Game();
+		instance.gsm = gsm;
 
 		// the game itself (load assets)
 		GameLoader gameLoader = new GameLoader();
 		instance.load(gameLoader, splashRenderer);
 
-		// create and assign the GSM
-		instance.gsm = new GameStateManager(instance);
-
 		// Clear the text master if it was used
 		if (Config.USE_SPLASH_SCREEN) {
 			TextMaster.cleanUp();
 		}
+
+		// Next, prepare the GSM
+		instance.gsm.init();
 
 		// Create the window and set up OpenGL and GLFW.
 		DisplayManager.initPrimaryGameWindow();

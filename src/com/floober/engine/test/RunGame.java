@@ -25,6 +25,7 @@ import com.floober.engine.core.util.configuration.Config;
 import com.floober.engine.core.util.input.KeyInput;
 import com.floober.engine.core.util.input.MouseInput;
 import com.floober.engine.core.util.time.TimeScale;
+import com.floober.engine.test.gameState.TestGameStateManager;
 import com.floober.engine.test.splash.TestSplashRenderer;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.Callbacks;
@@ -64,7 +65,7 @@ public class RunGame {
 		TestSplashRenderer splashRenderer = new TestSplashRenderer();
 
 		// load the game assets
-		Game.init(splashRenderer);
+		Game.init(splashRenderer, new TestGameStateManager(1));
 
 		// with assets now loaded, have the system masters set their global shortcuts
 		ParticleMaster.initGlobals();

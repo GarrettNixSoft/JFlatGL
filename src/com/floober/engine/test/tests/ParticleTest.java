@@ -28,6 +28,7 @@ import com.floober.engine.core.util.configuration.Config;
 import com.floober.engine.core.util.configuration.Settings;
 import com.floober.engine.core.util.input.KeyInput;
 import com.floober.engine.core.util.input.MouseInput;
+import com.floober.engine.test.gameState.TestGameStateManager;
 import com.floober.engine.test.splash.TestSplashRenderer;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -73,7 +74,7 @@ public class ParticleTest {
 		TestSplashRenderer splashRenderer = new TestSplashRenderer();
 
 		// Initialize the game.
-		Game.init(splashRenderer);
+		Game.init(splashRenderer, new TestGameStateManager(1));
 
 		Logger.log("initialization completed");
 

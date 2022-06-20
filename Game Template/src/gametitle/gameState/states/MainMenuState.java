@@ -11,6 +11,11 @@ public class MainMenuState extends GameState {
 	}
 
 	@Override
+	public void init() {
+		// create stuff
+	}
+
+	@Override
 	public void update() {
 		// do stuff
 	}
@@ -23,5 +28,10 @@ public class MainMenuState extends GameState {
 	@Override
 	public void handleInput() {
 		// do stuff
+	}
+
+	@Override
+	public void cleanUp() {
+		// remove stuff
 	}
 }

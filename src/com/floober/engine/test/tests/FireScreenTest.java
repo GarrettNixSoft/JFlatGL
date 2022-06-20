@@ -13,6 +13,7 @@ import com.floober.engine.core.util.configuration.Settings;
 import com.floober.engine.core.util.input.KeyInput;
 import com.floober.engine.core.util.input.MouseInput;
 import com.floober.engine.core.util.time.Sync;
+import com.floober.engine.test.gameState.TestGameStateManager;
 import com.floober.engine.test.splash.TestSplashRenderer;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.Callbacks;
@@ -32,7 +33,7 @@ public class FireScreenTest {
 		TestSplashRenderer splashRenderer = new TestSplashRenderer();
 
 		// Initialize the game.
-		Game.init(splashRenderer);
+		Game.init(splashRenderer, new TestGameStateManager(1));
 		// game components
 		Sync sync = new Sync();
 

@@ -109,32 +109,42 @@ public class FileUtil {
 	public static File getFile(String path) {
 		path = path.replace("\\", "/");
 		File file = new File(path);
-		if (!file.exists()) {
+		try (InputStream in = new FileInputStream(file)) {
+			System.out.println("Succeeded at: " + file.getPath());
+			return file;
+		} catch (Exception e) {
 			file = new File("/" + path);
-			if (!file.exists()) {
-				file = new File("res/" + path);
-				if (!file.exists()) {
-					file = new File("/res/" + path);
-					if (!file.exists()) {
-						file = new File("resourceData/" + path);
-						if (!file.exists()) {
-							file = new File("/resourceData/" + path);
-							if (!file.exists())
-								throw new RuntimeException("File " + path + " couldn't be found.");
-						} else {
-							System.out.println("Succeeded at: " + file.getPath());
-						}
-					} else {
-						System.out.println("Succeeded at: " + file.getPath());
-					}
-				} else {
-					System.out.println("Succeeded at: " + file.getPath());
-				}
-			} else {
+			try (InputStream in = new FileInputStream(file)) {
 				System.out.println("Succeeded at: " + file.getPath());
+				return file;
+			} catch (Exception e2) {
+				file = new File("res/" + path);
+				try (InputStream in = new FileInputStream(file)) {
+					System.out.println("Succeeded at: " + file.getPath());
+					return file;
+				} catch (Exception e3) {
+					file = new File("/res/" + path);
+					try (InputStream in = new FileInputStream(file)) {
+						System.out.println("Succeeded at: " + file.getPath());
+						return file;
+					} catch (Exception e4) {
+						file = new File("resourceData/" + path);
+						try (InputStream in = new FileInputStream(file)) {
+							System.out.println("Succeeded at: " + file.getPath());
+							return file;
+						} catch (Exception e5) {
+							file = new File("/resourceData/" + path);
+							try (InputStream in = new FileInputStream(file)) {
+								System.out.println("Succeeded at: " + file.getPath());
+								return file;
+							} catch (Exception e6) {
+								throw new RuntimeException("File " + path + " couldn't be found.");
+							}
+						}
+					}
+				}
 			}
 		}
-		return file;
 	}
 
 	public static void writeFile(String path, String name, String extension, ArrayList<String> data) {

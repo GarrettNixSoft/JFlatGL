@@ -1,59 +1,57 @@
 package com.floober.engine.core.gameState;
 
-import com.floober.engine.core.Game;
+import com.floober.engine.core.gameState.transitions.StateTransitionManager;
+import org.joml.Vector3f;
 
-public class GameStateManager {
-
-	// state IDs
-	public static final int MAIN_MENU_STATE = 0;
-	public static final int SETTINGS_STATE = 1;
-	public static final int PLAY_STATE = 2;
+public abstract class GameStateManager {
 
 	// game state array
-	private static final int NUM_STATES = 3;
-	private final GameState[] gameStates;
-	private int currentState;
+	protected final GameState[] gameStates;
+	protected int currentState;
 
-	// game access for initializing game states
-	private final Game game;
+	// changing states
+	protected final StateTransitionManager transitionManager;
 
-	public GameStateManager(Game game) {
-		this.game = game;
-		gameStates = new GameState[NUM_STATES];
-		currentState = MAIN_MENU_STATE;
-		setState(currentState);
+	public GameStateManager(int numStates) {
+		gameStates = new GameState[numStates];
+		transitionManager = new StateTransitionManager(this);
+	}
+
+	public abstract void init();
+
+	public void transitionState(int state, float time, Vector3f color) {
+		transitionManager.startTransition(state, time, color);
 	}
 
 	public void setState(int state) {
 		unloadState(currentState);
 		currentState = state;
 		loadState(currentState);
-		if (gameStates[currentState] != null) // TODO remove
 		gameStates[currentState].init();
 	}
 
-	private void loadState(int state) {
-		// TODO: implement on a per-project basis
-		// Example:
-//		switch (state) {
-//			case MAIN_MENU_STATE -> gameStates[state] = new MainMenuState(game, this);
-//			case SETTINGS_STATE -> gameStates[state] = new SettingsState(game, this);
-//			case PLAY_STATE -> gameStates[state] = new PlayState(game, this);
-//		}
-		gameStates[state] = new TestState(this);
-	}
+	protected abstract void loadState(int state);
 
 	private void unloadState(int state) {
-		gameStates[state] = null;
+		if (gameStates[state] != null) {
+			gameStates[state].cleanUp();
+			gameStates[state] = null;
+		}
 	}
 
 	public void update() {
+		if (transitionManager.transitionInProgress()) {
+			transitionManager.update();
+		}
 		gameStates[currentState].handleInput();
 		gameStates[currentState].update();
 	}
 
 	public void render() {
 		gameStates[currentState].render();
+		if (transitionManager.transitionInProgress()) {
+			transitionManager.render();
+		}
 	}
 
 	public GameState getCurrentState() {
