@@ -7,6 +7,8 @@ import com.floober.engine.core.util.conversion.StringConverter;
 import org.json.JSONObject;
 
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,45 +108,35 @@ public class FileUtil {
 		}
 	}
 
-	public static File getFile(String path) {
-		path = path.replace("\\", "/");
-		File file = new File(path);
-		try (InputStream in = new FileInputStream(file)) {
-			System.out.println("Succeeded at: " + file.getPath());
-			return file;
-		} catch (Exception e) {
-			file = new File("/" + path);
-			try (InputStream in = new FileInputStream(file)) {
-				System.out.println("Succeeded at: " + file.getPath());
-				return file;
-			} catch (Exception e2) {
-				file = new File("res/" + path);
-				try (InputStream in = new FileInputStream(file)) {
-					System.out.println("Succeeded at: " + file.getPath());
-					return file;
-				} catch (Exception e3) {
-					file = new File("/res/" + path);
-					try (InputStream in = new FileInputStream(file)) {
-						System.out.println("Succeeded at: " + file.getPath());
-						return file;
-					} catch (Exception e4) {
-						file = new File("resourceData/" + path);
-						try (InputStream in = new FileInputStream(file)) {
-							System.out.println("Succeeded at: " + file.getPath());
-							return file;
-						} catch (Exception e5) {
-							file = new File("/resourceData/" + path);
-							try (InputStream in = new FileInputStream(file)) {
-								System.out.println("Succeeded at: " + file.getPath());
-								return file;
-							} catch (Exception e6) {
-								throw new RuntimeException("File " + path + " couldn't be found.");
-							}
+	public static File getFile(String filePath) {
+		filePath = filePath.replace("\\", "/");
+		Path path = Paths.get(filePath);
+		if (!path.toFile().exists()) {
+			path = Paths.get("/" + filePath);
+			if (!path.toFile().exists()) {
+				path = Paths.get("res/" + filePath);
+				if (!path.toFile().exists()) {
+					path = Paths.get("/res/" + filePath);
+					if (!path.toFile().exists()) {
+						path = Paths.get("resourceData/" + filePath);
+						if (!path.toFile().exists()) {
+							path = Paths.get("/resourceData/" + filePath);
+							if (!path.toFile().exists())
+								throw new RuntimeException("File " + filePath + " couldn't be found.");
+						} else {
+							System.out.println("Succeeded at: " + path);
 						}
+					} else {
+						System.out.println("Succeeded at: " + path);
 					}
+				} else {
+					System.out.println("Succeeded at: " + path);
 				}
+			} else {
+				System.out.println("Succeeded at: " + path);
 			}
 		}
+		return path.toFile();
 	}
 
 	public static void writeFile(String path, String name, String extension, ArrayList<String> data) {
@@ -167,7 +159,7 @@ public class FileUtil {
 		// load file data
 //		Logger.log("Getting JSON: " + file);
 		ArrayList<String> fileData =
-				file.contains("assets") || file.endsWith("config.json") || file.endsWith("settings.json") ?
+				file.contains("assets") || file.contains("backgrounds") || file.endsWith("config.json") || file.endsWith("settings.json") ?
 					getResourceDataFile(file) :
 						StringUtils.containsAny(file, ".fnt", ".png", ".wav") ?
 							getResDataFile(file) :
@@ -200,6 +192,12 @@ public class FileUtil {
 				return null;
 			}
 		}
+	}
+
+	public static JSONObject getResourceDataJSON(String path) {
+		ArrayList<String> fileData = getResourceDataFile(path);
+		String combined = StringConverter.combineAll(fileData);
+		return new JSONObject(combined);
 	}
 
 	public static String[] getFileRaw(String path) {

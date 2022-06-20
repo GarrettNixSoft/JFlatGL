@@ -4,14 +4,11 @@ package com.floober.engine.core.renderEngine.display;
 import com.floober.engine.core.assets.loaders.GameLoader;
 import com.floober.engine.core.assets.loaders.ImageLoader;
 import com.floober.engine.core.Game;
-import com.floober.engine.core.renderEngine.Render;
-import com.floober.engine.core.renderEngine.particles.ParticleMaster;
 import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.core.renderEngine.textures.RawTextureData;
 import com.floober.engine.core.renderEngine.util.Layers;
 import com.floober.engine.core.renderEngine.util.Stencil;
 import com.floober.engine.core.util.Logger;
-import com.floober.engine.core.util.color.Colors;
 import com.floober.engine.core.util.configuration.Config;
 import com.floober.engine.core.util.configuration.Settings;
 import com.floober.engine.core.util.input.KeyInput;
@@ -153,7 +150,7 @@ public class DisplayManager {
 				// this is the best condition I could come up with that prevents
 				// these processes from executing before the necessary data/assets
 				// are loaded/created
-				if (GameLoader.LOAD_COMPLETE) {
+				if (GameLoader.LOAD_FINALIZED) {
 					// run game logic
 					Game.update();
 

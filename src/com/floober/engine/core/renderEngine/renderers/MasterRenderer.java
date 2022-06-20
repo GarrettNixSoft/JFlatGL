@@ -15,13 +15,10 @@ import com.floober.engine.core.renderEngine.fonts.fontRendering.TextMaster;
 import com.floober.engine.core.renderEngine.framebuffers.FrameBuffer;
 import com.floober.engine.core.renderEngine.framebuffers.FrameBuffers;
 import com.floober.engine.core.renderEngine.particles.ParticleMaster;
-import com.floober.engine.core.renderEngine.particles.ParticleTexture;
 import com.floober.engine.core.renderEngine.particles.types.Particle;
 import com.floober.engine.core.renderEngine.ppfx.PostProcessing;
 import com.floober.engine.core.renderEngine.util.Layers;
 import com.floober.engine.core.splash.SplashScreen;
-import com.floober.engine.core.util.Logger;
-import com.floober.engine.core.util.configuration.Config;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -287,10 +284,10 @@ public class MasterRenderer {
 	// *** RENDERING ***
 	public void prepare(boolean useSceneBuffer) {
 		currentRenderTarget = this;
-		if ((GameLoader.LOAD_COMPLETE || SplashScreen.SPLASH_RENDER) && useSceneBuffer) sceneBuffer.bindFrameBuffer();
+		if ((GameLoader.DATA_LOAD_COMPLETE || SplashScreen.SPLASH_RENDER) && useSceneBuffer) sceneBuffer.bindFrameBuffer();
 		glDepthMask(true);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-		if ((GameLoader.LOAD_COMPLETE || SplashScreen.SPLASH_RENDER) && useSceneBuffer) sceneBuffer.unbindFrameBuffer();
+		if ((GameLoader.DATA_LOAD_COMPLETE || SplashScreen.SPLASH_RENDER) && useSceneBuffer) sceneBuffer.unbindFrameBuffer();
 
 		// target the current window
 		glfwMakeContextCurrent(windowTarget);
@@ -311,7 +308,7 @@ public class MasterRenderer {
 		FontRenderer.ELEMENT_COUNT = 0;
 
 		// render to scene buffer
-		if ((GameLoader.LOAD_COMPLETE || SplashScreen.SPLASH_RENDER) && useSceneBuffer) sceneBuffer.bindFrameBuffer();
+		if ((GameLoader.DATA_LOAD_COMPLETE || SplashScreen.SPLASH_RENDER) && useSceneBuffer) sceneBuffer.bindFrameBuffer();
 
 		// prepare
 		prepareLayers();
@@ -332,10 +329,10 @@ public class MasterRenderer {
 		clearBatches();
 
 		// unbind scene buffer
-		if ((GameLoader.LOAD_COMPLETE || SplashScreen.SPLASH_RENDER) && useSceneBuffer) sceneBuffer.unbindFrameBuffer();
+		if ((GameLoader.DATA_LOAD_COMPLETE || SplashScreen.SPLASH_RENDER) && useSceneBuffer) sceneBuffer.unbindFrameBuffer();
 
 		// Do post-processing to complete the frame render
-		if ((GameLoader.LOAD_COMPLETE || SplashScreen.SPLASH_RENDER) && useSceneBuffer) postProcessor.doPostProcessing(sceneBuffer.getColorTexture());
+		if ((GameLoader.DATA_LOAD_COMPLETE || SplashScreen.SPLASH_RENDER) && useSceneBuffer) postProcessor.doPostProcessing(sceneBuffer.getColorTexture());
 
 	}
 

@@ -10,7 +10,8 @@ public class TestGameStateManager extends GameStateManager {
 
 	@Override
 	public void init() {
-		// sample
+		currentState = 0;
+		setState(currentState);
 	}
 
 	@Override

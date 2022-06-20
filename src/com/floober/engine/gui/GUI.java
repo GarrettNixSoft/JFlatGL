@@ -7,7 +7,6 @@ import com.floober.engine.gui.component.GUILayer;
 import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.data.Stack;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -45,13 +44,21 @@ public class GUI {
 	 * @return the GUIComponent with the matching ID, or null if none exists
 	 */
 	public GUIComponent getComponentByID(String componentID) {
+		// special case: fetching the background
+		if (componentID.equalsIgnoreCase("background")) {
+			return background;
+		}
 		// preemptively fail if the ID has not been registered
-		if (!componentIDs.contains(componentID)) return null;
-		for (GUILayer layer : layerStack.getElements()) {
+		if (!componentIDs.contains(componentID)) {
+			Logger.logError("No GUI component with ID " + componentID + " found!", Logger.MEDIUM);
+			return null;
+		}
+		for (GUILayer layer : layerStore.values()) {
 			for (GUIComponent component : layer.getAllComponents()) {
 				if (component.getComponentID().equals(componentID)) return component;
 			}
 		}
+		Logger.logError("(Fallthrough) No GUI component with ID " + componentID + " found!", Logger.MEDIUM);
 		return null;
 	}
 
@@ -79,6 +86,7 @@ public class GUI {
 			return false;
 		} else {
 			componentIDs.add(componentID);
+			Logger.logGUIEvent("Registered component: " + componentID);
 			return true;
 		}
 	}

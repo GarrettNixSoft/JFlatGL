@@ -50,7 +50,7 @@ public class Config {
 	public static JSONObject LOGGER_SETTINGS;
 
 	public static void load() {
-		JSONObject configJSON = FileUtil.getJSON("/config/config.json");
+		JSONObject configJSON = FileUtil.getResourceDataJSON("/config/config.json");
 
 		CONFIG_NODE = configJSON.getString("config_node");
 		SETTINGS_NODE = configJSON.getString("settings_node");

@@ -195,7 +195,7 @@ public class ParticleTest {
 
 		Logger.log("Particles were initialized");
 
-		GameLoader.LOAD_COMPLETE = true;
+		GameLoader.DATA_LOAD_COMPLETE = true;
 
 		// Run the game loop!
 		while (!glfwWindowShouldClose(primaryWindowID)) {

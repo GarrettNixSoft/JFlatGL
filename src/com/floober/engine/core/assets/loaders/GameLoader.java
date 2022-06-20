@@ -11,7 +11,8 @@ public class GameLoader extends Thread {
 	// loading stages
 	public static final int FONTS = 0, TEXTURES = 1, ANIMATIONS = 2, SFX = 3, MUSIC = 4;
 
-	public static boolean LOAD_COMPLETE = false;
+	public static boolean DATA_LOAD_COMPLETE = false;
+	public static boolean LOAD_FINALIZED = false;
 
 	// LOADING
 	// stage
@@ -63,7 +64,7 @@ public class GameLoader extends Thread {
 		}
 		// END_TEST
 
-		LOAD_COMPLETE = true;
+		DATA_LOAD_COMPLETE = true;
 	}
 
 	public void finish() {
@@ -71,6 +72,7 @@ public class GameLoader extends Thread {
 			assetLoader.finish();
 		}
 
+		LOAD_FINALIZED = true;
 		Logger.log("Loaded " + texTotal + " textures and " + fontTotal + " fonts");
 	}
 

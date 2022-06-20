@@ -19,7 +19,7 @@ public class AudioEventLoader extends EventLoader<QueuedEvent> {
 		eventQueue = new TriggerEventQueue<>();
 
 		// load JSON
-		JSONObject json = FileUtil.getJSON(path);
+		JSONObject json = FileUtil.getResourceDataJSON(path);
 		JSONArray events = json.getJSONArray("events");
 
 		// parse events

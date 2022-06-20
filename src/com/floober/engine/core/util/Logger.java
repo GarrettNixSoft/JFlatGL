@@ -191,12 +191,12 @@ public class Logger {
 	}
 
 	// UI debug
-	public static void logUIEvent(String message) {
+	public static void logGUIEvent(String message) {
 		if (!logGUIEvents) return;
 		outStream.println("[UI EVENT] " + message);
 	}
 
-	public static void logUIInteraction(String message) {
+	public static void logGUIInteraction(String message) {
 		if (!logGUIInteractions) return;
 		outStream.println("[UI INTERACTION] " + message);
 	}

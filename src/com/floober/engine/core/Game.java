@@ -23,7 +23,6 @@ import com.floober.engine.core.renderEngine.textures.TextureSet;
 import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.Session;
 import com.floober.engine.gui.GUIManager;
-import com.floober.engine.test.gameState.TestGameStateManager;
 
 import java.util.HashMap;
 
@@ -97,14 +96,14 @@ public class Game {
 			TextMaster.cleanUp();
 		}
 
-		// Next, prepare the GSM
-		instance.gsm.init();
-
 		// Create the window and set up OpenGL and GLFW.
 		DisplayManager.initPrimaryGameWindow();
 
 		// finish loading (after creating the main game window! this ensures OpenGL assets are properly loaded)
 		gameLoader.finish();
+
+		// Next, prepare the GSM
+		instance.gsm.init();
 
 		// load particles AFTER textures are loaded (some particles need to load textures from the game's pool)
 		ParticleMaster.initGlobals();
@@ -135,7 +134,7 @@ public class Game {
 		if (Config.USE_SPLASH_SCREEN) {
 
 			// render to it while the game loads
-			while (!GameLoader.LOAD_COMPLETE) {
+			while (!GameLoader.DATA_LOAD_COMPLETE) {
 				SplashScreen.render();
 			}
 

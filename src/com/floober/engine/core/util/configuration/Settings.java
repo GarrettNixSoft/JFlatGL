@@ -57,7 +57,7 @@ public class Settings {
 		// load preferences from the registry
 		prefs = Preferences.userRoot().node(Config.SETTINGS_NODE);
 		// load settings JSON metadata
-		JSONObject settingsJSON = FileUtil.getJSON("/config/settings.json");
+		JSONObject settingsJSON = FileUtil.getResourceDataJSON("/config/settings.json");
 		defaults = settingsJSON.getJSONObject("defaults");
 		// get all settings
 		settings = new HashMap<>();
