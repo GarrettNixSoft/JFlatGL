@@ -89,6 +89,13 @@ public class Game {
 
 		// the game itself (load assets)
 		GameLoader gameLoader = new GameLoader();
+
+		// TODO: allow custom asset loaders to be inserted here
+
+		// finalize all asset loaders
+		gameLoader.prepare();
+
+		// begin loading
 		instance.load(gameLoader, splashRenderer);
 
 		// Clear the text master if it was used

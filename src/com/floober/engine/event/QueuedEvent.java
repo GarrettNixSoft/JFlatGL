@@ -1,5 +1,7 @@
 package com.floober.engine.event;
 
+import com.floober.engine.core.util.Logger;
+
 /**
  * {@code QueuedEvent}s provide for a structured sequence of
  * events run through an {@code EventQueue}. In a {@code MultiEventQueue},
@@ -51,6 +53,7 @@ public abstract class QueuedEvent {
 	 */
 	public void start() {
 		started = true;
+		Logger.log("STARTED EVENT: " + getClass().getName());
 		onStart();
 	}
 

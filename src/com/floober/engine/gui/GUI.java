@@ -81,6 +81,9 @@ public class GUI {
 	 * 			{@code false} otherwise.
 	 */
 	public boolean registerComponent(GUIComponent component) {
+		// special case: BackgroundComponent doesn't need to register
+		if (component instanceof BackgroundComponent) return true;
+		// all other components
 		String componentID = component.getComponentID();
 		if (componentIDs.contains(componentID)) {
 			return false;

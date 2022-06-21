@@ -10,20 +10,9 @@ import com.floober.engine.core.util.data.Queue;
 
 public class TriggerEventQueue<T extends QueuedEvent> extends EventQueue<T> {
 
-	protected Queue<T> events;
-	protected boolean running;
-
 	public TriggerEventQueue() {
 		super();
 		running = false;
-	}
-
-	/**
-	 * Start this event queue.
-	 */
-	public void start() {
-		running = true;
-		if (events.peek() != null) events.peek().start();
 	}
 
 	/**
@@ -57,7 +46,7 @@ public class TriggerEventQueue<T extends QueuedEvent> extends EventQueue<T> {
 			else {
 				Logger.logEvent("Starting next event, of type " + events.peek().getClass());
 				assert events.peek() != null;
-				events.peek().onStart();
+				events.peek().start();
 			}
 		}
 	}

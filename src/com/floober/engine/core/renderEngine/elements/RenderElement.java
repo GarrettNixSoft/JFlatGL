@@ -20,8 +20,8 @@ public abstract class RenderElement implements Comparable<RenderElement> {
 	protected int layer;
 	protected float width, height;
 	protected float rotation;
-	protected Vector3f position;
-	protected Vector2f scale;
+	protected Vector3f position = new Vector3f();
+	protected Vector2f scale = new Vector2f();
 	protected boolean centered;
 	protected boolean stencilWrite;
 

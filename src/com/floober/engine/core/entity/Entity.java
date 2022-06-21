@@ -1,6 +1,7 @@
 package com.floober.engine.core.entity;
 
 import com.floober.engine.animation.Animation;
+import com.floober.engine.core.Game;
 import com.floober.engine.core.renderEngine.display.DisplayManager;
 import com.floober.engine.core.entity.projectile.Projectile;
 import com.floober.engine.core.renderEngine.elements.TextureElement;
@@ -52,7 +53,7 @@ public abstract class Entity {
 		this.y = 0;
 		this.layer = Layers.DEFAULT_LAYER;
 		// init a null Texture that can be set/moved later
-		textureElement = new TextureElement(null, 0, 0, 0, 0, 0, true);
+		textureElement = new TextureElement(Game.getTexture("default"), 0, 0, 0, 0, 0, true);
 	}
 
 	public Entity(float x, float y) {
@@ -60,7 +61,7 @@ public abstract class Entity {
 		this.y = y;
 		this.layer = Layers.DEFAULT_LAYER;
 		// init a null Texture that can be set/moved later
-		textureElement = new TextureElement(null, 0, 0, 0, 0, 0, true);
+		textureElement = new TextureElement(Game.getTexture("default"), 0, 0, 0, 0, 0, true);
 	}
 
 	public Entity(float x, float y, int layer) {
@@ -68,7 +69,7 @@ public abstract class Entity {
 		this.y = y;
 		this.layer = layer;
 		// init a null Texture that can be set/moved later
-		textureElement = new TextureElement(null, 0, 0, 0, 0, 0, true);
+		textureElement = new TextureElement(Game.getTexture("default"), 0, 0, 0, 0, 0, true);
 	}
 
 	// GETTERS

@@ -35,14 +35,29 @@ public class GameLoader extends Thread {
 	public GameLoader() {
 		// fade in the loading screen
 //		animateLoadRenderer();
-		// begin the loading process
-		AssetLoader.Mode mode = AssetLoader.Mode.DIRECTORY;
 		loaders.add(new FontLoader());
 		loaders.add(new TextureLoader());
 		loaders.add(new AnimationLoader());
 		loaders.add(new SfxLoader());
 		loaders.add(new MusicLoader());
 		// TODO implement this per project if you need more asset types to load
+	}
+
+	/**
+	 * Add a custom AssetLoader subclass to the load sequence.
+	 * If your project requires a custom type of asset to be
+	 * loaded, you can extend the AssetLoader class with your
+	 * own code for loading that asset type and add it to the
+	 * game loader here.
+	 * @param loader a custom loader to run when loading the game
+	 */
+	public void addCustomAssetLoader(AssetLoader loader) {
+		loaders.add(loader);
+	}
+
+	public void prepare() {
+		// begin the loading process
+		AssetLoader.Mode mode = AssetLoader.Mode.DIRECTORY;
 		// set modes
 		for (AssetLoader assetLoader : loaders) {
 			assetLoader.setMode(mode);

@@ -35,6 +35,17 @@ public class GlitchAnimation extends Animation {
 	// duration and severity of glitching
 	private boolean glitching;
 
+	/**
+	 * Create a glitch animation from a normal animation by adding a glitch frame array.
+	 * @param animation The original animation to base this new glitch animation off of.
+	 * @param glitchFrames The glitch frames to add to this animation.
+	 */
+	public GlitchAnimation(Animation animation, TextureSet glitchFrames) {
+		super(animation.getFrames(), animation.getFrameTime());
+		currentFrame = animation.getCurrentFrameIndex();
+		setGlitchFrames(glitchFrames);
+	}
+
 	public GlitchAnimation(GlitchAnimation other) {
 		super(other.frames, other.frameTime);
 		// super fields
@@ -50,17 +61,6 @@ public class GlitchAnimation extends Animation {
 		this.glitchDuration = other.glitchDuration;
 		// ...
 		this.glitching = other.glitching;
-	}
-
-	/**
-	 * Create a glitch animation from a normal animation by adding a glitch frame array.
-	 * @param animation The original animation to base this new glitch animation off of.
-	 * @param glitchFrames The glitch frames to add to this animation.
-	 */
-	public GlitchAnimation(Animation animation, TextureSet glitchFrames) {
-		super(animation.getFrames(), animation.getFrameTime());
-		currentFrame = animation.getCurrentFrameIndex();
-		setGlitchFrames(glitchFrames);
 	}
 
 	@Override

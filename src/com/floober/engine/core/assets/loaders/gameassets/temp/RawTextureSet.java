@@ -7,9 +7,13 @@ import com.floober.engine.core.renderEngine.textures.TextureSet;
 
 public record RawTextureSet(String key, RawTexture texture, int texWidth, int texHeight, boolean hasTransparency) {
 
-	public void addToGame() {
+	public TextureSet convert() {
 		TextureComponent textureComponent = texture.convertToOpenGLTexture();
-		TextureSet textureSet = new TextureSet(textureComponent, texWidth, texHeight, hasTransparency);
+		return new TextureSet(textureComponent, texWidth, texHeight, hasTransparency);
+	}
+
+	public void addToGame() {
+		TextureSet textureSet = convert();
 		Game.getTextures().addTextureSet(key, textureSet);
 	}
 
