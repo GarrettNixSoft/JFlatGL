@@ -209,6 +209,7 @@ public class GUIText {
 	public void setPosition(Vector3f position) {
 		this.position.set(position);
 	}
+	public void setLayer(int layer) {this.position.setComponent(2, layer); }
 	public void setBorderWidth(float borderWidth) {
 		this.borderWidth = borderWidth;
 	}
@@ -253,6 +254,8 @@ public class GUIText {
 
 	// Category 2: Damaging Setters (vertex data must be updated)
 	public void replaceText(String newText) {
+		// do nothing if the text is identical
+		if (newText.equals(textString)) return;
 		// update string
 		this.textString = newText;
 		this.lastCharVisible = textString.length();
@@ -331,7 +334,7 @@ public class GUIText {
 	 *         right.
 	 */
 	public Vector3f getPosition() {
-		return position;
+		return new Vector3f(position);
 	}
 
 	/**

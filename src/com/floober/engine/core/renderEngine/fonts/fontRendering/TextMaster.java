@@ -39,6 +39,7 @@ public class TextMaster {
 	}
 
 	public static void processText(GUIText text) {
+//		Logger.log("Processing text: " + text.getTextString());
 		FontType fontType = text.getFont();
 		TextMeshData data = fontType.loadText(text);
 		int vao = ModelLoader.loadToVAO(data.vertexPositions(), data.textureCoords(), text);

@@ -2,13 +2,14 @@ package com.floober.engine.core.renderEngine.fonts.fontRendering;
 
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.FontType;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.GUIText;
+import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.core.renderEngine.shaders.FontShader;
+import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.Map;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL12.glDrawRangeElements;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
 import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
@@ -58,11 +59,16 @@ public class FontRenderer {
 			glEnable(GL_STENCIL_TEST);
 			glStencilFunc(GL_EQUAL, 1, 0xFF);
 		}
+		// fix position
+		Vector3f textPos = text.getPosition();
+		textPos.z = MasterRenderer.getScreenZ((int) textPos.z);
+//		Logger.log("RENDERING TEXT AT Z: " + textPos.z);
+		// send data to shader
 		glBindVertexArray(text.getMesh());
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 		shader.loadColor(text.getColor());
-		shader.loadTranslation(text.getPosition());
+		shader.loadTranslation(textPos);
 		shader.loadWidth(text.getWidth());
 		shader.loadEdge(text.getEdge());
 		shader.loadBorderWidth(text.getBorderWidth());
