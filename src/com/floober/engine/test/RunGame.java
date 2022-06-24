@@ -10,7 +10,6 @@ import com.floober.engine.core.renderEngine.elements.TextureElement;
 import com.floober.engine.core.renderEngine.textures.TextureComponent;
 import com.floober.engine.core.renderEngine.util.Layers;
 import com.floober.engine.core.util.configuration.Settings;
-import com.floober.engine.gui.GUIManager;
 import com.floober.engine.core.renderEngine.Screenshot;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.floober.engine.core.renderEngine.fonts.fontRendering.FontRenderer;
@@ -23,8 +22,6 @@ import com.floober.engine.core.renderEngine.textures.TextureOutliner;
 import com.floober.engine.core.util.color.Colors;
 import com.floober.engine.core.util.configuration.Config;
 import com.floober.engine.core.util.input.KeyInput;
-import com.floober.engine.core.util.input.MouseInput;
-import com.floober.engine.core.util.time.TimeScale;
 import com.floober.engine.test.gameState.TestGameStateManager;
 import com.floober.engine.test.splash.TestSplashRenderer;
 import org.joml.Vector3f;
@@ -92,23 +89,14 @@ public class RunGame {
 		// Run the game loop!
 		while (!(glfwWindowShouldClose(primaryWindowID) || Game.closeRequested())) {
 
-			// poll input
-			KeyInput.update();
-			MouseInput.update();
-
-			// time
-			TimeScale.update();
-
 			// run game logic
 			Game.update();
-			GUIManager.update();
 
 			// clear window
 			MasterRenderer.primaryWindowRenderer.prepare(true);
 
 			// render game internally
 			Game.render();
-			GUIManager.render();
 
 //			Render.drawRect(Colors.RED, Window.mainCenterX(), Window.mainCenterY(), Layers.DEFAULT_LAYER, 200, 200, true);
 			testElement.renderTransformed();

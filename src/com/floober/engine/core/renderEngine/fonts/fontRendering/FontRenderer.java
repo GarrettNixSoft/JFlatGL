@@ -4,6 +4,7 @@ import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.FontType;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.core.renderEngine.shaders.FontShader;
+import com.floober.engine.core.util.Logger;
 import org.joml.Vector3f;
 
 import java.util.List;
@@ -55,13 +56,14 @@ public class FontRenderer {
 	}
 
 	private void renderText(GUIText text) {
-		if (text.isUseStencil()) {
-			glEnable(GL_STENCIL_TEST);
-			glStencilFunc(GL_EQUAL, 1, 0xFF);
-		}
+//		if (text.isUseStencil()) {
+//			glEnable(GL_STENCIL_TEST);
+//			glStencilFunc(GL_EQUAL, 1, 0xFF);
+//		}
 		// fix position
 		Vector3f textPos = text.getPosition();
 		textPos.z = MasterRenderer.getScreenZ((int) textPos.z);
+//		Logger.log("Rendering text: " + text.getTextString().substring(0, Math.min(text.getTextString().length(), 5)));
 //		Logger.log("RENDERING TEXT AT Z: " + textPos.z);
 		// send data to shader
 		glBindVertexArray(text.getMesh());
@@ -79,10 +81,10 @@ public class FontRenderer {
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
 		glBindVertexArray(0);
-		if (text.isUseStencil()) {
-			glDisable(GL_STENCIL_TEST);
-			glStencilFunc(GL_EQUAL, 1, 0x00);
-		}
+//		if (text.isUseStencil()) {
+//			glDisable(GL_STENCIL_TEST);
+//			glStencilFunc(GL_EQUAL, 1, 0x00);
+//		}
 	}
 
 	private void endRendering() {

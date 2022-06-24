@@ -424,6 +424,8 @@ public class GUIText {
 		if (!hidden) remove();
 		TextMaster.loadText(this);
 		hidden = false;
+//		Logger.log("Text shown! " + textString);
+//		Logger.log(getDebugString());
 	}
 
 	/**
@@ -432,6 +434,7 @@ public class GUIText {
 	public void hide() {
 		TextMaster.removeText(this);
 		hidden = true;
+//		Logger.log("Text hidden! " +  textString);
 	}
 
 	/**
@@ -440,11 +443,15 @@ public class GUIText {
 	public void remove() {
 		TextMaster.removeText(this);
 		delete();
+//		Logger.log("Removed text: " + textString);
+//		Logger.log(getDebugString());
 	}
 
 	private void remove(FontType oldFont) {
 		TextMaster.removeText(this, oldFont);
 		delete();
+//		Logger.log("Removed text: " + textString);
+//		Logger.log(getDebugString());
 	}
 
 	/**
@@ -472,6 +479,8 @@ public class GUIText {
 		if (needsReload) {
 			reload();
 			needsReload = false;
+//			Logger.log("Reloading: " + textString);
+//			Logger.log(getDebugString());
 			return true;
 		}
 		return false;
@@ -523,5 +532,20 @@ public class GUIText {
 	@Override
 	public String toString() {
 		return "[GUIText] @" + position + ", color=" + color + "; " + textString;
+	}
+
+	public String getDebugString(){
+		return	"Pos: " + position + "\n" +
+				"Col: " + color + "\n" +
+				"Siz: " + fontSize + "\n" +
+				"Len: " + lineMaxSize + "\n" +
+				"Lns: " + numberOfLines + "\n" +
+				"1st: " + firstCharVisible + "\n" +
+				"Lst: " + lastCharVisible + "\n" +
+				"Hid: " + hidden + "\n" +
+				"Prc: " + processed + "\n" +
+				"Nrl: " + needsReload + "\n" +
+				"Stn: " + useStencil + "\n";
+
 	}
 }
