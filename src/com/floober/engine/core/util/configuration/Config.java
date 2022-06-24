@@ -15,6 +15,7 @@ public class Config {
 
 	public static String CONFIG_NODE;
 	public static String SETTINGS_NODE;
+	public static String FLAGS_NODE;
 
 	public static String WINDOW_TITLE;
 
@@ -54,6 +55,7 @@ public class Config {
 
 		CONFIG_NODE = configJSON.getString("config_node");
 		SETTINGS_NODE = configJSON.getString("settings_node");
+		FLAGS_NODE = configJSON.getString("flags_node");
 
 		WINDOW_TITLE = configJSON.getString("window_title");
 

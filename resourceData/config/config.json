@@ -1,6 +1,7 @@
 {
 	"config_node": "flooberEngine/config",
 	"settings_node": "flooberEngine/settings",
+	"flags_node": "flooberEngine/flags",
 	"window_title": "FlooberEngine Development",
 	"debug_mode": true,
 	"crash_on_missing_shader_uniform": false,
