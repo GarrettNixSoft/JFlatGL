@@ -2,9 +2,14 @@ package com.floober.engine.core.util.configuration;
 
 import com.floober.engine.core.splash.SplashRenderer;
 import com.floober.engine.core.util.Logger;
+import com.floober.engine.core.util.conversion.DisplayScale;
+import com.floober.engine.core.util.data.Pair;
 import com.floober.engine.core.util.file.FileUtil;
+import com.floober.engine.core.util.input.Keybinds;
 import org.joml.Vector4f;
 import org.json.JSONObject;
+
+import java.awt.*;
 
 /**
 	The Config class contains all configurable settings that should be
@@ -41,6 +46,7 @@ public class Config {
 	// Splash screen dimensions
 	public static int SPLASH_WIDTH;
 	public static int SPLASH_HEIGHT;
+	public static boolean SCALE_SPLASH_SCREEN;
 	public static boolean SPLASH_TRANSPARENT;
 
 	public static float SPLASH_FAKE_LATENCY;
@@ -73,8 +79,16 @@ public class Config {
 		DEFAULT_WIDTH = configJSON.getInt("default_width");
 		DEFAULT_HEIGHT = configJSON.getInt("default_height");
 
+		SCALE_SPLASH_SCREEN = configJSON.getBoolean("scale_splash_screen");
 		SPLASH_WIDTH = configJSON.getInt("splash_width");
 		SPLASH_HEIGHT = configJSON.getInt("splash_height");
+
+		if (SCALE_SPLASH_SCREEN) {
+			Pair<Integer, Integer> dimensions = DisplayScale.getDimensionsScaledFor1080p(SPLASH_WIDTH, SPLASH_HEIGHT);
+			SPLASH_WIDTH = dimensions.data1();
+			SPLASH_HEIGHT = dimensions.data2();
+		}
+
 		SPLASH_TRANSPARENT = configJSON.getBoolean("splash_transparent");
 
 		SPLASH_FAKE_LATENCY = configJSON.getFloat("splash_screen_fake_latency");
