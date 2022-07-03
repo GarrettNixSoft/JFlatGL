@@ -7,6 +7,7 @@ import com.floober.engine.core.audio.AudioMaster;
 import com.floober.engine.core.audio.Sound;
 import com.floober.engine.core.gameState.GameStateManager;
 import com.floober.engine.core.renderEngine.display.DisplayManager;
+import com.floober.engine.core.renderEngine.models.ModelLoader;
 import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.core.splash.SplashRenderer;
 import com.floober.engine.core.splash.SplashScreen;
@@ -148,6 +149,8 @@ public class Game {
 			// then close the splash screen once loading completes
 			SplashScreen.close();
 		}
+
+		ModelLoader.cleanUp();
 	}
 
 	/**

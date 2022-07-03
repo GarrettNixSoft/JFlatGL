@@ -267,7 +267,8 @@ public class GUIText {
 	public void setFont(FontType font) {
 		FontType oldFont = this.font;
 		this.font = font;
-		reload(oldFont); // try this immediately
+		needsReload = true;
+//		reload(oldFont); // try this immediately
 	}
 
 	public void setFontSize(float size) {
@@ -442,14 +443,12 @@ public class GUIText {
 	 */
 	public void remove() {
 		TextMaster.removeText(this);
-		delete();
 //		Logger.log("Removed text: " + textString);
 //		Logger.log(getDebugString());
 	}
 
 	private void remove(FontType oldFont) {
 		TextMaster.removeText(this, oldFont);
-		delete();
 //		Logger.log("Removed text: " + textString);
 //		Logger.log(getDebugString());
 	}
@@ -535,7 +534,8 @@ public class GUIText {
 	}
 
 	public String getDebugString(){
-		return	"Pos: " + position + "\n" +
+		return	"VAO: " + textMeshVao + "\n" +
+				"Pos: " + position + "\n" +
 				"Col: " + color + "\n" +
 				"Siz: " + fontSize + "\n" +
 				"Len: " + lineMaxSize + "\n" +

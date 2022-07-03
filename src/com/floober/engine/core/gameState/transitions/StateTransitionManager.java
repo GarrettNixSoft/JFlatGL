@@ -1,6 +1,7 @@
 package com.floober.engine.core.gameState.transitions;
 
 import com.floober.engine.core.gameState.GameStateManager;
+import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.color.Colors;
 import com.floober.engine.core.util.time.Timer;
 import org.joml.Vector3f;
@@ -61,6 +62,7 @@ public class StateTransitionManager {
 //			Render.fillScreen(new Vector4f(transitionColor, alpha), Config.NEAR_CLIP);
 			TransitionFader.setFadeColor(new Vector4f(transitionColor, alpha));
 			TransitionFader.render();
+			Logger.log("Render transition fade");
 		}
 	}
 

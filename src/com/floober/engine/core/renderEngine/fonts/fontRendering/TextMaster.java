@@ -44,8 +44,17 @@ public class TextMaster {
 		TextMeshData data = fontType.loadText(text);
 		int vao = ModelLoader.loadToVAO(data.vertexPositions(), data.textureCoords(), text);
 		textVAOs.add(vao);
+//		Logger.log("Text got VAO: " + vao);
 		text.setMeshInfo(vao, data.vertexPositions().length / 3); // there are (length / 3) vertices, since each vertex is 3 floats (x,y,z)
 		text.setProcessed(true);
+		// TEST
+//		System.out.println("Printing stack trace:");
+//		StackTraceElement[] elements = Thread.currentThread().getStackTrace();
+//		for (int i = 1; i < elements.length; i++) {
+//			StackTraceElement s = elements[i];
+//			System.out.println("\tat " + s.getClassName() + "." + s.getMethodName() + "(" + s.getFileName() + ":" + s.getLineNumber() + ")");
+//		}
+		// END_TEST
 	}
 
 	public static void removeText(GUIText text) {

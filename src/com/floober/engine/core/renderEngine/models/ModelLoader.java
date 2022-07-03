@@ -1,6 +1,8 @@
 package com.floober.engine.core.renderEngine.models;
 
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.GUIText;
+import com.floober.engine.core.util.Logger;
+import com.floober.engine.core.util.conversion.StringConverter;
 import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;
@@ -61,6 +63,11 @@ public class ModelLoader {
 
 	public static int createVAO() {
 		int vaoID = glGenVertexArrays();
+//		Logger.log("GENERATED VAO: " + vaoID);
+		if (vaos.contains(vaoID)) {
+			Logger.log(StringConverter.listToString(vaos));
+			throw new RuntimeException("Duplicate VAO detected!");
+		}
 		vaos.add(vaoID);
 		glBindVertexArray(vaoID);
 		return vaoID;
@@ -145,6 +152,7 @@ public class ModelLoader {
 	// END_TEST
 
 	public static void deleteVAO(int vao) {
+//		Logger.log("DELETING VAO: " + vao + "    **************************************");
 		glDeleteVertexArrays(vao);
 		vaos.remove(Integer.valueOf(vao));
 		deletedPerFrame++;
@@ -158,11 +166,15 @@ public class ModelLoader {
 	public static void cleanUp() {
 		System.out.println("Cleaning up " + vaos.size() + " vaos and " + vbos.size() + " vbos");
 		for (int vao : vaos) {
+//			Logger.log("DELETING VAO: " + vao + "    **************************************");
 			glDeleteVertexArrays(vao);
 		}
+		vaos.clear();
 		for (int vbo : vbos) {
+//			Logger.log("DELETING VBO: " + vbo + "    **************************************");
 			glDeleteBuffers(vbo);
 		}
+		vbos.clear();
 	}
 
 }
