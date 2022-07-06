@@ -75,7 +75,7 @@ public class AnimationLoader extends AssetLoader {
 				rawAnimations.put(key, animation);
 				GameLoader.animationCount++;
 			} catch (Exception e) {
-				System.out.println("Failed to load Animation [key=" + key + "], error: " + e);
+				Logger.logLoadError("Failed to load Animation [key=" + key + "], error: " + e);
 			}
 		}
 	}
@@ -97,7 +97,7 @@ public class AnimationLoader extends AssetLoader {
 				rawGlitchAnimations.put(key, animation);
 				GameLoader.animationCount++;
 			} catch (Exception e) {
-				System.out.println("Failed to load Animation [key=" + key + "], error: " + e);
+				Logger.logLoadError("Failed to load Animation [key=" + key + "], error: " + e);
 			}
 		}
 	}
@@ -125,7 +125,7 @@ public class AnimationLoader extends AssetLoader {
 				}
 				GameLoader.animationCount++;
 			} catch (Exception e) {
-				System.out.println("Failed to load Animation Set [key=" + key + "], error: " + e);
+				Logger.logLoadError("Failed to load Animation Set [key=" + key + "], error: " + e);
 			}
 		}
 	}
@@ -161,9 +161,6 @@ public class AnimationLoader extends AssetLoader {
 	}
 
 	private HashMap<String, RawGlitchAnimation> parseGlitchAnimationSet(JSONObject object) {
-
-		for (String key : rawAnimations.keySet()) System.out.println(key);
-		for (String key : rawGlitchAnimations.keySet()) System.out.println(key);
 
 		Set<String> animations = object.keySet();
 		HashMap<String, RawGlitchAnimation> animationSet = new HashMap<>();
