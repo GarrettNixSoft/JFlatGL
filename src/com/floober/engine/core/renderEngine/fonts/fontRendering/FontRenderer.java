@@ -5,6 +5,7 @@ import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.core.renderEngine.shaders.FontShader;
 import com.floober.engine.core.util.Logger;
+import com.floober.engine.core.util.conversion.StringConverter;
 import org.joml.Vector3f;
 
 import java.util.List;
@@ -63,8 +64,8 @@ public class FontRenderer {
 		// fix position
 		Vector3f textPos = text.getPosition();
 		textPos.z = MasterRenderer.getScreenZ((int) textPos.z);
-//		Logger.log("Rendering text: " + text.getTextString().substring(0, Math.min(text.getTextString().length(), 5)));
-//		Logger.log("RENDERING TEXT AT Z: " + textPos.z);
+//		Logger.log("Rendering text: " + text.getTextString().substring(0, Math.min(text.getTextString().length(), 16)));
+//		Logger.log("RENDERING TEXT AT POS: " + StringConverter.vec3fToString(textPos));
 		// send data to shader
 		glBindVertexArray(text.getMesh());
 		glEnableVertexAttribArray(0);

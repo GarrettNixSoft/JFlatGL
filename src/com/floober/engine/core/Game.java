@@ -110,14 +110,14 @@ public class Game {
 		// finish loading (after creating the main game window! this ensures OpenGL assets are properly loaded)
 		gameLoader.finish();
 
+		// Re-initialize the TextMaster on the proper context
+		TextMaster.init();
+
 		// Next, prepare the GSM
 		instance.gsm.init();
 
 		// load particles AFTER textures are loaded (some particles need to load textures from the game's pool)
 		ParticleMaster.initGlobals();
-
-		// Re-initialize the TextMaster on the proper context
-		TextMaster.init();
 
 	}
 

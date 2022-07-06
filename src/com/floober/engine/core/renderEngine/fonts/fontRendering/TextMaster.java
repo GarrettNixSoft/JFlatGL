@@ -36,6 +36,8 @@ public class TextMaster {
 		FontType fontType = text.getFont();
 		List<GUIText> textBatch = texts[layer].computeIfAbsent(fontType, k -> new ArrayList<>());
 		textBatch.add(text);
+//		Logger.log("Added to layer " + layer + ": " + text.getTextString());
+//		Logger.log("Layer now has " + texts[layer].keySet().size() + " font lists in it");
 	}
 
 	public static void processText(GUIText text) {
@@ -58,6 +60,7 @@ public class TextMaster {
 	}
 
 	public static void removeText(GUIText text) {
+//		Logger.log("REMOVING: " + text.getTextString());
 		text.delete();
 		int layer = (int) text.getPosition().z();
 		List<GUIText> textBatch = texts[layer].get(text.getFont());
@@ -71,6 +74,7 @@ public class TextMaster {
 	}
 
 	public static void removeText(GUIText text, FontType oldFont) {
+//		Logger.log("REMOVING: " + text.getTextString());
 		text.delete();
 		int layer = (int) text.getPosition().z();
 		List<GUIText> textBatch = texts[layer].get(oldFont);
@@ -84,6 +88,7 @@ public class TextMaster {
 
 	public static void updateTexts(int layer) {
 		Set<FontType> keySet = texts[layer].keySet();
+//		Logger.log("Updating layer " + layer + "; it has " + keySet.size() + " text lists");
 		FontType[] fonts = keySet.toArray(new FontType[] {});
 		int setSize = keySet.size();
 		for (int j = 0; j < setSize; j++) {
@@ -96,6 +101,7 @@ public class TextMaster {
 				textList.get(k).update();
 			}
 		}
+//		Logger.log("Done updating layer " + layer + "; it has " + keySet.size() + " text lists");
 	}
 
 	/**
