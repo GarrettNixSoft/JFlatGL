@@ -1,6 +1,5 @@
 package com.floober.engine.core.util.time;
 
-import com.floober.engine.core.renderEngine.display.DisplayManager;
 import com.floober.engine.core.util.Logger;
 
 /*
@@ -126,11 +125,12 @@ public class Timer {
 	 * @return {@code true} if the set duration of time has passed since the timer was started.
 	 */
 	public boolean finished() {
-		if (time == -1) return false; // -1 sets a perpetual timer
+		if (time == -1 || start == -1) return false; // time == -1 sets a perpetual timer, start == -1 means the timer has not started (and therefore cannot be finished)
 		else return TimeScale.getRawTime(start) > time * 1000;
 	}
 
 	// SETTERS
+
 	/**
 	 * Set the duration of this timer. Fails if the timer is in progress.
 	 * @param time The new target duration.

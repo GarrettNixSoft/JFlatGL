@@ -2,16 +2,20 @@ package com.floober.engine.core;
 
 import com.floober.engine.animation.Animation;
 import com.floober.engine.core.assets.*;
+import com.floober.engine.core.assets.loaders.AssetLoader;
 import com.floober.engine.core.assets.loaders.GameLoader;
+import com.floober.engine.core.assets.loaders.Loader;
 import com.floober.engine.core.audio.AudioMaster;
 import com.floober.engine.core.audio.Sound;
 import com.floober.engine.core.gameState.GameStateManager;
 import com.floober.engine.core.renderEngine.display.DisplayManager;
 import com.floober.engine.core.renderEngine.models.ModelLoader;
 import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
+import com.floober.engine.core.renderEngine.textures.TextureOutliner;
 import com.floober.engine.core.splash.SplashRenderer;
 import com.floober.engine.core.splash.SplashScreen;
 import com.floober.engine.core.util.configuration.Config;
+import com.floober.engine.core.util.configuration.Settings;
 import com.floober.engine.core.util.input.KeyInput;
 import com.floober.engine.core.util.input.MouseInput;
 import com.floober.engine.core.util.time.TimeScale;
@@ -26,9 +30,10 @@ import com.floober.engine.core.util.Session;
 import com.floober.engine.gui.GUIManager;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 import static com.floober.engine.core.renderEngine.display.DisplayManager.primaryWindowID;
-import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
+import static org.lwjgl.glfw.GLFW.*;
 
 /**
  * This class represents the Game itself. It provides convenience
@@ -42,6 +47,7 @@ public class Game {
 	public static Game instance;
 
 	// game components
+	private final GameLoader loader;
 	private final Textures textures;
 	private final Music music;
 	private final Sfx sfx;
@@ -61,6 +67,7 @@ public class Game {
 	 * asset containers.
 	 */
 	public Game() {
+		loader = new GameLoader();
 		textures = new Textures();
 		music = new Music();
 		sfx = new Sfx();
@@ -70,12 +77,27 @@ public class Game {
 	}
 
 	/**
+	 * Add a custom AssetLoader subclass to the load sequence.
+	 * If your project requires a custom type of asset to be
+	 * loaded, you can extend the AssetLoader class with your
+	 * own code for loading that asset type and add it to the
+	 * game loader here.
+	 * @param assetLoader a custom loader to run when loading the game
+	 */
+	public static void addCustomAssetLoader(AssetLoader assetLoader) {
+		instance.loader.addCustomAssetLoader(assetLoader);
+	}
+
+	/**
 	 * Calling this method will load all game assets
 	 * specified in the JSON directories contained in
 	 * resourceData/assets. Once loading is complete,
 	 * the GameStateManager will be initialized.
 	 */
 	public static void init(SplashRenderer splashRenderer, GameStateManager gsm) {
+
+		// update display windows and timings
+		DisplayManager.updateDisplay();
 
 		// initialize OpenGL now to prepare it for a splash render window if necessary
 		DisplayManager.initOpenGL();
@@ -210,7 +232,7 @@ public class Game {
 			// render to the screen
 			MasterRenderer.primaryWindowRenderer.render(true);
 
-			// update display and poll events
+			// update display windows and timings
 			DisplayManager.updateDisplay();
 		}
 	}
@@ -372,5 +394,28 @@ public class Game {
 
 	// Fonts
 	public static FontType getFont(String key) { return instance.fonts.getFont(key); }
+
+
+	/**
+	 * Clean up game components to close the game.
+	 * Clears all loaded assets and terminates GLFW.
+	 */
+	public static void cleanUp() {
+		// Clean up when done.
+		Loader.cleanUp();
+		MasterRenderer.cleanUp();
+		TextMaster.cleanUp();
+		AudioMaster.cleanUp();
+		TextureOutliner.cleanUp();
+
+		// Clean up GLFW
+		DisplayManager.cleanUp();
+
+		glfwTerminate();
+		Objects.requireNonNull(glfwSetErrorCallback(null)).free(); // shut up, compiler
+
+		// save user settings/preferences and game flags
+		Settings.save();
+	}
 
 }

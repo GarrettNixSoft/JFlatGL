@@ -53,7 +53,6 @@ public class Config {
 
 	public static boolean USE_SPLASH_SCREEN;
 
-	public static JSONObject LOAD_RENDER_SETTINGS;
 	public static JSONObject LOGGER_SETTINGS;
 
 	public static void load() {
@@ -94,8 +93,6 @@ public class Config {
 		SPLASH_FAKE_LATENCY = configJSON.getFloat("splash_screen_fake_latency");
 
 		USE_SPLASH_SCREEN = configJSON.getBoolean("use_splash_screen");
-
-		LOAD_RENDER_SETTINGS = configJSON.getJSONObject("load_render_settings");
 
 		LOGGER_SETTINGS = configJSON.getJSONObject("logger_settings");
 

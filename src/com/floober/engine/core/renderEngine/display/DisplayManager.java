@@ -396,6 +396,11 @@ public class DisplayManager {
 				i--;
 			}
 		}
+
+		updateTimings();
+	}
+
+	private static void updateTimings() {
 		// update time values
 		long currentFrameTime = getCurrentTime();
 		currentFrameDelta = currentFrameTime - lastFrameTime;
