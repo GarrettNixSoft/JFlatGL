@@ -106,6 +106,14 @@ public class Timer {
 	}
 
 	/**
+	 * Get the progress of this timer, or 1 if it has finished.
+	 * @return The current progress of the timer as a percentage, or 1 if it has finished.
+	 */
+	public float getProgressCapped() {
+		return Math.max(getProgress(), 1.0f);
+	}
+
+	/**
 	 * Check if the timer is in progress.
 	 * @return {@code true} if the timer has been started.
 	 */

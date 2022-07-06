@@ -2,6 +2,7 @@ package com.floober.engine.core.util.conversion;
 
 import org.joml.Vector2f;
 import org.joml.Vector2i;
+import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 import java.util.List;
@@ -25,6 +26,10 @@ public class StringConverter {
 
 	public static String vec4fToString(Vector4f vector) {
 		return "Vector4f(" + vector.x() + ", " + vector.y() + ", " + vector.z() + ", " + vector.w() + ")";
+	}
+
+	public static String vec3fToString(Vector3f vector) {
+		return "Vector3f(" + vector.x() + ", " + vector.y() + ", " + vector.z() + ")";
 	}
 
 	public static String vec2fToString(Vector2f vector) {

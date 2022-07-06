@@ -163,11 +163,7 @@ public class AnimationLoader extends AssetLoader {
 	private HashMap<String, RawGlitchAnimation> parseGlitchAnimationSet(JSONObject object) {
 
 		for (String key : rawAnimations.keySet()) System.out.println(key);
-		System.out.println("**************************************************************************************************");
 		for (String key : rawGlitchAnimations.keySet()) System.out.println(key);
-
-		System.out.println("There are " + rawAnimations.size() + " raw animations");
-		System.out.println("There are " + rawGlitchAnimations.size() + " raw glitch animations");
 
 		Set<String> animations = object.keySet();
 		HashMap<String, RawGlitchAnimation> animationSet = new HashMap<>();

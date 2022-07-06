@@ -25,7 +25,7 @@ public class DisplayScale {
 	 * returned represents the dimensions for the user's current display
 	 * resolution that will result in a physical size equivalent to the given
 	 * dimensions on an equally sized 1080p monitor.
-	 *
+	 * <br>
 	 * For example, if the user is running the game on a 4K display, the pair
 	 * returned will be scaled up by a factor of 2 on both axes.
 	 *
