@@ -146,6 +146,7 @@ public class TabbedPanel extends GUIPanel {
 		if (currentTab == null) currentTab = tab;
 		// add the tab to the list of tabs
 		tabs.add(tab);
+		addComponent(tab);
 		// finally, return the result so the caller can add the content they want to the tab
 		return tab;
 	}
@@ -285,4 +286,11 @@ public class TabbedPanel extends GUIPanel {
 		currentTab.render();
 	}
 
+
+	// TEST
+	@Override
+	public void addComponent(GUIComponent component) {
+		super.addComponent(component);
+		Logger.log("ADDED COMPONENT TO TABBED PANEL " + getComponentID() + "; THERE ARE NOW " + getComponents().size());
+	}
 }

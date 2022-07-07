@@ -355,7 +355,7 @@ public abstract class GUIComponent {
 	}
 
 	public void updateEvents() {
-		Logger.log("Update events on " + getComponentID());
+//		Logger.log("Update events on " + getComponentID());
 		eventQueue.update();
 	}
 

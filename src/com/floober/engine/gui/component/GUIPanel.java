@@ -32,15 +32,23 @@ public class GUIPanel extends GUIComponent {
 
 	@Override
 	public boolean isClosed() {
-		if (components.isEmpty()) return false;
+		if (components.isEmpty()) {
+//			Logger.log("Panel " + getComponentID() + " not closed; empty panel");
+			return false;
+		}
 		for (GUIComponent component : components) {
 			if (!component.isClosed()) {
-//				Logger.log("Panel not closed; component " + component.getComponentID() + " is still open");
+//				Logger.log("Panel " + getComponentID() + " not closed; component " + component.getComponentID() + " is still open");
 				return false;
 			}
 		}
 // 		Logger.log("Panel closed!");
-		return !hasPendingEvents();
+		if (hasPendingEvents()) {
+//			Logger.log("Panel " + getComponentID() + " not closed; has pending events");
+			return false;
+		}
+
+		return true;
 	}
 
 	@Override
@@ -84,7 +92,7 @@ public class GUIPanel extends GUIComponent {
 
 	@Override
 	public void close() {
-		Logger.log("Panel " + getComponentID() + " close called. Events: \n" + getActions()[ON_CLOSE]);
+		Logger.log("Panel " + getComponentID() + " close called.");
 		super.close();
 		for (GUIComponent component : components) {
 			component.close();
@@ -134,6 +142,7 @@ public class GUIPanel extends GUIComponent {
 	@Override
 	public void remove() {
 		for (GUIComponent component : components) {
+			Logger.log("REMOVING COMPONENT: " + component.getComponentID());
 			component.remove();
 		}
 	}

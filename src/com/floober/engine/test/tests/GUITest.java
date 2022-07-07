@@ -92,40 +92,40 @@ public class GUITest {
 		tabbedPanel.finalizeLayout();
 
 		// create the button
-		Button button = new Button("quit_button", gui);
+		Button quitButton = new Button("quit_button", gui);
 		// set the button's parameters
-		button.label("Quit").rounded(0.15f).textSize(1.2f)
+		quitButton.label("Quit").rounded(0.15f).textSize(1.2f)
 				.location(new Vector3f(gameWindow.centerX(), gameWindow.centerY() + 120, Layers.TOP_LAYER))
 				.size(new Vector2f(250, 100)).primaryColor(Colors.WHITE).secondaryColor(Colors.BLACK)
 				.onOpen(() -> {
-					button.queueEvent(new RestoreOpacityEvent(button, 0.05f));
-					button.queueEvent(new RestoreScaleEvent(button, 0.05f));
+					quitButton.queueEvent(new RestoreOpacityEvent(quitButton, 0.05f));
+					quitButton.queueEvent(new RestoreScaleEvent(quitButton, 0.05f));
 				})
 				.onClose(() -> {
-					button.queueEvent(new FadeComponentEvent(button, 0, 0.2f));
-					button.queueEvent(new ScaleEvent(button, -0.2f, 0.2f));
+					quitButton.queueEvent(new FadeComponentEvent(quitButton, 0, 0.2f));
+					quitButton.queueEvent(new ScaleEvent(quitButton, -0.2f, 0.2f));
 				})
 				.onMouseOver(() -> {
 					Game.playSfx("hover2");
 //					button.queueEvent(new ScaleEvent(button, 0.1f, 0.05f)); // grow by 10% over 50ms
-					button.setPrimaryColor(new Vector4f(1, 0.9f, 0.7f, 1));
-					button.queueEvent(new OffsetPositionEvent(button, new Vector2f(30, 0), 0.05f));
+					quitButton.setPrimaryColor(new Vector4f(1, 0.9f, 0.7f, 1));
+					quitButton.queueEvent(new OffsetPositionEvent(quitButton, new Vector2f(30, 0), 0.05f));
 				})
 				.onMouseExit(() -> {
-					button.queueEvent(new RestoreScaleEvent(button, 0.05f));// return to normal size
-					button.setPrimaryColor(Colors.WHITE);
-					button.queueEvent(new RestoreOffsetEvent(button, 0.05f));
+					quitButton.queueEvent(new RestoreScaleEvent(quitButton, 0.05f));// return to normal size
+					quitButton.setPrimaryColor(Colors.WHITE);
+					quitButton.queueEvent(new RestoreOffsetEvent(quitButton, 0.05f));
 				})
 				.onLeftClick(() -> {
 					Game.playSfx("select");
 					tabbedPanel.resetCloseAction();
-					button.queueEvent(new BlockingDelayEvent(0.3f));
-					button.queueEvent(new PerformActionEvent(Game::quit));
+					quitButton.queueEvent(new BlockingDelayEvent(0.3f));
+					quitButton.queueEvent(new PerformActionEvent(Game::quit));
 					GUIManager.closeGUI();
 				});
 
 		// add the button to the GUI panel
-		tab.addComponent(button);
+		tab.addComponent(quitButton);
 
 		Button otherButton = new Button("click_button", gui);
 		otherButton.label("Click").rounded(0.15f).textSize(1.2f)
@@ -217,7 +217,6 @@ public class GUITest {
 
 			// render game internally
 			Game.render();
-			GUIManager.render();
 
 			// Debug!
 			float fps = 1.0f / DisplayManager.getFrameTimeRaw();

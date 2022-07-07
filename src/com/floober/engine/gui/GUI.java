@@ -23,6 +23,9 @@ public class GUI {
 	private final HashMap<String, GUILayer> layerStore;
 	private final Stack<GUILayer> layerStack;
 
+	// track closing state
+	private boolean closing = false;
+
 	// component IDs must be unique within a GUI
 	private final HashSet<String> componentIDs;
 
@@ -214,6 +217,7 @@ public class GUI {
 	 * Close this GUI. Automatically closes all layers.
 	 */
 	public void close() {
+		closing = true;
 		for (GUILayer layer : layerStack.getElements()) {
 			layer.close();
 //			layer.lock();
@@ -233,12 +237,11 @@ public class GUI {
 	 * Unlock the top layer of this GUI.
 	 */
 	public void unlock() {
-		for (GUILayer layer : layerStack.getElements()) {
-			layerStack.peek().unlock();
-		}
+		layerStack.peek().unlock();
 	}
 
 	public void update() {
+//		if (closing) Logger.log("Attempting to close GUI " + id);
 //		Logger.log("Updating GUI");
 		if (layerStack.isEmpty()) return;
 		// remove top layer if it's closed completely
