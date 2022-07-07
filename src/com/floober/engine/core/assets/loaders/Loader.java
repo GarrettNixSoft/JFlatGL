@@ -24,7 +24,7 @@ public class Loader {
 
 	public static TextureComponent loadTextureConverted(String path) {
 		path = "textures" + SEPARATOR + path;
-		Logger.log("Loaded raw texture: " + path);
+//		Logger.log("Loaded raw texture: " + path);
 		return ImageLoader.loadTexture(path).convertToOpenGLTexture();
 	}
 
@@ -57,7 +57,7 @@ public class Loader {
 	public static RawFontType loadFont(String font, String key) {
 		String path = "fonts" + SEPARATOR + font + SEPARATOR + font;
 		RawTexture rawTexture = ImageLoader.loadTexture(path + ".png");
-		Logger.log("Loaded raw texture: " + path + ".png");
+//		Logger.log("Loaded raw texture: " + path + ".png");
 		RawTextureAtlas fontAtlas = new RawTextureAtlas(key, rawTexture, 1, true);
 		String fontFile = loadFontFile(SEPARATOR + path + ".fnt");
 		return new RawFontType(key, fontAtlas, fontFile);

@@ -9,11 +9,13 @@ import com.floober.engine.core.audio.AudioMaster;
 import com.floober.engine.core.audio.Sound;
 import com.floober.engine.core.gameState.GameStateManager;
 import com.floober.engine.core.renderEngine.display.DisplayManager;
+import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.floober.engine.core.renderEngine.models.ModelLoader;
 import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.core.renderEngine.textures.TextureOutliner;
 import com.floober.engine.core.splash.SplashRenderer;
 import com.floober.engine.core.splash.SplashScreen;
+import com.floober.engine.core.util.color.Colors;
 import com.floober.engine.core.util.configuration.Config;
 import com.floober.engine.core.util.configuration.Settings;
 import com.floober.engine.core.util.input.KeyInput;
@@ -28,6 +30,7 @@ import com.floober.engine.core.renderEngine.textures.TextureSet;
 import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.Session;
 import com.floober.engine.gui.GUIManager;
+import org.joml.Vector3f;
 
 import java.util.HashMap;
 import java.util.Objects;
@@ -62,6 +65,9 @@ public class Game {
 	// flag for requesting quit
 	private boolean closeRequest;
 
+	// FPS counter
+	private GUIText fpsDisplay;
+
 	/**
 	 * Create the game. This will initialize all
 	 * asset containers.
@@ -95,6 +101,13 @@ public class Game {
 	 * the GameStateManager will be initialized.
 	 */
 	public static void init(SplashRenderer splashRenderer, GameStateManager gsm) {
+
+		// Set up logging.
+		Logger.setLoggerConfig();
+
+		// Set up OpenAL.
+		AudioMaster.init();
+		AudioMaster.setListenerData(0, 0, 0);
 
 		// update display windows and timings
 		DisplayManager.updateDisplay();
@@ -140,6 +153,15 @@ public class Game {
 
 		// load particles AFTER textures are loaded (some particles need to load textures from the game's pool)
 		ParticleMaster.initGlobals();
+
+		// Init FPS display
+		instance.fpsDisplay = new GUIText("FPS: ", 0.5f, Game.getFont("default"), new Vector3f(0, 0, 0), 1, false);
+		instance.fpsDisplay.setColor(Colors.GREEN);
+		instance.fpsDisplay.setWidth(0.5f);
+		instance.fpsDisplay.setEdge(0.2f);
+
+		if (Settings.getSettingBoolean("show_fps"))
+			instance.fpsDisplay.show();
 
 	}
 
@@ -190,6 +212,12 @@ public class Game {
 		instance.sfx.update();
 		// GUI components
 		GUIManager.update();
+		// FPS display
+		if (Settings.getSettingBoolean("show_fps")) {
+			float fps = 1.0f / DisplayManager.getFrameTimeRaw();
+			String fpsStr = String.format("FPS: %.2f", fps);
+			instance.fpsDisplay.replaceText(fpsStr);
+		}
 	}
 
 	// RENDER GAME INTERNALLY
@@ -234,6 +262,7 @@ public class Game {
 
 			// update display windows and timings
 			DisplayManager.updateDisplay();
+			MasterRenderer.getTargetWindow().swapBuffers();
 		}
 	}
 
@@ -331,6 +360,17 @@ public class Game {
 	}
 
 	// SHORTCUTS
+	public static GUIText getFPSDisplay() {
+		return instance.fpsDisplay;
+	}
+
+	public static float centerX() {
+		return MasterRenderer.getTargetWindow().centerX();
+	}
+
+	public static float centerY() {
+		return MasterRenderer.getTargetWindow().centerY();
+	}
 
 	// Textures
 	/**

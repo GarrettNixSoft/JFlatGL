@@ -9,7 +9,7 @@ public record RawFontType(String key, RawTextureAtlas rawAtlas, String fontFile)
 
 	public void addToGame() {
 		FontType font = convert();
-		Logger.log("Added font (key: " + key + ") to the game. Atlas id: " + font.getTextureAtlas());
+//		Logger.log("Added font (key: " + key + ") to the game. Atlas id: " + font.getTextureAtlas());
 		Game.getFonts().addFont(key, font);
 	}
 
