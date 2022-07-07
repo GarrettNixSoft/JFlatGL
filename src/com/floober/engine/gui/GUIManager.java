@@ -30,7 +30,10 @@ public class GUIManager {
 		// only update GUI if one exists
 		if (activeGUI != null) {
 			activeGUI.update();
+			// if the current GUI is closed,
 			if (activeGUI.isClosed()) {
+				Logger.log("GUI " + activeGUI.getId() + " CLOSED!");
+				// advance to the next if one exists
 				if (nextGUI != null) {
 					activeGUI = nextGUI;
 					nextGUI = null;
@@ -40,7 +43,6 @@ public class GUIManager {
 				}
 			}
 		}
-
 	}
 
 	public static void render() {

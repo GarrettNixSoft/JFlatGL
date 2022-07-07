@@ -13,7 +13,7 @@ public class PerformActionEvent extends GUIEvent {
 
 	@Override
 	public void onStart() {
-		action.trigger();
+		action.onTrigger();
 		complete = true;
 	}
 

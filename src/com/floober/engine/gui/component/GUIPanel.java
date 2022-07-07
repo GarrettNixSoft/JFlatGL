@@ -84,7 +84,7 @@ public class GUIPanel extends GUIComponent {
 
 	@Override
 	public void close() {
-		Logger.log("Panel " + getComponentID() + " close called. Events: \n" + actions[ON_CLOSE]);
+		Logger.log("Panel " + getComponentID() + " close called. Events: \n" + getActions()[ON_CLOSE]);
 		super.close();
 		for (GUIComponent component : components) {
 			component.close();

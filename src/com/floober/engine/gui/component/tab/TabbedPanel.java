@@ -1,10 +1,12 @@
-package com.floober.engine.gui.component;
+package com.floober.engine.gui.component.tab;
 
 import com.floober.engine.core.renderEngine.display.DisplayManager;
 import com.floober.engine.core.renderEngine.display.Window;
 import com.floober.engine.core.Game;
 import com.floober.engine.gui.GUI;
 import com.floober.engine.gui.GUIAction;
+import com.floober.engine.gui.component.GUIComponent;
+import com.floober.engine.gui.component.GUIPanel;
 import com.floober.engine.gui.event.BlockingDelayEvent;
 import com.floober.engine.core.renderEngine.Render;
 import com.floober.engine.core.renderEngine.elements.TextureElement;
@@ -122,7 +124,7 @@ public class TabbedPanel extends GUIPanel {
 		// generate the tab
 		TabContentPanel tab = new TabContentPanel(tabLabel, getParent(), closeTime);
 		// make it wait on close
-		tab.onClose(new GUIAction().addPerformActionOnTrigger(() -> tab.queueEvent(new BlockingDelayEvent(closeTime))));
+		tab.onClose(() -> tab.queueEvent(new BlockingDelayEvent(closeTime)));
 		// generate a button for it
 		TabButton button = new TabButton(tab.getComponentID() + "_button", getParent(), tabIcon);
 		button.label(tabLabel)
@@ -130,13 +132,13 @@ public class TabbedPanel extends GUIPanel {
 				.primaryColor(getPrimaryColor())
 				.secondaryColor(getSecondaryColor())
 				.tertiaryColor(getTertiaryColor())
-				.onOpen(actions[ON_OPEN])
-				.onClose(actions[ON_CLOSE])
-				.onMouseOver(new GUIAction()
-						.addPerformActionOnTrigger(() -> Game.playSfx("hover2")))
-				.onLeftClick(new GUIAction()
-						.addPerformActionOnTrigger(() -> Game.playSfx("select"))
-						.addPerformActionOnTrigger(() -> setCurrentTab(tab)));
+				.onOpen(getActions()[ON_OPEN])
+				.onClose(getActions()[ON_CLOSE])
+				.onMouseOver(() -> Game.playSfx("hover2"))
+				.onLeftClick(() -> {
+					Game.playSfx("select");
+					setCurrentTab(tab);
+				});
 		button.size(buttonSize);
 		// add it to the list
 		tabButtons.add(button);
@@ -203,12 +205,12 @@ public class TabbedPanel extends GUIPanel {
 			// add a delay to the current tab's close sequence to give its components time to close
 			Logger.log("Delaying close complete for " + closeTime + "s");
 			// instruct the current tab to set this panel's current tab to the new tab when it is finished
-			currentTab.onCloseComplete(new GUIAction().addPerformActionOnTrigger(() -> {
+			currentTab.onCloseComplete(() -> {
 				this.currentTab = tab;
 				Logger.log("tab close complete, current tab now set to " + this.currentTab.getComponentID());
 				tab.open();
 				tab.unlock();
-			}));
+			});
 			currentTab.close();
 			currentTab.lock();
 		}
@@ -221,7 +223,7 @@ public class TabbedPanel extends GUIPanel {
 	 * tab being opened during the close sequence.
 	 */
 	public void resetCloseAction() {
-		currentTab.onClose(new GUIAction());
+		currentTab.onClose(GUIAction.NOP);
 	}
 
 	// RUNNING GUI
@@ -264,7 +266,7 @@ public class TabbedPanel extends GUIPanel {
 			if (!tab.isLocked()) tab.update();
 			tab.updateEvents();
 		}
-		currentTab.update();
+//		currentTab.update();
 	}
 
 	@Override
@@ -281,90 +283,6 @@ public class TabbedPanel extends GUIPanel {
 			button.render();
 		}
 		currentTab.render();
-	}
-
-	// SUB-ELEMENTS
-
-	public static class TabContentPanel extends GUIPanel {
-
-		private final float closeTime;
-
-		public TabContentPanel(String componentID, GUI parent, float closeTime) {
-			super(componentID, parent);
-			this.closeTime = closeTime;
-		}
-
-		/**
-		 * Adding a component to a TabContentPanel adds the component
-		 * to the panel as usual, but also adds onto its {@code ON_CLOSE} action
-		 * a blocking delay event with a duration equal to the parent
-		 * TabbedPanel's configured {@code closeTime}.
-		 * @param component the component to add
-		 */
-		@Override
-		public void addComponent(GUIComponent component) {
-			super.addComponent(component);
-			GUIAction onCloseAction = component.actions[ON_CLOSE];
-			onCloseAction.addPerformActionOnTrigger(() -> component.queueEvent(new BlockingDelayEvent(closeTime)), onCloseAction.getActionCount() - 1);
-			Logger.log("Component " + component.getComponentID() + " added to tab " + getComponentID() + " and onClose() delay of " + closeTime + "s added");
-		}
-	}
-
-	public static class TabButton extends GUIComponent {
-
-		private final TextureElement iconTexture;
-		private final GUIText label;
-
-		private float defaultTextSize = 1.5f;
-
-		public TabButton(String componentID, GUI parent, TextureComponent icon) {
-			super(componentID, parent);
-			label = new GUIText("Tab", defaultTextSize, Game.getFont("default"), new Vector3f(0,0,10), 1, true);
-			iconTexture = new TextureElement();
-			iconTexture.setTexture(icon);
-		}
-
-		public TabButton label(String labelText) {
-			this.label.replaceText(labelText);
-			return this;
-		}
-
-		public TabButton font(FontType font) {
-			this.label.setFont(font);
-			return this;
-		}
-
-		public TabButton textSize(float textSize) {
-			defaultTextSize = 1.5f * textSize;
-			return this;
-		}
-
-		@Override
-		public void update() {
-			// nothing
-		}
-
-		@Override
-		public void doTransform() {
-			iconTexture.setPosition(getPosition().setComponent(2, getPosition().z() - 1));
-			iconTexture.setSize(getSize().mul(getScale()));
-			iconTexture.transform();
-			label.setPosition(new Vector3f(DisplayManager.convertToTextScreenPos(new Vector2f(getPosition().x(), getPosition().y() + getSize().y() / 2)), getPosition().z()));
-			label.center();
-			label.setFontSize(defaultTextSize * getScale());
-			label.setColor(getSecondaryColor().mul(getOpacity()));
-		}
-
-		@Override
-		public void render() {
-			if (label.isHidden()) label.show();
-			Render.drawImage(iconTexture);
-		}
-
-		@Override
-		public void remove() {
-			label.remove();
-		}
 	}
 
 }

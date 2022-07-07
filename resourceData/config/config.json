@@ -17,7 +17,7 @@
 	"scale_splash_screen": true,
 	"splash_transparent": true,
 	"use_splash_screen": true,
-	"splash_screen_fake_latency": 3,
+	"splash_screen_fake_latency": 0,
 	"load_render_settings": {
 		"font": "aller",
 		"logo": "res/icon/icon512.png",

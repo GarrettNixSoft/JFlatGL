@@ -1,6 +1,5 @@
 package com.floober.engine.gui.component;
 
-import com.floober.engine.core.util.conversion.StringConverter;
 import com.floober.engine.event.MultiEventQueue;
 import com.floober.engine.gui.GUI;
 import com.floober.engine.gui.GUIAction;
@@ -40,7 +39,7 @@ public abstract class GUIComponent {
 	private final HashMap<String, GUIAction> transitions = new HashMap<>();
 
 	// interactions
-	protected final GUIAction[] actions = new GUIAction[8];
+	private final GUIAction[] actions = new GUIAction[8];
 	protected static final int ON_OPEN = 0;
 	protected static final int ON_OPEN_COMPLETE = 1;
 	protected static final int ON_CLOSE = 2;
@@ -64,8 +63,8 @@ public abstract class GUIComponent {
 		this.componentID = componentID;
 		this.parent = parent;
 		if (!parent.registerComponent(this)) throw new RuntimeException("Failed to register component id (" + componentID + "), ID is not unique!");
-		onOpen(new GUIAction());
-		onClose(new GUIAction());
+		onOpen(GUIAction.NOP);
+		onClose(GUIAction.NOP);
 	}
 
 	// CONSTRUCTING GUI ELEMENTS
@@ -120,7 +119,7 @@ public abstract class GUIComponent {
 	}
 
 	public GUIComponent onOpen(GUIAction action) {
-		actions[ON_OPEN] = action.addPerformActionOnTrigger(() -> queueEvent(new ReadyEvent(this)));
+		actions[ON_OPEN] = () -> queueEvent(new ReadyEvent(this));
 		return this;
 	}
 
@@ -130,9 +129,10 @@ public abstract class GUIComponent {
 	}
 
 	public GUIComponent onClose(GUIAction action) {
-		actions[ON_CLOSE] = action
-//				.addPerformActionOnTrigger(() -> Logger.log("This is the inserted event from the GUIComponent class, added on component " + componentID))
-				.addPerformActionOnTrigger(() -> queueEvent(new ClosedEvent(this)));
+		actions[ON_CLOSE] = () -> {
+//			Logger.log("This is the inserted event from the GUIComponent class, added on component " + componentID);
+			queueEvent(new ClosedEvent(this));
+		};
 		return this;
 	}
 
@@ -165,11 +165,8 @@ public abstract class GUIComponent {
 	public String getComponentID() {
 		return componentID;
 	}
-
 	public GUI getParent() {return parent; }
-
 	public boolean isActive() { return active; }
-
 	public boolean isLocked() {
 		return locked;
 	}
@@ -197,59 +194,67 @@ public abstract class GUIComponent {
 		}
 	}
 
+	// Position vectors
 	public Vector3f getPosition() {
 		return new Vector3f(position);
 	}
+	public Vector3f getOriginalPosition() {
+		return new Vector3f(originalPosition);
+	}
 
-	public Vector3f getOriginalPosition() { return new Vector3f(originalPosition); }
-
+	// Position components
 	public float getX() {
 		return position.x;
 	}
-
 	public float getY() {
 		return position.y;
 	}
-
 	public int getLayer() {
 		return (int) position.z;
 	}
 
-	public Vector2f getOffset() {
-		Vector3f offset3 = getPosition().sub(getOriginalPosition());
-		return new Vector2f(offset3.x, offset3.y);
-	}
-
+	// Size values
 	public Vector2f getSize() {
 		return new Vector2f(size);
 	}
-
 	public float getWidth() {
 		return size.x;
 	}
-
 	public float getHeight() {
 		return size.y;
 	}
-
 	public float getScale() {
 		return scale;
 	}
 
+	// Color values
 	public Vector4f getPrimaryColor() {
 		return new Vector4f(primaryColor);
 	}
-
 	public Vector4f getSecondaryColor() {
 		return new Vector4f(secondaryColor);
 	}
-
 	public Vector4f getTertiaryColor() {
 		return new Vector4f(tertiaryColor);
 	}
-
 	public float getOpacity() {
 		return opacity;
+	}
+
+	// Actors
+	public GUIAction[] getActions() {
+		return actions;
+	}
+
+	/**
+	 * Get this component's current offset as applied by
+	 * any events or interactions.
+	 * @return 	the difference between this component's current
+	 * 			visible position and its original position
+	 */
+	public Vector2f getOffset() {
+		Vector3f offset3 = getPosition().sub(getOriginalPosition());
+		return new Vector2f(offset3.x, offset3.y);
 	}
 
 	/**
@@ -350,6 +355,7 @@ public abstract class GUIComponent {
 	}
 
 	public void updateEvents() {
+		Logger.log("Update events on " + getComponentID());
 		eventQueue.update();
 	}
 
@@ -383,7 +389,7 @@ public abstract class GUIComponent {
 	}
 
 	private void trigger(int actionID) {
-		if (actions[actionID] != null) actions[actionID].trigger();
+		if (actions[actionID] != null) actions[actionID].onTrigger();
 		if (actionID == ON_LEFT_CLICK) Logger.log("Triggered left click!");
 	}
 
