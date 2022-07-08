@@ -94,6 +94,12 @@ public class Game {
 		instance.loader.addCustomAssetLoader(assetLoader);
 	}
 
+	public static void loadConfig() {
+		// Load user preferences/settings and game flags
+		Config.load();
+		Settings.load();
+	}
+
 	/**
 	 * Calling this method will load all game assets
 	 * specified in the JSON directories contained in

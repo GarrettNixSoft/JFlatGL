@@ -25,14 +25,25 @@ public class GUIManager {
 		activeGUI.close();
 	}
 
+	public static void forceCloseGUI() {
+		GUI_BANK.remove(activeGUI.getId());
+		activeGUI.forceClose();
+		activeGUI = null;
+	}
+
 	public static void update() {
 		GUIEventsHandler.handleEvents(); // handle events from last frame
 		// only update GUI if one exists
 		if (activeGUI != null) {
+			String guiID = activeGUI.getId();
 			activeGUI.update();
+			if (activeGUI == null) {
+				Logger.log("GUI " + guiID + " CLOSED!");
+				return;
+			}
 			// if the current GUI is closed,
 			if (activeGUI.isClosed()) {
-				Logger.log("GUI " + activeGUI.getId() + " CLOSED!");
+				Logger.log("GUI " + guiID + " CLOSED!");
 				// advance to the next if one exists
 				if (nextGUI != null) {
 					activeGUI = nextGUI;

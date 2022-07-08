@@ -43,9 +43,7 @@ public class GUITest {
 
 	public static void main(String[] args) throws GUIException {
 
-		// Load user preferences/settings and game flags
-		Config.load();
-		Settings.load();
+		Game.loadConfig();
 
 		Settings.setSettingValue("fullscreen", false);
 

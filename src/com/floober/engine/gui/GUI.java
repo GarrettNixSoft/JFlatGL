@@ -225,6 +225,15 @@ public class GUI {
 	}
 
 	/**
+	 * Force this GUI to immediately remove all components and layers.
+	 */
+	public void forceClose() {
+		for (GUILayer layer : layerStack.getElements()) {
+			layer.remove();
+		}
+	}
+
+	/**
 	 * Lock all layers of this GUI.
 	 */
 	public void lock() {

@@ -131,6 +131,7 @@ public abstract class GUIComponent {
 	public GUIComponent onClose(GUIAction action) {
 		actions[ON_CLOSE] = () -> {
 //			Logger.log("This is the inserted event from the GUIComponent class, added on component " + componentID);
+			action.onTrigger();
 			queueEvent(new ClosedEvent(this));
 		};
 		return this;
@@ -189,8 +190,7 @@ public abstract class GUIComponent {
 	public boolean hasPendingEvents(ClosedEvent event) {
 		if (eventQueue.isEmpty()) return false;
 		else {
-			if (eventQueue.getRunningEvents().size() == 1 && eventQueue.getRunningEvents().contains(event)) return false;
-			else return true;
+			return eventQueue.getRunningEvents().size() != 1 || !eventQueue.getRunningEvents().contains(event);
 		}
 	}
 
@@ -352,6 +352,7 @@ public abstract class GUIComponent {
 	// ACTIONS
 	public void queueEvent(GUIEvent event) {
 		eventQueue.queueEvent(event);
+//		Logger.log("Queued Event: " + event.getClass());
 	}
 
 	public void updateEvents() {
