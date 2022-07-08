@@ -1,5 +1,7 @@
 package com.floober.engine.core.util.file;
 
+import com.floober.engine.core.util.configuration.Config;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
@@ -9,6 +11,7 @@ public class FileGetter {
 	public static File getFile(String startingDir, String... extensions) {
 
 		JFileChooser fileChooser = new JFileChooser(startingDir);
+
 
 		FileFilter fileFilter = new FileFilter() {
 			@Override
@@ -21,13 +24,17 @@ public class FileGetter {
 
 			@Override
 			public String getDescription() {
-				return "Accepts files with extensions passed to the FileGetter.getFile() method";
+				return "DDPC 2 Maps (.ddpm)";
 			}
 		};
 
-		fileChooser.addChoosableFileFilter(fileFilter);
+//		fileChooser.addChoosableFileFilter(fileFilter);
+		fileChooser.setFileFilter(fileFilter);
 
-		int selection = fileChooser.showOpenDialog(null);
+		JFrame parent = new JFrame("Choose a Map File");
+		parent.setIconImage(Config.ICON_IMAGE);
+
+		int selection = fileChooser.showOpenDialog(parent);
 
 		if (selection == JFileChooser.APPROVE_OPTION)
 			return fileChooser.getSelectedFile();

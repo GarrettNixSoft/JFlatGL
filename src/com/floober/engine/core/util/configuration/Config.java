@@ -1,5 +1,6 @@
 package com.floober.engine.core.util.configuration;
 
+import com.floober.engine.core.assets.loaders.ImageLoader;
 import com.floober.engine.core.splash.SplashRenderer;
 import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.conversion.DisplayScale;
@@ -10,6 +11,7 @@ import org.joml.Vector4f;
 import org.json.JSONObject;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 /**
 	The Config class contains all configurable settings that should be
@@ -32,6 +34,7 @@ public class Config {
 	public static String ICON_PATH_64;
 	public static String ICON_PATH_48;
 	public static String ICON_PATH_32;
+	public static BufferedImage ICON_IMAGE;
 
 	// The internal resolution at which the game is rendered;
 	// for game logic purposes, these are the bounds of the window
@@ -71,6 +74,8 @@ public class Config {
 		ICON_PATH_64 = configJSON.getString("icon_path_64");
 		ICON_PATH_48 = configJSON.getString("icon_path_48");
 		ICON_PATH_32 = configJSON.getString("icon_path_32");
+
+		ICON_IMAGE = ImageLoader.loadBufferedImage(ICON_PATH_64);
 
 		INTERNAL_WIDTH = configJSON.getInt("internal_width");
 		INTERNAL_HEIGHT = configJSON.getInt("internal_height");
