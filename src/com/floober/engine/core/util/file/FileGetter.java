@@ -33,11 +33,15 @@ public class FileGetter {
 
 		JFrame parent = new JFrame("Choose a Map File");
 		parent.setIconImage(Config.ICON_IMAGE);
+		parent.setAlwaysOnTop(true);
 
 		int selection = fileChooser.showOpenDialog(parent);
+		File selectedFile = fileChooser.getSelectedFile();
+
+		parent.dispose();
 
 		if (selection == JFileChooser.APPROVE_OPTION)
-			return fileChooser.getSelectedFile();
+			return selectedFile;
 
 		else if (selection == JFileChooser.CANCEL_OPTION)
 			return null;
