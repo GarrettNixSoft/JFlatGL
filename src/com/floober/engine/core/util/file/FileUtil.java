@@ -157,6 +157,10 @@ public class FileUtil {
 	// LOAD METHODS
 	public static byte[] getFileBytes(String filePath) {
 		File file = new File(filePath);
+		return getFileBytes(file);
+	}
+
+	public static byte[] getFileBytes(File file) {
 		try (FileInputStream stream = new FileInputStream(file)) {
 			return stream.readAllBytes();
 		} catch (IOException e) {
