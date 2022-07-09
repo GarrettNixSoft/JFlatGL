@@ -62,7 +62,7 @@ public class StateTransitionManager {
 //			Render.fillScreen(new Vector4f(transitionColor, alpha), Config.NEAR_CLIP);
 			TransitionFader.setFadeColor(new Vector4f(transitionColor, alpha));
 			TransitionFader.render();
-			Logger.log("Render transition fade");
+//			Logger.log("Render transition fade");
 		}
 	}
 
