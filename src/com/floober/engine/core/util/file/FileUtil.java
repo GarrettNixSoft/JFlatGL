@@ -155,6 +155,16 @@ public class FileUtil {
 	}
 
 	// LOAD METHODS
+	public static byte[] getFileBytes(String filePath) {
+		File file = new File(filePath);
+		try (FileInputStream stream = new FileInputStream(file)) {
+			return stream.readAllBytes();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return new byte[0];
+		}
+	}
+
 	public static JSONObject getJSON(String file) {
 		// load file data
 //		Logger.log("Getting JSON: " + file);
