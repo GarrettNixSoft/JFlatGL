@@ -8,7 +8,7 @@ import java.io.File;
 
 public class FileGetter {
 
-	public static File getFile(String startingDir, String... extensions) {
+	public static File getFile(String startingDir, String filterDesc, String... extensions) {
 
 		JFileChooser fileChooser = new JFileChooser(startingDir);
 
@@ -24,7 +24,7 @@ public class FileGetter {
 
 			@Override
 			public String getDescription() {
-				return "DDPC 2 Maps (.ddpm)";
+				return filterDesc;
 			}
 		};
 
