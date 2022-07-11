@@ -21,11 +21,15 @@ public class GUIManager {
 	}
 
 	public static void closeGUI() {
+		// can't close an active GUI if there isn't one
+		if (activeGUI == null) return;
 		Logger.log("CLOSING GUI ************************************************************************");
 		activeGUI.close();
 	}
 
 	public static void forceCloseGUI() {
+		// can't close an active GUI if there isn't one
+		if (activeGUI == null) return;
 		GUI_BANK.remove(activeGUI.getId());
 		activeGUI.forceClose();
 		activeGUI = null;
