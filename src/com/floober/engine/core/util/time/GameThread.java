@@ -12,4 +12,11 @@ public class GameThread {
 		}
 	}
 
+	public static void executeThreaded(GameTask task) {
+
+		GameWorker worker = new GameWorker(task);
+		worker.run();
+
+	}
+
 }
