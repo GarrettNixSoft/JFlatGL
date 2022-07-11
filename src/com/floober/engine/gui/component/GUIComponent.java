@@ -13,6 +13,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+import java.nio.file.Path;
 import java.nio.file.attribute.AclEntry;
 import java.util.HashMap;
 
@@ -215,19 +216,19 @@ public abstract class GUIComponent {
 	}
 
 	public float getLeft() {
-		return getX() - getWidth() * getScale() / 2;
+		return getX() - size.x * scale / 2;
 	}
 
 	public float getRight() {
-		return getX() + getWidth() * getScale() / 2;
+		return getX() + size.x * scale / 2;
 	}
 
 	public float getTop() {
-		return getY() - getHeight() * getScale() / 2;
+		return getY() - size.y * scale / 2;
 	}
 
 	public float getBottom() {
-		return getY() + getHeight() * getScale() / 2;
+		return getY() + size.y * scale / 2;
 	}
 
 	// Size values
@@ -242,6 +243,14 @@ public abstract class GUIComponent {
 	}
 	public float getScale() {
 		return scale;
+	}
+
+	public float getScaledWidth() {
+		return size.x * scale;
+	}
+
+	public float getScaledHeight() {
+		return size.y * scale;
 	}
 
 	// Color values
