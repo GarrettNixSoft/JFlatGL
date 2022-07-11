@@ -13,6 +13,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+import java.nio.file.attribute.AclEntry;
 import java.util.HashMap;
 
 public abstract class GUIComponent {
@@ -211,6 +212,22 @@ public abstract class GUIComponent {
 	}
 	public int getLayer() {
 		return (int) position.z;
+	}
+
+	public float getLeft() {
+		return getX() - getWidth() * getScale() / 2;
+	}
+
+	public float getRight() {
+		return getX() + getWidth() * getScale() / 2;
+	}
+
+	public float getTop() {
+		return getY() - getHeight() * getScale() / 2;
+	}
+
+	public float getBottom() {
+		return getY() + getHeight() * getScale() / 2;
 	}
 
 	// Size values
