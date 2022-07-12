@@ -417,7 +417,7 @@ public abstract class GUIComponent {
 
 	private void trigger(int actionID) {
 		if (actions[actionID] != null) actions[actionID].onTrigger();
-		if (actionID == ON_LEFT_CLICK) Logger.log("Triggered left click!");
+//		if (actionID == ON_LEFT_CLICK) Logger.log("Triggered left click!");
 	}
 
 
