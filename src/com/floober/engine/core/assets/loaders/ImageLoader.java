@@ -154,8 +154,8 @@ public class ImageLoader {
 		try {
 			return ImageIO.read(inputStream);
 		} catch (Exception e) {
-			Logger.logError("Failed to read InputStream to BufferedImage.");
-			throw new RuntimeException("Failed to read InputStream to BufferedImage.");
+			Logger.logError("Failed to read InputStream to BufferedImage. Path: " + path);
+			throw new RuntimeException("Failed to read InputStream to BufferedImage. Path: " + path);
 		}
 	}
 
