@@ -47,7 +47,7 @@ public class ImageLoader {
 			int width = w.get();
 			int height = h.get();
 			// create the RawTexture and return it
-			return new RawTexture(buffer, width, height);
+			return new RawTexture(buffer, -1, width, height);
 		}
 	}
 

@@ -4,10 +4,13 @@ import com.floober.engine.core.renderEngine.elements.TextureElement;
 import com.floober.engine.core.renderEngine.textures.TextureComponent;
 import com.floober.engine.gui.GUI;
 
+import java.awt.color.ICC_ColorSpace;
+
 public class ImageButton extends Button {
 
 	private final TextureElement image;
 	private final TextureElement hoverImage;
+	private final TextureElement labelImage;
 
 	public ImageButton(String componentID, GUI parent) {
 		super(componentID, parent);
@@ -15,16 +18,8 @@ public class ImageButton extends Button {
 		image.setCentered(true);
 		hoverImage = new TextureElement();
 		hoverImage.setCentered(true);
-	}
-
-	public ImageButton image(TextureComponent tex) {
-		image.setTexture(tex);
-		return this;
-	}
-
-	public ImageButton hoverImage(TextureComponent tex) {
-		hoverImage.setTexture(tex);
-		return this;
+		labelImage = new TextureElement();
+		labelImage.setCentered(true);
 	}
 
 	@Override
@@ -41,6 +36,33 @@ public class ImageButton extends Button {
 		image.setSize(width, height);
 		hoverImage.setSize(width, height);
 		return this;
+	}
+
+	public ImageButton image(TextureComponent tex) {
+		setImage(tex);
+		return this;
+	}
+
+	public ImageButton hoverImage(TextureComponent tex) {
+		setHoverImage(tex);
+		return this;
+	}
+
+	public ImageButton labelImage(TextureComponent tex) {
+		setLabelImage(tex);
+		return this;
+	}
+
+	public void setImage(TextureComponent tex) {
+		image.setTexture(tex);
+	}
+
+	public void setHoverImage(TextureComponent tex) {
+		hoverImage.setTexture(tex);
+	}
+
+	public void setLabelImage(TextureComponent tex) {
+		labelImage.setTexture(tex);
 	}
 
 	@Override

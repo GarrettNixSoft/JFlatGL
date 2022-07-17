@@ -7,6 +7,7 @@ import com.floober.engine.core.renderEngine.textures.TextureComponent;
 import com.floober.engine.core.util.Logger;
 
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
 import java.nio.ByteBuffer;
 
 public class ImageConverter {
@@ -20,14 +21,14 @@ public class ImageConverter {
 	public static RawTexture[] convertToTextureArray(BufferedImage image, int textureWidth) {
 		// warn if the image does not evenly divide by the width
 		if (image.getWidth() % textureWidth != 0)
-			Logger.logWarning("BufferedImage width does not divide evenly by given width (" + image.getWidth() + ")");
+			throw new IllegalArgumentException("BufferedImage width does not divide evenly by given width (" + image.getWidth() + ")");
 		// initialize the results array
 		RawTexture[] results = new RawTexture[image.getWidth() / textureWidth];
 		// loop through and populate the array
 		for (int i = 0; i < results.length; ++i) {
 			BufferedImage subimage = image.getSubimage(i * textureWidth,  0, textureWidth, image.getHeight());
 			ByteBuffer imageData = ImageLoader.getBufferedImageData(subimage);
-			results[i] = new RawTexture(imageData, subimage.getWidth(), subimage.getHeight());
+			results[i] = new RawTexture(imageData, image.getType(), subimage.getWidth(), subimage.getHeight());
 		}
 		// return the results
 		return results;
@@ -43,9 +44,9 @@ public class ImageConverter {
 	public static RawTexture[] convertToTextureArray(BufferedImage image, int textureWidth, int textureHeight) {
 		// warn if the image does not evenly divide by the given dimensions
 		if (image.getWidth() % textureWidth != 0)
-			Logger.logWarning("BufferedImage width does not divide evenly by given width (" + image.getWidth() + ")");
+			throw new IllegalArgumentException("BufferedImage width does not divide evenly by given width (" + image.getWidth() + ")");
 		if (image.getHeight() % textureHeight != 0)
-			Logger.logWarning("BufferedImage height does not divide evenly by given height (" + image.getHeight() + ")");
+			throw new IllegalArgumentException("BufferedImage height does not divide evenly by given height (" + image.getHeight() + ")");
 		// initialize the results array
 		int numRows = image.getHeight() / textureHeight;
 		int numCols = image.getWidth() / textureWidth;
@@ -54,7 +55,7 @@ public class ImageConverter {
 		for (int i = 0; i < results.length; i++) {
 			BufferedImage subimage = image.getSubimage(i % numCols * textureWidth, i / numRows * textureHeight, textureWidth, textureHeight);
 			ByteBuffer imageData = ImageLoader.getBufferedImageData(subimage);
-			results[i] = new RawTexture(imageData, textureWidth, textureHeight);
+			results[i] = new RawTexture(imageData, image.getType(), textureWidth, textureHeight);
 		}
 		// return the results
 		return results;
