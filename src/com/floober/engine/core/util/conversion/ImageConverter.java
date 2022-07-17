@@ -21,7 +21,7 @@ public class ImageConverter {
 	public static RawTexture[] convertToTextureArray(BufferedImage image, int textureWidth) {
 		// warn if the image does not evenly divide by the width
 		if (image.getWidth() % textureWidth != 0)
-			throw new IllegalArgumentException("BufferedImage width does not divide evenly by given width (" + image.getWidth() + ")");
+			throw new IllegalArgumentException("BufferedImage width does not divide evenly by given width (" + image.getWidth() + " / " + textureWidth + ")");
 		// initialize the results array
 		RawTexture[] results = new RawTexture[image.getWidth() / textureWidth];
 		// loop through and populate the array
@@ -44,9 +44,9 @@ public class ImageConverter {
 	public static RawTexture[] convertToTextureArray(BufferedImage image, int textureWidth, int textureHeight) {
 		// warn if the image does not evenly divide by the given dimensions
 		if (image.getWidth() % textureWidth != 0)
-			throw new IllegalArgumentException("BufferedImage width does not divide evenly by given width (" + image.getWidth() + ")");
+			throw new IllegalArgumentException("BufferedImage width does not divide evenly by given width (" + image.getWidth() + " / " + textureWidth + ")");
 		if (image.getHeight() % textureHeight != 0)
-			throw new IllegalArgumentException("BufferedImage height does not divide evenly by given height (" + image.getHeight() + ")");
+			throw new IllegalArgumentException("BufferedImage height does not divide evenly by given height (" + image.getHeight() + " / " + textureHeight + ")");
 		// initialize the results array
 		int numRows = image.getHeight() / textureHeight;
 		int numCols = image.getWidth() / textureWidth;
