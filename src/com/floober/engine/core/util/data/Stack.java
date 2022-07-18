@@ -1,6 +1,7 @@
 package com.floober.engine.core.util.data;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -98,13 +99,13 @@ public class Stack<T> extends DataStructure<T> {
 	}
 
 	/**
-	 * Retrieve all elements from this Stack in order.
+	 * Retrieve all elements from this Stack in order (bottom to top).
 	 * @return an array containing all elements in the Stack
 	 */
 	public List<T> getElements() {
 
 		List<T> result = new ArrayList<>(size);
-		Queue<T> other = new Queue<>(size);
+		Stack<T> other = new Stack<>(size);
 
 		while (!isEmpty()) {
 			T element = poll();
@@ -117,7 +118,21 @@ public class Stack<T> extends DataStructure<T> {
 			push(other.poll());
 		}
 
+		Collections.reverse(result);
+
 		return result;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("Stack[");
+		for (T element : getElements()) {
+			stringBuilder.append(element).append(", ");
+		}
+		stringBuilder.setLength(stringBuilder.length() - 2);
+		stringBuilder.append(']');
+		return stringBuilder.toString();
 	}
 
 }

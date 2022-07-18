@@ -1,14 +1,18 @@
 package com.floober.engine.gui;
 
 import com.floober.engine.core.util.color.Colors;
+import com.floober.engine.core.util.input.MouseInput;
 import com.floober.engine.gui.component.BackgroundComponent;
 import com.floober.engine.gui.component.GUIComponent;
 import com.floober.engine.gui.component.GUILayer;
 import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.data.Stack;
+import com.floober.engine.gui.event.MouseClickEvent;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 public class GUI {
 
@@ -287,6 +291,38 @@ public class GUI {
 				layer.updateEvents();
 				layer.updateNoInput();
 			}
+		}
+		// check for a click
+		if (MouseInput.leftClick()) {
+			processClickEvent(MouseInput.LEFT);
+		}
+		if (MouseInput.rightClick()) {
+			processClickEvent(MouseInput.RIGHT);
+		}
+	}
+
+	private void processClickEvent(int button) {
+		// generate an event
+		MouseClickEvent event = new MouseClickEvent(button, MouseInput.getX(), MouseInput.getY());
+		// create a consumption flag
+		boolean consumed = false;
+		// offer the event to each layer starting from the top and moving down
+		// stop once it has been consumed by a component or we reach a locked layer
+		List<GUILayer> layers = layerStack.getElements();
+		Logger.log("Layer stack: " + layerStack);
+		Collections.reverse(layers);
+		Logger.log("Top layer is: " + layers.get(0).getComponentID());
+		while (!consumed) {
+
+			if (layers.isEmpty()) break;
+
+			GUILayer nextLayer = layers.get(0);
+			if (nextLayer.isLocked()) consumed = true;
+			else consumed = nextLayer.consumeClick(event);
+
+			if (!consumed)
+				layers.remove(0);
+
 		}
 	}
 

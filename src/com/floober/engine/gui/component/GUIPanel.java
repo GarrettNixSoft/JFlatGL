@@ -3,6 +3,7 @@ package com.floober.engine.gui.component;
 import com.floober.engine.gui.GUI;
 import com.floober.engine.gui.event.ClosedEvent;
 import com.floober.engine.core.util.Logger;
+import com.floober.engine.gui.event.MouseClickEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -123,6 +124,20 @@ public class GUIPanel extends GUIComponent {
 			component.checkInput();
 			component.update();
 		}
+	}
+
+	@Override
+	public boolean consumeClick(MouseClickEvent clickEvent) {
+		// create a consumed flag
+		boolean consumed = false;
+		// offer the event to each subcomponent
+		for (GUIComponent component : components) {
+			consumed = component.consumeClick(clickEvent);
+			// if the event was consumed, end the loop
+			if (consumed) break;
+		}
+		// report the result
+		return consumed;
 	}
 
 	@Override

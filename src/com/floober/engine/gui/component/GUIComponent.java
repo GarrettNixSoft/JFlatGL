@@ -8,6 +8,7 @@ import com.floober.engine.core.util.input.MouseInput;
 import com.floober.engine.core.util.math.Collisions;
 import com.floober.engine.gui.event.ClosedEvent;
 import com.floober.engine.gui.event.GUIEvent;
+import com.floober.engine.gui.event.MouseClickEvent;
 import com.floober.engine.gui.event.ReadyEvent;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -407,11 +408,28 @@ public abstract class GUIComponent {
 		else if (mouseExit()) {
 			trigger(ON_MOUSE_EXIT);
 		}
-		if (leftClick()) {
+//		if (leftClick()) {
+//			trigger(ON_LEFT_CLICK);
+//		}
+//		if (rightClick()) {
+//			trigger(ON_RIGHT_CLICK);
+//		}
+	}
+
+	public boolean consumeClick(MouseClickEvent clickEvent) {
+		if (clickEvent.button() == MouseInput.LEFT && mouseHover()) {
 			trigger(ON_LEFT_CLICK);
+			Logger.logGUIInteraction("Component " + componentID + " consumed the Left Click event!");
+			return true;
 		}
-		if (rightClick()) {
+		else if (clickEvent.button() == MouseInput.RIGHT && mouseHover()) {
 			trigger(ON_RIGHT_CLICK);
+			Logger.logGUIInteraction("Component " + componentID + " consumed the Right Click event!");
+			return true;
+		}
+		else {
+			Logger.logGUIInteraction("Component " + componentID + " did not consume the click event.");
+			return false;
 		}
 	}
 
