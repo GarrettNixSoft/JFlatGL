@@ -67,4 +67,10 @@ public class TabButton extends GUIComponent {
 	public void remove() {
 		label.remove();
 	}
+
+	@Override
+	public void restore() {
+		label.show();
+	}
+
 }

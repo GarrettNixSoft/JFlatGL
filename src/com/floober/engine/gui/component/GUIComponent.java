@@ -446,6 +446,7 @@ public abstract class GUIComponent {
 
 	// force implement this in case any component uses a GUIText
 	public abstract void remove();
+	public abstract void restore();
 
 	/**
 	 * Check if the mouse has entered this component's

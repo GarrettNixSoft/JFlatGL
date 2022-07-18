@@ -184,8 +184,21 @@ public class GUIPanel extends GUIComponent {
 	@Override
 	public void remove() {
 		for (GUIComponent component : components) {
-			Logger.log("REMOVING COMPONENT: " + component.getComponentID());
+			Logger.logGUIEvent("REMOVING COMPONENT: " + component.getComponentID());
 			component.remove();
 		}
+	}
+
+	@Override
+	public void restore() {
+		for (GUIComponent component : components) {
+			Logger.logGUIInteraction("RESTORING COMPONENT: " + component.getComponentID());
+			component.restore();
+		}
+	}
+
+	@Override
+	public String toString() {
+		return "GUIPanel[\"" + getComponentID() + "\"]";
 	}
 }

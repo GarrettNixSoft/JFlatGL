@@ -38,4 +38,9 @@ public class BackgroundComponent extends GUIComponent {
 	public void remove() {
 		// nothing
 	}
+
+	@Override
+	public void restore() {
+		// nothing
+	}
 }

@@ -103,7 +103,7 @@ public class ImageButton extends Button {
 
 	@Override
 	public void render() {
-		if (mouseHover()) hoverImage.render();
+		if (mouseHover() && !isLocked()) hoverImage.render();
 		else image.render();
 		labelImage.render();
 	}

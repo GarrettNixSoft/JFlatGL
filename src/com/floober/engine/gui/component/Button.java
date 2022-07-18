@@ -3,6 +3,7 @@ package com.floober.engine.gui.component;
 import com.floober.engine.core.renderEngine.display.DisplayManager;
 import com.floober.engine.core.Game;
 import com.floober.engine.core.renderEngine.Render;
+import com.floober.engine.core.renderEngine.elements.geometry.OutlineElement;
 import com.floober.engine.core.renderEngine.elements.geometry.RectElement;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.FontType;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.GUIText;
@@ -10,10 +11,12 @@ import com.floober.engine.core.util.Logger;
 import com.floober.engine.gui.GUI;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 public class Button extends GUIComponent {
 
 	private final RectElement baseElement;
+	private final OutlineElement outlineElement;
 	private final GUIText label;
 
 	private float defaultTextSize = 1.5f;
@@ -24,6 +27,7 @@ public class Button extends GUIComponent {
 		label.setWidth(0.5f);
 		label.setEdge(0.2f);
 		baseElement = new RectElement(getPrimaryColor(), 0, 0, 0, 0, 0, true);
+		outlineElement = new OutlineElement(getTertiaryColor(), 0, 0, 0, 0, 0, 0, true);
 	}
 
 	public Button label(String labelText) {
@@ -43,6 +47,13 @@ public class Button extends GUIComponent {
 
 	public Button rounded(float roundAmount) {
 		baseElement.setRoundRadius(roundAmount);
+		outlineElement.setRoundRadius(roundAmount);
+		return this;
+	}
+
+	public Button outline(Vector4f outlineColor, float outlineWidth) {
+		outlineElement.setColor(outlineColor);
+		outlineElement.setLineWidth(outlineWidth);
 		return this;
 	}
 
@@ -57,10 +68,17 @@ public class Button extends GUIComponent {
 
 	@Override
 	public void doTransform() {
+		// transform the base element
 		baseElement.setPosition(getPosition().setComponent(2, getPosition().z() - 1));
 		baseElement.setSize(getSize().mul(getScale()));
 		baseElement.transform();
 		baseElement.setColor(getPrimaryColor().mul(getOpacity()));
+		// transform the outline element
+		outlineElement.setPosition(getPosition().setComponent(2, getPosition().z() - 1));
+		outlineElement.setSize(getSize().mul(getScale()));
+		outlineElement.transform();
+		outlineElement.setColor(getPrimaryColor().mul(getOpacity()));
+		// transform the label
 		label.setPosition(new Vector3f(DisplayManager.convertToTextScreenPos(new Vector2f(getPosition().x(), getPosition().y())), getPosition().z()));
 		label.center();
 		label.setFontSize(defaultTextSize * getScale());
@@ -70,11 +88,17 @@ public class Button extends GUIComponent {
 	@Override
 	public void render() {
 		if (label.isHidden()) label.show();
-		Render.drawRect(baseElement);
+		baseElement.render();
+		outlineElement.render();
 	}
 
 	@Override
 	public void remove() {
 		label.remove();
+	}
+
+	@Override
+	public void restore() {
+		label.show();
 	}
 }

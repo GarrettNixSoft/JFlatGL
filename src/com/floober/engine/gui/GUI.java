@@ -227,7 +227,9 @@ public class GUI {
 		}
 
 		// otherwise, pop the next layer, put everything back and return the count
-		layerStack.pop();
+		GUILayer removed = layerStack.poll();
+		removed.remove();
+
 		while (!temp.isEmpty()) layerStack.push(temp.poll());
 		return count;
 
@@ -250,6 +252,9 @@ public class GUI {
 
 		// put the layer back
 		stackLayer(layerID);
+
+		GUILayer layer = layerStore.get(layerID);
+		layer.restore();
 
 		// replace the layers on top
 		while (!temp.isEmpty()) stackLayer(temp.poll());

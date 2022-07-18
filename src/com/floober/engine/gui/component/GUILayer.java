@@ -177,6 +177,14 @@ public class GUILayer extends GUIComponent {
 	}
 
 	@Override
+	public void restore() {
+		for (GUIComponent component : components) {
+			Logger.logGUIInteraction("RESTORING COMPONENT: " + component.getComponentID());
+			component.restore();
+		}
+	}
+
+	@Override
 	public String toString() {
 		return "GUILayer[\"" + getComponentID() + "\"]";
 	}
