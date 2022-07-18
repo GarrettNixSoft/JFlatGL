@@ -1,9 +1,12 @@
 package com.floober.engine.gui.component;
 
+import com.floober.engine.core.renderEngine.elements.geometry.RectElement;
+import com.floober.engine.core.util.color.Colors;
 import com.floober.engine.gui.GUI;
 import com.floober.engine.gui.event.ClosedEvent;
 import com.floober.engine.core.util.Logger;
 import com.floober.engine.gui.event.MouseClickEvent;
+import org.joml.Vector4f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +14,29 @@ import java.util.List;
 public class GUIPanel extends GUIComponent {
 
 	private final List<GUIComponent> components = new ArrayList<>();
+	private RectElement baseElement;
 
 	public GUIPanel(String componentID, GUI parent) {
 		super(componentID, parent);
+		baseElement = new RectElement(Colors.INVISIBLE, new Vector4f(), getLayer(), true);
+	}
+
+	@Override
+	public GUIComponent primaryColor(Vector4f primaryColor) {
+		baseElement.setColor(primaryColor);
+		return super.primaryColor(primaryColor);
+	}
+
+	@Override
+	public void setSize(float width, float height) {
+		super.setSize(width, height);
+		baseElement.setSize(width, height);
+	}
+
+	@Override
+	public void setPosition(float x, float y, int layer) {
+		baseElement.setPosition(x, y, layer);
+		super.setPosition(x, y, layer);
 	}
 
 	public List<GUIComponent> getComponents() {
@@ -21,7 +44,8 @@ public class GUIPanel extends GUIComponent {
 	}
 
 	public void addComponent(GUIComponent component) {
-		components.add(component);
+		if (component != this)
+			components.add(component);
 	}
 
 	@Override
@@ -142,6 +166,8 @@ public class GUIPanel extends GUIComponent {
 
 	@Override
 	public void doTransform() {
+		baseElement.setSize(getScaledSize());
+		baseElement.transform();
 		for (GUIComponent component : components) {
 			component.doTransform();
 		}
@@ -149,6 +175,7 @@ public class GUIPanel extends GUIComponent {
 
 	@Override
 	public void render() {
+		baseElement.render();
 		for (GUIComponent component : components) {
 			component.render();
 		}

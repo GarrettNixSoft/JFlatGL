@@ -31,7 +31,8 @@ public class GUILayer extends GUIComponent {
 	}
 
 	public void addComponent(GUIComponent component) {
-		components.add(component);
+		if (component != this)
+			components.add(component);
 	}
 
 	public boolean deleteComponentByID(String componentID) {
