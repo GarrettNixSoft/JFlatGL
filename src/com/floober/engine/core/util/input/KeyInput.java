@@ -283,35 +283,46 @@ public class KeyInput {
 		} else return false;
 	}
 
+	public static boolean isReleased(int key) {
+		return !getInstance().keyState[key] &&
+				getInstance().prevKeyState[key];
+	}
+
+	public static boolean isReleased(int... keys) {
+		for (int i : keys) {
+			if (isReleased(i)) return true;
+		}
+		return false;
+	}
+
 	// CHECK FOR NEW KEY PRESS
 	public static boolean isPressed(int key) {
-		return windowKeyboardAdapters.get(MasterRenderer.getTargetWindowID()).keyState[key] &&
-				!windowKeyboardAdapters.get(MasterRenderer.getTargetWindowID()).prevKeyState[key];
+		return getInstance().keyState[key] &&
+				!getInstance().prevKeyState[key];
 	}
 
 	public static boolean isPressed(int... keys) {
 		for (int i : keys) {
-			if (windowKeyboardAdapters.get(MasterRenderer.getTargetWindowID()).keyState[i] &&
-					!windowKeyboardAdapters.get(MasterRenderer.getTargetWindowID()).prevKeyState[i]) return true;
+			if (isPressed(i)) return true;
 		}
 		return false;
 	}
 
 	// CHECK FOR HOLDING SHIFT
 	public static boolean isShift() {
-		return windowKeyboardAdapters.get(MasterRenderer.getTargetWindowID()).keyState[LSHIFT] ||
-				windowKeyboardAdapters.get(MasterRenderer.getTargetWindowID()).keyState[RSHIFT];
+		return getInstance().keyState[LSHIFT] ||
+				getInstance().keyState[RSHIFT];
 	}
 
 	// CHECK FOR HOLDING CONTROL
 	public static boolean isCtrl() {
-		return windowKeyboardAdapters.get(MasterRenderer.getTargetWindowID()).keyState[LCONTROL] ||
-				windowKeyboardAdapters.get(MasterRenderer.getTargetWindowID()).keyState[RCONTROL];
+		return getInstance().keyState[LCONTROL] ||
+				getInstance().keyState[RCONTROL];
 	}
 
 	// CHECK FOR TEXT INPUT
 	public static List<Character> getCharacterInput() {
-		return windowKeyboardAdapters.get(MasterRenderer.getTargetWindowID()).textInput;
+		return getInstance().textInput;
 	}
 }
 
