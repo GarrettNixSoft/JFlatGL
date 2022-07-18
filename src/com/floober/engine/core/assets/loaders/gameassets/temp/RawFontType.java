@@ -15,7 +15,7 @@ public record RawFontType(String key, RawTextureAtlas rawAtlas, String fontFile)
 
 	public FontType convert() {
 		TextureAtlas fontAtlas = rawAtlas.convert();
-		return new FontType(fontAtlas.textureID(), fontFile);
+		return new FontType(fontAtlas.texture().id(), fontFile);
 	}
 
 }

@@ -14,7 +14,7 @@ public record RawTextureAtlas(String key, RawTexture texture, int numRows, boole
 
 	public TextureAtlas convert() {
 		TextureComponent temp = texture.convertToOpenGLTexture();
-		return new TextureAtlas(temp.id(), temp.width(), temp.height(), numRows, hasTransparency);
+		return new TextureAtlas(temp, numRows, hasTransparency);
 	}
 
 }

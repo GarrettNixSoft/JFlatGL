@@ -30,11 +30,18 @@ public class TextureComponent {
 		this.hasTransparency = hasTransparency;
 	}
 
+	@SuppressWarnings("all") // I meant to do it this way
 	public TextureComponent(TextureComponent other) {
-		this.texture = other.texture;
+		this.texture = other.texture.copy();
 		this.textureOffset.set(other.textureOffset);
 		this.hasTransparency = other.hasTransparency;
 		this.alpha = other.alpha;
+	}
+
+	// CLONE
+	@Override
+	public TextureComponent clone() {
+		return new TextureComponent(this);
 	}
 
 	// GETTERS

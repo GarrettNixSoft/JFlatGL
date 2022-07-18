@@ -155,28 +155,33 @@ public class TextureLoader extends AssetLoader {
 			int width = arrayObject.getInt("width");
 			// get the optional height
 			int height = arrayObject.optInt("height");
-			// load the array based on whether the height key exists
-			RawTexture[] rawArray;
-			if (height != 0)
-				rawArray = Loader.loadTextureArray(path, width, height);
-			else
-				rawArray = Loader.loadTextureArray(path, width);
-
-			boolean[] hasTransparency = new boolean[rawArray.length];
-
+			// Load the texture
+			RawTexture texture = Loader.loadTexture(path);
+			// It must be square
+			if (texture.width() / width != texture.height() / height)
+				throw new IllegalArgumentException("Texture array is not square");
+			// throw an exception if the image does not evenly divide by the given dimensions
+			if (texture.width() % width != 0)
+				throw new IllegalArgumentException("Texture array image width does not divide evenly by given width (" + texture.width() + " / " + width + ")");
+			if (texture.height() % height != 0)
+				throw new IllegalArgumentException("Texture array image height does not divide evenly by given height (" + texture.height() + " / " + height + ")");
 			// check whether this texture array is known
+			boolean hasTransparency;
 			if (TextureAnalyzer.isKnown(key)) { // if it is, set its transparency value to the known one
 //				Logger.log("Found data for this texture in the cache!");
-				boolean transparency = TextureAnalyzer.knownTransparencyValue(key);
-				Arrays.fill(hasTransparency, transparency);
+				hasTransparency = TextureAnalyzer.knownTransparencyValue(key);
 			}
 			else { 								// otherwise, analyze it to determine whether it contains transparency
 //				Logger.log("No data found, analyzing texture");
-				boolean transparency = TextureAnalyzer.findTransparencyInTexture(path, key);
-				Arrays.fill(hasTransparency, transparency);
+				hasTransparency = TextureAnalyzer.findTransparencyInTexture(path, key);
 			}
+			// compute the number of rows
+			int numRows = texture.height() / height;
+			// create the atlas
+			RawTextureAtlas rawTextureAtlas = new RawTextureAtlas(key, texture, numRows, hasTransparency);
 
-			RawTextureArray textureArray = new RawTextureArray(key, rawArray, hasTransparency);
+			// pack it all into the array
+			RawTextureArray textureArray = new RawTextureArray(key, rawTextureAtlas, width, height, hasTransparency);
 			rawTextureArrays.add(textureArray);
 
 			// report the load count

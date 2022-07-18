@@ -171,7 +171,7 @@ public class TileRenderer {
 	private void bindTexture(TextureAtlas textureAtlas) {
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, textureAtlas.textureID());
+		glBindTexture(GL_TEXTURE_2D, textureAtlas.texture().id());
 	}
 
 	private void bindOverlayTexture(TextureComponent texture) {
