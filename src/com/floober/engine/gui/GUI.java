@@ -148,6 +148,15 @@ public class GUI {
 		Logger.log("Layer stack succeeded");
 	}
 
+	public void stackLayer(String layerID) {
+		if (!layerStore.containsKey(layerID))
+			throw new RuntimeException("Tried to stack a layer that doesn't exist! (" + layerID + ")");
+		GUILayer layer = layerStore.get(layerID);
+		layerStack.push(layer);
+		layer.open();
+		Logger.log("Layer stack succeeded");
+	}
+
 	/**
 	 * Place a GUILayer onto the layer stack. If the given layer
 	 * is not already in the layer stack, it will be added to it.
@@ -187,6 +196,64 @@ public class GUI {
 	 */
 	public void removeTopLayer() {
 		layerStack.peek().close();
+	}
+
+	/**
+	 * Remove a specific layer from the layer stack.
+	 * <br>
+	 * Note that if any additional layers are added or removed
+	 * above the layer removed by this call before it is restored,
+	 * there is no guarantee that the original layer ordering
+	 * can be preserved.
+	 * @param layerID the ID of the layer to remove
+	 * @return the number of layers that were on top of
+	 * the target layer, or -1 if no layer with the given ID
+	 * was found in the stack.
+	 */
+	public int removeLayer(String layerID) {
+
+		// pop layers until it is found
+		int count = 0;
+		Stack<GUILayer> temp = new Stack<>(layerStack.size());
+		while (!layerStack.isEmpty() && !layerStack.peek().getComponentID().equals(layerID)) {
+			temp.push(layerStack.poll());
+			count++;
+		}
+
+		// if we removed all layers and didn't find a match, put everything back and return -1
+		if (layerStack.isEmpty()) {
+			while (!temp.isEmpty()) layerStack.push(temp.poll());
+			return -1;
+		}
+
+		// otherwise, pop the next layer, put everything back and return the count
+		layerStack.pop();
+		while (!temp.isEmpty()) layerStack.push(temp.poll());
+		return count;
+
+	}
+
+	/**
+	 * Reverse the process of calling {@code removeLayer()}.
+	 * @param layerID the ID of the layer to restore
+	 * @param count the value returned by {@code removeLayer()} for the given layer
+	 */
+	public void restoreLayer(String layerID, int count) {
+
+		// error if the requested layer does not exist
+		if (!layerStore.containsKey(layerID))
+			throw new RuntimeException("Attempted to restore a layer that does not exist! (" + layerID + ")");
+
+		// remove the layers on top of the desired layer
+		Stack<GUILayer> temp = new Stack<>(count);
+		for (int i = 0; i < count; i++) temp.push(layerStack.poll());
+
+		// put the layer back
+		stackLayer(layerID);
+
+		// replace the layers on top
+		while (!temp.isEmpty()) stackLayer(temp.poll());
+
 	}
 
 	/**
