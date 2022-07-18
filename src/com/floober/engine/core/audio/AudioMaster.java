@@ -1,13 +1,18 @@
 package com.floober.engine.core.audio;
 
+import com.floober.engine.core.assets.loaders.Loader;
 import com.floober.engine.core.audio.util.WaveData;
 import com.floober.engine.core.util.Logger;
+import com.floober.engine.core.util.file.FileUtil;
+import com.floober.engine.core.util.file.ResourceLoader;
 import org.joml.Vector3f;
 import org.lwjgl.openal.AL;
 import org.lwjgl.openal.ALC;
 import org.lwjgl.openal.ALC10;
 import org.lwjgl.openal.ALCCapabilities;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -47,17 +52,43 @@ public class AudioMaster {
 
 	public static Sound loadSound(String file) {
 		Logger.logLoad("Loading sound: " + file);
-		file = file.replace("/", "\\");
-		long start = System.nanoTime();
-		int buffer = alGenBuffers();
-		buffers.add(buffer);
-		WaveData waveFile = WaveData.create(file);
-		alBufferData(buffer, waveFile.format(), waveFile.data(), waveFile.samplerate());
-		Sound sound = new Sound(buffer, waveFile.stereo());
-		waveFile.dispose();
-		long elapsed = (System.nanoTime() - start) / 1_000_000;
-		Logger.logLoad("Loaded sound file in " + elapsed + "ms");
-		return sound;
+		// create an input stream
+		try (InputStream inputStream = Loader.tryGetInputStream(file)) {
+			long start = System.nanoTime();
+			int buffer = alGenBuffers();
+			buffers.add(buffer);
+			// load the input stream
+			WaveData waveFile = WaveData.create(inputStream);
+			alBufferData(buffer, waveFile.format(), waveFile.data(), waveFile.samplerate());
+			Sound sound = new Sound(buffer, waveFile.stereo());
+			waveFile.dispose();
+			long elapsed = (System.nanoTime() - start) / 1_000_000;
+			Logger.logLoad("Loaded sound file in " + elapsed + "ms");
+			return sound;
+		} catch (IOException e) {
+			Logger.logError("Error loading " + file + ": " + e.getMessage(), Logger.CRITICAL);
+			return null;
+		}
+//		file = file.replace("/", "\\");
+	}
+
+	private static InputStream tryGetInputStream(String path) {
+		// declare the input stream
+		InputStream in = null;
+		// open the stream; how this executes depends on whether the game is running in-IDE or as an exported JAR
+		try {
+			in = ResourceLoader.getResourceAsStream(path); // exported game
+		}
+		catch (Exception e1) {
+			try {
+				Logger.logLoadError("Export-load failed, trying in-development load...");
+				in = ResourceLoader.getResourceAsStream("res" + FileUtil.SEPARATOR + path); // in development
+			} catch (Exception e2) {
+				Logger.logLoadError("In-development load failed. Resource could not be found.");
+			}
+		}
+		Logger.logLoad("Load success!");
+		return in;
 	}
 
 	public static Source generateSource() {

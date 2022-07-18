@@ -1,12 +1,9 @@
 package com.floober.engine.core.assets.loaders;
 
-import com.floober.engine.core.assets.loaders.gameassets.temp.RawTextureComponent;
 import com.floober.engine.core.renderEngine.textures.RawTextureData;
 import com.floober.engine.core.renderEngine.textures.Texture;
 import com.floober.engine.core.renderEngine.textures.TextureComponent;
 import com.floober.engine.core.util.Logger;
-import com.floober.engine.core.util.file.FileUtil;
-import com.floober.engine.core.util.file.ResourceLoader;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.system.MemoryStack;
 
@@ -149,7 +146,7 @@ public class ImageLoader {
 		// report load
 		Logger.logLoad("Loading to buffered image: " + path);
 		// get input stream
-		InputStream inputStream = tryGetInputStream(path);
+		InputStream inputStream = Loader.tryGetInputStream(path);
 		// load buffered image
 		try {
 			return ImageIO.read(inputStream);
@@ -161,7 +158,7 @@ public class ImageLoader {
 
 	private static ByteBuffer tryLoad(String path, IntBuffer w, IntBuffer h, IntBuffer comp) {
 		// declare the input stream
-		try (InputStream in = tryGetInputStream(path)) {
+		try (InputStream in = Loader.tryGetInputStream(path)) {
 			// get the bytes from the input stream
 			byte[] imageBytes = {};
 			try {
@@ -186,34 +183,6 @@ public class ImageLoader {
 			throw new RuntimeException(e);
 		}
 
-	}
-
-	/**
-	 * A utility function to help the game to retrieve InputStreams in both
-	 * the development environment and when exported. It will attempt to load
-	 * from an exported environment first, to preserve performance when the
-	 * game is deployed; if that attempt fails, it will assume the game is
-	 * being run in development (an IDE) and try that load method.
-	 * @param path The path of the file to load.
-	 * @return An InputStream associated with the path, or null if both attempts fail.
-	 */
-	private static InputStream tryGetInputStream(String path) {
-		// declare the input stream
-		InputStream in = null;
-		// open the stream; how this executes depends on whether the game is running in-IDE or as an exported JAR
-		try {
-			in = ResourceLoader.getResourceAsStream(path); // exported game
-		}
-		catch (Exception e1) {
-			try {
-				Logger.logLoadError("Export-load failed, trying in-development load...");
-				in = ResourceLoader.getResourceAsStream("res" + FileUtil.SEPARATOR + path); // in development
-			} catch (Exception e2) {
-				Logger.logLoadError("In-development load failed. Resource could not be found.");
-			}
-		}
-		Logger.logLoad("Load success!");
-		return in;
 	}
 
 	/**

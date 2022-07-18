@@ -10,8 +10,10 @@ import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.conversion.ImageConverter;
 import com.floober.engine.core.util.conversion.StringConverter;
 import com.floober.engine.core.util.file.FileUtil;
+import com.floober.engine.core.util.file.ResourceLoader;
 
 import java.awt.image.BufferedImage;
+import java.io.InputStream;
 
 import static com.floober.engine.core.util.file.FileUtil.SEPARATOR;
 
@@ -72,4 +74,31 @@ public class Loader {
 		ImageLoader.cleanUp();
 	}
 
+	/**
+	 * A utility function to help the game to retrieve InputStreams in both
+	 * the development environment and when exported. It will attempt to load
+	 * from an exported environment first, to preserve performance when the
+	 * game is deployed; if that attempt fails, it will assume the game is
+	 * being run in development (an IDE) and try that load method.
+	 * @param path The path of the file to load.
+	 * @return An InputStream associated with the path, or null if both attempts fail.
+	 */
+	public static InputStream tryGetInputStream(String path) {
+		// declare the input stream
+		InputStream in = null;
+		// open the stream; how this executes depends on whether the game is running in-IDE or as an exported JAR
+		try {
+			in = ResourceLoader.getResourceAsStream(path); // exported game
+		}
+		catch (Exception e1) {
+			try {
+				Logger.logLoadError("Export-load failed, trying in-development load...");
+				in = ResourceLoader.getResourceAsStream("res" + SEPARATOR + path); // in development
+			} catch (Exception e2) {
+				Logger.logLoadError("In-development load failed. Resource could not be found.");
+			}
+		}
+		Logger.logLoad("Load success!");
+		return in;
+	}
 }
