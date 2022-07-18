@@ -4,8 +4,6 @@ import com.floober.engine.core.renderEngine.elements.TextureElement;
 import com.floober.engine.core.renderEngine.textures.TextureComponent;
 import com.floober.engine.gui.GUI;
 
-import java.awt.color.ICC_ColorSpace;
-
 public class ImageButton extends Button {
 
 	private final TextureElement image;
