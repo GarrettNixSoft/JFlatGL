@@ -309,9 +309,8 @@ public class GUI {
 		// offer the event to each layer starting from the top and moving down
 		// stop once it has been consumed by a component or we reach a locked layer
 		List<GUILayer> layers = layerStack.getElements();
-		Logger.log("Layer stack: " + layerStack);
 		Collections.reverse(layers);
-		Logger.log("Top layer is: " + layers.get(0).getComponentID());
+
 		while (!consumed) {
 
 			if (layers.isEmpty()) break;

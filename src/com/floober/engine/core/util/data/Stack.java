@@ -108,17 +108,15 @@ public class Stack<T> extends DataStructure<T> {
 		Stack<T> other = new Stack<>(size);
 
 		while (!isEmpty()) {
-			T element = poll();
-			result.add(element);
-			other.push(element);
+			other.push(poll());
 		}
 
 		// now put everything back into this stack
 		while (!other.isEmpty()) {
-			push(other.poll());
+			T element = other.poll();
+			push(element);
+			result.add(element);
 		}
-
-		Collections.reverse(result);
 
 		return result;
 	}
