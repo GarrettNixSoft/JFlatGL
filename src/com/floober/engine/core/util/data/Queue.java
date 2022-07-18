@@ -162,6 +162,14 @@ public class Queue<T> extends DataStructure<T> {
 	}
 
 	/**
+	 * Check if this queue has another element.
+	 * @return {@code true} if there is at least one element in this queue
+	 */
+	public boolean hasNext() {
+		return size > 0;
+	}
+
+	/**
 	 * Retrieve all elements from this Queue in order.
 	 * @return an array containing all elements in the Queue
 	 */

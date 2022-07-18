@@ -99,6 +99,14 @@ public class Stack<T> extends DataStructure<T> {
 	}
 
 	/**
+	 * Check if this stack has another element.
+	 * @return {@code true} if there is at least one element in this stack
+	 */
+	public boolean hasNext() {
+		return size > 0;
+	}
+
+	/**
 	 * Retrieve all elements from this Stack in order (bottom to top).
 	 * @return an array containing all elements in the Stack
 	 */
