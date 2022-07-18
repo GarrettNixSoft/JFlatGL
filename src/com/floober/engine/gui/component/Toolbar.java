@@ -12,14 +12,26 @@ public class Toolbar extends GUIPanel {
 
 	public Toolbar(String componentID, GUI parent, int numButtons) {
 		super(componentID, parent);
-		baseElement = new RectElement(Colors.INVISIBLE, new Vector4f(), getLayer(), false);
+		baseElement = new RectElement(Colors.INVISIBLE, new Vector4f(), getLayer(), true);
 		buttons = new Button[numButtons];
+	}
+
+	@Override
+	public GUIComponent primaryColor(Vector4f primaryColor) {
+		baseElement.setColor(primaryColor);
+		return super.primaryColor(primaryColor);
 	}
 
 	@Override
 	public void setSize(float width, float height) {
 		super.setSize(width, height);
 		baseElement.setSize(width, height);
+	}
+
+	@Override
+	public void setPosition(float x, float y, int layer) {
+		baseElement.setPosition(x, y, layer);
+		super.setPosition(x, y, layer);
 	}
 
 	public void sizeButtons(float width, float height) {
@@ -29,12 +41,10 @@ public class Toolbar extends GUIPanel {
 	}
 
 	public void positionButtons(int padding) {
-		// determine how much horizontal spacing is available to the buttons
-		int buttonSpace = (int) (getWidth() / buttons.length);
 		int buttonSize = (int) buttons[0].getWidth();
 		// position each button
 		for (int i = 0; i < buttons.length; i++) {
-			int xPos = i * (buttonSize + padding) + padding;
+			int xPos = (int) getLeft() + buttonSize / 2 + padding + i * (buttonSize + padding);
 			int yPos = (int) getY();
 			buttons[i].setPosition(xPos, yPos, getLayer() + 1);
 		}
@@ -53,4 +63,16 @@ public class Toolbar extends GUIPanel {
 		return buttons[index];
 	}
 
+	@Override
+	public void doTransform() {
+		baseElement.setSize(getScaledSize());
+		baseElement.transform();
+		super.doTransform();
+	}
+
+	@Override
+	public void render() {
+		super.render();
+		baseElement.render();
+	}
 }

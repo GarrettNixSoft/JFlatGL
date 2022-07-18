@@ -23,7 +23,6 @@ import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
 import com.floober.engine.core.renderEngine.renderers.TextureRenderer;
 import com.floober.engine.core.renderEngine.util.Layers;
 import com.floober.engine.core.util.color.Colors;
-import com.floober.engine.core.util.configuration.Config;
 import com.floober.engine.core.util.exception.GUIException;
 import com.floober.engine.core.util.input.KeyInput;
 import com.floober.engine.core.util.input.MouseInput;
@@ -195,7 +194,7 @@ public class GUITest {
 					});
 		}
 
-		gui.stackLayer(layer);
+		gui.stackAndLock(layer);
 
 		// activate the GUI
 		GUIManager.setActiveGUI(gui);

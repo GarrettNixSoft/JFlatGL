@@ -3,6 +3,8 @@ package com.floober.engine.gui.component;
 import com.floober.engine.core.renderEngine.elements.TextureElement;
 import com.floober.engine.core.renderEngine.textures.TextureComponent;
 import com.floober.engine.gui.GUI;
+import org.joml.Vector2f;
+import org.joml.Vector3f;
 
 public class ImageButton extends Button {
 
@@ -25,6 +27,7 @@ public class ImageButton extends Button {
 		super.location(x, y, layer);
 		image.setPosition(x, y, layer);
 		hoverImage.setPosition(x, y, layer);
+		labelImage.setPosition(x, y, layer);
 		return this;
 	}
 
@@ -33,7 +36,32 @@ public class ImageButton extends Button {
 		super.size(width, height);
 		image.setSize(width, height);
 		hoverImage.setSize(width, height);
+		labelImage.setSize(width, height);
 		return this;
+	}
+
+	@Override
+	public void setPosition(Vector3f position) {
+		image.setPosition(position);
+		hoverImage.setPosition(position);
+		labelImage.setPosition(position);
+		super.setPosition(position);
+	}
+
+	@Override
+	public void setPosition(float x, float y, int layer) {
+		image.setPosition(x, y, layer);
+		hoverImage.setPosition(x, y, layer);
+		labelImage.setPosition(x, y, layer);
+		super.setPosition(x, y, layer);
+	}
+
+	@Override
+	public void setPosition(Vector2f position, float z) {
+		image.setPosition(new Vector3f(position, z));
+		hoverImage.setPosition(new Vector3f(position, z));
+		labelImage.setPosition(new Vector3f(position, z));
+		super.setPosition(position, z);
 	}
 
 	public ImageButton image(TextureComponent tex) {
@@ -65,14 +93,19 @@ public class ImageButton extends Button {
 
 	@Override
 	public void doTransform() {
+		image.setSize(getScaledSize());
 		image.transform();
+		hoverImage.setSize(getScaledSize());
 		hoverImage.transform();
+		labelImage.setSize(getScaledSize());
+		labelImage.transform();
 	}
 
 	@Override
 	public void render() {
-		if (mouseOver()) hoverImage.render();
+		if (mouseHover()) hoverImage.render();
 		else image.render();
+		labelImage.render();
 	}
 
 }

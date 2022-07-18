@@ -235,6 +235,7 @@ public abstract class GUIComponent {
 	public Vector2f getSize() {
 		return new Vector2f(size);
 	}
+	public Vector2f getScaledSize() { return new Vector2f(size).mul(scale); }
 	public float getWidth() {
 		return size.x;
 	}
@@ -248,7 +249,6 @@ public abstract class GUIComponent {
 	public float getScaledWidth() {
 		return size.x * scale;
 	}
-
 	public float getScaledHeight() {
 		return size.y * scale;
 	}
@@ -437,8 +437,16 @@ public abstract class GUIComponent {
 	 * mouse's current position, or false otherwise
 	 */
 	protected boolean mouseOver() {
-		return !Collisions.contains(getCollisionBox(), MouseInput.getPrevPos()) &&
-				Collisions.contains(getCollisionBox(), MouseInput.getMousePos());
+		return !Collisions.contains(getCollisionBox(), MouseInput.getPrevPos()) && mouseHover();
+	}
+
+	/**
+	 * Check if the mouse is over this component's
+	 * collision box.
+	 * @return {@code true} if the mouse is over this component
+	 */
+	protected boolean mouseHover() {
+		return Collisions.contains(getCollisionBox(), MouseInput.getMousePos());
 	}
 
 	/**

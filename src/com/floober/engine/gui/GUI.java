@@ -125,7 +125,7 @@ public class GUI {
 	 */
 	public void addLayer(GUILayer layer) {
 		storeLayer(layer);
-		stackLayer(layer);
+		stackAndLock(layer);
 	}
 
 	/**
@@ -136,15 +136,23 @@ public class GUI {
 		layerStore.put(layer.getComponentID(), layer);
 	}
 
+	public void stackLayer(GUILayer layer) {
+		String layerID = layer.getComponentID();
+		if (!layerStore.containsKey(layerID)) layerStore.put(layerID, layer);
+		layerStack.push(layer);
+		layer.open();
+		Logger.log("Layer stack succeeded");
+	}
+
 	/**
 	 * Place a GUILayer onto the layer stack. If the given layer
 	 * is not already in the layer stack, it will be added to it.
 	 * @param layer the layer to stack
 	 */
-	public void stackLayer(GUILayer layer) {
+	public void stackAndLock(GUILayer layer) {
 		String layerID = layer.getComponentID();
 		if (!layerStore.containsKey(layerID)) layerStore.put(layerID, layer);
-		stackLayer(layerID);
+		stackAndLock(layerID);
 	}
 
 	/**
@@ -154,11 +162,13 @@ public class GUI {
 	 * on the layer stack.
 	 * @param layerID the ID of the layer to stack
 	 */
-	public void stackLayer(String layerID) {
+	public void stackAndLock(String layerID) {
 		if (layerStore.containsKey(layerID)) {
 			GUILayer layer = layerStore.get(layerID);
 			if (layerStack.getElements().contains(layer)) throw new RuntimeException("Layer " + layerID + " is already on the layer stack!");
-			if (!layerStack.isEmpty()) layerStack.peek().lock();
+			// lock previously stacked layers
+			lock();
+			// put the new layer on top
 			layerStack.push(layer);
 			layer.open();
 			Logger.log("Layer stack succeeded");
@@ -247,6 +257,12 @@ public class GUI {
 	 */
 	public void unlock() {
 		layerStack.peek().unlock();
+	}
+
+	public void unlockAll() {
+		for (GUILayer layer : layerStack.getElements()) {
+			layer.unlock();
+		}
 	}
 
 	public void update() {
