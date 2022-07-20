@@ -42,6 +42,24 @@ public class TabButton extends GUIComponent {
 	}
 
 	@Override
+	public void setPosition(Vector3f position) {
+		label.setPosition(position);
+		super.setPosition(position);
+	}
+
+	@Override
+	public void setPosition(float x, float y, int layer) {
+		label.setPosition(new Vector3f(DisplayManager.convertToTextScreenPos(new Vector2f(getPosition().x(), getPosition().y() + getSize().y() / 2)), getPosition().z()));
+		super.setPosition(x, y, layer);
+	}
+
+	@Override
+	public void setPosition(Vector2f position, float z) {
+		label.setPosition(new Vector3f(position, z));
+		super.setPosition(position, z);
+	}
+
+	@Override
 	public void update() {
 		// nothing
 	}
@@ -51,6 +69,7 @@ public class TabButton extends GUIComponent {
 		iconTexture.setPosition(getPosition().setComponent(2, getPosition().z() - 1));
 		iconTexture.setSize(getSize().mul(getScale()));
 		iconTexture.transform();
+		// transform the label
 		label.setPosition(new Vector3f(DisplayManager.convertToTextScreenPos(new Vector2f(getPosition().x(), getPosition().y() + getSize().y() / 2)), getPosition().z()));
 		label.center();
 		label.setFontSize(defaultTextSize * getScale());
