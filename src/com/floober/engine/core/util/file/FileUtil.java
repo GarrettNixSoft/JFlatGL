@@ -154,6 +154,18 @@ public class FileUtil {
 		}
 	}
 
+	public static void writeFile(File file, byte[] bytes) {
+
+		try (FileOutputStream stream = new FileOutputStream(file)) {
+
+			stream.write(bytes);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
 	// LOAD METHODS
 	public static byte[] getFileBytes(String filePath) {
 		File file = new File(filePath);
