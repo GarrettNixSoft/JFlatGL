@@ -27,7 +27,7 @@ public class TextMaster {
 
 	public static void render(int layer) {
 		updateTexts(layer);
-		Logger.log("Rendering layer " + layer);
+//		Logger.log("Rendering layer " + layer);
 		renderer.render(texts[layer]);
 	}
 

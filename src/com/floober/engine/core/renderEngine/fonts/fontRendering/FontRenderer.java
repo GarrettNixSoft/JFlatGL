@@ -65,7 +65,7 @@ public class FontRenderer {
 		// fix position
 		Vector3f textPos = text.getPosition();
 		textPos.z = MasterRenderer.getScreenZ((int) textPos.z);
-		if (!text.getTextString().startsWith("FPS")) Logger.log("Rendering text: " + text.getTextString().substring(0, Math.min(text.getTextString().length(), 16)));
+//		if (!text.getTextString().startsWith("FPS")) Logger.log("Rendering text: " + text.getTextString().substring(0, Math.min(text.getTextString().length(), 16)));
 //		Logger.log("RENDERING TEXT AT POS: " + StringConverter.vec3fToString(textPos));
 		// send data to shader
 		glBindVertexArray(text.getMesh());

@@ -487,7 +487,7 @@ public class GUIText {
 	 */
 	public boolean update() {
 		if (needsReload) {
-			Logger.log("Reloading " + textString);
+//			Logger.log("Reloading " + textString);
 			reload();
 			needsReload = false;
 //			Logger.log("Reloading: " + textString);
