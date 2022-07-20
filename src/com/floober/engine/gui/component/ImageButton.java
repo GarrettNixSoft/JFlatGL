@@ -108,4 +108,9 @@ public class ImageButton extends Button {
 		labelImage.render();
 	}
 
+	@Override
+	public void restore() {
+		// nothing
+	}
+
 }
