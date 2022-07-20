@@ -52,7 +52,7 @@ public class Button extends GUIComponent {
 	}
 
 	public Button outline(Vector4f outlineColor, float outlineWidth) {
-		outlineElement.setColor(outlineColor);
+		tertiaryColor(outlineColor);
 		outlineElement.setLineWidth(outlineWidth);
 		return this;
 	}
@@ -77,7 +77,7 @@ public class Button extends GUIComponent {
 		outlineElement.setPosition(getPosition().setComponent(2, getPosition().z() - 1));
 		outlineElement.setSize(getSize().mul(getScale()));
 		outlineElement.transform();
-		outlineElement.setColor(getPrimaryColor().mul(getOpacity()));
+		outlineElement.setColor(getTertiaryColor().mul(getOpacity()));
 		// transform the label
 		label.setPosition(new Vector3f(DisplayManager.convertToTextScreenPos(new Vector2f(getPosition().x(), getPosition().y())), getPosition().z()));
 		label.center();

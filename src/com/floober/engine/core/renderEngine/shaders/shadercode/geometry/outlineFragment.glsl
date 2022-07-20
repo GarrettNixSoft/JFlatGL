@@ -15,13 +15,13 @@ float udRoundBox(vec2 pos, vec2 ext) {
 
 void main(void) {
 
+	vec2 aspectRatio = vec2(1, dimensions.x / dimensions.y);
+	float ratio = aspectRatio.x / aspectRatio.y;
+
 	// STEP 1: Discard if inside lineWidth
-	if (pos.x < lineWidth || pos.x > 1 - lineWidth || pos.y < lineWidth || pos.y > 1 - lineWidth) {
-		out_color = vec4(lineWidth);
+	if (pos.x < lineWidth || pos.x > 1 - lineWidth || pos.y < lineWidth * ratio || pos.y > 1 - lineWidth * ratio) {
 
 		// STEP 2: If not discarded, draw like normal rect
-		vec2 aspectRatio = vec2(1, dimensions.x / dimensions.y);
-
 		vec2 pos2 = pos * aspectRatio;
 		vec2 halfRes = vec2(0.5) * aspectRatio;
 
