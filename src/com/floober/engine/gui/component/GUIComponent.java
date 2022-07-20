@@ -42,7 +42,7 @@ public abstract class GUIComponent {
 	private final HashMap<String, GUIAction> transitions = new HashMap<>();
 
 	// interactions
-	private final GUIAction[] actions = new GUIAction[8];
+	private final GUIAction[] actions = new GUIAction[9];
 	protected static final int ON_OPEN = 0;
 	protected static final int ON_OPEN_COMPLETE = 1;
 	protected static final int ON_CLOSE = 2;
@@ -51,6 +51,7 @@ public abstract class GUIComponent {
 	protected static final int ON_MOUSE_EXIT = 5;
 	protected static final int ON_LEFT_CLICK = 6;
 	protected static final int ON_RIGHT_CLICK = 7;
+	protected static final int ON_MOUSE_HOVER = 8;
 
 	// enter/exit
 	private boolean active;
@@ -162,6 +163,11 @@ public abstract class GUIComponent {
 
 	public GUIComponent onRightClick(GUIAction action) {
 		actions[ON_RIGHT_CLICK] = action;
+		return this;
+	}
+
+	public GUIComponent onMouseHover(GUIAction action) {
+		actions[ON_MOUSE_HOVER] = action;
 		return this;
 	}
 
@@ -407,6 +413,9 @@ public abstract class GUIComponent {
 		}
 		else if (mouseExit()) {
 			trigger(ON_MOUSE_EXIT);
+		}
+		else if (mouseHover()) {
+			trigger(ON_MOUSE_HOVER);
 		}
 //		if (leftClick()) {
 //			trigger(ON_LEFT_CLICK);
