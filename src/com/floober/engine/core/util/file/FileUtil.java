@@ -154,14 +154,16 @@ public class FileUtil {
 		}
 	}
 
-	public static void writeFile(File file, byte[] bytes) {
+	public static boolean writeFile(File file, byte[] bytes) {
 
 		try (FileOutputStream stream = new FileOutputStream(file)) {
 
 			stream.write(bytes);
+			return true;
 
 		} catch (IOException e) {
 			e.printStackTrace();
+			return false;
 		}
 
 	}
