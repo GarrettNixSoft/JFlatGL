@@ -10,6 +10,7 @@ import org.joml.Vector3f;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
@@ -28,7 +29,7 @@ public class FontRenderer {
 		shader = new FontShader();
 	}
 
-	public void render(Map<FontType, List<GUIText>> texts) {
+	public void render(Map<FontType, Set<GUIText>> texts) {
 
 		prepare();
 
@@ -64,7 +65,7 @@ public class FontRenderer {
 		// fix position
 		Vector3f textPos = text.getPosition();
 		textPos.z = MasterRenderer.getScreenZ((int) textPos.z);
-//		Logger.log("Rendering text: " + text.getTextString().substring(0, Math.min(text.getTextString().length(), 16)));
+		if (!text.getTextString().startsWith("FPS")) Logger.log("Rendering text: " + text.getTextString().substring(0, Math.min(text.getTextString().length(), 16)));
 //		Logger.log("RENDERING TEXT AT POS: " + StringConverter.vec3fToString(textPos));
 		// send data to shader
 		glBindVertexArray(text.getMesh());

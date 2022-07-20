@@ -184,6 +184,7 @@ public class GUI {
 			// put the new layer on top
 			layerStack.push(layer);
 			layer.open();
+			layer.restore();
 			Logger.log("Layer stack succeeded");
 		}
 		else throw new RuntimeException("GUI layer " + layerID + " does not exist!");

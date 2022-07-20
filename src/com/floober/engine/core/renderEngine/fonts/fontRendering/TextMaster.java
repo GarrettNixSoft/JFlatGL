@@ -11,7 +11,7 @@ import java.util.*;
 
 public class TextMaster {
 
-	private static Map<FontType, List<GUIText>>[] texts;
+	private static Map<FontType, Set<GUIText>>[] texts;
 	private static FontRenderer renderer;
 
 	public static final List<Integer> textVAOs = new ArrayList<>();
@@ -27,14 +27,15 @@ public class TextMaster {
 
 	public static void render(int layer) {
 		updateTexts(layer);
+		Logger.log("Rendering layer " + layer);
 		renderer.render(texts[layer]);
 	}
 
 	public static void loadText(GUIText text) {
 		if (!text.isProcessed()) processText(text);
-		int layer = (int) text.getPosition().z();
+		int layer = text.getLayer();
 		FontType fontType = text.getFont();
-		List<GUIText> textBatch = texts[layer].computeIfAbsent(fontType, k -> new ArrayList<>());
+		Set<GUIText> textBatch = texts[layer].computeIfAbsent(fontType, k -> new HashSet<>());
 		textBatch.add(text);
 //		Logger.log("Added to layer " + layer + ": " + text.getTextString());
 //		Logger.log("Layer now has " + texts[layer].keySet().size() + " font lists in it");
@@ -62,8 +63,8 @@ public class TextMaster {
 	public static void removeText(GUIText text) {
 //		Logger.log("REMOVING: " + text.getTextString());
 		text.delete();
-		int layer = (int) text.getPosition().z();
-		List<GUIText> textBatch = texts[layer].get(text.getFont());
+		int layer = text.getLayer();
+		Set<GUIText> textBatch = texts[layer].get(text.getFont());
 		if (textBatch != null) {
 			textBatch.remove(text);
 			if (textBatch.isEmpty()) {
@@ -76,14 +77,28 @@ public class TextMaster {
 	public static void removeText(GUIText text, FontType oldFont) {
 //		Logger.log("REMOVING: " + text.getTextString());
 		text.delete();
-		int layer = (int) text.getPosition().z();
-		List<GUIText> textBatch = texts[layer].get(oldFont);
+		int layer = text.getLayer();
+		Set<GUIText> textBatch = texts[layer].get(oldFont);
 		if (textBatch != null) {
 			textBatch.remove(text);
 			if (textBatch.isEmpty()) {
 				texts[layer].remove(oldFont);
 			}
 		}
+	}
+
+	public static void moveLayers(GUIText text, int oldLayer, int newLayer) {
+		// remove from old layer
+		Set<GUIText> targetList = texts[oldLayer].get(text.getFont());
+		if (targetList != null) {
+			texts[oldLayer].get(text.getFont()).remove(text);
+			if (targetList.isEmpty()) {
+				texts[oldLayer].remove(text.getFont());
+			}
+		}
+		// add to new layer
+		Set<GUIText> textBatch = texts[newLayer].computeIfAbsent(text.getFont(), k -> new HashSet<>());
+		textBatch.add(text);
 	}
 
 	public static void updateTexts(int layer) {
@@ -94,11 +109,12 @@ public class TextMaster {
 		for (int j = 0; j < setSize; j++) {
 			if (keySet.size() != setSize) Logger.log("Key set was size " + setSize + ", but on iteration " + j + " of the loop it is now " + keySet.size());
 			FontType fontType = fonts[j];
-			List<GUIText> textList = texts[layer].get(fontType);
-			int size = textList.size();
+			Set<GUIText> textSet = texts[layer].get(fontType);
+			GUIText[] textArray = textSet.toArray(new GUIText[0]);
+			int size = textSet.size();
 			//noinspection ForLoopReplaceableByForEach
 			for (int k = 0; k < size; ++k) {
-				textList.get(k).update();
+				textArray[k].update();
 			}
 		}
 //		Logger.log("Done updating layer " + layer + "; it has " + keySet.size() + " text lists");
@@ -108,7 +124,7 @@ public class TextMaster {
 	 * Clear all GUIText objects from the screen.
 	 */
 	public static void clear() {
-		for (Map<FontType, List<GUIText>> map : texts) {
+		for (Map<FontType, Set<GUIText>> map : texts) {
 			// delete every GUIText's data
 			for (FontType fontType : map.keySet()) {
 				for (GUIText guiText : map.get(fontType)) {

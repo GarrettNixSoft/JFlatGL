@@ -32,6 +32,7 @@ public class GUIText {
 	private int vertexCount;
 	private final Vector4f color = new Vector4f(0f, 0f, 0f, 1f);
 
+
 	private final Vector3f position;
 	private float lineMaxSize;
 	private int numberOfLines;
@@ -207,8 +208,18 @@ public class GUIText {
 
 	// Category 1: Free Setters (no need to update vertex data)
 	public void setPosition(Vector3f position) {
+		int oldLayer = getLayer();
 		this.position.set(position);
+		int newLayer = getLayer();
+		if (oldLayer != newLayer) {
+			TextMaster.moveLayers(this, oldLayer, newLayer);
+		}
 	}
+
+	public int getLayer() {
+		return (int) this.position.z();
+	}
+
 	public void setLayer(int layer) {this.position.setComponent(2, layer); }
 	public void setBorderWidth(float borderWidth) {
 		this.borderWidth = borderWidth;
@@ -476,6 +487,7 @@ public class GUIText {
 	 */
 	public boolean update() {
 		if (needsReload) {
+			Logger.log("Reloading " + textString);
 			reload();
 			needsReload = false;
 //			Logger.log("Reloading: " + textString);
