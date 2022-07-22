@@ -8,6 +8,11 @@ import java.io.File;
 
 public class FileGetter {
 
+	static {
+		try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); }
+		catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException ignored) {}
+	}
+
 	public static File getFile(String startingDir, String filterDesc, String... extensions) {
 		return promptForFile(false, startingDir, filterDesc, extensions);
 	}
