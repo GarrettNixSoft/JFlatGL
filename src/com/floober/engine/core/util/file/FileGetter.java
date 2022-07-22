@@ -9,6 +9,14 @@ import java.io.File;
 public class FileGetter {
 
 	public static File getFile(String startingDir, String filterDesc, String... extensions) {
+		return promptForFile(false, startingDir, filterDesc, extensions);
+	}
+
+	public static File getSaveDestination(String startingDir, String filterDesc, String... extensions) {
+		return promptForFile(true, startingDir, filterDesc, extensions);
+	}
+
+	private static File promptForFile(boolean save, String startingDir, String filterDesc, String... extensions) {
 
 		JFileChooser fileChooser = new JFileChooser(startingDir);
 
@@ -35,7 +43,7 @@ public class FileGetter {
 		parent.setIconImage(Config.ICON_IMAGE);
 		parent.setAlwaysOnTop(true);
 
-		int selection = fileChooser.showOpenDialog(parent);
+		int selection = save ? fileChooser.showSaveDialog(parent) : fileChooser.showOpenDialog(parent);
 		File selectedFile = fileChooser.getSelectedFile();
 
 		parent.dispose();
