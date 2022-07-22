@@ -65,6 +65,78 @@ public class StringConverter {
 		return result.toString();
 	}
 
+	public static String byteArrayToString(byte[] arr) {
+		StringBuilder result = new StringBuilder();
+		result.append('{');
+		for (byte b : arr) {
+			result.append(b);
+			result.append(", ");
+		}
+		result.setLength(result.length() - 2);
+		result.append('}');
+		return result.toString();
+	}
+
+	public static String shortArrayToString(short[] arr) {
+		StringBuilder result = new StringBuilder();
+		result.append('{');
+		for (short s : arr) {
+			result.append(s);
+			result.append(", ");
+		}
+		result.setLength(result.length() - 2);
+		result.append('}');
+		return result.toString();
+	}
+
+	public static String intArrayToString(int[] arr) {
+		StringBuilder result = new StringBuilder();
+		result.append('{');
+		for (int i : arr) {
+			result.append(i);
+			result.append(", ");
+		}
+		result.setLength(result.length() - 2);
+		result.append('}');
+		return result.toString();
+	}
+
+	public static String longArrayToString(long[] arr) {
+		StringBuilder result = new StringBuilder();
+		result.append('{');
+		for (long l : arr) {
+			result.append(l);
+			result.append(", ");
+		}
+		result.setLength(result.length() - 2);
+		result.append('}');
+		return result.toString();
+	}
+
+	public static String floatArrayToString(float[] arr) {
+		StringBuilder result = new StringBuilder();
+		result.append('{');
+		for (float f : arr) {
+			result.append(f);
+			result.append(", ");
+		}
+		result.setLength(result.length() - 2);
+		result.append('}');
+		return result.toString();
+	}
+
+	public static String doubleArrayToString(double[] arr) {
+		StringBuilder result = new StringBuilder();
+		result.append('{');
+		for (double d : arr) {
+			result.append(d);
+			result.append(", ");
+		}
+		result.setLength(result.length() - 2);
+		result.append('}');
+		return result.toString();
+	}
+
 	/**
 	 * Get a pair of floats representing a range of values.
 	 * @param rangeStr The range, formatted as "value1->value2" where value1 and value2 are float values.
