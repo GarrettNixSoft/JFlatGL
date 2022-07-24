@@ -172,7 +172,7 @@ public class GUILayer extends GUIComponent {
 	@Override
 	public void remove() {
 		for (GUIComponent component : components) {
-			component.remove();
+			component.removeComponent();
 		}
 	}
 

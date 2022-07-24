@@ -14,7 +14,7 @@ import java.util.List;
 public class GUIPanel extends GUIComponent {
 
 	private final List<GUIComponent> components = new ArrayList<>();
-	private RectElement baseElement;
+	private final RectElement baseElement;
 
 	public GUIPanel(String componentID, GUI parent) {
 		super(componentID, parent);
@@ -185,7 +185,7 @@ public class GUIPanel extends GUIComponent {
 	public void remove() {
 		for (GUIComponent component : components) {
 			Logger.logGUIEvent("REMOVING COMPONENT: " + component.getComponentID());
-			component.remove();
+			component.removeComponent();
 		}
 	}
 
