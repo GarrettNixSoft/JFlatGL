@@ -229,7 +229,8 @@ public class GUI {
 
 		// otherwise, pop the next layer, put everything back and return the count
 		GUILayer removed = layerStack.poll();
-		removed.remove();
+//		removed.close();
+		removed.removeComponent();
 
 		while (!temp.isEmpty()) layerStack.push(temp.poll());
 		return count;
@@ -260,6 +261,21 @@ public class GUI {
 		// replace the layers on top
 		while (!temp.isEmpty()) stackLayer(temp.poll());
 
+	}
+
+	/**
+	 * Check whether a layer is currently on the stack.
+	 * @param layerID the ID of the layer
+	 * @return {@code true} if the layer is on the stack
+	 * @throws RuntimeException if no layer with the given ID exists in this GUI
+	 */
+	public boolean isLayerStacked(String layerID) {
+		if (!layerStore.containsKey(layerID)) throw new RuntimeException("Layer " + layerID + " does not exist and therefore cannot be stacked!");
+		List<GUILayer> stackedLayers = layerStack.getElements();
+		for (GUILayer layer : stackedLayers) {
+			if (layer.getComponentID().equals(layerID)) return true;
+		}
+		return false;
 	}
 
 	/**
@@ -316,7 +332,7 @@ public class GUI {
 	 */
 	public void forceClose() {
 		for (GUILayer layer : layerStack.getElements()) {
-			layer.remove();
+			layer.removeComponent();
 		}
 	}
 
