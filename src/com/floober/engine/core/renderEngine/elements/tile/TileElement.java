@@ -61,7 +61,7 @@ public class TileElement extends TextureElement {
 		int column = index % textureAtlas.numRows();
 		int row = index / textureAtlas.numRows();
 		int tileOffsetPixels = (int) (width * 0.05);
-		float tileOffsetCoords = (float) tileOffsetPixels / textureAtlas.width();
+		float tileOffsetCoords = (float) tileOffsetPixels / textureAtlas.width(); // curse you, past me, for not explaining what this does
 		offset.x = (float) column / textureAtlas.numRows() + tileOffsetCoords;
 		offset.y = (float) row / textureAtlas.numRows() + tileOffsetCoords;
 		offset.z = offset.x + 1f / textureAtlas.numRows() - tileOffsetCoords * 2;

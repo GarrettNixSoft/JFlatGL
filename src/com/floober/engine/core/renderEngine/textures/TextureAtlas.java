@@ -24,11 +24,13 @@ public record TextureAtlas(TextureComponent texture, int numRows, boolean hasTra
 	}
 
 	public Vector4f getTextureOffset(int index) {
-		float xPerIndex = (float) texture.width() / numRows;
-		float yPerIndex = (float) texture.height() / numRows;
-		int xIndex = index % numRows;
-		int yIndex = index / numRows;
-		return new Vector4f(xIndex * xPerIndex, yIndex * yPerIndex, xPerIndex, yPerIndex);
+		int r = index / numRows;
+		int c = index % numRows;
+		float x1 = (float) c / numRows;
+		float y1 = (float) r / numRows;
+		float x2 = 1.0f / numRows;
+		float y2 = 1.0f / numRows;
+		return new Vector4f(x1, y1, x2, y2);
 	}
 
 }
