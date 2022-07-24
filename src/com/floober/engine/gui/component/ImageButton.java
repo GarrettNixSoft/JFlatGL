@@ -12,6 +12,8 @@ public class ImageButton extends Button {
 	private final TextureElement hoverImage;
 	private final TextureElement labelImage;
 
+	private float labelScale = 1;
+
 	public ImageButton(String componentID, GUI parent) {
 		super(componentID, parent);
 		image = new TextureElement();
@@ -20,6 +22,11 @@ public class ImageButton extends Button {
 		hoverImage.setCentered(true);
 		labelImage = new TextureElement();
 		labelImage.setCentered(true);
+	}
+
+	public ImageButton labelScale(float labelScale) {
+		setLabelScale(labelScale);
+		return this;
 	}
 
 	@Override
@@ -91,13 +98,17 @@ public class ImageButton extends Button {
 		labelImage.setTexture(tex);
 	}
 
+	public void setLabelScale(float labelScale) {
+		this.labelScale = labelScale;
+	}
+
 	@Override
 	public void doTransform() {
 		image.setSize(getScaledSize());
 		image.transform();
 		hoverImage.setSize(getScaledSize());
 		hoverImage.transform();
-		labelImage.setSize(getScaledSize());
+		labelImage.setSize(getScaledSize().mul(labelScale));
 		labelImage.transform();
 	}
 
