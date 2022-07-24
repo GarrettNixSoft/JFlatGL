@@ -9,6 +9,7 @@ public class Toolbar extends GUIPanel {
 
 	private final RectElement baseElement;
 	private final Button[] buttons;
+	private int selected;
 
 	public Toolbar(String componentID, GUI parent, int numButtons) {
 		super(componentID, parent);
@@ -61,6 +62,14 @@ public class Toolbar extends GUIPanel {
 
 	public Button getButton(int index) {
 		return buttons[index];
+	}
+
+	public int getSelected() {
+		return selected;
+	}
+
+	public void setSelected(int selected) {
+		this.selected = selected;
 	}
 
 	@Override
