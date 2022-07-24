@@ -74,7 +74,7 @@ public class Button extends GUIComponent {
 		baseElement.transform();
 		baseElement.setColor(getPrimaryColor().mul(getOpacity()));
 		// transform the outline element
-		outlineElement.setPosition(getPosition().setComponent(2, getPosition().z() - 1));
+		outlineElement.setPosition(getPosition().setComponent(2, getPosition().z()));
 		outlineElement.setSize(getSize().mul(getScale()));
 		outlineElement.transform();
 		outlineElement.setColor(getTertiaryColor().mul(getOpacity()));

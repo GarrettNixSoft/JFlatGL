@@ -1,14 +1,13 @@
 package com.floober.engine.test;
 
 import com.floober.engine.core.Game;
-import com.floober.engine.core.assets.loaders.ImageLoader;
 import com.floober.engine.core.assets.loaders.Loader;
-import com.floober.engine.core.assets.loaders.RawTexture;
 import com.floober.engine.core.audio.AudioMaster;
 import com.floober.engine.core.renderEngine.display.DisplayManager;
 import com.floober.engine.core.renderEngine.elements.TextureElement;
 import com.floober.engine.core.renderEngine.textures.TextureComponent;
 import com.floober.engine.core.renderEngine.util.Layers;
+import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.configuration.Settings;
 import com.floober.engine.core.renderEngine.Screenshot;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.GUIText;
@@ -77,11 +76,10 @@ public class RunGame {
 		fpsDisplay.setEdge(0.2f);
 		fpsDisplay.show();
 
-		RawTexture fontRaw = ImageLoader.loadTexture("res/fonts/aller/aller.png");
-//		TextureComponent testComponent = new TextureComponent(Game.getFont("menu").getTextureAtlas(), 1024, 1024, true);
-		TextureComponent testComponent = fontRaw.convertToOpenGLTexture();
+		TextureComponent testTile = Game.getTextureArray("s_level")[32];
+		Logger.log("Offsets: " + testTile.getTextureOffset());
 
-		TextureElement testElement = new TextureElement(Game.getTexture("default"));
+		TextureElement testElement = new TextureElement(testTile);
 		testElement.setPosition(100, 100, Layers.DEFAULT_LAYER);
 		testElement.setSize(200, 200);
 		testElement.setCentered(false);
