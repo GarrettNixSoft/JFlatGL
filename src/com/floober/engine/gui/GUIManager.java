@@ -1,8 +1,10 @@
 package com.floober.engine.gui;
 
 import com.floober.engine.core.util.Logger;
+import com.floober.engine.gui.component.GUIComponent;
 
 import java.util.HashMap;
+import java.util.Optional;
 
 public class GUIManager {
 
@@ -10,6 +12,16 @@ public class GUIManager {
 
 	private static GUI activeGUI;
 	private static GUI nextGUI;
+
+	/**
+	 * Search for a component in the current active GUI.
+	 * @param componentID the ID of the component to search for
+	 * @return an Optional containing the component, if found.
+	 */
+	public static Optional<GUIComponent> searchComponentByID(String componentID) {
+		GUIComponent component = activeGUI.getComponentByID(componentID);
+		return Optional.ofNullable(component);
+	}
 
 	public static void setActiveGUI(GUI gui) {
 		activeGUI = gui;
