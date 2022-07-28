@@ -378,6 +378,14 @@ public class Game {
 		return MasterRenderer.getTargetWindow().centerY();
 	}
 
+	public static int width() {
+		return Config.INTERNAL_WIDTH;
+	}
+
+	public static int height() {
+		return Config.INTERNAL_HEIGHT;
+	}
+
 	// Textures
 	/**
 	 * Get a textureComponent from the stored Textures.
