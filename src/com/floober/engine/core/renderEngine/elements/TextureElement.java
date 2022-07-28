@@ -66,8 +66,8 @@ public class TextureElement extends RenderElement {
 	public TextureElement(TextureComponent textureComponent) {
 		super(0, 0, 0, true);
 		this.textureComponent = textureComponent;
-		this.width = 0;
-		this.height = 0;
+		this.width = textureComponent.width();
+		this.height = textureComponent.height();
 	}
 
 	public TextureElement(TextureComponent texture, float x, float y, int layer, float width, float height, boolean centered) {
