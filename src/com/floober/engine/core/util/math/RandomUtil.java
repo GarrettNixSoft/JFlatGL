@@ -103,6 +103,24 @@ public class RandomUtil {
 	}
 
 	/**
+	 * Get a random byte value in the range [0, Byte.MAX_VALUE]
+	 * @return a random byte
+	 */
+	public static byte getByte() {
+		return (byte) (getFloat() * Byte.MAX_VALUE);
+	}
+
+	/**
+	 * Get a random byte value in the range [min, max]
+	 * @param min the minimum value
+	 * @param max the maximum value
+	 * @return a random byte
+	 */
+	public static byte getByte(int min, int max) {
+		return (byte) (getInt(min, max));
+	}
+
+	/**
 	 * Get a random boolean value.
 	 * @return A random boolean value.
 	 */
