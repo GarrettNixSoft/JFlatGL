@@ -122,6 +122,8 @@ public class MouseInput {
 		return Collisions.contains(bounds, windowMouseAdapters.get(DisplayManager.primaryWindowID).mouseLocation);
 	}
 
+	public static boolean wheelMoved() { return wheelUp() || wheelDown(); }
+
 	public static boolean wheelUp() {
 		return windowMouseAdapters.get(DisplayManager.primaryWindowID).WHEEL_UP;
 	}
@@ -129,5 +131,5 @@ public class MouseInput {
 	public static boolean wheelDown() {
 		return windowMouseAdapters.get(DisplayManager.primaryWindowID).WHEEL_DOWN;
 	}
-	
+
 }

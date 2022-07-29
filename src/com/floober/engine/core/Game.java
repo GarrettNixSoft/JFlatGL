@@ -386,6 +386,10 @@ public class Game {
 		return Config.INTERNAL_HEIGHT;
 	}
 
+	public static float getFrameTime() {
+		return DisplayManager.getFrameTimeSeconds();
+	}
+
 	// Textures
 	/**
 	 * Get a textureComponent from the stored Textures.
