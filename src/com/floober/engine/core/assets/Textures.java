@@ -39,7 +39,10 @@ public class Textures {
 		return textureSets.get(key);
 	}
 
-	public TextureComponent[] getTextureArray(String key) { return textureArrays.get(key); }
+	public TextureComponent[] getTextureArray(String key) {
+		return textureArrays.get(key);
+	}
+
 	public TextureAtlas getTextureAtlas(String key) {
 		return textureAtlases.get(key);
 	}
