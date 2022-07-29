@@ -24,7 +24,7 @@ public class TileElement extends TextureElement {
 		this.alternateAtlas = alternateAtlas;
 		this.atlasIndex = atlasIndex;
 		texOffsets = new Vector4f();
-		setTextureOffset(texOffsets, atlasIndex);
+		setTextureOffset(atlasIndex);
 	}
 
 	public void useSettings(int index) {
@@ -52,20 +52,20 @@ public class TileElement extends TextureElement {
 		// set overlay rotation
 		overlayRotation = settings.overlayRotation();
 		// set the texture offsets for this tile
-		setTextureOffset(texOffsets, atlasIndex);
+		setTextureOffset(atlasIndex);
 	}
 
-	private void setTextureOffset(Vector4f offset, int index) {
+	public void setTextureOffset(int index) {
 		// TODO rewrite this to calculate new coordinates
 		this.atlasIndex = index;
 		int column = index % textureAtlas.numRows();
 		int row = index / textureAtlas.numRows();
 		int tileOffsetPixels = (int) (width * 0.05);
 		float tileOffsetCoords = (float) tileOffsetPixels / textureAtlas.width(); // curse you, past me, for not explaining what this does
-		offset.x = (float) column / textureAtlas.numRows() + tileOffsetCoords;
-		offset.y = (float) row / textureAtlas.numRows() + tileOffsetCoords;
-		offset.z = offset.x + 1f / textureAtlas.numRows() - tileOffsetCoords * 2;
-		offset.w = offset.y + 1f / textureAtlas.numRows() - tileOffsetCoords * 2;
+		texOffsets.x = (float) column / textureAtlas.numRows() + tileOffsetCoords;
+		texOffsets.y = (float) row / textureAtlas.numRows() + tileOffsetCoords;
+		texOffsets.z = texOffsets.x + 1f / textureAtlas.numRows() - tileOffsetCoords * 2;
+		texOffsets.w = texOffsets.y + 1f / textureAtlas.numRows() - tileOffsetCoords * 2;
 //		Logger.log("Offsets for index " + index + " computed: " + offset);
 	}
 
@@ -85,6 +85,10 @@ public class TileElement extends TextureElement {
 	public float getOverlayRotation() { return overlayRotation; }
 
 	// SETTERS
+	public void setTileSize(float tileSize) {
+		setSize(tileSize, tileSize);
+	}
+
 	public void setPosition(float x, float y) {
 		this.x = x;
 		this.y = y;
