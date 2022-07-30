@@ -5,7 +5,7 @@ import java.util.List;
 
 public class LinkedList<T> {
 
-	private class Node {
+	public class Node {
 		T data;
 		Node previous;
 		Node next;
