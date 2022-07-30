@@ -83,6 +83,37 @@ public class LinkedList<T> {
 	}
 
 	/**
+	 * Set a new first node for this Linked List.
+	 * Only do this if you know what you're doing!
+	 * The size of the list will be automatically re-counted.
+	 * @param newFirst the new first Node
+	 */
+	public void setFirst(Node newFirst) {
+		first = newFirst;
+		recomputeSize();
+	}
+
+	/**
+	 * Set a new last node for this Linked List.
+	 * Only do this if you know what you're doing!
+	 * The size of the list will be automatically re-counted.
+	 * @param newLast the new first Node
+	 */
+	public void setLast(Node newLast) {
+		last = newLast;
+		recomputeSize();
+	}
+
+	private void recomputeSize() {
+		size = 1;
+		Node ptr = first;
+		while (ptr.next != null) {
+			ptr = ptr.next;
+			size++;
+		}
+	}
+
+	/**
 	 * Add an element to the beginning of this Linked List.
 	 * @param element the element to add
 	 */
