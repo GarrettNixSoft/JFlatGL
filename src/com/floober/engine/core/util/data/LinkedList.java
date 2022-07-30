@@ -123,9 +123,9 @@ public class LinkedList<T> {
 	}
 
 	private void recomputeSize() {
-		size = 1;
+		size = 0;
 		Node ptr = first;
-		while (ptr.next != null) {
+		while (ptr != null) {
 			ptr = ptr.next;
 			size++;
 		}
@@ -141,6 +141,7 @@ public class LinkedList<T> {
 		newFirst.next = first;
 		newFirst.previous = null;
 		first = newFirst;
+		if (isEmpty()) last = newFirst;
 		size++;
 	}
 
@@ -149,11 +150,13 @@ public class LinkedList<T> {
 	 * @param element the element to add
 	 */
 	public void addLast(T element) {
+
 		Node newLast = new Node();
 		newLast.data = element;
 		newLast.next = null;
 		newLast.previous = last;
 		last = newLast;
+		if (isEmpty()) first = newLast;
 		size++;
 	}
 
