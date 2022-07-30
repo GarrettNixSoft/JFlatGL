@@ -63,6 +63,14 @@ public class LinkedList<T> {
 	}
 
 	/**
+	 * Check whether this Linked List is empty.
+	 * @return {@code true} if there are zero elements in the list
+	 */
+	public boolean isEmpty() {
+		return size == 0;
+	}
+
+	/**
 	 * Get the first Node in this Linked List.
 	 * @return the first Node in the list
 	 */
