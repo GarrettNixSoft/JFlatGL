@@ -6,9 +6,9 @@ import java.util.List;
 public class LinkedList<T> {
 
 	public class Node {
-		T data;
-		Node previous;
-		Node next;
+		public T data;
+		public Node previous;
+		public Node next;
 	}
 
 	private int capacity;
@@ -34,6 +34,16 @@ public class LinkedList<T> {
 		this.capacity = capacity;
 		size = 0;
 		first = last = null;
+	}
+
+	/**
+	 * Generate a new Node object. Useful for manually
+	 * manipulating the structure of the Linked List. Only
+	 * use this if you know what you're doing.
+	 * @return a new empty Node object
+	 */
+	public Node generateNode() {
+		return new Node();
 	}
 
 	/**
