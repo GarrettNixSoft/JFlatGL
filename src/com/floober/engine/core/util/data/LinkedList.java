@@ -140,8 +140,9 @@ public class LinkedList<T> {
 		newFirst.data = element;
 		newFirst.next = first;
 		newFirst.previous = null;
-		first = newFirst;
 		if (isEmpty()) last = newFirst;
+		else first.previous = newFirst;
+		first = newFirst;
 		size++;
 	}
 
@@ -150,13 +151,13 @@ public class LinkedList<T> {
 	 * @param element the element to add
 	 */
 	public void addLast(T element) {
-
 		Node newLast = new Node();
 		newLast.data = element;
 		newLast.next = null;
 		newLast.previous = last;
-		last = newLast;
 		if (isEmpty()) first = newLast;
+		else last.next = newLast;
+		last = newLast;
 		size++;
 	}
 
