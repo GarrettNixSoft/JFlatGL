@@ -37,6 +37,38 @@ public class LinkedList<T> {
 	}
 
 	/**
+	 * Get the capacity of this Linked List.
+	 * @return the capacity of the list
+	 */
+	public int getCapacity() {
+		return capacity;
+	}
+
+	/**
+	 * Get the current size of this Linked List.
+	 * @return the number of elements in the list
+	 */
+	public int getSize() {
+		return size;
+	}
+
+	/**
+	 * Get the first Node in this Linked List.
+	 * @return the first Node in the list
+	 */
+	public Node getFirst() {
+		return first;
+	}
+
+	/**
+	 * Get the last Node in this Linked List.
+	 * @return the last Node in the list
+	 */
+	public Node getLast() {
+		return last;
+	}
+
+	/**
 	 * Set the maximum capacity of this linked list.
 	 * @param newCapacity the new capacity
 	 * @throws RuntimeException if the new capacity is smaller than the current size
@@ -74,22 +106,6 @@ public class LinkedList<T> {
 		newLast.previous = last;
 		last = newLast;
 		size++;
-	}
-
-	/**
-	 * Get the capacity of this Linked List.
-	 * @return the capacity of the list
-	 */
-	public int getCapacity() {
-		return capacity;
-	}
-
-	/**
-	 * Get the current size of this Linked List.
-	 * @return the number of elements in the list
-	 */
-	public int getSize() {
-		return size;
 	}
 
 	/**
