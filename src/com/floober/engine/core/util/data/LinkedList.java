@@ -150,6 +150,24 @@ public class LinkedList<T> {
 	}
 
 	/**
+	 * Get the first element from this Linked List.
+	 * Does not mutate the list.
+	 * @return the first element
+	 */
+	public T peekFirst() {
+		return first.data;
+	}
+
+	/**
+	 * Get the last element from this Linked List.
+	 * Does not mutate the list.
+	 * @return the last element
+	 */
+	public T peekLast() {
+		return last.data;
+	}
+
+	/**
 	 * Get the first element from this Linked List and remove it from the list.
 	 * @return the first element from the Linked List
 	 */
