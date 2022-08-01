@@ -216,6 +216,14 @@ public class LinkedList<T> {
 	}
 
 	/**
+	 * Clear this Linked List.
+	 */
+	public void clear() {
+		size = 0;
+		first = last = null;
+	}
+
+	/**
 	 * Get all of the elements from this Linked List in a standard Java List.
 	 * This operation runs in O(n) (linear) time.
 	 * @return every element from the Linked List in a List
