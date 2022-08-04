@@ -21,10 +21,14 @@ public class GUIPanel extends GUIComponent {
 		baseElement = new RectElement(Colors.INVISIBLE, new Vector4f(), getLayer(), true);
 	}
 
+	protected RectElement getBaseElement() {
+		return baseElement;
+	}
+
 	@Override
-	public GUIComponent primaryColor(Vector4f primaryColor) {
+	public void setPrimaryColor(Vector4f primaryColor) {
 		baseElement.setColor(primaryColor);
-		return super.primaryColor(primaryColor);
+		super.setPrimaryColor(primaryColor);
 	}
 
 	@Override
