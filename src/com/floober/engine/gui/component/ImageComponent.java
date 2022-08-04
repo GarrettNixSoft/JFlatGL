@@ -26,12 +26,15 @@ public class ImageComponent extends GUIComponent {
 	public void doTransform() {
 		image.setPosition(getPosition());
 		image.setSize(getScaledSize());
+		image.setAlpha(getOpacity());
+		image.setHasTransparency(image.textureComponentHasTransparency() || getOpacity() < 1);
+		image.setRotation(getRotation());
 		image.transform();
 	}
 
 	@Override
 	public void render() {
-		// nothing
+		image.render();
 	}
 
 	@Override
