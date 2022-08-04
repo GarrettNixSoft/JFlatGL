@@ -27,6 +27,7 @@ public abstract class GUIComponent {
 	// location on screen
 	private final Vector3f position = new Vector3f(), originalPosition = new Vector3f();
 	private final Vector2f size = new Vector2f();
+	private float rotation;
 	private float scale = 1;
 
 	// appearance
@@ -195,6 +196,10 @@ public abstract class GUIComponent {
 		return !eventQueue.isEmpty();
 	}
 
+	public float getRotation() {
+		return rotation;
+	}
+
 	/**
 	 * Custom hasPendingEvents() method used by the ClosedEvent class, which passes itself.
 	 * Returns true if the queue is empty, OR, the only remaining event is the ClosedEvent
@@ -328,6 +333,7 @@ public abstract class GUIComponent {
 		Logger.log("Component " + componentID + " unlocked");
 	}
 
+	// SETTERS
 	public void setPosition(Vector3f position) {
 		this.position.set(position);
 		this.originalPosition.set(position);
@@ -386,6 +392,10 @@ public abstract class GUIComponent {
 
 	public void setOpacity(float opacity) {
 		this.opacity = opacity;
+	}
+
+	public void setRotation(float rotation) {
+		this.rotation = rotation;
 	}
 
 	// ACTIONS
