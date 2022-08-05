@@ -4,10 +4,10 @@ import javax.swing.*;
 
 public class UserInput {
 
-	private static final JFrame frame = new JFrame();
-
-	static {
+	private static JFrame buildParent() {
+		JFrame frame = new JFrame();
 		frame.setAlwaysOnTop(true);
+		return frame;
 	}
 
 	/**
@@ -16,7 +16,10 @@ public class UserInput {
 	 * @return the user's input as a String
 	 */
 	public static String getUserString(String prompt) {
-		return JOptionPane.showInputDialog(frame, prompt);
+		JFrame frame = buildParent();
+		String result = JOptionPane.showInputDialog(frame, prompt);
+		frame.dispose();
+		return result;
 	}
 
 	/**
@@ -43,7 +46,9 @@ public class UserInput {
 	}
 
 	public static void showErrorMessage(String message, String title) {
+		JFrame frame = buildParent();
 		JOptionPane.showMessageDialog(frame, message, title, JOptionPane.ERROR_MESSAGE);
+		frame.dispose();
 	}
 
 }
