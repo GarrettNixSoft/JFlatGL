@@ -125,6 +125,46 @@ public class MathUtil {
 	}
 
 	/**
+	 * Round a float value to the nearest {@code interval}.
+	 * @param value the value to round
+	 * @param interval the rounding interval
+	 * @return an approximation of the nearest interval for the given value
+	 */
+	public static float roundToNearest(float value, float interval) {
+
+		float between = value % interval;
+
+		if (between < interval / 2f) {
+			return value - between;
+		}
+		else {
+			float rest = interval - between;
+			return value + rest;
+		}
+
+	}
+
+	/**
+	 * Round an int value to the nearest {@code interval}.
+	 * @param value the value to round
+	 * @param interval the rounding interval
+	 * @return the nearest interval for the given value
+	 */
+	public static int roundToNearest(int value, int interval) {
+
+		int between = value % interval;
+
+		if (between < interval / 2f) {
+			return value - between;
+		}
+		else {
+			int rest = interval - between;
+			return value + rest;
+		}
+
+	}
+
+	/**
 	 * Get the distance between two points.
 	 * @param x1 The x-coordinate of Point 1
 	 * @param y1 The y-coordinate of Point 1
