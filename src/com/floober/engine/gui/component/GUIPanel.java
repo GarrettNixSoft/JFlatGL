@@ -112,7 +112,7 @@ public class GUIPanel extends GUIComponent {
 
 	@Override
 	public void open() {
-		Logger.log("Panel " + getComponentID() + " open called");
+		Logger.logGUIEvent("Panel " + getComponentID() + " open called");
 		super.open();
 		for (GUIComponent component : components) {
 			component.open();
@@ -121,7 +121,7 @@ public class GUIPanel extends GUIComponent {
 
 	@Override
 	public void close() {
-		Logger.log("Panel " + getComponentID() + " close called.");
+		Logger.logGUIEvent("Panel " + getComponentID() + " close called.");
 		super.close();
 		for (GUIComponent component : components) {
 			component.close();
@@ -196,7 +196,7 @@ public class GUIPanel extends GUIComponent {
 	@Override
 	public void restore() {
 		for (GUIComponent component : components) {
-			Logger.logGUIInteraction("RESTORING COMPONENT: " + component.getComponentID());
+			Logger.logGUIEvent("RESTORING COMPONENT: " + component.getComponentID());
 			component.restore();
 		}
 	}
