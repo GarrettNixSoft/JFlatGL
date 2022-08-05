@@ -74,7 +74,7 @@ public class GUILayer extends GUIComponent {
 
 	@Override
 	public void open() {
-		Logger.log("Opening GUILayer");
+		Logger.logGUIEvent("Opening GUILayer " + getComponentID());
 		super.open();
 		for (GUIComponent component : components) {
 			component.open();
@@ -83,7 +83,7 @@ public class GUILayer extends GUIComponent {
 
 	@Override
 	public void close() {
-		Logger.log("Layer close called");
+		Logger.logGUIEvent("Layer close called on " + getComponentID());
 		super.close();
 		for (GUIComponent component : components) {
 			component.close();

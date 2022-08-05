@@ -325,12 +325,12 @@ public abstract class GUIComponent {
 
 	public void lock() {
 		locked = true;
-		Logger.log("Component " + componentID + " locked");
+		Logger.logGUIEvent("Component " + componentID + " locked");
 	}
 
 	public void unlock() {
 		locked = false;
-		Logger.log("Component " + componentID + " unlocked");
+		Logger.logGUIEvent("Component " + componentID + " unlocked");
 	}
 
 	// SETTERS
@@ -401,17 +401,15 @@ public abstract class GUIComponent {
 	// ACTIONS
 	public void queueEvent(GUIEvent event) {
 		eventQueue.queueEvent(event);
-//		Logger.log("Queued Event: " + event.getClass());
 	}
 
 	public void updateEvents() {
-//		Logger.log("Update events on " + getComponentID());
 		eventQueue.update();
 	}
 
 	public void open() {
 		if (isActive()) {
-			Logger.log("Open failed; " + componentID + " is already active");
+			Logger.logGUIEvent("Open failed; " + componentID + " is already active");
 			return;
 		}
 		trigger(ON_OPEN);
