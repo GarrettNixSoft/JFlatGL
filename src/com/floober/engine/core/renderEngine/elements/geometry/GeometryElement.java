@@ -16,6 +16,8 @@ public abstract class GeometryElement extends RenderElement {
 
 	public void setColor(Vector4f color) { this.color.set(color); }
 
+	public void setAlpha(float alpha) { this.color.setComponent(3, alpha); }
+
 	public boolean hasTransparency() {
 		return color.w < 1;
 	}
