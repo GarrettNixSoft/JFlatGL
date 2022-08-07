@@ -33,6 +33,9 @@ public class GUI {
 	// component IDs must be unique within a GUI
 	private final HashSet<String> componentIDs;
 
+	// a basic focus system
+	private GUIComponent focusedComponent;
+
 	public GUI(String id) {
 		if (GUIManager.GUI_BANK.containsKey(id)) throw new RuntimeException("A GUI with this ID (" + id + ") already exists!");
 		else GUIManager.GUI_BANK.put(id, this);
@@ -43,6 +46,16 @@ public class GUI {
 		// no background object to avoid using a null
 		noBackground = new BackgroundComponent("background_empty", this, Colors.INVISIBLE);
 		background = noBackground;
+	}
+
+	public void focusComponent(GUIComponent component) {
+		focusedComponent = component;
+		if (focusedComponent != null) focusedComponent.triggerOnFocus();
+	}
+
+	public void clearFocus() {
+		if (focusedComponent != null) focusedComponent.triggerOnFocusLost();
+		focusedComponent = null;
 	}
 
 	/**
@@ -388,6 +401,9 @@ public class GUI {
 		if (MouseInput.rightClick()) {
 			processClickEvent(MouseInput.RIGHT);
 		}
+		// if there's a focused component, handle key input for it
+		if (focusedComponent != null)
+			focusedComponent.handleKeyInput();
 	}
 
 	private void processClickEvent(int button) {

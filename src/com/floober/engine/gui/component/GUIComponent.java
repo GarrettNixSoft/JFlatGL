@@ -14,8 +14,6 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
-import java.nio.file.Path;
-import java.nio.file.attribute.AclEntry;
 import java.util.HashMap;
 
 public abstract class GUIComponent {
@@ -43,7 +41,7 @@ public abstract class GUIComponent {
 	private final HashMap<String, GUIAction> transitions = new HashMap<>();
 
 	// interactions
-	private final GUIAction[] actions = new GUIAction[10];
+	private final GUIAction[] actions = new GUIAction[12];
 	protected static final int ON_OPEN = 0;
 	protected static final int ON_OPEN_COMPLETE = 1;
 	protected static final int ON_CLOSE = 2;
@@ -54,6 +52,8 @@ public abstract class GUIComponent {
 	protected static final int ON_RIGHT_CLICK = 7;
 	protected static final int ON_MOUSE_HOVER = 8;
 	protected static final int ON_REMOVE = 9;
+	protected static final int ON_FOCUS = 10;
+	protected static final int ON_FOCUS_LOST = 11;
 
 	// enter/exit
 	private boolean active;
@@ -175,6 +175,16 @@ public abstract class GUIComponent {
 
 	public GUIComponent onRemove(GUIAction action) {
 		actions[ON_REMOVE] = action;
+		return this;
+	}
+
+	public GUIComponent onFocus(GUIAction action) {
+		actions[ON_FOCUS] = action;
+		return this;
+	}
+
+	public GUIComponent onFocusLost(GUIAction action) {
+		actions[ON_FOCUS_LOST] = action;
 		return this;
 	}
 
@@ -456,7 +466,7 @@ public abstract class GUIComponent {
 		}
 	}
 
-	private void trigger(int actionID) {
+	public void trigger(int actionID) {
 		if (actions[actionID] != null) actions[actionID].onTrigger();
 //		if (actionID == ON_LEFT_CLICK) Logger.log("Triggered left click!");
 	}
@@ -467,14 +477,28 @@ public abstract class GUIComponent {
 	public abstract void doTransform();
 	public abstract void render();
 
+	public abstract void remove();
+	public abstract void restore();
+
 	// force implement this in case any component uses a GUIText
 	public void removeComponent() {
 		remove();
 		trigger(ON_REMOVE);
 	}
 
-	public abstract void remove();
-	public abstract void restore();
+	public void triggerOnFocus() {
+		trigger(ON_FOCUS);
+	}
+
+	public void triggerOnFocusLost() {
+		trigger(ON_FOCUS_LOST);
+	}
+
+	/**
+	 * Override this method for components that should listen to
+	 * the keyboard when focused, such as TextInputComponents.
+	 */
+	public void handleKeyInput() {}
 
 	/**
 	 * Check if the mouse has entered this component's
