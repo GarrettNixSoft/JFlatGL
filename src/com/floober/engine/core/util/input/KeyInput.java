@@ -24,6 +24,7 @@ public class KeyInput {
 
 	public Queue<Character> characterQueue = new Queue<>();
 	public List<Character> textInput = new ArrayList<>();
+	public Queue<Character> storedCharacterQueue = new Queue<>();
 
 	// LETTER KEYS
 	public static final int A = 1;
@@ -145,6 +146,7 @@ public class KeyInput {
 		KeyInput keyboardAdapter = windowKeyboardAdapters.get(windowTarget);
 		// flush text input to the list, and clear the queue
 		keyboardAdapter.textInput = keyboardAdapter.characterQueue.getElements();
+		keyboardAdapter.storedCharacterQueue = new Queue<>(keyboardAdapter.characterQueue);
 		keyboardAdapter.characterQueue.clear();
 		// get key state arrays
 		boolean[] keyState = keyboardAdapter.keyState;
@@ -324,5 +326,16 @@ public class KeyInput {
 	public static List<Character> getCharacterInput() {
 		return getInstance().textInput;
 	}
+
+	/**
+	 * Retrieve a copy of the stored character queue.
+	 * Contains every new character input in the order
+	 * they were received.
+	 * @return a Queue of chars
+	 */
+	public static Queue<Character> getCharacterInputQueue() {
+		return new Queue<>(getInstance().storedCharacterQueue);
+	}
+
 }
 
