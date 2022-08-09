@@ -44,6 +44,17 @@ public class Queue<T> extends DataStructure<T> {
 	}
 
 	/**
+	 * Copy a queue.
+	 * @param other the Queue to copy
+	 */
+	public Queue(Queue<T> other) {
+		this.first = other.first;
+		this.last = other.last;
+		this.size = other.size;
+		this.capacity = other.capacity;
+	}
+
+	/**
 	 * Add an element to the end of this queue.
 	 * @param element the element to add
 	 * @return {@code true} if there is room in the queue and the element is added, or {@code false} if the queue is full.

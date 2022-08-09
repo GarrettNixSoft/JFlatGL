@@ -248,12 +248,21 @@ public class DisplayManager {
 		}
 
 		// Step 4: Set up callbacks
-		glfwSetKeyCallback(primaryWindowID, (window, key, scancode, action, mods) -> {});
+		glfwSetKeyCallback(primaryWindowID, (window, key, scancode, action, mods) -> {
+			if (action == GLFW_PRESS || action == GLFW_REPEAT) {
+				if (key == GLFW_KEY_BACKSPACE)
+					KeyInput.windowKeyboardAdapters.get(window).characterQueue.push('\u0008');
+				else if (key == GLFW_KEY_DELETE)
+					KeyInput.windowKeyboardAdapters.get(window).characterQueue.push('\u007F');
+			}
+		});
 
 		// Sub-step: Create a callback for text input
 		glfwSetCharCallback(primaryWindowID, (window, codepoint) -> {
 			char[] text = Character.toChars(codepoint);
-			for (char c : text) KeyInput.windowKeyboardAdapters.get(window).characterQueue.push(c);
+			for (char c : text) {
+				KeyInput.windowKeyboardAdapters.get(window).characterQueue.push(c);
+			}
 		});
 
 		if (glfwRawMouseMotionSupported())
