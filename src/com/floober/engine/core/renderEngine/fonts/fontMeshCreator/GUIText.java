@@ -39,7 +39,8 @@ public class GUIText {
 
 	private FontType font;
 
-	private final boolean centerText;
+	private boolean centerHorizontal;
+	private boolean centerVertical;
 
 	private float width;
 	private float edge;
@@ -61,7 +62,7 @@ public class GUIText {
 		this.font = Game.getFont("default");
 		this.position = new Vector3f();
 		this.lineMaxSize = 1;
-		this.centerText = false;
+		this.centerHorizontal = false;
 		this.firstCharVisible = 0;
 		this.lastCharVisible = textString.length();
 		// default values
@@ -82,7 +83,7 @@ public class GUIText {
 		this.font = Game.getFont("default");
 		this.position = new Vector3f();
 		this.lineMaxSize = 1;
-		this.centerText = false;
+		this.centerHorizontal = false;
 		this.firstCharVisible = 0;
 		this.lastCharVisible = textString.length();
 		// default values
@@ -122,7 +123,7 @@ public class GUIText {
 		this.font = font;
 		this.position = position;
 		this.lineMaxSize = maxLineLength;
-		this.centerText = centered;
+		this.centerHorizontal = this.centerVertical = centered;
 		this.firstCharVisible = 0;
 		this.lastCharVisible = textString.length();
 		// default values
@@ -149,7 +150,7 @@ public class GUIText {
 		this.font = other.font;
 		this.position = other.position;
 		this.lineMaxSize = other.lineMaxSize;
-		this.centerText = other.centerText;
+		this.centerHorizontal = other.centerHorizontal;
 		this.firstCharVisible = 0;
 		this.lastCharVisible = newTextString.length();
 		// text display values
@@ -192,6 +193,14 @@ public class GUIText {
 	}
 	public int getLastCharVisible() {
 		return lastCharVisible;
+	}
+
+	public boolean isCenterHorizontal() {
+		return centerHorizontal;
+	}
+
+	public boolean isCenterVertical() {
+		return centerVertical;
 	}
 
 	public int getNumVisibleChars() {
@@ -272,6 +281,21 @@ public class GUIText {
 		this.lastCharVisible = textString.length();
 		// mark needs reload
 		processed = false;
+		needsReload = true;
+	}
+
+	public void setCentered(boolean centered) {
+		centerHorizontal = centerVertical = centered;
+		needsReload = true; // TODO:  << are you sure about that
+	}
+
+	public void setCenterHorizontal(boolean centerHorizontal) {
+		this.centerHorizontal = centerHorizontal;
+		needsReload = true;
+	}
+
+	public void setCenterVertical(boolean centerVertical) {
+		this.centerVertical = centerVertical;
 		needsReload = true;
 	}
 
@@ -399,7 +423,7 @@ public class GUIText {
 	 * @return {@code true} if the text should be centered.
 	 */
 	public boolean isCentered() {
-		return centerText;
+		return centerHorizontal;
 	}
 
 	/**
@@ -516,19 +540,23 @@ public class GUIText {
 	 * Should only be called once per position change.
 	 */
 	public void center() {
-		if (centerText) {
+		if (centerHorizontal) {
 			// x is easy
 			position.x -= lineMaxSize / 2;
+			// mark for reloading
+			needsReload = true;
+		}
+		if (centerVertical) {
 			// y is also easy, now
 			try {
 				float textHeight = textMeshData.textHeight();
 				position.y -= textHeight / 2;
+				// mark for reloading
+				needsReload = true;
 			} catch (Exception e) {
 				// guess we're not ready for that yet
 				Logger.logWarning("Maybe don't center this text yet, if you can help it");
 			}
-			// mark for reloading
-			needsReload = true;
 		}
 	}
 
