@@ -501,6 +501,42 @@ public class DisplayManager {
 		return (long) (glfwGetTime() * 1000);
 	}
 
+	public static Vector2f convertToPixelPosition(Vector2f screenPos) {
+
+		float x = Config.INTERNAL_WIDTH / 2f * (screenPos.x + 1);
+		float y = Config.INTERNAL_HEIGHT / 2f * (screenPos.y + 1);
+
+		// invert
+		y = Config.INTERNAL_HEIGHT - y;
+
+		return new Vector2f(x, y);
+
+	}
+
+	public static Vector3f convertToPixelPosition(Vector2f screenPos, int layer) {
+
+		float x = Config.INTERNAL_WIDTH / 2f * (screenPos.x + 1);
+		float y = Config.INTERNAL_HEIGHT / 2f * (screenPos.y + 1);
+
+		// invert
+		y = Config.INTERNAL_HEIGHT - y;
+
+		return new Vector3f(x, y, layer);
+
+	}
+
+	public static Vector3f convertToPixelPosition(Vector3f screenPos) {
+
+		float x = Config.INTERNAL_WIDTH / 2f * (screenPos.x + 1);
+		float y = Config.INTERNAL_HEIGHT / 2f * (screenPos.y + 1);
+
+		// invert
+		y = Config.INTERNAL_HEIGHT - y;
+
+		return new Vector3f(x, y, screenPos.z);
+
+	}
+
 	/**
 	 * Convert the position and scale values given from pixel units to screen units,
 	 * and return the results in a Vector3f that can be passed to a vertex shader.
@@ -596,6 +632,18 @@ public class DisplayManager {
 		float displayX = -1 + (2f / Config.INTERNAL_WIDTH) * position.x;
 		float displayY = -1 + (2f / Config.INTERNAL_HEIGHT) * position.y; // used to use commented-out y variable above ^^^
 		// return the result
+		return new Vector2f(displayX, displayY);
+	}
+
+	public static Vector2f convertToScreenPos(float x, float y) {
+//		Logger.log("Position " + position);
+		// invert y axis
+		y = Config.INTERNAL_HEIGHT - y;
+		// convert pixel coordinates to OpenGL coordinates
+		float displayX = -1 + (2f / Config.INTERNAL_WIDTH) * x;
+		float displayY = -1 + (2f / Config.INTERNAL_HEIGHT) * y;
+		// return the result
+//		Logger.log("Converted to position " + new Vector2f(displayX, displayY));
 		return new Vector2f(displayX, displayY);
 	}
 

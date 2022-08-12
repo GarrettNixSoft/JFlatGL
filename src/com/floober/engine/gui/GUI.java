@@ -49,6 +49,7 @@ public class GUI {
 	}
 
 	public void focusComponent(GUIComponent component) {
+		if (focusedComponent != null) focusedComponent.triggerOnFocusLost();
 		focusedComponent = component;
 		if (focusedComponent != null) focusedComponent.triggerOnFocus();
 	}

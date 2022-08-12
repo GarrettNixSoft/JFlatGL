@@ -1,7 +1,9 @@
 package com.floober.engine.core.renderEngine.fonts.fontMeshCreator;
 
 import com.floober.engine.core.renderEngine.util.Layers;
+import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.data.Pair;
+import com.floober.engine.core.util.input.MouseInput;
 import com.floober.engine.core.util.math.MathUtil;
 
 import java.util.ArrayList;
@@ -31,33 +33,53 @@ public class TextMeshCreator {
 		return textMeshData;
 	}
 
+	protected MetaFile getMetaData() {
+		return metaData;
+	}
+
 	private List<Line> createStructure(GUIText text) {
 		char[] chars = text.getTextString().toCharArray();
 		List<Line> lines = new ArrayList<>();
 		Line currentLine = new Line(metaData.getSpaceWidth(), text.getFontSize(), text.getMaxLineSize());
 		Word currentWord = new Word(text.getFontSize());
+
+		int spaceCount = 0;
+
 		for (char c : chars) {
 			if (c == SPACE_ASCII) {
-				boolean added = currentLine.attemptToAddWord(currentWord);
-				if (!added) {
-					lines.add(currentLine);
-					currentLine = new Line(metaData.getSpaceWidth(), text.getFontSize(), text.getMaxLineSize());
-					currentLine.attemptToAddWord(currentWord);
+				// add the word if it's not currently empty
+				if (!currentWord.isEmpty()) { // assign the space count and reset the counter
+					currentWord.setSpacesBefore(spaceCount);
+					spaceCount = 0;
+					boolean added = currentLine.attemptToAddWord(currentWord);
+					if (!added) {
+						lines.add(currentLine);
+						currentLine = new Line(metaData.getSpaceWidth(), text.getFontSize(), text.getMaxLineSize());
+						currentLine.attemptToAddWord(currentWord);
+					}
+					currentWord = new Word(text.getFontSize());
 				}
-				currentWord = new Word(text.getFontSize());
+				spaceCount++;
 			}
 			else if (c == NEWLINE_ASCII) {
-				boolean added = currentLine.attemptToAddWord(currentWord);
-				lines.add(currentLine);
-				currentLine = new Line(metaData.getSpaceWidth(), text.getFontSize(), text.getMaxLineSize());
-				if (!added) currentLine.attemptToAddWord(currentWord);
-				currentWord = new Word(text.getFontSize());
+				if (!currentWord.isEmpty()) {// assign the space count and reset the counter
+					currentWord.setSpacesBefore(spaceCount);
+					spaceCount = 0;
+					boolean added = currentLine.attemptToAddWord(currentWord);
+					lines.add(currentLine);
+					currentLine = new Line(metaData.getSpaceWidth(), text.getFontSize(), text.getMaxLineSize());
+					if (!added) currentLine.attemptToAddWord(currentWord);
+					currentWord = new Word(text.getFontSize());
+				}
 			}
 			else {
 				Character character = metaData.getCharacter(c);
 				currentWord.addCharacter(character);
 			}
 		}
+		// set the last word's space count
+		currentWord.setSpacesBefore(spaceCount);
+		// finish the structure and return the line list
 		completeStructure(lines, currentLine, currentWord, text);
 		return lines;
 	}
@@ -97,7 +119,11 @@ public class TextMeshCreator {
 		if (text.isCenteredVertical()) {
 			double totalHeight = LINE_HEIGHT * lines.size() * text.getFontSize();
 			cursorY -= totalHeight / 2;
+			// one line:
+//			cursorY -= LINE_HEIGHT * text.getFontSize() / 2;
 		}
+
+//		Logger.log("SPACE WIDTH: " + metaData.getSpaceWidth());
 
 		for (Line line : lines) {
 
@@ -109,20 +135,20 @@ public class TextMeshCreator {
 
 			// add all the words
 			for (Word word : line.getWords()) {
+				cursorX += word.getSpacesBefore() * metaData.getSpaceWidth() * text.getFontSize();
 				for (Character letter : word.getCharacters()) {
 					addVerticesForCharacter(cursorX, cursorY, text.getPosition().z, letter, text.getFontSize(), vertices);
 					addTexCoords(textureCoords, letter.xTextureCoord(), letter.yTextureCoord(),
 							letter.xMaxTextureCoord(), letter.yMaxTextureCoord());
 					cursorX += letter.xAdvance() * text.getFontSize();
 				}
-				cursorX += metaData.getSpaceWidth() * text.getFontSize();
 			}
 			cursorX = 0;
 			cursorY += LINE_HEIGHT * text.getFontSize();
 		}
 
 //		if (lines.size() > 1) cursorY -= LINE_HEIGHT * text.getFontSize();
-		return new TextMeshData(listToArray(vertices), listToArray(textureCoords), (float) cursorY);
+		return new TextMeshData(listToArray(vertices), listToArray(textureCoords), (float) cursorY, lines);
 	}
 
 	private void addVerticesForCharacter(double cursorX, double cursorY, float z, Character character, double fontSize,

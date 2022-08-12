@@ -1,5 +1,6 @@
 package com.floober.engine.core.renderEngine.fonts.fontMeshCreator;
 
+import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.configuration.Config;
 
 import java.io.BufferedReader;
@@ -53,7 +54,33 @@ public class MetaFile {
 		loadLineSizes();
 		int imageWidth = getValueOfVariable("scaleW");
 		loadCharacterData(imageWidth);
+		// ENSURE THAT SPACES ARE ALWAYS INCLUDED
+		validateSpace();
 		close();
+	}
+
+	private void validateSpace() {
+
+		if (!metaData.containsKey(32)) {
+			Logger.log("NO SPACE DATA FOUND!");
+
+			// get the character(s) to base the space data off of
+			Character base1 = metaData.containsKey(10) ? metaData.get(10) : metaData.get(13);
+			Character base2 = metaData.get(33);
+
+			// clone it
+			Character space = new Character(
+					32, ' ', 0, 0, 0, 0,
+					base1.xOffset(), base1.yOffset(), 0, 0, base2.xAdvance()
+			);
+
+			metaData.put(32, space);
+
+			this.spaceWidth = base2.xAdvance();
+
+
+		}
+
 	}
 
 	protected double getSpaceWidth() {

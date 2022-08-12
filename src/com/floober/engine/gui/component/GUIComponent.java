@@ -59,6 +59,9 @@ public abstract class GUIComponent {
 	private boolean active;
 	private boolean locked;
 
+	// focus components
+	private boolean focused;
+
 	/**
 	 * Construct a GUIComponent. All GUIComponents must
 	 * have an ID.
@@ -232,6 +235,10 @@ public abstract class GUIComponent {
 		return new Vector3f(originalPosition);
 	}
 
+	public Vector2f getPosition2() {
+		return new Vector2f(position.x, position.y);
+	}
+
 	// Position components
 	public float getX() {
 		return position.x;
@@ -257,6 +264,14 @@ public abstract class GUIComponent {
 
 	public float getBottom() {
 		return getY() + size.y * scale / 2;
+	}
+
+	public float getOffsetX() {
+		return position.x + getOffset().x;
+	}
+
+	public float getOffsetY() {
+		return position.y + getOffset().y;
 	}
 
 	// Size values
@@ -293,6 +308,11 @@ public abstract class GUIComponent {
 	}
 	public float getOpacity() {
 		return opacity;
+	}
+
+	// Focus
+	public boolean isFocused() {
+		return focused;
 	}
 
 	// Actors
@@ -487,10 +507,12 @@ public abstract class GUIComponent {
 	}
 
 	public void triggerOnFocus() {
+		focused = true;
 		trigger(ON_FOCUS);
 	}
 
 	public void triggerOnFocusLost() {
+		focused = false;
 		trigger(ON_FOCUS_LOST);
 	}
 

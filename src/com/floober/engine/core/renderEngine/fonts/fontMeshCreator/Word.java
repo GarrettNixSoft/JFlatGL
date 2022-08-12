@@ -15,6 +15,7 @@ public class Word {
 	private final List<Character> characters = new ArrayList<>();
 	private double width = 0;
 	private final double fontSize;
+	private int spacesBefore;
 
 	private String wordString;
 
@@ -36,6 +37,10 @@ public class Word {
 		width += character.xAdvance() * fontSize;
 		wordString += character.c();
 	}
+
+	protected void setSpacesBefore(int spacesBefore) {
+		this.spacesBefore = spacesBefore;
+	}
 	
 	/**
 	 * @return The list of characters in the word.
@@ -43,12 +48,20 @@ public class Word {
 	protected List<Character> getCharacters(){
 		return characters;
 	}
+
+	protected int getSpacesBefore() {
+		return spacesBefore;
+	}
 	
 	/**
 	 * @return The width of the word in terms of screen size.
 	 */
 	protected double getWordWidth(){
 		return width;
+	}
+
+	protected boolean isEmpty() {
+		return characters.isEmpty();
 	}
 
 	/**

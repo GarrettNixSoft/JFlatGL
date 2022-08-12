@@ -202,6 +202,11 @@ public class GUIText {
 	}
 
 	// GETTERS
+
+	public TextMeshData getTextMeshData() {
+		return textMeshData;
+	}
+
 	public int getLayer() {
 		return (int) this.position.z();
 	}
@@ -281,6 +286,10 @@ public class GUIText {
 		return new Vector3f(position);
 	}
 
+	public Vector2f getPosition2() {
+		return new Vector2f(position.x, position.y);
+	}
+
 	/**
 	 * @return the ID of the text's VAO, which contains all the vertex data for
 	 *         the quads on which the text will be rendered.
@@ -321,6 +330,135 @@ public class GUIText {
 	 * @return Whether this text currently uses the stencil test.
 	 */
 	public boolean isUseStencil() { return useStencil; }
+
+	public Vector2f getCursorPosition(int cursorIndex) {
+
+		double x = 0;
+		double y = 0;
+
+		double spaceWidth = font.getMetaData().getSpaceWidth() * fontSize;
+		double lineHeight = TextMeshCreator.LINE_HEIGHT * fontSize;
+
+		List<Line> lines = textMeshData.textLines();
+		Line currentLine = lines.get(0);
+
+		if (currentLine.isEmpty()) {
+			return getPosition2();
+		}
+
+		List<Word> words = currentLine.getWords();
+		Word currentWord = words.get(0);
+
+		if (currentWord.isEmpty()) {
+			return getPosition2();
+		}
+
+		List<Character> characters = currentWord.getCharacters();
+		Character currentCharacter = characters.get(0);
+
+		// adjust starting position
+		if (!centeredVertical) {
+			double totalHeight = lines.size() * lineHeight;
+			y -= totalHeight / 2;
+		}
+		if (textJustify == Justify.RIGHT) {
+			x = lineMaxSize - currentLine.getLineLength();
+		}
+
+		// parse characters
+		int lineIndex = 0;
+		int wordIndex = 0;
+		int charIndex = 0;
+		int index = 0;
+
+		// count the index until the target is reached
+		while (index < cursorIndex) {
+
+			// if this index is beyond the size of the current word, move on to the next one
+			if (charIndex >= characters.size()) {
+				wordIndex++;
+				charIndex = 0;
+
+				if (wordIndex < words.size()) { // remain on the same line
+
+					// skip every space between the current word and the next
+					currentWord = words.get(wordIndex);
+					index += currentWord.getSpacesBefore();
+					x += currentWord.getSpacesBefore() * spaceWidth;
+
+					Logger.log("Spaces before: " + currentWord.getSpacesBefore());
+
+					if (currentWord.isEmpty()) { // there was a trailing space, we've reached the end
+						return new Vector2f((float) x, (float) y).add(getPosition2());
+					}
+					else {
+						characters = currentWord.getCharacters();
+						currentCharacter = characters.get(charIndex);
+					}
+
+
+
+				}
+				else { // move to the next line
+					lineIndex++;
+
+					if (lineIndex < lines.size()) { // still in bounds
+
+						// wrap word and character index
+						wordIndex = 0;
+
+						// wrap x back around
+						if (textJustify == Justify.RIGHT)
+							x = lineMaxSize - currentLine.getLineLength();
+						else
+							x = 0;
+						// move y down a line
+						y += lineHeight;
+
+						// get the next line
+						currentLine = lines.get(lineIndex);
+
+						if (currentLine.isEmpty()) {// there was a trailing space, we've reached the end
+							return new Vector2f((float) x, (float) y).add(getPosition2());
+						}
+
+						// get the next word and character
+						words = currentLine.getWords();
+						currentWord = words.get(wordIndex);
+
+						if (currentWord.isEmpty()) { // there was a trailing space, we've reached the end
+							return new Vector2f((float) x, (float) y).add(getPosition2());
+						}
+						else {
+							characters = currentWord.getCharacters();
+							currentCharacter = characters.get(charIndex);
+						}
+
+					}
+					else { // out of bounds; return current position
+						return new Vector2f((float) x, (float) y).add(getPosition2());
+					}
+
+				}
+
+			}
+			else {
+				currentCharacter = characters.get(charIndex);
+			}
+
+			// add the current character's size
+			x += currentCharacter.xAdvance() * fontSize;
+
+			// advance to the next character
+			index++;
+			charIndex++;
+
+		}
+
+		// return result
+		return new Vector2f((float) x, (float) y).add(getPosition2());
+
+	}
 
 	// SETTERS
 
@@ -428,13 +566,15 @@ public class GUIText {
 	}
 
 	public void setLineMaxSize(float lineMaxSize) {
+		// reload if the new line size setting is different
+		if (this.lineMaxSize != lineMaxSize) needsReload = true;
 		this.lineMaxSize = lineMaxSize;
-		needsReload = true;
 	}
 
 	public void setTextJustify(Justify textJustify) {
+		// reload if the new justify setting is different
+		if (this.textJustify != textJustify) needsReload = true;
 		this.textJustify = textJustify;
-		needsReload = true;
 	}
 
 	/**
@@ -519,9 +659,11 @@ public class GUIText {
 	 * @return {@code true} if this text was reloaded.
 	 */
 	public boolean update() {
+
 		if (needsReload) {
 //			Logger.log("Reloading " + textString);
 			reload();
+			center();
 			needsReload = false;
 //			Logger.log("Reloading: " + textString);
 //			Logger.log(getDebugString());
@@ -549,19 +691,20 @@ public class GUIText {
 	 * Should only be called once per position change.
 	 */
 	public void center() {
-		if (textJustify == Justify.CENTER) {
-			// x is easy
-			position.x -= lineMaxSize / 2;
-			// mark for reloading
-			needsReload = true;
-		}
+
+		// HORIZONTAL
+		// x is easy
+		position.x -= lineMaxSize / 2;
+		// mark for reloading
+//		needsReload = true;
+
+		// VERTICAL
 //		if (centeredVertical) {
 //			// y is also easy, now
 //			try {
 //				float textHeight = textMeshData.textHeight();
 //				position.y -= textHeight / 2;
-//				// mark for reloading
-//				needsReload = true;
+//
 //			} catch (Exception e) {
 //				// guess we're not ready for that yet
 //				Logger.logWarning("Maybe don't center this text yet, if you can help it");

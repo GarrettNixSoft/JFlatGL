@@ -47,4 +47,8 @@ public class FontType {
 		return loader.createTextMesh(text);
 	}
 
+	public MetaFile getMetaData() {
+		return loader.getMetaData();
+	}
+
 }

@@ -42,7 +42,7 @@ public class Line {
 	 * @return {@code true} if the word has successfully been added to the line.
 	 */
 	protected boolean attemptToAddWord(Word word) {
-		double additionalLength = word.getWordWidth();
+		double additionalLength = word.getWordWidth() + word.getSpacesBefore() * spaceSize;
 		// always add the word if it's the first word in the line, regardless of length; otherwise it gets stuck in a loop of trying to add lines
 //		if (currentLineLength == 0) {
 //			words.add(word);
@@ -71,7 +71,7 @@ public class Line {
 	/**
 	 * @return The current screen-space length of the line.
 	 */
-	protected double getLineLength() {
+	public double getLineLength() {
 		return currentLineLength;
 	}
 
@@ -80,6 +80,10 @@ public class Line {
 	 */
 	protected List<Word> getWords() {
 		return words;
+	}
+
+	protected boolean isEmpty() {
+		return words.isEmpty();
 	}
 
 }
