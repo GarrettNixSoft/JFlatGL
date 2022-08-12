@@ -112,7 +112,6 @@ public class TextMaster {
 			Set<GUIText> textSet = texts[layer].get(fontType);
 			GUIText[] textArray = textSet.toArray(new GUIText[0]);
 			int size = textSet.size();
-			//noinspection ForLoopReplaceableByForEach
 			for (int k = 0; k < size; ++k) {
 				textArray[k].update();
 			}

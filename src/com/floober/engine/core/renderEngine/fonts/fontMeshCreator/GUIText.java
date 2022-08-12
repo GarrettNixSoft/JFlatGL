@@ -55,6 +55,7 @@ public class GUIText {
 	private boolean needsReload;
 	private boolean useStencil;
 
+	private final Vector4f stencilRegion = new Vector4f();
 
 	public GUIText() {
 		this.textString = "";
@@ -166,6 +167,9 @@ public class GUIText {
 	}
 
 	// GETTERS
+	public int getLayer() {
+		return (int) this.position.z();
+	}
 	public float getLineWidth() {
 		return lineMaxSize;
 	}
@@ -194,20 +198,25 @@ public class GUIText {
 	public int getLastCharVisible() {
 		return lastCharVisible;
 	}
-
 	public boolean isCenterHorizontal() {
 		return centerHorizontal;
 	}
-
 	public boolean isCenterVertical() {
 		return centerVertical;
 	}
-
 	public int getNumVisibleChars() {
 		return lastCharVisible - firstCharVisible;
 	}
-
 	public boolean isProcessed() { return processed; }
+	public Vector4f getStencilRegion() { return stencilRegion; }
+
+	public Vector2f getStencilPos() {
+		return new Vector2f(stencilRegion.x, stencilRegion.y);
+	}
+
+	public Vector2f getStencilSize() {
+		return new Vector2f(stencilRegion.z, stencilRegion.w);
+	}
 
 	public boolean nextCharNotWhitespace(int charIndex) {
 		return (charIndex < getTextString().length() && getTextString().charAt(charIndex) != ' ') || charIndex == getTextString().length();
@@ -223,10 +232,6 @@ public class GUIText {
 		if (oldLayer != newLayer) {
 			TextMaster.moveLayers(this, oldLayer, newLayer);
 		}
-	}
-
-	public int getLayer() {
-		return (int) this.position.z();
 	}
 
 	public void setLayer(int layer) {this.position.setComponent(2, layer); }
@@ -256,6 +261,10 @@ public class GUIText {
 	}
 	public void setProcessed(boolean processed) { this.processed = processed; }
 	public void setUseStencil(boolean useStencil) {this.useStencil = useStencil; }
+
+	public void setStencilRegion(Vector4f stencilRegion) {
+		this.stencilRegion.set(stencilRegion);
+	}
 
 	public void setAlpha(float alpha) { color.setComponent(3, alpha); }
 
