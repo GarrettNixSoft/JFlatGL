@@ -16,11 +16,11 @@ public class FrameBuffers {
 	private static final List<FrameBuffer> buffers = new ArrayList<>();
 
 	public static FrameBuffer createFullScreenFrameBuffer() {
-		return createFrameBuffer(DisplayManager.primaryWindowID, Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT, FrameBuffer.DEPTH_RENDER_BUFFER);
+		return createFrameBuffer(DisplayManager.primaryWindowID, Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT, FrameBuffer.DEPTH_STENCIL_BUFFER);
 	}
 
 	public static FrameBuffer createFullScreenFrameBufferUnregistered(Window window) {
-		return createFrameBufferUnregistered(window, Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT, FrameBuffer.DEPTH_RENDER_BUFFER);
+		return createFrameBufferUnregistered(window, Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT, FrameBuffer.DEPTH_STENCIL_BUFFER);
 	}
 
 	public static FrameBuffer createFrameBuffer(long windowID, int width, int height) {

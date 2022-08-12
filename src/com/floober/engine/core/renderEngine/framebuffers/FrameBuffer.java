@@ -17,6 +17,7 @@ public class FrameBuffer {
 	public static final int NONE = 0;
 	public static final int DEPTH_TEXTURE = 1;
 	public static final int DEPTH_RENDER_BUFFER = 2;
+	public static final int DEPTH_STENCIL_BUFFER = 3;
 
 	private final Window window;
 	private final int width;
@@ -25,6 +26,7 @@ public class FrameBuffer {
 
 	private int colorTexture;
 	private int depthTexture;
+	private int stencilTexture;
 
 	private int depthBuffer;
 	private int colorBuffer;
@@ -129,10 +131,13 @@ public class FrameBuffer {
 	private void initializeFrameBuffer(int type) {
 		createFrameBuffer();
 		createTextureAttachment();
-		if (type == DEPTH_RENDER_BUFFER) {
-			createDepthBufferAttachment();
-		} else if (type == DEPTH_TEXTURE) {
-			createDepthTextureAttachment();
+		switch (type) {
+			case DEPTH_TEXTURE -> createDepthTextureAttachment();
+			case DEPTH_RENDER_BUFFER -> createDepthBufferAttachment();
+			case DEPTH_STENCIL_BUFFER -> {
+				createDepthStencilBuffer();
+//				createStencilTextureAttachment();  // this causes OpenGL to complain; something about a mismatch
+			}
 		}
 		unbindFrameBuffer();
 	}
@@ -190,6 +195,23 @@ public class FrameBuffer {
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthBuffer);
 	}
 
+	private void createStencilTextureAttachment() {
+		stencilTexture = glGenTextures();
+		glBindTexture(GL_TEXTURE_2D, stencilTexture);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH32F_STENCIL8, width, height, 0, GL_DEPTH_COMPONENT,
+				GL_FLOAT, (ByteBuffer) null);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		GL30.glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, stencilTexture, 0);
+	}
+
+	private void createDepthStencilBuffer() {
+		depthBuffer = glGenRenderbuffers();
+		glBindRenderbuffer(GL_RENDERBUFFER, depthBuffer);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, depthBuffer);
+	}
+
 	// DELETION
 
 	/**
@@ -199,8 +221,9 @@ public class FrameBuffer {
 		if (!deleted) glDeleteFramebuffers(bufferID);
 		glDeleteTextures(colorTexture);
 		glDeleteTextures(depthTexture);
-		glDeleteRenderbuffers(depthBuffer);
+		glDeleteTextures(stencilTexture);
 		glDeleteRenderbuffers(colorBuffer);
+		glDeleteRenderbuffers(depthBuffer);
 	}
 
 	/**
