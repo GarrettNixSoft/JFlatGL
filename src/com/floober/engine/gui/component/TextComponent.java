@@ -11,7 +11,7 @@ import org.joml.Vector3f;
 public class TextComponent extends GUIComponent {
 
 	private final GUIText text;
-	private float defaultTextSize = 1.5f;
+	private float defaultTextSize = 1;
 
 	public TextComponent(String componentID, GUI parent) {
 		super(componentID, parent);
@@ -31,8 +31,28 @@ public class TextComponent extends GUIComponent {
 	}
 
 	public TextComponent fontSize(float fontSize) {
-		defaultTextSize = fontSize;
+		setFontSize(fontSize);
 		return this;
+	}
+
+	public void setFontSize(float fontSize) {
+		defaultTextSize = fontSize;
+	}
+
+	public void setWidth(float width) {
+		text.setWidth(width);
+	}
+
+	public void setEdge(float edge) {
+		text.setEdge(edge);
+	}
+
+	public void setBorderWidth(float borderWidth) {
+		text.setBorderWidth(borderWidth);
+	}
+
+	public void setBorderEdge(float borderEdge) {
+		text.setBorderEdge(borderEdge);
 	}
 
 	public GUIText getText() {
