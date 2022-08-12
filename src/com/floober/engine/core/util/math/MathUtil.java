@@ -5,6 +5,7 @@ import com.floober.engine.core.renderEngine.display.Window;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 import java.awt.*;
 
@@ -16,6 +17,13 @@ public class MathUtil {
 	public static Matrix4f createTransformationMatrix(Vector2f translation, Vector2f scale) {
 		Matrix4f matrix = new Matrix4f();
 		matrix.translate(new Vector3f(translation, 0));
+		matrix.scale(new Vector3f(scale, 0));
+		return matrix;
+	}
+
+	public static Matrix4f createTransformationMatrix(Vector3f translation, Vector2f scale) {
+		Matrix4f matrix = new Matrix4f();
+		matrix.translate(translation);
 		matrix.scale(new Vector3f(scale, 0));
 		return matrix;
 	}
@@ -309,6 +317,14 @@ public class MathUtil {
 		double angle = Math.atan2(xDelta, yDelta);
 		angle -= Math.PI / 2;
 		return (float) Math.toDegrees(angle);
+	}
+
+	public static boolean vec4Equal(Vector4f a, Vector4f b) {
+		return a.x == b.x && a.y == b.y && a.z == b.z && a.w == b.w;
+	}
+
+	public static boolean vec4Different(Vector4f a, Vector4f b) {
+		return !vec4Equal(a, b);
 	}
 
 }
