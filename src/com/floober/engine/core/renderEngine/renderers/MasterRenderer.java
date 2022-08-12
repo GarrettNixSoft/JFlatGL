@@ -347,12 +347,12 @@ public class MasterRenderer {
 	private void prepareLayers() {
 		for (int i = 0; i < RENDER_LAYERS; ++i) {
 			RenderLayer layer = layers[i];
-			layer.addOpaqueBatch(opaqueTextureBatches.get((i)));
-			layer.addOpaqueBatch(opaqueTileBatches.get((i)));
-			layer.addOpaqueBatch(opaqueRectBatches.get((i)));
-			layer.addOpaqueBatch(opaqueCircleBatches.get((i)));
-			layer.addOpaqueBatch(opaqueLineBatches.get((i)));
-			layer.addOpaqueBatch(opaqueOutlineBatches.get((i)));
+			layer.addOpaqueBatch(opaqueTextureBatches.get(i));
+			layer.addOpaqueBatch(opaqueTileBatches.get(i));
+			layer.addOpaqueBatch(opaqueRectBatches.get(i));
+			layer.addOpaqueBatch(opaqueCircleBatches.get(i));
+			layer.addOpaqueBatch(opaqueLineBatches.get(i));
+			layer.addOpaqueBatch(opaqueOutlineBatches.get(i));
 			layer.addTransparentBatch(transparentTextureBatches.get(i));
 			layer.addTransparentBatch(transparentTileBatches.get(i));
 			layer.addTransparentBatch(transparentRectBatches.get(i));
