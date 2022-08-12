@@ -690,7 +690,7 @@ public class GUIText {
 	 * Center the text horizontally on its current position.
 	 * Should only be called once per position change.
 	 */
-	public void center() {
+	private void center() {
 
 		// HORIZONTAL
 		// x is easy

@@ -72,7 +72,6 @@ public class TabButton extends GUIComponent {
 		iconTexture.transform();
 		// transform the label
 		label.setPosition(new Vector3f(DisplayManager.convertToTextScreenPos(new Vector2f(getPosition().x(), getPosition().y() + getSize().y() / 2)), getPosition().z()));
-		label.center();
 		label.setFontSize(defaultTextSize * getScale());
 		label.setColor(getSecondaryColor().mul(getOpacity()));
 	}

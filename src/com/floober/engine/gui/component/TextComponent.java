@@ -68,7 +68,6 @@ public class TextComponent extends GUIComponent {
 	public void doTransform() {
 		// transform the label
 		text.setPosition(new Vector3f(DisplayManager.convertToTextScreenPos(new Vector2f(getPosition().x(), getPosition().y())), getPosition().z()));
-		text.center();
 		text.setFontSize(defaultTextSize * getScale());
 		text.setColor(getPrimaryColor().mul(getOpacity()));
 		text.setOutlineColor(getSecondaryColor().mul(getOpacity()));

@@ -81,7 +81,6 @@ public class Button extends GUIComponent {
 		outlineElement.setColor(getTertiaryColor().mul(getOpacity()));
 		// transform the label
 		label.setPosition(new Vector3f(DisplayManager.convertToTextScreenPos(new Vector2f(getPosition().x(), getPosition().y())), getPosition().z()));
-		label.center();
 		label.setFontSize(defaultTextSize * getScale());
 		label.setColor(getSecondaryColor().mul(getOpacity()));
 	}
