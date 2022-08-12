@@ -30,6 +30,7 @@ import java.util.List;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.opengl.GL43.GL_DEBUG_SEVERITY_NOTIFICATION;
 import static org.lwjgl.opengl.GL43.glDebugMessageControl;
 import static org.lwjgl.system.MemoryUtil.NULL;
@@ -215,6 +216,10 @@ public class DisplayManager {
 		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRANSPARENT_FRAMEBUFFER);
 		glfwWindowHint(GLFW_AUTO_ICONIFY, GL_FALSE);
+		glfwWindowHint(GLFW_STENCIL_BITS, 8);
+
+//		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+//		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 
 		// Step 3: Create the window. The process depends on whether we're creating a fullscreen window or not.
 		primaryMonitorVideoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
@@ -304,8 +309,10 @@ public class DisplayManager {
 		glClearDepth(1);
 
 		// STENCIL SETTINGS
-		glStencilFunc(GL_EQUAL, 1, 0xFF);
+		glClearStencil(0);
 		glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
+		glStencilFunc(GL_ALWAYS, 1, 0xFF);
+		glStencilMask(0x00);
 
 		Stencil.disableStencilWrite();
 
