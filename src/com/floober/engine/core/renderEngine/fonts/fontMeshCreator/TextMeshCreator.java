@@ -116,12 +116,12 @@ public class TextMeshCreator {
 		List<Float> vertices = new ArrayList<>();
 		List<Float> textureCoords = new ArrayList<>();
 
-		if (text.isCenteredVertical()) {
-			double totalHeight = LINE_HEIGHT * lines.size() * text.getFontSize();
-			cursorY -= totalHeight / 2;
-			// one line:
+//		if (text.isCenteredVertical()) {
+//			double totalHeight = LINE_HEIGHT * lines.size() * text.getFontSize();
+//			cursorY -= totalHeight / 2;
+//			// one line:
 //			cursorY -= LINE_HEIGHT * text.getFontSize() / 2;
-		}
+//		}
 
 //		Logger.log("SPACE WIDTH: " + metaData.getSpaceWidth());
 

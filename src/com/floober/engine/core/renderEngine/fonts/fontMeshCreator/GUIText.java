@@ -45,7 +45,7 @@ public class GUIText {
 	private int numberOfLines;
 
 	// controlling the alignment of text
-	private boolean centeredVertical;
+	private boolean centeredVertical = true;
 
 	// text justification
 	public enum Justify {
@@ -699,17 +699,16 @@ public class GUIText {
 //		needsReload = true;
 
 		// VERTICAL
-//		if (centeredVertical) {
-//			// y is also easy, now
-//			try {
-//				float textHeight = textMeshData.textHeight();
-//				position.y -= textHeight / 2;
-//
-//			} catch (Exception e) {
-//				// guess we're not ready for that yet
-//				Logger.logWarning("Maybe don't center this text yet, if you can help it");
-//			}
-//		}
+		if (centeredVertical) {
+			// y is also easy, now
+			try {
+				float textHeight = textMeshData.textHeight();
+				position.y -= textHeight / 2;
+			} catch (Exception e) {
+				// guess we're not ready for that yet
+				Logger.logWarning("Maybe don't center this text yet, if you can help it");
+			}
+		}
 	}
 
 	/**
