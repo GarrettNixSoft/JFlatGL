@@ -15,7 +15,7 @@ public class TextComponent extends GUIComponent {
 
 	public TextComponent(String componentID, GUI parent) {
 		super(componentID, parent);
-		text = new GUIText("Text", defaultTextSize, Game.getFont("default"), new Vector3f(0,0,10), 1, true);
+		text = new GUIText("Text", defaultTextSize, Game.getFont("default"), new Vector3f(0,0,10), 1, GUIText.Justify.CENTER);
 		text.setWidth(0.5f);
 		text.setEdge(0.2f);
 	}

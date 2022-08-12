@@ -19,29 +19,41 @@ import java.util.List;
  */
 public class GUIText {
 
+	// the actual text this GUIText represents
 	private String textString;
-	private float fontSize;
-	
-	private int firstCharVisible;
-	private int lastCharVisible;
 
+	// the generated mesh data that the GPU needs
 	private TextMeshData textMeshData;
-
 	private int textMeshVao;
 	private final List<Integer> textMeshVbos = new ArrayList<>();
 	private int vertexCount;
 	private final Vector4f color = new Vector4f(0f, 0f, 0f, 1f);
 
+	// The Font to use
+	private FontType font;
+	private float fontSize;
 
+	// control which portion of the text is visible (useful for scrolling text)
+	private int firstCharVisible;
+	private int lastCharVisible;
+
+	// where the text is on screen
 	private final Vector3f position;
+
+	// text can be split into multiple lines
 	private float lineMaxSize;
 	private int numberOfLines;
 
-	private FontType font;
+	// controlling the alignment of text
+	private boolean centeredVertical;
 
-	private boolean centerHorizontal;
-	private boolean centerVertical;
+	// text justification
+	public enum Justify {
+		LEFT, CENTER, RIGHT
+	}
+	private Justify textJustify;
 
+	// shader settings
 	private float width;
 	private float edge;
 	private float borderWidth;
@@ -50,11 +62,13 @@ public class GUIText {
 	private final Vector2f shadowOffset;
 	private final Vector4f outlineColor;
 
+	// state flags
 	private boolean hidden;
 	private boolean processed;
 	private boolean needsReload;
 	private boolean useStencil;
 
+	// stencil region for controlling what portion of the text is visible
 	private final Vector4f stencilRegion = new Vector4f();
 
 	public GUIText() {
@@ -63,7 +77,7 @@ public class GUIText {
 		this.font = Game.getFont("default");
 		this.position = new Vector3f();
 		this.lineMaxSize = 1;
-		this.centerHorizontal = false;
+		this.textJustify = Justify.LEFT;
 		this.firstCharVisible = 0;
 		this.lastCharVisible = textString.length();
 		// default values
@@ -84,7 +98,28 @@ public class GUIText {
 		this.font = Game.getFont("default");
 		this.position = new Vector3f();
 		this.lineMaxSize = 1;
-		this.centerHorizontal = false;
+		this.textJustify = Justify.LEFT;
+		this.firstCharVisible = 0;
+		this.lastCharVisible = textString.length();
+		// default values
+		this.width = 0.5f;
+		this.edge = 0.01f;
+		this.borderWidth = 0;
+		this.borderEdge = 0.1f;
+		this.shadowOffset = new Vector2f(0, 0);
+		this.outlineColor = new Vector4f(0, 0, 0, 1);
+		this.hidden = true;
+		// create mesh data
+		TextMaster.processText(this);
+	}
+
+	public GUIText(String text, float fontSize, FontType font, Vector3f position, float maxLineLength) {
+		this.textString = text;
+		this.fontSize = fontSize;
+		this.font = font;
+		this.position = position;
+		this.lineMaxSize = maxLineLength;
+		this.textJustify = Justify.LEFT;
 		this.firstCharVisible = 0;
 		this.lastCharVisible = textString.length();
 		// default values
@@ -116,15 +151,15 @@ public class GUIText {
 	 *            the text is longer than this length it will go onto the next
 	 *            line. When text is centered it is centered into the middle of
 	 *            the line, based on this line length value.
-	 * @param centered Whether the text should be centered or not.
+	 * @param textJustify The text justify setting: LEFT, CENTER, or RIGHT
 	 */
-	public GUIText(String text, float fontSize, FontType font, Vector3f position, float maxLineLength, boolean centered) {
+	public GUIText(String text, float fontSize, FontType font, Vector3f position, float maxLineLength, Justify textJustify) {
 		this.textString = text;
 		this.fontSize = fontSize;
 		this.font = font;
 		this.position = position;
 		this.lineMaxSize = maxLineLength;
-		this.centerHorizontal = this.centerVertical = centered;
+		this.textJustify = textJustify;
 		this.firstCharVisible = 0;
 		this.lastCharVisible = textString.length();
 		// default values
@@ -151,7 +186,7 @@ public class GUIText {
 		this.font = other.font;
 		this.position = other.position;
 		this.lineMaxSize = other.lineMaxSize;
-		this.centerHorizontal = other.centerHorizontal;
+		this.textJustify = other.textJustify;
 		this.firstCharVisible = 0;
 		this.lastCharVisible = newTextString.length();
 		// text display values
@@ -198,22 +233,17 @@ public class GUIText {
 	public int getLastCharVisible() {
 		return lastCharVisible;
 	}
-	public boolean isCenterHorizontal() {
-		return centerHorizontal;
-	}
-	public boolean isCenterVertical() {
-		return centerVertical;
+	public boolean isCenteredVertical() {
+		return centeredVertical;
 	}
 	public int getNumVisibleChars() {
 		return lastCharVisible - firstCharVisible;
 	}
 	public boolean isProcessed() { return processed; }
 	public Vector4f getStencilRegion() { return stencilRegion; }
-
 	public Vector2f getStencilPos() {
 		return new Vector2f(stencilRegion.x, stencilRegion.y);
 	}
-
 	public Vector2f getStencilSize() {
 		return new Vector2f(stencilRegion.z, stencilRegion.w);
 	}
@@ -221,6 +251,76 @@ public class GUIText {
 	public boolean nextCharNotWhitespace(int charIndex) {
 		return (charIndex < getTextString().length() && getTextString().charAt(charIndex) != ' ') || charIndex == getTextString().length();
 	}
+
+	public Justify getTextJustify() {
+		return textJustify;
+	}
+
+	public int getVertexCount() {
+		return this.vertexCount;
+	}
+	public float getFontSize() {
+		return fontSize;
+	}
+	public FontType getFont() {
+		return font;
+	}
+	public Vector4f getColor() {
+		return color;
+	}
+	public int getNumberOfLines() {
+		return numberOfLines;
+	}
+
+	/**
+	 * @return The position of the top-left corner of the text in screen-space.
+	 *         (0, 0) is the top left corner of the screen, (1, 1) is the bottom
+	 *         right.
+	 */
+	public Vector3f getPosition() {
+		return new Vector3f(position);
+	}
+
+	/**
+	 * @return the ID of the text's VAO, which contains all the vertex data for
+	 *         the quads on which the text will be rendered.
+	 */
+	public int getMesh() {
+		return textMeshVao;
+	}
+
+	/**
+	 * @return {@code true} if the text should be centered.
+	 */
+	public boolean isCentered() {
+		return textJustify == Justify.CENTER;
+	}
+
+	/**
+	 * @return The maximum length of a line of this text.
+	 */
+	protected float getMaxLineSize() {
+		return lineMaxSize;
+	}
+
+	/**
+	 * @return The string of text.
+	 */
+	public String getTextString() {
+		return textString;
+	}
+
+	/**
+	 * @return Whether this text is currently hidden.
+	 */
+	public boolean isHidden() {
+		return hidden;
+	}
+
+	/**
+	 * @return Whether this text currently uses the stencil test.
+	 */
+	public boolean isUseStencil() { return useStencil; }
 
 	// SETTERS
 
@@ -232,6 +332,13 @@ public class GUIText {
 		if (oldLayer != newLayer) {
 			TextMaster.moveLayers(this, oldLayer, newLayer);
 		}
+	}
+
+	public void setColor(float r, float g, float b, float a) {
+		color.set(r, g, b, a);
+	}
+	public void setColor(Vector4f color) {
+		setColor(color.x(), color.y(), color.z(), color.w());
 	}
 
 	public void setLayer(int layer) {this.position.setComponent(2, layer); }
@@ -293,18 +400,8 @@ public class GUIText {
 		needsReload = true;
 	}
 
-	public void setCentered(boolean centered) {
-		centerHorizontal = centerVertical = centered;
-		needsReload = true; // TODO:  << are you sure about that
-	}
-
-	public void setCenterHorizontal(boolean centerHorizontal) {
-		this.centerHorizontal = centerHorizontal;
-		needsReload = true;
-	}
-
-	public void setCenterVertical(boolean centerVertical) {
-		this.centerVertical = centerVertical;
+	public void setCenteredVertical(boolean centeredVertical) {
+		this.centeredVertical = centeredVertical;
 		needsReload = true;
 	}
 
@@ -335,59 +432,9 @@ public class GUIText {
 		needsReload = true;
 	}
 
-	/**
-	 * @return The font used by this text.
-	 */
-	public FontType getFont() {
-		return font;
-	}
-
-	/**
-	 * Set the color of the text.
-	 * 
-	 * @param r Red value, between 0 and 1.
-	 * @param g Green value, between 0 and 1.
-	 * @param b Blue value, between 0 and 1.
-	 */
-	public void setColor(float r, float g, float b, float a) {
-		color.set(r, g, b, a);
-	}
-
-	public void setColor(Vector4f color) {
-		setColor(color.x(), color.y(), color.z(), color.w());
-	}
-
-	/**
-	 * @return the colour of the text.
-	 */
-	public Vector4f getColor() {
-		return color;
-	}
-
-	/**
-	 * @return The number of lines of text. This is determined when the text is
-	 *         loaded, based on the length of the text and the max line length
-	 *         that is set.
-	 */
-	public int getNumberOfLines() {
-		return numberOfLines;
-	}
-
-	/**
-	 * @return The position of the top-left corner of the text in screen-space.
-	 *         (0, 0) is the top left corner of the screen, (1, 1) is the bottom
-	 *         right.
-	 */
-	public Vector3f getPosition() {
-		return new Vector3f(position);
-	}
-
-	/**
-	 * @return the ID of the text's VAO, which contains all the vertex data for
-	 *         the quads on which the text will be rendered.
-	 */
-	public int getMesh() {
-		return textMeshVao;
+	public void setTextJustify(Justify textJustify) {
+		this.textJustify = textJustify;
+		needsReload = true;
 	}
 
 	/**
@@ -405,20 +452,6 @@ public class GUIText {
 	}
 
 	/**
-	 * @return The total number of vertices of all the text's quads.
-	 */
-	public int getVertexCount() {
-		return this.vertexCount;
-	}
-
-	/**
-	 * @return the font size of the text (a font size of 1 is normal).
-	 */
-	public float getFontSize() {
-		return fontSize;
-	}
-
-	/**
 	 * Sets the number of lines that this text covers (method used only in
 	 * loading).
 	 * 
@@ -427,39 +460,6 @@ public class GUIText {
 	protected void setNumberOfLines(int number) {
 		this.numberOfLines = number;
 	}
-
-	/**
-	 * @return {@code true} if the text should be centered.
-	 */
-	public boolean isCentered() {
-		return centerHorizontal;
-	}
-
-	/**
-	 * @return The maximum length of a line of this text.
-	 */
-	protected float getMaxLineSize() {
-		return lineMaxSize;
-	}
-
-	/**
-	 * @return The string of text.
-	 */
-	public String getTextString() {
-		return textString;
-	}
-
-	/**
-	 * @return Whether this text is currently hidden.
-	 */
-	public boolean isHidden() {
-		return hidden;
-	}
-
-	/**
-	 * @return Whether this text currently uses the stencil test.
-	 */
-	public boolean isUseStencil() { return useStencil; }
 
 	// ACTIONS
 	/**
@@ -549,24 +549,24 @@ public class GUIText {
 	 * Should only be called once per position change.
 	 */
 	public void center() {
-		if (centerHorizontal) {
+		if (textJustify == Justify.CENTER) {
 			// x is easy
 			position.x -= lineMaxSize / 2;
 			// mark for reloading
 			needsReload = true;
 		}
-		if (centerVertical) {
-			// y is also easy, now
-			try {
-				float textHeight = textMeshData.textHeight();
-				position.y -= textHeight / 2;
-				// mark for reloading
-				needsReload = true;
-			} catch (Exception e) {
-				// guess we're not ready for that yet
-				Logger.logWarning("Maybe don't center this text yet, if you can help it");
-			}
-		}
+//		if (centeredVertical) {
+//			// y is also easy, now
+//			try {
+//				float textHeight = textMeshData.textHeight();
+//				position.y -= textHeight / 2;
+//				// mark for reloading
+//				needsReload = true;
+//			} catch (Exception e) {
+//				// guess we're not ready for that yet
+//				Logger.logWarning("Maybe don't center this text yet, if you can help it");
+//			}
+//		}
 	}
 
 	/**
@@ -594,7 +594,7 @@ public class GUIText {
 				"Hid: " + hidden + "\n" +
 				"Prc: " + processed + "\n" +
 				"Nrl: " + needsReload + "\n" +
-				"Stn: " + useStencil + "\n";
-
+				"Stn: " + useStencil + "\n" +
+				"Reg: " + stencilRegion + "\n";
 	}
 }

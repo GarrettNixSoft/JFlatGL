@@ -161,7 +161,7 @@ public class Game {
 		ParticleMaster.initGlobals();
 
 		// Init FPS display
-		instance.fpsDisplay = new GUIText("FPS: ", 0.5f, Game.getFont("default"), new Vector3f(0, 0, 0), 1, false);
+		instance.fpsDisplay = new GUIText("FPS: ", 0.5f, Game.getFont("default"), new Vector3f(0, 0, 0), 1);
 		instance.fpsDisplay.setColor(Colors.GREEN);
 		instance.fpsDisplay.setWidth(0.5f);
 		instance.fpsDisplay.setEdge(0.2f);

@@ -38,7 +38,7 @@ public class FireScreenTest {
 		Sync sync = new Sync();
 
 		GUIText fpsDisplay = new GUIText("FPS: ", 0.5f, Game.getFont("menu"),
-				new Vector3f(0, 0, 1), 1, false);
+				new Vector3f(0, 0, 1), 1);
 		fpsDisplay.setColor(Colors.GREEN);
 		fpsDisplay.setWidth(0.5f);
 		fpsDisplay.setEdge(0.2f);

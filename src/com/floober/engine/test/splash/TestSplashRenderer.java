@@ -29,7 +29,7 @@ public class TestSplashRenderer extends SplashRenderer {
 
 		FontType font = Loader.loadFontConverted("aller");
 
-		loadText = new GUIText("", 5, font, new Vector3f(0, 0.5f, 1), 1, true);
+		loadText = new GUIText("", 5, font, new Vector3f(0, 0.5f, 1), 1, GUIText.Justify.CENTER);
 		loadText.setColor(Colors.GREEN);
 		loadText.setWidth(0.5f);
 		loadText.setEdge(0.2f);

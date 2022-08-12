@@ -23,7 +23,8 @@ public class Button extends GUIComponent {
 
 	public Button(String componentID, GUI parent) {
 		super(componentID, parent);
-		label = new GUIText("Button", defaultTextSize, Game.getFont("default"), new Vector3f(0,0,10), 1, true);
+		label = new GUIText("Button", defaultTextSize, Game.getFont("default"), new Vector3f(0,0,10), 1, GUIText.Justify.CENTER);
+		label.setCenteredVertical(true);
 		label.setWidth(0.5f);
 		label.setEdge(0.2f);
 		baseElement = new RectElement(getPrimaryColor(), 0, 0, 0, 0, 0, true);

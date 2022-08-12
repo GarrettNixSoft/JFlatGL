@@ -84,7 +84,7 @@ public class ParticleTest {
 		guiFont = Loader.loadFontConverted("aller");
 		Vector4f textColor = new Vector4f(1,1,1,0.8f);
 		Vector4f shadowColor = new Vector4f(0);
-		particleCountDisplay = new GUIText("Particles: 0", 1.5f, guiFont, new Vector3f(0), 1, false);
+		particleCountDisplay = new GUIText("Particles: 0", 1.5f, guiFont, new Vector3f(0), 1);
 		particleCountDisplay.setColor(textColor);
 		particleCountDisplay.setWidth(0.5f);
 		particleCountDisplay.setEdge(0.2f);
@@ -93,7 +93,7 @@ public class ParticleTest {
 		particleCountDisplay.setBorderEdge(0.08f);
 		particleCountDisplay.setShadowOffset(0.007f, 0.007f);
 		particleCountDisplay.show();
-		performanceDisplay = new GUIText("Tick: ... Frame: ...", 1f, guiFont, new Vector3f(0, 0.05f, 0), 0.12f, false);
+		performanceDisplay = new GUIText("Tick: ... Frame: ...", 1f, guiFont, new Vector3f(0, 0.05f, 0), 0.12f);
 		performanceDisplay.setColor(textColor);
 		performanceDisplay.setWidth(0.5f);
 		performanceDisplay.setEdge(0.1f);
@@ -102,7 +102,7 @@ public class ParticleTest {
 		performanceDisplay.setBorderEdge(0.08f);
 		performanceDisplay.setShadowOffset(0.007f, 0.007f);
 		performanceDisplay.show();
-		mousePositionDisplay = new GUIText("Mouse position: (...)", 1f, guiFont, new Vector3f(0, 0.11f, 0), 0.35f, false);
+		mousePositionDisplay = new GUIText("Mouse position: (...)", 1f, guiFont, new Vector3f(0, 0.11f, 0), 0.35f);
 		mousePositionDisplay.setColor(textColor);
 		mousePositionDisplay.setWidth(0.5f);
 		mousePositionDisplay.setEdge(0.1f);
@@ -111,7 +111,7 @@ public class ParticleTest {
 		mousePositionDisplay.setBorderEdge(0.08f);
 		mousePositionDisplay.setShadowOffset(0.007f, 0.007f);
 		mousePositionDisplay.show();
-		colorDisplay = new GUIText("Color", 1f, guiFont, new Vector3f(0, 0.17f, 0), 0.2f, false);
+		colorDisplay = new GUIText("Color", 1f, guiFont, new Vector3f(0, 0.17f, 0), 0.2f);
 		colorDisplay.setColor(textColor);
 		colorDisplay.setWidth(0.5f);
 		colorDisplay.setEdge(0.1f);
@@ -120,7 +120,7 @@ public class ParticleTest {
 		colorDisplay.setBorderEdge(0.08f);
 		colorDisplay.setShadowOffset(0.007f, 0.007f);
 		colorDisplay.show();
-		particleSettingsDisplay = new GUIText("Particle Settings: ...", 1f, guiFont, new Vector3f(0, 0.25f, 0), 0.3f, false);
+		particleSettingsDisplay = new GUIText("Particle Settings: ...", 1f, guiFont, new Vector3f(0, 0.25f, 0), 0.3f);
 		particleSettingsDisplay.setColor(textColor);
 		particleSettingsDisplay.setWidth(0.5f);
 		particleSettingsDisplay.setEdge(0.1f);

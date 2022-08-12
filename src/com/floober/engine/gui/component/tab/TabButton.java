@@ -21,7 +21,8 @@ public class TabButton extends GUIComponent {
 
 	public TabButton(String componentID, GUI parent, TextureComponent icon) {
 		super(componentID, parent);
-		label = new GUIText("Tab", defaultTextSize, Game.getFont("default"), new Vector3f(0,0,10), 1, true);
+		label = new GUIText("Tab", defaultTextSize, Game.getFont("default"), new Vector3f(0,0,10), 1, GUIText.Justify.CENTER);
+		label.setCenteredVertical(true);
 		iconTexture = new TextureElement();
 		iconTexture.setTexture(icon);
 	}

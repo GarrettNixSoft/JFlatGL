@@ -70,7 +70,7 @@ public class RunGame {
 //		loadRenderer.cleanUp();
 
 		// SET UP DEBUG TEXT
-		fpsDisplay = new GUIText("FPS: ", 0.5f, Game.getFont("menu"), new Vector3f(0, 0, 0), 1, false);
+		fpsDisplay = new GUIText("FPS: ", 0.5f, Game.getFont("menu"), new Vector3f(0, 0, 0), 1);
 		fpsDisplay.setColor(Colors.GREEN);
 		fpsDisplay.setWidth(0.5f);
 		fpsDisplay.setEdge(0.2f);

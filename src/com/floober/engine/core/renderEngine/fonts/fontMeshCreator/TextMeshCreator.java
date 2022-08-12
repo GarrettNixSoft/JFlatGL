@@ -93,10 +93,21 @@ public class TextMeshCreator {
 		double cursorY = 0f;
 		List<Float> vertices = new ArrayList<>();
 		List<Float> textureCoords = new ArrayList<>();
+
+		if (text.isCenteredVertical()) {
+			double totalHeight = LINE_HEIGHT * lines.size() * text.getFontSize();
+			cursorY -= totalHeight / 2;
+		}
+
 		for (Line line : lines) {
-			if (text.isCentered()) {
+
+			// if it's center or right justified, adapt
+			if (text.getTextJustify() == GUIText.Justify.CENTER)
 				cursorX = (line.getMaxLength() - line.getLineLength()) / 2;
-			}
+			else if (text.getTextJustify() == GUIText.Justify.RIGHT)
+				cursorX = line.getMaxLength() - line.getLineLength();
+
+			// add all the words
 			for (Word word : line.getWords()) {
 				for (Character letter : word.getCharacters()) {
 					addVerticesForCharacter(cursorX, cursorY, text.getPosition().z, letter, text.getFontSize(), vertices);
@@ -109,6 +120,7 @@ public class TextMeshCreator {
 			cursorX = 0;
 			cursorY += LINE_HEIGHT * text.getFontSize();
 		}
+
 //		if (lines.size() > 1) cursorY -= LINE_HEIGHT * text.getFontSize();
 		return new TextMeshData(listToArray(vertices), listToArray(textureCoords), (float) cursorY);
 	}
