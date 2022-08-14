@@ -39,6 +39,8 @@
 		"log_cutscenes": true,
 		"log_gui_events": false,
 		"log_gui_interactions": false,
-		"log_audio_start": true
+		"log_audio_start": true,
+		"log_gamepad": true,
+		"log_gamepad_connections": true
 	}
 }

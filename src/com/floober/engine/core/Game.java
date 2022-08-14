@@ -18,6 +18,7 @@ import com.floober.engine.core.splash.SplashScreen;
 import com.floober.engine.core.util.color.Colors;
 import com.floober.engine.core.util.configuration.Config;
 import com.floober.engine.core.util.configuration.Settings;
+import com.floober.engine.core.util.input.GamepadInput;
 import com.floober.engine.core.util.input.KeyInput;
 import com.floober.engine.core.util.input.MouseInput;
 import com.floober.engine.core.util.time.TimeScale;
@@ -124,6 +125,9 @@ public class Game {
 		// Set up OpenAL.
 		AudioMaster.init();
 		AudioMaster.setListenerData(0, 0, 0);
+
+		// Prepare the Gamepad input
+		GamepadInput.init();
 
 		// initialize the instance
 		instance = new Game();
@@ -275,6 +279,7 @@ public class Game {
 	private static void pollInput() {
 		KeyInput.update();
 		MouseInput.update();
+		GamepadInput.update();
 	}
 
 	// ACTIONS

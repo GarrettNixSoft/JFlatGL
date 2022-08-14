@@ -2,6 +2,7 @@ package com.floober.engine.core.util;
 
 import com.floober.engine.core.util.configuration.Config;
 import com.floober.engine.core.util.conversion.StringConverter;
+import com.floober.engine.core.util.input.Gamepad;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
 import org.joml.Vector4f;
@@ -29,6 +30,9 @@ public class Logger {
 	public static boolean logLoadSuccess;
 	public static boolean logLoadErrors;
 	public static boolean logLoadGeneral;
+	// hardware
+	public static boolean logGamepad;
+	public static boolean logGamepadConnections;
 	// in-game
 	public static boolean logEntityDebug;
 	public static boolean logEnemyDebug;
@@ -52,6 +56,9 @@ public class Logger {
 		logLoadSuccess = Config.LOGGER_SETTINGS.getBoolean("log_load_success");
 		logLoadErrors = Config.LOGGER_SETTINGS.getBoolean("log_load_errors");
 		logLoadGeneral = Config.LOGGER_SETTINGS.getBoolean("log_load_general");
+		// hardware
+		logGamepad = Config.LOGGER_SETTINGS.optBoolean("log_gamepad", false);
+		logGamepadConnections = Config.LOGGER_SETTINGS.optBoolean("log_gamepad_connections", true);
 		// in-game
 		logEntityDebug = Config.LOGGER_SETTINGS.getBoolean("log_entity_debug");
 		logEnemyDebug = Config.LOGGER_SETTINGS.getBoolean("log_enemy_debug");
@@ -215,6 +222,18 @@ public class Logger {
 	public static void logPlayer(String message) {
 		if (!logPlayerDebug) return;
 		outStream.println("[PLAYER] " + message);
+	}
+
+	// hardware info
+	public static void logGamepad(String message) {
+		if (!logGamepad) return;
+		outStream.println("[GAMEPAD] " + message);
+	}
+
+	public static void logGamepadConnection(Gamepad gamepad, boolean connected) {
+		if (!logGamepadConnections) return;
+		if (connected) outStream.println("[GAMEPAD] CONNECTED: " + gamepad.getName() + " (" + gamepad.getGUID() + ")");
+		else outStream.println("[GAMEPAD] DISCONNECTED: " + gamepad.getName() + " (" + gamepad.getGUID() + ")");
 	}
 	
 }
