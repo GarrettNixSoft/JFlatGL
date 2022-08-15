@@ -376,11 +376,11 @@ public class Game {
 		return instance.fpsDisplay;
 	}
 
-	public static float centerX() {
+	public static int centerX() {
 		return MasterRenderer.getTargetWindow().centerX();
 	}
 
-	public static float centerY() {
+	public static int centerY() {
 		return MasterRenderer.getTargetWindow().centerY();
 	}
 
@@ -474,6 +474,7 @@ public class Game {
 
 		// Clean up GLFW
 		DisplayManager.cleanUp();
+		GamepadInput.cleanUp();
 
 		glfwTerminate();
 		Objects.requireNonNull(glfwSetErrorCallback(null)).free(); // shut up, compiler

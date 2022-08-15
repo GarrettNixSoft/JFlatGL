@@ -217,12 +217,12 @@ public class Window {
 
 	public static float mainCenterY() { return DisplayManager.getPrimaryGameWindow().centerY(); }
 
-	public float centerX() {
-		return Config.INTERNAL_WIDTH / 2f;
+	public int centerX() {
+		return Config.INTERNAL_WIDTH / 2;
 	}
 
-	public float centerY() {
-		return Config.INTERNAL_HEIGHT / 2f;
+	public int centerY() {
+		return Config.INTERNAL_HEIGHT / 2;
 	}
 
 	public Vector2f center() {
