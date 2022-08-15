@@ -1,7 +1,5 @@
 package com.floober.engine.core.util.input;
 
-import com.floober.engine.core.util.Logger;
-import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWGamepadState;
 
 import java.nio.ByteBuffer;
@@ -15,6 +13,7 @@ public class Gamepad {
 	private final String name;
 	private final String guid;
 	private final int jid;
+	private final int index;
 
 	// button, axis states
 	private final GLFWGamepadState gamepadState;
@@ -26,8 +25,9 @@ public class Gamepad {
 	private byte[] prevButtons = new byte[100];
 	private float[] prevAxes = new float[100];
 
-	public Gamepad(int jid) {
+	public Gamepad(int jid, int index) {
 		this.jid = jid;
+		this.index = index;
 		this.name = glfwGetJoystickName(jid);
 		this.guid = glfwGetJoystickGUID(jid);
 		this.gamepadState = GLFWGamepadState.malloc();
@@ -45,6 +45,10 @@ public class Gamepad {
 
 	public int getJID() {
 		return jid;
+	}
+
+	public int getIndex() {
+		return index;
 	}
 
 	protected GLFWGamepadState getGamepadState() {

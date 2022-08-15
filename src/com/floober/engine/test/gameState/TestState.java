@@ -24,11 +24,13 @@ public class TestState extends GameState {
 	private float y;
 	private float r;
 
+	private float size = 100;
+
 	public TestState(GameStateManager gsm) {
 		super(gsm);
 		x = Game.centerX();
 		y = Game.centerY();
-		rect = new RectElement(Colors.RED, x, y, Layers.DEFAULT_LAYER, 100, 100, true);
+		rect = new RectElement(Colors.RED, x, y, Layers.DEFAULT_LAYER, size, size, true);
 	}
 
 	@Override
@@ -39,15 +41,25 @@ public class TestState extends GameState {
 	@Override
 	public void update() {
 
-		// move/rotate based on gamepad input
+		// move/rotate/scale based on gamepad input
 		float delta = 250 * Game.getFrameTime();
 		float rotate = 90 * Game.getFrameTime();
+		float scale = 15 * Game.getFrameTime();
+
+		// right bumper acts as a boost for movement
+		if (GamepadInput.isPressed(0, GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER)) delta *= 2;
+
+		// left bumper acts as a boost for scaling
+		if (GamepadInput.isPressed(0, GLFW_GAMEPAD_BUTTON_LEFT_BUMPER)) scale *= 10;
 
 		x += GamepadInput.getAxis(0, GLFW_GAMEPAD_AXIS_LEFT_X) * delta;
 		y += GamepadInput.getAxis(0, GLFW_GAMEPAD_AXIS_LEFT_Y) * delta;
 		r -= GamepadInput.getAxis(0, GLFW_GAMEPAD_AXIS_RIGHT_X) * rotate;
+		size -= GamepadInput.getAxis(0, GLFW_GAMEPAD_AXIS_LEFT_TRIGGER) * scale;
+		size += GamepadInput.getAxis(0, GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER) * scale;
 
 		rect.setPosition(x, y, Layers.DEFAULT_LAYER);
+		rect.setSize(size, size);
 		rect.setRotation(r);
 		rect.transform();
 
