@@ -15,8 +15,8 @@
 	"splash_width": 800,
 	"splash_height": 500,
 	"scale_splash_screen": true,
-	"splash_transparent": true,
-	"use_splash_screen": true,
+	"splash_transparent": false,
+	"use_splash_screen": false,
 	"splash_screen_fake_latency": 0,
 	"load_render_settings": {
 		"font": "aller",
