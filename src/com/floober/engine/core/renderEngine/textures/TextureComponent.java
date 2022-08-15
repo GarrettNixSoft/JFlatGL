@@ -65,10 +65,6 @@ public class TextureComponent {
 		return hasTransparency;
 	}
 
-	public float getAlpha() {
-		return alpha;
-	}
-
 	// SETTERS
 	public void setTextureOffset(Vector4f textureOffset) {
 		this.textureOffset.set(textureOffset);
@@ -76,10 +72,6 @@ public class TextureComponent {
 
 	public void setHasTransparency(boolean hasTransparency) {
 		this.hasTransparency = hasTransparency;
-	}
-
-	public void setAlpha(float alpha) {
-		this.alpha = alpha;
 	}
 
 }

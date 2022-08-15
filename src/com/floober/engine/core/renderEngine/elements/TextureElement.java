@@ -26,6 +26,9 @@ public class TextureElement extends RenderElement {
 	private final Vector4f bChannelColor = new Vector4f(0);
 	private final Vector4f aChannelColor = new Vector4f(0);
 
+	// alpha control
+	private float alpha;
+
 	// color effect
 	private final Vector4f color = new Vector4f(0);
 	private float mix;
@@ -117,6 +120,8 @@ public class TextureElement extends RenderElement {
 		this.gChannelColor.set(other.gChannelColor);
 		this.bChannelColor.set(other.bChannelColor);
 		this.aChannelColor.set(other.aChannelColor);
+		// alpha control
+		this.alpha = other.alpha;
 		// color effect
 		this.color.set(other.color);
 		this.mix = other.mix;
@@ -146,7 +151,7 @@ public class TextureElement extends RenderElement {
 	// shortcuts
 	public Texture getRawTexture() { return textureComponent.texture(); }
 	public Vector4f getTextureComponentOffset() { return textureComponent.getTextureOffset(); }
-	public float getTextureComponentAlpha() { return textureComponent.getAlpha(); }
+	public float getAlpha() { return alpha; }
 	public boolean textureComponentHasTransparency() { return textureComponent.hasTransparency(); }
 
 	public boolean doColorSwap() {
@@ -233,7 +238,7 @@ public class TextureElement extends RenderElement {
 	public void setbChannelColor(Vector4f bChannelColor) { if (bChannelColor != null) this.bChannelColor.set(bChannelColor); }
 	public void setaChannelColor(Vector4f aChannelColor) { if (aChannelColor != null) this.aChannelColor.set(aChannelColor); }
 
-	public void setAlpha(float alpha) { this.textureComponent.setAlpha(alpha); }
+	public void setAlpha(float alpha) { this.alpha = alpha; }
 	public void setColor(Vector4f color) { this.color.set(color); }
 	public void setMix(float mix) { this.mix = mix; }
 

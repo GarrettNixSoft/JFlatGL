@@ -197,7 +197,7 @@ public class TextureRenderer {
 				MathUtil.createTransformationMatrix(element.getRenderPosition(), element.getScale(), element.getRotation());
 		shader.loadTransformationMatrix(matrix);
 		shader.loadTextureOffset(element.getTextureComponentOffset());
-		shader.loadTextureAlpha(element.getTextureComponent().getAlpha());
+		shader.loadTextureAlpha(element.getAlpha());
 		// color swap
 		shader.loadDoColorSwap(element.doColorSwap());
 		shader.loadrChannelColor(element.getrChannelColor());
