@@ -1,16 +1,13 @@
 package com.floober.engine.core.util.configuration;
 
 import com.floober.engine.core.assets.loaders.ImageLoader;
-import com.floober.engine.core.splash.SplashRenderer;
 import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.conversion.DisplayScale;
 import com.floober.engine.core.util.data.Pair;
 import com.floober.engine.core.util.file.FileUtil;
-import com.floober.engine.core.util.input.Keybinds;
 import org.joml.Vector4f;
 import org.json.JSONObject;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**

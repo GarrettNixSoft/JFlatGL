@@ -1,6 +1,6 @@
 package com.floober.engine.core.audio;
 
-import com.floober.engine.core.util.input.KeyInput;
+import com.floober.engine.core.input.KeyInput;
 import com.floober.engine.core.util.time.Tweener;
 
 public class AudioChannel {
@@ -160,7 +160,7 @@ public class AudioChannel {
 		// update the source
 		source.update();
 
-		if (KeyInput.isHeld(KeyInput.V) && isPlaying()) System.out.println("vol = " + volume);
+//		if (KeyInput.isHeld(KeyInput.V) && isPlaying()) System.out.println("vol = " + volume);
 	}
 
 }

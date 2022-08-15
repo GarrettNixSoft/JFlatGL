@@ -11,7 +11,7 @@ import com.floober.engine.core.renderEngine.particles.types.LightParticle;
 import com.floober.engine.core.renderEngine.particles.types.Particle;
 import com.floober.engine.core.util.color.Colors;
 import com.floober.engine.core.util.configuration.Config;
-import com.floober.engine.core.util.input.KeyInput;
+import com.floober.engine.core.input.KeyInput;
 import com.floober.engine.core.util.math.Collisions;
 import com.floober.engine.core.util.math.MathUtil;
 import com.floober.engine.core.util.math.RandomUtil;

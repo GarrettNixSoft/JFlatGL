@@ -11,8 +11,8 @@ import com.floober.engine.core.renderEngine.util.Stencil;
 import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.configuration.Config;
 import com.floober.engine.core.util.configuration.Settings;
-import com.floober.engine.core.util.input.KeyInput;
-import com.floober.engine.core.util.input.MouseInput;
+import com.floober.engine.core.input.KeyInput;
+import com.floober.engine.core.input.MouseInput;
 import com.floober.engine.core.util.math.MathUtil;
 import com.floober.engine.core.util.time.TimeScale;
 import org.joml.Vector2f;
@@ -30,7 +30,6 @@ import java.util.List;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL30.*;
 import static org.lwjgl.opengl.GL43.GL_DEBUG_SEVERITY_NOTIFICATION;
 import static org.lwjgl.opengl.GL43.glDebugMessageControl;
 import static org.lwjgl.system.MemoryUtil.NULL;

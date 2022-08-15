@@ -4,7 +4,7 @@ import com.floober.engine.event.MultiEventQueue;
 import com.floober.engine.gui.GUI;
 import com.floober.engine.gui.GUIAction;
 import com.floober.engine.core.util.Logger;
-import com.floober.engine.core.util.input.MouseInput;
+import com.floober.engine.core.input.MouseInput;
 import com.floober.engine.core.util.math.Collisions;
 import com.floober.engine.gui.event.ClosedEvent;
 import com.floober.engine.gui.event.GUIEvent;

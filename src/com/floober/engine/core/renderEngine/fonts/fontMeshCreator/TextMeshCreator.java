@@ -1,9 +1,7 @@
 package com.floober.engine.core.renderEngine.fonts.fontMeshCreator;
 
 import com.floober.engine.core.renderEngine.util.Layers;
-import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.data.Pair;
-import com.floober.engine.core.util.input.MouseInput;
 import com.floober.engine.core.util.math.MathUtil;
 
 import java.util.ArrayList;

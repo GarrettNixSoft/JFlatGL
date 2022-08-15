@@ -2,7 +2,7 @@ package com.floober.engine.core.util;
 
 import com.floober.engine.core.util.configuration.Config;
 import com.floober.engine.core.util.conversion.StringConverter;
-import com.floober.engine.core.util.input.Gamepad;
+import com.floober.engine.core.input.Gamepad;
 import org.joml.Vector2f;
 import org.joml.Vector2i;
 import org.joml.Vector4f;

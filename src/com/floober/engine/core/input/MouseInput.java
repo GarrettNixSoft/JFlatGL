@@ -1,9 +1,8 @@
-package com.floober.engine.core.util.input;
+package com.floober.engine.core.input;
 
 import com.floober.engine.core.renderEngine.display.DisplayManager;
 import com.floober.engine.core.renderEngine.display.Window;
 import com.floober.engine.core.renderEngine.renderers.MasterRenderer;
-import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.conversion.VectorConverter;
 import com.floober.engine.core.util.math.Collisions;
 import org.joml.Vector2f;

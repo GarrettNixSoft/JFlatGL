@@ -8,7 +8,7 @@ import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.color.Colors;
 import com.floober.engine.core.util.data.Queue;
-import com.floober.engine.core.util.input.KeyInput;
+import com.floober.engine.core.input.KeyInput;
 import com.floober.engine.core.util.time.Timer;
 import com.floober.engine.gui.GUI;
 import org.joml.Vector2f;

@@ -1,4 +1,4 @@
-package com.floober.engine.core.util.input;
+package com.floober.engine.core.input;
 
 import javax.swing.*;
 

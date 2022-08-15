@@ -1,7 +1,7 @@
 package com.floober.engine.gui;
 
 import com.floober.engine.core.util.color.Colors;
-import com.floober.engine.core.util.input.MouseInput;
+import com.floober.engine.core.input.MouseInput;
 import com.floober.engine.gui.component.BackgroundComponent;
 import com.floober.engine.gui.component.GUIComponent;
 import com.floober.engine.gui.component.GUILayer;
