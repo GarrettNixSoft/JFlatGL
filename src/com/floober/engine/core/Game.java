@@ -170,8 +170,9 @@ public class Game {
 		instance.fpsDisplay.setWidth(0.5f);
 		instance.fpsDisplay.setEdge(0.2f);
 
-		if (Settings.getSettingBoolean("show_fps"))
+		if (Settings.getSettingBoolean("show_fps")) {
 			instance.fpsDisplay.show();
+		}
 
 	}
 

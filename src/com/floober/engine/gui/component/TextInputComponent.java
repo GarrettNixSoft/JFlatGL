@@ -391,7 +391,7 @@ public class TextInputComponent extends GUIComponent {
 		baseElement.setPosition(getPosition());
 		// cursor
 		Vector2f cursorPos = text.getCursorPosition(cursorIndex);
-		cursorPos.x -= text.getLineWidth() / 2f;
+//		cursorPos.x -= text.getLineWidth() / 2f;
 		cursorPos.mul(2);
 		cursorPos.sub(1, 1);
 

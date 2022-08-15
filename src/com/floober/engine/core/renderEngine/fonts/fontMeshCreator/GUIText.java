@@ -470,6 +470,8 @@ public class GUIText {
 		if (oldLayer != newLayer) {
 			TextMaster.moveLayers(this, oldLayer, newLayer);
 		}
+		// move to center the text properly
+		center();
 	}
 
 	public void setColor(float r, float g, float b, float a) {
@@ -663,7 +665,6 @@ public class GUIText {
 		if (needsReload) {
 //			Logger.log("Reloading " + textString);
 			reload();
-			center();
 			needsReload = false;
 //			Logger.log("Reloading: " + textString);
 //			Logger.log(getDebugString());
