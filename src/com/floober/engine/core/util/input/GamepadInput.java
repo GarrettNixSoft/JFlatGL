@@ -127,6 +127,18 @@ public class GamepadInput {
 
 	}
 
+	public static void cleanUp() {
+
+		for (Gamepad gamepad : connectedGamepads) {
+			if (gamepad != null) gamepad.free();
+		}
+	}
+
+	// ******************************** CHECKING STATUS ********************************
+	public static boolean isConnected(int gamepadIndex) {
+		return connectedGamepads[gamepadIndex] != null;
+	}
+
 	// ******************************** GETTING INPUT VALUES ********************************
 	public static boolean isPressed(int gamepadIndex, int button) {
 
