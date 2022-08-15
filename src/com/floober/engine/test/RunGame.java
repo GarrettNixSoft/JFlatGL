@@ -44,11 +44,11 @@ public class RunGame {
 	public static void main(String[] args) {
 
 		// Load user preferences/settings and game flags
-		Config.load();
-		Settings.load();
+		Game.loadConfig();
 
 		// TESTING GAME
 		Settings.setSettingValue("fullscreen", false);
+		Settings.setSettingValue("show_fps", true);
 		// FOR EFFICIENCY IN RUNNING MULTIPLE TIMES TO CHECK THINGS
 
 		// game components
@@ -63,81 +63,11 @@ public class RunGame {
 		// load the game assets
 		Game.init(splashRenderer, new TestGameStateManager(1));
 
-		// with assets now loaded, have the system masters set their global shortcuts
-		ParticleMaster.initGlobals();
-
-		// finish load render
-//		loadRenderer.cleanUp();
-
-		// SET UP DEBUG TEXT
-		fpsDisplay = new GUIText("FPS: ", 0.5f, Game.getFont("menu"), new Vector3f(0, 0, 0), 1);
-		fpsDisplay.setColor(Colors.GREEN);
-		fpsDisplay.setWidth(0.5f);
-		fpsDisplay.setEdge(0.2f);
-		fpsDisplay.show();
-
-		TextureComponent testTile = Game.getTextureArray("s_level")[32];
-		Logger.log("Offsets: " + testTile.getTextureOffset());
-
-		TextureElement testElement = new TextureElement(testTile);
-		testElement.setPosition(100, 100, Layers.DEFAULT_LAYER);
-		testElement.setSize(200, 200);
-		testElement.setCentered(false);
-
 		// Run the game loop!
-		while (!(glfwWindowShouldClose(primaryWindowID) || Game.closeRequested())) {
-
-			// run game logic
-			Game.update();
-
-			// clear window
-			MasterRenderer.primaryWindowRenderer.prepare(true);
-
-			// render game internally
-			Game.render();
-
-//			Render.drawRect(Colors.RED, Window.mainCenterX(), Window.mainCenterY(), Layers.DEFAULT_LAYER, 200, 200, true);
-			testElement.renderTransformed();
-
-			// Debug!
-			float fps = 1.0f / DisplayManager.getFrameTimeRaw();
-			fpsDisplay.replaceText("FPS: " + fps +
-					"\nGeom: " + GeometryRenderer.ELEMENT_COUNT +
-					"\nTxtr: " + TextureRenderer.ELEMENT_COUNT +
-					"\nText: " + FontRenderer.ELEMENT_COUNT +
-					"\nPart: " + MasterRenderer.getParticleCount());
-
-			// handle top-level universal inputs
-			handleInput();
-
-			// render to the screen
-			MasterRenderer.primaryWindowRenderer.render(true);
-			MasterRenderer.getTargetWindow().swapBuffers();
-
-			// update display and poll events
-			DisplayManager.updateDisplay();
-
-			// sync time
-//			sync.sync(Display.FPS_CAP);
-// 			decide if this is worth it; for me, it's smoother without (but rare hitching occurs for like 0.1s)
-		}
+		Game.runGameLoop();
 
 		// Clean up when done.
-		Loader.cleanUp();
-		MasterRenderer.cleanUp();
-		TextMaster.cleanUp();
-		AudioMaster.cleanUp();
-		TextureOutliner.cleanUp();
-
-		// Clean up GLFW
-		Callbacks.glfwFreeCallbacks(primaryWindowID);
-		glfwDestroyWindow(primaryWindowID);
-
-		glfwTerminate();
-		Objects.requireNonNull(glfwSetErrorCallback(null)).free(); // shut up, compiler
-
-		// save user settings/preferences and game flags
-		Settings.save();
+		Game.cleanUp();
 
 	}
 

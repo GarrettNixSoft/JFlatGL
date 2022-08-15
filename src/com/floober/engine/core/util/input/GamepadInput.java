@@ -19,6 +19,20 @@ public class GamepadInput {
 	// timer to poll for whether gamepads are still connected
 	private static Timer connectionPollTimer;
 
+	// stick dead zones
+	private static float innerDeadZone = 0.1f;
+	private static float outerDeadZone = 0;
+
+	// ******************************** SETTINGS ********************************
+	public static void setInnerDeadZone(float innerDeadZone) {
+		GamepadInput.innerDeadZone = innerDeadZone;
+	}
+
+	public static void setOuterDeadZone(float outerDeadZone) {
+		GamepadInput.outerDeadZone = outerDeadZone;
+	}
+
+	// ******************************** SETUP ********************************
 	public static void init() {
 
 		// create the poll timer
@@ -55,6 +69,9 @@ public class GamepadInput {
 		}
 
 		// TODO update all connected controllers
+		for (Gamepad gamepad : connectedGamepads) {
+			gamepad.update();
+		}
 
 	}
 
@@ -95,6 +112,45 @@ public class GamepadInput {
 		connectedGamepads.remove(gamepad);
 
 		Logger.logGamepadConnection(gamepad, false);
+
+	}
+
+	// ******************************** GETTING INPUT VALUES ********************************
+	public static boolean isPressed(int gamepadIndex, int button) {
+
+		// return false for invalid index values
+		if (gamepadIndex < 0 || gamepadIndex >= connectedGamepads.size()) return false;
+
+		// fetch the button state of the requested gamepad
+		return connectedGamepads.get(gamepadIndex).isPressed(button);
+
+	}
+
+	public static boolean isHeld(int gamepadIndex, int button) {
+
+		// return false for invalid index values
+		if (gamepadIndex < 0 || gamepadIndex >= connectedGamepads.size()) return false;
+
+		// fetch the button state of the requested gamepad
+		return connectedGamepads.get(gamepadIndex).isHeld(button);
+
+	}
+
+	public static float getAxis(int gamepadIndex, int axis) {
+
+		// return false for invalid index values
+		if (gamepadIndex < 0 || gamepadIndex >= connectedGamepads.size()) return 0;
+
+		// fetch the axis state of the requested gamepad
+		float stick = connectedGamepads.get(gamepadIndex).getAxis(axis);
+
+		// apply dead zones
+		if (Math.abs(stick) < innerDeadZone) stick = 0;
+		else if (stick > 1 - outerDeadZone) stick = 1 - outerDeadZone;
+		else if (stick < -1 + outerDeadZone) stick = -1 + outerDeadZone;
+
+		// return the stick value
+		return stick;
 
 	}
 

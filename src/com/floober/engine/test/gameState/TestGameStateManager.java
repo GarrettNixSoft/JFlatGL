@@ -18,4 +18,5 @@ public class TestGameStateManager extends GameStateManager {
 	protected void loadState(int state) {
 		gameStates[currentState] = new TestState(this);
 	}
+
 }
