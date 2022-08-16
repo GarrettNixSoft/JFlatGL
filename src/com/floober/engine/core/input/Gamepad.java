@@ -1,5 +1,6 @@
 package com.floober.engine.core.input;
 
+import com.floober.engine.core.util.Logger;
 import org.lwjgl.glfw.GLFWGamepadState;
 
 import java.nio.ByteBuffer;
@@ -8,6 +9,66 @@ import java.nio.FloatBuffer;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Gamepad {
+
+	// convenience aliases
+	public static final int AXIS_LEFT_X = GLFW_GAMEPAD_AXIS_LEFT_X;
+	public static final int AXIS_LEFT_Y = GLFW_GAMEPAD_AXIS_LEFT_Y;
+	public static final int AXIS_RIGHT_X = GLFW_GAMEPAD_AXIS_RIGHT_X;
+	public static final int AXIS_RIGHT_Y = GLFW_GAMEPAD_AXIS_RIGHT_Y;
+	public static final int AXIS_TRIGGER_LEFT = GLFW_GAMEPAD_AXIS_LEFT_TRIGGER;
+	public static final int AXIS_TRIGGER_RIGHT = GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER;
+
+	public static final int BUTTON_X = GLFW_GAMEPAD_BUTTON_X;
+	public static final int BUTTON_Y = GLFW_GAMEPAD_BUTTON_Y;
+	public static final int BUTTON_A = GLFW_GAMEPAD_BUTTON_A;
+	public static final int BUTTON_B = GLFW_GAMEPAD_BUTTON_B;
+	public static final int BUTTON_BACK = GLFW_GAMEPAD_BUTTON_BACK;
+	public static final int BUTTON_START = GLFW_GAMEPAD_BUTTON_START;
+	public static final int BUTTON_GUIDE = GLFW_GAMEPAD_BUTTON_GUIDE;
+	public static final int BUMPER_LEFT = GLFW_GAMEPAD_BUTTON_LEFT_BUMPER;
+	public static final int BUMPER_RIGHT = GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER;
+
+	public static final int[] AXIS_IDS = {
+			GLFW_GAMEPAD_AXIS_LEFT_X,
+			GLFW_GAMEPAD_AXIS_LEFT_Y,
+			GLFW_GAMEPAD_AXIS_RIGHT_X,
+			GLFW_GAMEPAD_AXIS_RIGHT_Y,
+			GLFW_GAMEPAD_AXIS_LEFT_TRIGGER,
+			GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER
+	};
+
+	public static final int[] BUTTON_IDS = {
+			GLFW_GAMEPAD_BUTTON_X,
+			GLFW_GAMEPAD_BUTTON_Y,
+			GLFW_GAMEPAD_BUTTON_A,
+			GLFW_GAMEPAD_BUTTON_B,
+			GLFW_GAMEPAD_BUTTON_BACK,
+			GLFW_GAMEPAD_BUTTON_START,
+			GLFW_GAMEPAD_BUTTON_GUIDE,
+			GLFW_GAMEPAD_BUTTON_LEFT_BUMPER,
+			GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER
+	};
+
+	public static final String[] AXIS_NAMES = {
+			"Left Stick X",
+			"Left Stick Y",
+			"Right Stick X",
+			"Right Stick Y",
+			"Left Trigger",
+			"Right Trigger"
+	};
+
+	public static final String[] BUTTON_NAMES = {
+			"X",
+			"Y",
+			"A",
+			"B",
+			"Back",
+			"Start",
+			"Guide",
+			"Left Bumper",
+			"Right Bumper"
+	};
 
 	// identifiers
 	private final String name;
@@ -65,6 +126,36 @@ public class Gamepad {
 
 	public float getAxis(int axis) {
 		return axes[axis];
+	}
+
+	public boolean anyInput() {
+
+		// true if any button is pressed this frame
+		for (int button : BUTTON_IDS) {
+			if (isHeld(button)) {
+				Logger.logGamepad("Button press: " + BUTTON_NAMES[button]);
+				return true;
+			}
+		}
+
+		// true if any axis is not at rest this frame
+
+		// triggers rest at -1.0
+		if (getAxis(AXIS_TRIGGER_LEFT) > -1) return true;
+		if (getAxis(AXIS_TRIGGER_RIGHT) > -1) return true;
+
+		// sticks rest at [ -innerDeadZone, innerDeadZone ]
+		float deadZone = GamepadInput.getInnerDeadZone();
+
+		if (Math.abs(getAxis(AXIS_LEFT_X)) > deadZone) return true;
+		if (Math.abs(getAxis(AXIS_LEFT_Y)) > deadZone) return true;
+		if (Math.abs(getAxis(AXIS_RIGHT_X)) > deadZone) return true;
+		if (Math.abs(getAxis(AXIS_RIGHT_Y)) > deadZone) return true;
+
+
+		// false if none of the above
+		return false;
+
 	}
 
 	// ******************************** METHODS ********************************

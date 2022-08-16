@@ -53,6 +53,10 @@ public class Config {
 
 	public static boolean USE_SPLASH_SCREEN;
 
+	// Control scheme settings
+	public static boolean SUPPORT_INPUT_SWITCHING;
+
+	// Debug settings
 	public static JSONObject LOGGER_SETTINGS;
 
 	public static void load() {
@@ -95,6 +99,8 @@ public class Config {
 		SPLASH_FAKE_LATENCY = configJSON.getFloat("splash_screen_fake_latency");
 
 		USE_SPLASH_SCREEN = configJSON.getBoolean("use_splash_screen");
+
+		SUPPORT_INPUT_SWITCHING = configJSON.optBoolean("support_input_switching", false);
 
 		LOGGER_SETTINGS = configJSON.getJSONObject("logger_settings");
 

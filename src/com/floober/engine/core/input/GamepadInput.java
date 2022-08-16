@@ -30,6 +30,10 @@ public class GamepadInput {
 		GamepadInput.outerDeadZone = outerDeadZone;
 	}
 
+	public static float getInnerDeadZone() {
+		return innerDeadZone;
+	}
+
 	// ******************************** SETUP ********************************
 	public static void init() {
 
@@ -140,6 +144,22 @@ public class GamepadInput {
 	}
 
 	// ******************************** GETTING INPUT VALUES ********************************
+	public static boolean anyInput() {
+
+		// check every gamepad slot
+		for (int i = 0; i < connectedGamepads.length; i++) {
+			// if this gamepad is connected
+			if (isConnected(i)) {
+				// then return true if it reports any input
+				if (connectedGamepads[i].anyInput()) return true;
+			}
+		}
+
+		// return false if no gamepad is present and reporting inputs for this frame
+		return false;
+
+	}
+
 	public static boolean isPressed(int gamepadIndex, int button) {
 
 		// return false for invalid index values
@@ -180,7 +200,7 @@ public class GamepadInput {
 
 	}
 
-	private static boolean deadZoneApplies(int axis) {
+	public static boolean deadZoneApplies(int axis) {
 
 		return	axis == GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER ||
 				axis == GLFW_GAMEPAD_AXIS_LEFT_TRIGGER ||

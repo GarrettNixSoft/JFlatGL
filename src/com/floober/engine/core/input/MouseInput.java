@@ -74,6 +74,10 @@ public class MouseInput {
 //		DX = Mouse.getDX();
 //		DY = -Mouse.getDY(); // Disabled until I come up with a better solution.
 	}
+
+	public static boolean anyInput() {
+		return mouseMoved() || wheelMoved();
+	}
 	
 	public static boolean isPressed(int button) {
 		return windowMouseAdapters.get(DisplayManager.primaryWindowID).buttonState[button];

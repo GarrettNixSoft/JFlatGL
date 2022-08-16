@@ -26,6 +26,9 @@ public class KeyInput {
 	public List<Character> textInput = new ArrayList<>();
 	public Queue<Character> storedCharacterQueue = new Queue<>();
 
+	// Whether a key has been pressed this frame
+	public static boolean KEY_PRESSED = false;
+
 	// LETTER KEYS
 	public static final int A = 1;
 	public static final int B = 2;

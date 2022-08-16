@@ -259,6 +259,8 @@ public class DisplayManager {
 				else if (key == GLFW_KEY_DELETE)
 					KeyInput.windowKeyboardAdapters.get(window).characterQueue.push('\u007F');
 			}
+
+			KeyInput.KEY_PRESSED = true;
 		});
 
 		// Sub-step: Create a callback for text input
@@ -302,7 +304,7 @@ public class DisplayManager {
 		glfwSetWindowSizeCallback(primaryWindowID, windowResizeCallback);
 
 		glDepthFunc(GL_LEQUAL);
-		glDepthRange(0, 1); // TODO mark
+		glDepthRange(0, 1);
 
 		glClearColor(0, 0, 0, 1);
 		glClearDepth(1);

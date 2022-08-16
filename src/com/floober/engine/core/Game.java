@@ -8,6 +8,7 @@ import com.floober.engine.core.assets.loaders.Loader;
 import com.floober.engine.core.audio.AudioMaster;
 import com.floober.engine.core.audio.Sound;
 import com.floober.engine.core.gameState.GameStateManager;
+import com.floober.engine.core.input.Controls;
 import com.floober.engine.core.renderEngine.display.DisplayManager;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.floober.engine.core.renderEngine.models.ModelLoader;
@@ -223,6 +224,10 @@ public class Game {
 		instance.sfx.update();
 		// GUI components
 		GUIManager.update();
+
+		// clear the key flag
+		KeyInput.KEY_PRESSED = false;
+
 		// FPS display
 		if (Settings.getSettingBoolean("show_fps")) {
 			float fps = 1.0f / DisplayManager.getFrameTimeRaw();
@@ -278,9 +283,12 @@ public class Game {
 	}
 
 	private static void pollInput() {
+		// update each input method
 		KeyInput.update();
 		MouseInput.update();
 		GamepadInput.update();
+		// update the Controls
+		Controls.update();
 	}
 
 	// ACTIONS
