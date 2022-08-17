@@ -27,7 +27,7 @@ public class TextureElement extends RenderElement {
 	private final Vector4f aChannelColor = new Vector4f(0);
 
 	// alpha control
-	private float alpha;
+	private float alpha = 1;
 
 	// color effect
 	private final Vector4f color = new Vector4f(0);
