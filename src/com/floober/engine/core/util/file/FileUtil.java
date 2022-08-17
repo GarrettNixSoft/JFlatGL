@@ -76,7 +76,7 @@ public class FileUtil {
 			reader.close();
 		} catch (Exception e) {
 			Logger.logLoadError("Failed to load file: " + file.getPath());
-			e.printStackTrace();
+//			e.printStackTrace();
 			return data;
 		}
 		return data;
@@ -181,6 +181,11 @@ public class FileUtil {
 			e.printStackTrace();
 			return new byte[0];
 		}
+	}
+
+	public static JSONObject getJSON(File file) {
+		String combinedData = StringConverter.combineAll(getFileData(file));
+		return new JSONObject(combinedData);
 	}
 
 	public static JSONObject getJSON(String file) {

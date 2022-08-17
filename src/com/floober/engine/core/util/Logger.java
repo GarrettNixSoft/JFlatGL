@@ -30,6 +30,7 @@ public class Logger {
 	public static boolean logLoadSuccess;
 	public static boolean logLoadErrors;
 	public static boolean logLoadGeneral;
+	public static boolean logLoadControls;
 	// hardware
 	public static boolean logGamepad;
 	public static boolean logGamepadConnections;
@@ -56,6 +57,7 @@ public class Logger {
 		logLoadSuccess = Config.LOGGER_SETTINGS.getBoolean("log_load_success");
 		logLoadErrors = Config.LOGGER_SETTINGS.getBoolean("log_load_errors");
 		logLoadGeneral = Config.LOGGER_SETTINGS.getBoolean("log_load_general");
+		logLoadControls = Config.LOGGER_SETTINGS.optBoolean("log_load_controls", false);
 		// hardware
 		logGamepad = Config.LOGGER_SETTINGS.optBoolean("log_gamepad", false);
 		logGamepadConnections = Config.LOGGER_SETTINGS.optBoolean("log_gamepad_connections", true);
@@ -180,11 +182,15 @@ public class Logger {
 		if (!logLoadSuccess) return;
 		outStream.println("[LOAD SUCCESS] Successfully loaded: " + path);
 	}
-	
-	// game load debug
+
 	public static void logLoad(String message) {
 		if (!logLoaders) return;
 		outStream.println("[LOAD] " + message);
+	}
+
+	public static void logLoadControls(String message) {
+		if (!logLoadControls) return;
+		outStream.println("[CONTROLS] " + message);
 	}
 
 	public static void logEvent(String message) {

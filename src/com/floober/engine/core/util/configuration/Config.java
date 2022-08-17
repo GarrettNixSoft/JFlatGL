@@ -17,11 +17,16 @@ import java.awt.image.BufferedImage;
  */
 public class Config {
 
+	public static String WINDOW_TITLE;
+
+	// preferences nodes
 	public static String CONFIG_NODE;
 	public static String SETTINGS_NODE;
 	public static String FLAGS_NODE;
 
-	public static String WINDOW_TITLE;
+	// where the controls file should be stored
+	public static String DEFAULT_CONTROLS_DIR;
+	public static String CONTROLS_PATH;
 
 	public static boolean DEBUG_MODE; // development use
 
@@ -43,14 +48,12 @@ public class Config {
 	public static int DEFAULT_WIDTH;
 	public static int DEFAULT_HEIGHT;
 
-	// Splash screen dimensions
+	// Splash screen settings
 	public static int SPLASH_WIDTH;
 	public static int SPLASH_HEIGHT;
 	public static boolean SCALE_SPLASH_SCREEN;
 	public static boolean SPLASH_TRANSPARENT;
-
 	public static float SPLASH_FAKE_LATENCY;
-
 	public static boolean USE_SPLASH_SCREEN;
 
 	// Control scheme settings
@@ -65,6 +68,9 @@ public class Config {
 		CONFIG_NODE = configJSON.getString("config_node");
 		SETTINGS_NODE = configJSON.getString("settings_node");
 		FLAGS_NODE = configJSON.getString("flags_node");
+
+		DEFAULT_CONTROLS_DIR = configJSON.getString("default_controls");
+		CONTROLS_PATH = configJSON.getString("controls_path");
 
 		WINDOW_TITLE = configJSON.getString("window_title");
 
@@ -95,9 +101,7 @@ public class Config {
 		}
 
 		SPLASH_TRANSPARENT = configJSON.getBoolean("splash_transparent");
-
 		SPLASH_FAKE_LATENCY = configJSON.getFloat("splash_screen_fake_latency");
-
 		USE_SPLASH_SCREEN = configJSON.getBoolean("use_splash_screen");
 
 		SUPPORT_INPUT_SWITCHING = configJSON.optBoolean("support_input_switching", false);

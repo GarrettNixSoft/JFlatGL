@@ -22,7 +22,8 @@
 		"d_pad_left": "gui/gamepad/d_pad_left.png",
 		"d_pad_down": "gui/gamepad/d_pad_down.png",
 		"d_pad_up": "gui/gamepad/d_pad_up.png",
-		"gamepad_stick": "gui/gamepad/stick.png"
+		"gamepad_stick_off": "gui/gamepad/stick_off.png",
+		"gamepad_stick_on": "gui/gamepad/stick_on.png"
 	},
 	"texture_sets": {
 		"default_set": {

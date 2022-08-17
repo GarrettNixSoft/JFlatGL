@@ -182,7 +182,7 @@ public class GamepadInput {
 
 	public static float getAxis(int gamepadIndex, int axis) {
 
-		// return false for invalid index values
+		// return 0 for invalid index values
 		if (gamepadIndex < 0 || gamepadIndex >= connectedGamepads.length || connectedGamepads[gamepadIndex] == null) return 0;
 
 		// fetch the axis state of the requested gamepad
@@ -197,6 +197,16 @@ public class GamepadInput {
 
 		// return the stick value
 		return stick;
+
+	}
+
+	public static boolean axisNewInput(int gamepadIndex, int axis) {
+
+		// return false for invalid index values
+		if (gamepadIndex < 0 || gamepadIndex >= connectedGamepads.length || connectedGamepads[gamepadIndex] == null) return false;
+
+		// check the gamepad
+		return connectedGamepads[gamepadIndex].axisNewInput(axis);
 
 	}
 

@@ -100,6 +100,8 @@ public class Game {
 		// Load user preferences/settings and game flags
 		Config.load();
 		Settings.load();
+		// Load control mappings
+		Controls.init();
 	}
 
 	/**

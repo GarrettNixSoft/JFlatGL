@@ -5,6 +5,7 @@ import org.lwjgl.glfw.GLFWGamepadState;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+import java.nio.file.Path;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -27,6 +28,8 @@ public class Gamepad {
 	public static final int BUTTON_GUIDE = GLFW_GAMEPAD_BUTTON_GUIDE;
 	public static final int BUMPER_LEFT = GLFW_GAMEPAD_BUTTON_LEFT_BUMPER;
 	public static final int BUMPER_RIGHT = GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER;
+	public static final int THUMB_LEFT = GLFW_GAMEPAD_BUTTON_LEFT_THUMB;
+	public static final int THUMB_RIGHT = GLFW_GAMEPAD_BUTTON_RIGHT_THUMB;
 
 	public static final int[] AXIS_IDS = {
 			GLFW_GAMEPAD_AXIS_LEFT_X,
@@ -46,7 +49,9 @@ public class Gamepad {
 			GLFW_GAMEPAD_BUTTON_START,
 			GLFW_GAMEPAD_BUTTON_GUIDE,
 			GLFW_GAMEPAD_BUTTON_LEFT_BUMPER,
-			GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER
+			GLFW_GAMEPAD_BUTTON_RIGHT_BUMPER,
+			GLFW_GAMEPAD_BUTTON_LEFT_THUMB,
+			GLFW_GAMEPAD_BUTTON_RIGHT_THUMB
 	};
 
 	public static final String[] AXIS_NAMES = {
@@ -67,8 +72,19 @@ public class Gamepad {
 			"Start",
 			"Guide",
 			"Left Bumper",
-			"Right Bumper"
+			"Right Bumper",
+			"Left Thumb",
+			"Right Thumb"
 	};
+
+	// check what type of input a given binding is
+	public static boolean isAxis(String input) {
+		return GamepadNames.AXIS_NAMES.contains(input);
+	}
+
+	public static boolean isButton(String input) {
+		return GamepadNames.BUTTON_NAMES.contains(input);
+	}
 
 	// identifiers
 	private final String name;
@@ -126,6 +142,23 @@ public class Gamepad {
 
 	public float getAxis(int axis) {
 		return axes[axis];
+	}
+
+	public boolean axisNewInput(int axis) {
+
+		if (GamepadInput.deadZoneApplies(axis)) {
+
+			float deadZone = GamepadInput.getInnerDeadZone();
+			return Math.abs(prevAxes[axis]) <= deadZone && Math.abs(axes[axis]) > deadZone;
+
+		}
+		else {
+
+			float restValue = -1.0f;
+			return prevAxes[axis] == restValue && getAxis(axis) != restValue;
+
+		}
+
 	}
 
 	public boolean anyInput() {
