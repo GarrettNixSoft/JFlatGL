@@ -413,7 +413,9 @@ public class DisplayManager {
 				i--;
 			}
 		}
+	}
 
+	public static void prepareFrame() {
 		updateTimings();
 	}
 

@@ -264,6 +264,8 @@ public class Game {
 	public static void runGameLoop() {
 		while (!(glfwWindowShouldClose(primaryWindowID) || closeRequested())) {
 
+			DisplayManager.prepareFrame();
+
 			// run game logic
 			update();
 
