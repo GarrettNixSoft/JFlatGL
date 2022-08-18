@@ -4,6 +4,10 @@ import org.joml.Vector4f;
 
 public class OutlineElement extends GeometryElement {
 
+	public static final int HORIZONTAL = 0;
+	public static final int VERTICAL = 1;
+	private int roundingMode = HORIZONTAL;
+
 	private float round = 0;
 	private float lineWidth;
 
@@ -52,6 +56,15 @@ public class OutlineElement extends GeometryElement {
 	public boolean hasTransparency() {
 		return true;
 	}
+
+	public int getRoundingMode() {
+		return roundingMode;
+	}
+
+	public void setRoundingMode(int roundingMode) {
+		this.roundingMode = roundingMode;
+	}
+
 
 	// SETTERS
 	public void setRoundRadius(float r) {

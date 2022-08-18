@@ -177,6 +177,7 @@ public class GeometryRenderer {
 
 			Matrix4f transformationMatrix = MathUtil.createTransformationMatrix(element.getRenderPosition(), element.getScale(), element.getRotation());
 			outlineShader.loadRoundRadius(element.getRoundRadius());
+			outlineShader.loadRoundMode(element.getRoundingMode());
 			outlineShader.loadDimensions(new Vector2f(element.getHeight(), element.getWidth()));
 			outlineShader.loadColor(element.getColor());
 			outlineShader.loadLineWidth(element.getLineWidth() / element.getWidth());

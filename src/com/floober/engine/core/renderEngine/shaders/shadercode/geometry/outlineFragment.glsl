@@ -4,6 +4,7 @@ out vec4 out_color;
 
 uniform vec4 color;
 uniform float r;
+uniform int roundMode;
 uniform vec2 dimensions;
 uniform float lineWidth;
 
@@ -15,7 +16,7 @@ float udRoundBox(vec2 pos, vec2 ext) {
 
 void main(void) {
 
-	vec2 aspectRatio = vec2(1, dimensions.x / dimensions.y);
+	vec2 aspectRatio = roundMode == 0 ? vec2(1, dimensions.x / dimensions.y) : vec2(dimensions.y / dimensions.x, 1);
 	float ratio = aspectRatio.x / aspectRatio.y;
 
 	// STEP 1: Discard if inside lineWidth
