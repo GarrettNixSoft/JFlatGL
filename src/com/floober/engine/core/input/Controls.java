@@ -15,6 +15,7 @@ public class Controls {
 	}
 
 	private static InputMode INPUT_MODE = InputMode.KEYBOARD_MOUSE;
+	private static InputMode PREV_MODE = InputMode.KEYBOARD_MOUSE;
 
 	public static InputMode getCurrentInputMode() {
 		return INPUT_MODE;
@@ -50,21 +51,30 @@ public class Controls {
 	// ******************************** AUTO-MODE SWITCHING ********************************
 	public static void update() {
 
+		PREV_MODE = INPUT_MODE;
+
 		if (INPUT_MODE == InputMode.KEYBOARD_MOUSE) {
 			if (GamepadInput.anyInput()) {
 				INPUT_MODE = InputMode.GAMEPAD;
+				Cursor.setCursorMode(Cursor.CursorMode.GAMEPAD);
 
 				Logger.log("INPUT MODE SWITCHED: Gamepad");
 			}
 		}
 		else if (INPUT_MODE == InputMode.GAMEPAD) {
-			if (KeyInput.KEY_PRESSED || MouseInput.anyInput()) {
-				INPUT_MODE = InputMode.KEYBOARD_MOUSE;
 
-				Logger.log("INPUT MODE SWITCHED: Keyboard/Mouse");
+			if (KeyInput.KEY_PRESSED || Cursor.anyMouseInput()) {
+				INPUT_MODE = InputMode.KEYBOARD_MOUSE;
+				Cursor.setCursorMode(Cursor.CursorMode.RAW_MOUSE);
+
+				Logger.log("INPUT MODE SWITCHED: Keyboard/Mouse (reason: " + (KeyInput.KEY_PRESSED ? "keyboard" : "mouse") + ")");
 			}
 		}
 
+	}
+
+	public static boolean modeSwitched() {
+		return INPUT_MODE != PREV_MODE;
 	}
 
 	// ******************************** CHECKING INPUTS ********************************
@@ -76,6 +86,8 @@ public class Controls {
 		// if the requested control is valid for this context, check it
 		if (context.hasControl(control)) {
 
+//			Logger.log(control + " is a valid control");
+
 			Keybind keybind = context.getKeybindForControl(control);
 			return keybind.inputPresent(player);
 
@@ -83,6 +95,11 @@ public class Controls {
 		// otherwise, this input cannot be present
 		else return false;
 
+	}
+
+	public static float getVaryingInput(String control, int player) {
+		// TODO
+		return 0;
 	}
 
 }

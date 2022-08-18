@@ -1,5 +1,6 @@
 package com.floober.engine.gui;
 
+import com.floober.engine.core.input.Cursor;
 import com.floober.engine.core.util.color.Colors;
 import com.floober.engine.core.input.MouseInput;
 import com.floober.engine.gui.component.BackgroundComponent;
@@ -396,7 +397,7 @@ public class GUI {
 			}
 		}
 		// check for a click
-		if (MouseInput.leftClick()) {
+		if (MouseInput.leftClick()) { // TODO: gamepad A button
 			processClickEvent(MouseInput.LEFT);
 		}
 		if (MouseInput.rightClick()) {
@@ -409,7 +410,7 @@ public class GUI {
 
 	private void processClickEvent(int button) {
 		// generate an event
-		MouseClickEvent event = new MouseClickEvent(button, MouseInput.getX(), MouseInput.getY());
+		MouseClickEvent event = new MouseClickEvent(button, Cursor.getX(), Cursor.getY());
 		// create a consumption flag
 		boolean consumed = false;
 		// offer the event to each layer starting from the top and moving down

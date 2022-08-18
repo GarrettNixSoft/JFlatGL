@@ -1,5 +1,6 @@
 package com.floober.engine.gui.component;
 
+import com.floober.engine.core.input.Cursor;
 import com.floober.engine.event.MultiEventQueue;
 import com.floober.engine.gui.GUI;
 import com.floober.engine.gui.GUIAction;
@@ -378,6 +379,11 @@ public abstract class GUIComponent {
 		this.originalPosition.set(position, z);
 	}
 
+	public void setPosition(float x, float y) {
+		this.position.setComponent(0, x);
+		this.position.setComponent(1, y);
+	}
+
 	public void setX(float x) {
 		this.position.setComponent(0, x);
 	}
@@ -385,6 +391,8 @@ public abstract class GUIComponent {
 	public void setY(float y) {
 		this.position.setComponent(1, y);
 	}
+
+	public void setLayer(int layer) { this.position.setComponent(2, layer); }
 
 	public void setOffsetPosition(Vector2f offsetPosition) {
 		this.position.set(getOriginalPosition().add(offsetPosition.x, offsetPosition.y, 0));
@@ -530,7 +538,7 @@ public abstract class GUIComponent {
 	 * mouse's current position, or false otherwise
 	 */
 	protected boolean mouseOver() {
-		return !Collisions.contains(getCollisionBox(), MouseInput.getPrevPos()) && mouseHover();
+		return !Collisions.contains(getCollisionBox(), Cursor.getPrevPos()) && mouseHover();
 	}
 
 	/**
@@ -539,7 +547,7 @@ public abstract class GUIComponent {
 	 * @return {@code true} if the mouse is over this component
 	 */
 	protected boolean mouseHover() {
-		return Collisions.contains(getCollisionBox(), MouseInput.getMousePos());
+		return Collisions.contains(getCollisionBox(), Cursor.getCursorPos());
 	}
 
 	/**
@@ -550,8 +558,8 @@ public abstract class GUIComponent {
 	 * the mouse's current position, or false otherwise
 	 */
 	protected boolean mouseExit() {
-		return Collisions.contains(getCollisionBox(), MouseInput.getPrevPos()) &&
-				!Collisions.contains(getCollisionBox(), MouseInput.getMousePos());
+		return Collisions.contains(getCollisionBox(), Cursor.getPrevPos()) &&
+				!Collisions.contains(getCollisionBox(), Cursor.getCursorPos());
 	}
 
 	/**
@@ -562,7 +570,7 @@ public abstract class GUIComponent {
 	 * is clicked
 	 */
 	protected boolean leftClick() {
-		return MouseInput.leftClick() && Collisions.contains(getCollisionBox(), MouseInput.getMousePos());
+		return MouseInput.leftClick() && Collisions.contains(getCollisionBox(), Cursor.getCursorPos());
 	}
 
 	/**
@@ -573,7 +581,7 @@ public abstract class GUIComponent {
 	 * is clicked
 	 */
 	protected boolean rightClick() {
-		return MouseInput.rightClick() && Collisions.contains(getCollisionBox(), MouseInput.getMousePos());
+		return MouseInput.rightClick() && Collisions.contains(getCollisionBox(), Cursor.getCursorPos());
 	}
 
 }

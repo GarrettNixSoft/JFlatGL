@@ -4,6 +4,7 @@
 	"flags_node": "flooberEngine/flags",
 	"default_controls": "config/controls/platformer_template",
 	"controls_path": "/controls",
+	"gamepad_cursor": "res/textures/gui/gamepad/gamepad_cursor.png",
 	"window_title": "FlooberEngine Development",
 	"debug_mode": true,
 	"crash_on_missing_shader_uniform": false,
@@ -41,7 +42,7 @@
 		"log_events": false,
 		"log_cutscenes": true,
 		"log_gui_events": false,
-		"log_gui_interactions": false,
+		"log_gui_interactions": true,
 		"log_audio_start": true,
 		"log_gamepad": true,
 		"log_gamepad_connections": true

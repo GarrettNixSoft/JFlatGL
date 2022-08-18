@@ -75,6 +75,7 @@ public class Keybind {
 		keys.put("tertiary", tertiaryBind);
 		result.put("keys", keys);
 		result.put("gamepad", gamepadBind);
+		result.put("varying", varying);
 		// TODO: gamepad is an obj, with two fields: button, and varying (boolean)
 		// return when finished
 		return result;
@@ -177,12 +178,26 @@ public class Keybind {
 					// then if this input is repeatable,
 					if (repeatable) {
 						// just return whether this axis is not considered to be at rest
-						return GamepadInput.getAxis(player, gamepadValue) != 0;
+						return GamepadInput.getAxis(player, gamepadValue) != GamepadInput.getRestForAxis(gamepadValue);
 					}
 					// otherwise if it isn't repeatable,
 					else {
 						// check whether there is a new input for this axis on this frame
 						return GamepadInput.axisNewInput(player, gamepadValue);
+					}
+				}
+				// otherwise if it's a specific direction on an axis,
+				else if (Gamepad.isDirectional(gamepadBind)) {
+					// then if this input is repeatable,
+					if (repeatable) {
+						// just return whether this axis is currently moved in the given direction
+						return GamepadInput.getAxisDirectional(player, gamepadBind);
+					}
+					// otherwise if it isn't repeatable,
+					else {
+						// check whether this axis is currently moved in the given direction, and it started moving on this frame
+						return	GamepadInput.axisNewInput(player, gamepadValue) &&
+								GamepadInput.getAxisDirectional(player, gamepadBind);
 					}
 				}
 				// otherwise if it corresponds to a button,

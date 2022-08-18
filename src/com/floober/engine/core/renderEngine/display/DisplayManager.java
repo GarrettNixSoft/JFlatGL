@@ -75,14 +75,12 @@ public class DisplayManager {
 		windows.add(window);
 		windowsByID.put(window.getWindowID(), window);
 		KeyInput.windowKeyboardAdapters.put(window.getWindowID(), new KeyInput());
-		MouseInput.windowMouseAdapters.put(window.getWindowID(), new MouseInput());
 	}
 
 	public static void removeWindow(Window window) {
 		windows.remove(window);
 		windowsByID.remove(window.getWindowID());
 		KeyInput.windowKeyboardAdapters.remove(window.getWindowID());
-		MouseInput.windowMouseAdapters.remove(window.getWindowID());
 	}
 
 	// INITIALIZING
@@ -273,7 +271,7 @@ public class DisplayManager {
 
 		if (glfwRawMouseMotionSupported())
 			glfwSetInputMode(primaryWindowID, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
-		glfwSetScrollCallback(primaryWindowID, (theWindowID, xoffset, yoffset) -> MouseInput.windowMouseAdapters.get(primaryWindowID).WHEEL = yoffset);
+		glfwSetScrollCallback(primaryWindowID, (theWindowID, xoffset, yoffset) -> MouseInput.WHEEL = yoffset);
 
 		// Step 5: Load and set the window icon.
 		initWindowIcons();
@@ -381,7 +379,7 @@ public class DisplayManager {
 		// configure window mouse input
 		if (glfwRawMouseMotionSupported())
 			glfwSetInputMode(windowID, GLFW_RAW_MOUSE_MOTION, GLFW_TRUE);
-		glfwSetScrollCallback(windowID, (theWindowID, xoffset, yoffset) -> MouseInput.windowMouseAdapters.get(windowID).WHEEL = yoffset);
+		glfwSetScrollCallback(windowID, (theWindowID, xoffset, yoffset) -> MouseInput.WHEEL = yoffset);
 		// make the window visible
 		glfwShowWindow(windowID);
 		// return the window handle object
@@ -404,12 +402,13 @@ public class DisplayManager {
 
 	public static void updateDisplay() {
 		for (int i = 0; i < windows.size(); i++) {
-			long windowID = windows.get(i).getWindowID();
-			if (windows.get(i).shouldClose()) {
+			Window window = windows.get(i);
+			long windowID = window.getWindowID();
+			window.update();
+			if (window.shouldClose()) {
 				glfwDestroyWindow(windowID);
 				windows.remove(i);
 				KeyInput.windowKeyboardAdapters.remove(windowID);
-				MouseInput.windowMouseAdapters.remove(windowID);
 				i--;
 			}
 		}

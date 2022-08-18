@@ -22,6 +22,9 @@ public class Window {
 	private int viewportWidth;
 	private int viewportHeight;
 
+	private int x;
+	private int y;
+
 	private int mouseXOffset;
 	private int mouseYOffset;
 	private double mouseXRatio;
@@ -73,6 +76,11 @@ public class Window {
 
 	public void update() {
 		// TODO: window shake effect
+		int[] xPos = new int[1];
+		int[] yPos = new int[1];
+		glfwGetWindowPos(windowID, xPos, yPos);
+		this.x = xPos[0];
+		this.y = yPos[0];
 	}
 
 	// GETTERS
@@ -100,6 +108,14 @@ public class Window {
 
 	public int getHeight() {
 		return height;
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
 	}
 
 	public int getxOffset() {

@@ -1,6 +1,6 @@
 {
 	"jump": {
-		"repeatable": true,
+		"repeatable": false,
 		"keys": {
 			"primary": "space",
 			"secondary": "w",
@@ -15,7 +15,7 @@
 			"secondary": "right_arrow",
 			"tertiary": "none"
 		},
-		"gamepad": "left_stick_x_positive"
+		"gamepad": "right_trigger"
 	},
 	"move_left": {
 		"repeatable": true,
@@ -24,7 +24,17 @@
 			"secondary": "left_arrow",
 			"tertiary": "none"
 		},
-		"gamepad": "left_stick_x_negative"
+		"gamepad": "left_trigger"
+	},
+	"speed_up": {
+		"repeatable": true,
+		"keys": {
+			"primary": "left_shift",
+			"secondary": "right_shift",
+			"tertiary": "none"
+		},
+		"gamepad": "left_thumb",
+		"varying": false
 	},
 	"attack": {
 		"repeatable": false,

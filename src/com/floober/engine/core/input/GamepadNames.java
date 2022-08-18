@@ -22,6 +22,7 @@ public class GamepadNames {
 	protected static final Map<String, Integer> GAMEPAD_VALUES = new HashMap<>();
 
 	protected static final List<String> AXIS_NAMES = new ArrayList<>();
+	protected static final List<String> AXIS_DIRECTION_NAMES = new ArrayList<>();
 	protected static final List<String> BUTTON_NAMES = new ArrayList<>();
 
 	static {
@@ -33,6 +34,15 @@ public class GamepadNames {
 		AXIS_NAMES.add("right_stick_y");
 		AXIS_NAMES.add("left_trigger");
 		AXIS_NAMES.add("right_trigger");
+		// axis directions
+		AXIS_DIRECTION_NAMES.add("left_stick_x_negative");
+		AXIS_DIRECTION_NAMES.add("left_stick_x_positive");
+		AXIS_DIRECTION_NAMES.add("left_stick_y_negative");
+		AXIS_DIRECTION_NAMES.add("left_stick_y_positive");
+		AXIS_DIRECTION_NAMES.add("right_stick_x_negative");
+		AXIS_DIRECTION_NAMES.add("right_stick_x_positive");
+		AXIS_DIRECTION_NAMES.add("right_stick_y_negative");
+		AXIS_DIRECTION_NAMES.add("right_stick_y_positive");
 		// buttons
 		BUTTON_NAMES.add("x");
 		BUTTON_NAMES.add("y");
@@ -67,9 +77,17 @@ public class GamepadNames {
 		GAMEPAD_NAMES[BUTTON_START + Gamepad.THUMB_RIGHT]	= "right_thumb";
 		// ASSIGN VALUES
 		GAMEPAD_VALUES.put("left_stick_x", Gamepad.AXIS_LEFT_X);
+		GAMEPAD_VALUES.put("left_stick_x_positive", Gamepad.AXIS_LEFT_X);
+		GAMEPAD_VALUES.put("left_stick_x_negative", Gamepad.AXIS_LEFT_X);
 		GAMEPAD_VALUES.put("left_stick_y", Gamepad.AXIS_LEFT_Y);
+		GAMEPAD_VALUES.put("left_stick_y_positive", Gamepad.AXIS_LEFT_Y);
+		GAMEPAD_VALUES.put("left_stick_y_negative", Gamepad.AXIS_LEFT_Y);
 		GAMEPAD_VALUES.put("right_stick_x", Gamepad.AXIS_RIGHT_X);
+		GAMEPAD_VALUES.put("right_stick_x_positive", Gamepad.AXIS_RIGHT_X);
+		GAMEPAD_VALUES.put("right_stick_x_negative", Gamepad.AXIS_RIGHT_X);
 		GAMEPAD_VALUES.put("right_stick_y", Gamepad.AXIS_RIGHT_Y);
+		GAMEPAD_VALUES.put("right_stick_y_negative", Gamepad.AXIS_RIGHT_Y);
+		GAMEPAD_VALUES.put("right_stick_y_positive", Gamepad.AXIS_RIGHT_Y);
 		GAMEPAD_VALUES.put("left_trigger", Gamepad.AXIS_TRIGGER_LEFT);
 		GAMEPAD_VALUES.put("right_trigger", Gamepad.AXIS_TRIGGER_RIGHT);
 		GAMEPAD_VALUES.put("x", Gamepad.BUTTON_X);

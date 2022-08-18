@@ -8,7 +8,7 @@ import com.floober.engine.core.assets.loaders.Loader;
 import com.floober.engine.core.audio.AudioMaster;
 import com.floober.engine.core.audio.Sound;
 import com.floober.engine.core.gameState.GameStateManager;
-import com.floober.engine.core.input.Controls;
+import com.floober.engine.core.input.*;
 import com.floober.engine.core.renderEngine.display.DisplayManager;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.floober.engine.core.renderEngine.models.ModelLoader;
@@ -19,9 +19,6 @@ import com.floober.engine.core.splash.SplashScreen;
 import com.floober.engine.core.util.color.Colors;
 import com.floober.engine.core.util.configuration.Config;
 import com.floober.engine.core.util.configuration.Settings;
-import com.floober.engine.core.input.GamepadInput;
-import com.floober.engine.core.input.KeyInput;
-import com.floober.engine.core.input.MouseInput;
 import com.floober.engine.core.util.time.TimeScale;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.FontType;
 import com.floober.engine.core.renderEngine.fonts.fontRendering.TextMaster;
@@ -131,6 +128,9 @@ public class Game {
 
 		// Prepare the Gamepad input
 		GamepadInput.init();
+
+		// initialize the cursor
+		Cursor.init();
 
 		// initialize the instance
 		instance = new Game();
@@ -289,8 +289,8 @@ public class Game {
 	private static void pollInput() {
 		// update each input method
 		KeyInput.update();
-		MouseInput.update();
 		GamepadInput.update();
+		Cursor.update();
 		// update the Controls
 		Controls.update();
 	}

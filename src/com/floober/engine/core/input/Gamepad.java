@@ -5,7 +5,6 @@ import org.lwjgl.glfw.GLFWGamepadState;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
-import java.nio.file.Path;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -82,6 +81,10 @@ public class Gamepad {
 		return GamepadNames.AXIS_NAMES.contains(input);
 	}
 
+	public static boolean isDirectional(String input) {
+		return GamepadNames.AXIS_DIRECTION_NAMES.contains(input);
+	}
+
 	public static boolean isButton(String input) {
 		return GamepadNames.BUTTON_NAMES.contains(input);
 	}
@@ -137,7 +140,7 @@ public class Gamepad {
 	}
 
 	public boolean isPressed(int button) {
-		return prevButtons[button] == GLFW_PRESS && isHeld(button);
+		return prevButtons[button] != GLFW_PRESS && isHeld(button);
 	}
 
 	public float getAxis(int axis) {
@@ -198,7 +201,6 @@ public class Gamepad {
 		prevState.set(gamepadState);
 		prevButtons = buttons;
 		prevAxes = axes;
-
 		// ask GLFW what's going on with this gamepad
 		glfwGetGamepadState(jid, gamepadState);
 

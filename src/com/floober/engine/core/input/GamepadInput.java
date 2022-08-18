@@ -180,6 +180,11 @@ public class GamepadInput {
 
 	}
 
+	public static float getRestForAxis(int axis) {
+		if (deadZoneApplies(axis)) return 0;
+		else return -1;
+	}
+
 	public static float getAxis(int gamepadIndex, int axis) {
 
 		// return 0 for invalid index values
@@ -200,6 +205,27 @@ public class GamepadInput {
 
 	}
 
+	public static boolean getAxisDirectional(int gamepadIndex, String axisDirection) {
+
+		// return false for invalid index values
+		if (gamepadIndex < 0 || gamepadIndex >= connectedGamepads.length || connectedGamepads[gamepadIndex] == null) return false;
+
+		// determine which axis and which direction
+		boolean isPositive = axisDirection.endsWith("positive");
+		String axisName = axisDirection.substring(0, axisDirection.lastIndexOf('_'));
+
+		// get the axis
+		int axis = GamepadNames.GAMEPAD_VALUES.get(axisName);
+
+		if (isPositive) {
+			return getAxis(gamepadIndex, axis) > 0;
+		}
+		else {
+			return getAxis(gamepadIndex, axis) < 0;
+		}
+
+	}
+
 	public static boolean axisNewInput(int gamepadIndex, int axis) {
 
 		// return false for invalid index values
@@ -212,9 +238,7 @@ public class GamepadInput {
 
 	public static boolean deadZoneApplies(int axis) {
 
-		return	axis == GLFW_GAMEPAD_AXIS_RIGHT_TRIGGER ||
-				axis == GLFW_GAMEPAD_AXIS_LEFT_TRIGGER ||
-				axis == GLFW_GAMEPAD_AXIS_LEFT_X ||
+		return	axis == GLFW_GAMEPAD_AXIS_LEFT_X ||
 				axis == GLFW_GAMEPAD_AXIS_LEFT_Y ||
 				axis == GLFW_GAMEPAD_AXIS_RIGHT_X ||
 				axis == GLFW_GAMEPAD_AXIS_RIGHT_Y;
