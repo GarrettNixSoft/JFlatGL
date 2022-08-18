@@ -4,6 +4,7 @@ import com.floober.engine.core.Game;
 import com.floober.engine.core.renderEngine.display.DisplayManager;
 import com.floober.engine.core.renderEngine.elements.geometry.OutlineElement;
 import com.floober.engine.core.renderEngine.elements.geometry.RectElement;
+import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.FontType;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.floober.engine.core.util.Logger;
 import com.floober.engine.core.util.color.Colors;
@@ -74,6 +75,36 @@ public class TextInputComponent extends GUIComponent {
 		return this;
 	}
 
+	/**
+	 * Set the primary color of this TextInputComponent. The primary color is used as
+	 * the color for the input text.
+	 * @param primaryColor the color of the text
+	 */
+	@Override
+	public void setPrimaryColor(Vector4f primaryColor) {
+		super.setPrimaryColor(primaryColor);
+	}
+
+	/**
+	 * Set the secondary color of this TextInputComponent. The secondary color is used as
+	 * the color of the border/outline.
+	 * @param secondaryColor the border color
+	 */
+	@Override
+	public void setSecondaryColor(Vector4f secondaryColor) {
+		super.setSecondaryColor(secondaryColor);
+	}
+
+	/**
+	 * Set the tertiary color of this TextInputComponent. The tertiary color is used as
+	 * the color of the background.
+	 * @param tertiaryColor the background color
+	 */
+	@Override
+	public void setTertiaryColor(Vector4f tertiaryColor) {
+		super.setTertiaryColor(tertiaryColor);
+	}
+
 	// ******************************** GETTERS ********************************
 	public Vector4f getCursorColor() {
 		return new Vector4f(cursorColor);
@@ -88,6 +119,8 @@ public class TextInputComponent extends GUIComponent {
 	}
 
 	// ******************************** SETTERS ********************************
+	public void setFont(FontType font) { text.setFont(font); }
+
 	public void setFontSize(float fontSize) {
 		defaultTextSize = fontSize;
 	}

@@ -55,6 +55,10 @@ public class TextComponent extends GUIComponent {
 		text.setBorderEdge(borderEdge);
 	}
 
+	public void setTextJustify(GUIText.Justify justify) {
+		text.setTextJustify(justify);
+	}
+
 	public GUIText getText() {
 		return text;
 	}

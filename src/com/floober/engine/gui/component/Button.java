@@ -2,12 +2,10 @@ package com.floober.engine.gui.component;
 
 import com.floober.engine.core.renderEngine.display.DisplayManager;
 import com.floober.engine.core.Game;
-import com.floober.engine.core.renderEngine.Render;
 import com.floober.engine.core.renderEngine.elements.geometry.OutlineElement;
 import com.floober.engine.core.renderEngine.elements.geometry.RectElement;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.FontType;
 import com.floober.engine.core.renderEngine.fonts.fontMeshCreator.GUIText;
-import com.floober.engine.core.util.Logger;
 import com.floober.engine.gui.GUI;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -41,7 +39,7 @@ public class Button extends GUIComponent {
 		return this;
 	}
 
-	public Button textSize(float textSize) {
+	public Button fontSize(float textSize) {
 		defaultTextSize = 1.5f * textSize;
 		return this;
 	}
@@ -49,6 +47,12 @@ public class Button extends GUIComponent {
 	public Button rounded(float roundAmount) {
 		baseElement.setRoundRadius(roundAmount);
 		outlineElement.setRoundRadius(roundAmount);
+		return this;
+	}
+
+	public Button roundMode(int roundMode) {
+		baseElement.setRoundingMode(roundMode);
+		outlineElement.setRoundingMode(roundMode);
 		return this;
 	}
 
