@@ -60,11 +60,12 @@ public class Timer {
 	/**
 	 * Restart the timer with a new time target.
 	 * Equivalent to calling:
-	 * <ul>
-	 *   {@code reset()},<br>
-	 * 	 {@code setTime(newTime)}, and<br>
-	 * 	 {@code start()}.
-	 * </ul>
+	 * <br>
+	 * <pre>
+	 * 	{@code reset();}
+	 * 	{@code setTime(newTime);}
+	 * 	{@code start();}
+	 * 	</pre>
 	 *
 	 * @param newTime The new duration.
 	 */
