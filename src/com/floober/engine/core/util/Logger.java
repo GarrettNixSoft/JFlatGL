@@ -91,6 +91,12 @@ public class Logger {
 		outStream.println("[MESSAGE] " + message);
 	}
 
+	public static void log(String format, Object... args) {
+		if (!logAnything) return;
+		outStream.printf(format, args);
+		outStream.println();
+	}
+
 	public static void log(Object object) {
 		if (!logAnything) return;
 		outStream.println("[MESSAGE] " + object.toString());
