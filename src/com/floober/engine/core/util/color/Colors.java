@@ -92,4 +92,13 @@ public class Colors {
 		result.w *= alpha;
 		return result;
 	}
+
+	public static Vector4f lighten(Vector4f baseColor, float lightFactor) {
+		return mix(baseColor, Colors.WHITE, lightFactor);
+	}
+
+	public static Vector4f darken(Vector4f baseColor, float lightFactor) {
+		return mix(baseColor, Colors.BLACK, lightFactor);
+	}
+
 }
