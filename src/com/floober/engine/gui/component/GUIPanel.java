@@ -1,5 +1,6 @@
 package com.floober.engine.gui.component;
 
+import com.floober.engine.core.renderEngine.elements.geometry.OutlineElement;
 import com.floober.engine.core.renderEngine.elements.geometry.RectElement;
 import com.floober.engine.core.util.color.Colors;
 import com.floober.engine.gui.GUI;
@@ -15,31 +16,40 @@ public class GUIPanel extends GUIComponent {
 
 	private final List<GUIComponent> components = new ArrayList<>();
 	private final RectElement baseElement;
+	private final OutlineElement borderElement;
+
+	private float borderWidth;
 
 	public GUIPanel(String componentID, GUI parent) {
 		super(componentID, parent);
 		baseElement = new RectElement(Colors.INVISIBLE, new Vector4f(), getLayer(), true);
+		borderElement = new OutlineElement(Colors.INVISIBLE, new Vector4f(), getLayer(), 0, true);
 	}
 
 	protected RectElement getBaseElement() {
 		return baseElement;
 	}
 
-	@Override
-	public void setPrimaryColor(Vector4f primaryColor) {
-		baseElement.setColor(primaryColor);
-		super.setPrimaryColor(primaryColor);
+	protected OutlineElement getBorderElement() {
+		return borderElement;
+	}
+
+	public GUIPanel borderWidth(float borderWidth) {
+		setBorderWidth(borderWidth);
+		return this;
+	}
+
+	public void setBorderWidth(float borderWidth) {
+		this.borderWidth = borderWidth;
 	}
 
 	@Override
 	public void setSize(float width, float height) {
 		super.setSize(width, height);
-		baseElement.setSize(width, height);
 	}
 
 	@Override
 	public void setPosition(float x, float y, int layer) {
-		baseElement.setPosition(x, y, layer);
 		super.setPosition(x, y, layer);
 	}
 
@@ -170,8 +180,18 @@ public class GUIPanel extends GUIComponent {
 
 	@Override
 	public void doTransform() {
+		// background color
+		baseElement.setPosition(getPosition());
 		baseElement.setSize(getScaledSize());
 		baseElement.transform();
+		baseElement.setColor(getPrimaryColor().mul(getOpacity()));
+		// border color
+		borderElement.setPosition(getPosition());
+		borderElement.setSize(getScaledSize());
+		borderElement.setLineWidth(borderWidth * getScale());
+		borderElement.transform();
+		borderElement.setColor(getSecondaryColor().mul(getOpacity()));
+		// subcomponents
 		for (GUIComponent component : components) {
 			component.doTransform();
 		}
@@ -180,6 +200,7 @@ public class GUIPanel extends GUIComponent {
 	@Override
 	public void render() {
 		baseElement.render();
+		borderElement.render();
 		for (GUIComponent component : components) {
 			component.render();
 		}
