@@ -93,7 +93,7 @@ public class Logger {
 
 	public static void log(String format, Object... args) {
 		if (!logAnything) return;
-		outStream.printf(format, args);
+		outStream.printf("[MESSAGE] " + format, args);
 		outStream.println();
 	}
 

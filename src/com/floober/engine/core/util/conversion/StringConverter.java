@@ -65,7 +65,22 @@ public class StringConverter {
 		return result.toString();
 	}
 
+	public static String tabbedListToString(List<?> list) {
+		StringBuilder result = new StringBuilder();
+		result.append("List[\n");
+		for (Object o : list) {
+			result.append('\t');
+			result.append(o);
+			result.append(",\n");
+		}
+		// remove last space
+		result.deleteCharAt(result.length() - 1);
+		result.append("\n]");
+		return result.toString();
+	}
+
 	public static String byteArrayToString(byte[] arr) {
+		if (arr.length == 0) return "{}";
 		StringBuilder result = new StringBuilder();
 		result.append('{');
 		for (byte b : arr) {
@@ -78,6 +93,7 @@ public class StringConverter {
 	}
 
 	public static String shortArrayToString(short[] arr) {
+		if (arr.length == 0) return "{}";
 		StringBuilder result = new StringBuilder();
 		result.append('{');
 		for (short s : arr) {
@@ -90,6 +106,7 @@ public class StringConverter {
 	}
 
 	public static String intArrayToString(int[] arr) {
+		if (arr.length == 0) return "{}";
 		StringBuilder result = new StringBuilder();
 		result.append('{');
 		for (int i : arr) {
@@ -102,6 +119,7 @@ public class StringConverter {
 	}
 
 	public static String longArrayToString(long[] arr) {
+		if (arr.length == 0) return "{}";
 		StringBuilder result = new StringBuilder();
 		result.append('{');
 		for (long l : arr) {
@@ -114,6 +132,7 @@ public class StringConverter {
 	}
 
 	public static String floatArrayToString(float[] arr) {
+		if (arr.length == 0) return "{}";
 		StringBuilder result = new StringBuilder();
 		result.append('{');
 		for (float f : arr) {
@@ -126,6 +145,7 @@ public class StringConverter {
 	}
 
 	public static String doubleArrayToString(double[] arr) {
+		if (arr.length == 0) return "{}";
 		StringBuilder result = new StringBuilder();
 		result.append('{');
 		for (double d : arr) {
