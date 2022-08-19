@@ -115,10 +115,10 @@ public class FontRenderer {
 		glClear(GL_STENCIL_BUFFER_BIT);
 
 		// get whether the depth test is enabled
-//		boolean depth = glGetBoolean(GL_DEPTH_TEST);
-//		glDisable(GL_DEPTH_TEST);
+		boolean depth = glGetBoolean(GL_DEPTH_TEST);
+		glDisable(GL_DEPTH_TEST);
 
-		glEnable(GL_DEPTH_TEST);
+//		glEnable(GL_DEPTH_TEST);
 
 		// set the stencil function to make rendering affect the stencil buffer
 //		glDisable(GL_BLEND);
@@ -168,7 +168,7 @@ public class FontRenderer {
 
 //		glEnable(GL_BLEND);
 
-//		if (depth) glEnable(GL_DEPTH_TEST);
+		if (depth) glEnable(GL_DEPTH_TEST);
 
 		// restart the font shader
 		shader.start();

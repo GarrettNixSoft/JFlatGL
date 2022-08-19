@@ -59,6 +59,10 @@ public class TextComponent extends GUIComponent {
 		text.setTextJustify(justify);
 	}
 
+	public void setTextCenteredVertical(boolean centeredVertical) {
+		text.setCenteredVertical(centeredVertical);
+	}
+
 	public GUIText getText() {
 		return text;
 	}

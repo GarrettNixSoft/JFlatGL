@@ -354,7 +354,7 @@ public class GUIText {
 		}
 
 		List<Character> characters = currentWord.getCharacters();
-		Character currentCharacter = characters.get(0);
+		Character currentCharacter;
 
 		// adjust starting position
 		if (!centeredVertical) {
@@ -631,6 +631,7 @@ public class GUIText {
 		TextMaster.removeText(this);
 //		Logger.log("Removed text: " + textString);
 //		Logger.log(getDebugString());
+		hidden = true;
 	}
 
 	private void remove(FontType oldFont) {

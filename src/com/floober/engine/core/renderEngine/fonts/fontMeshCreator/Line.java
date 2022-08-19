@@ -50,15 +50,15 @@ public class Line {
 //			return true;
 //		}
 
-			additionalLength += !words.isEmpty() ? spaceSize : 0;
-			if (currentLineLength + additionalLength <= maxLength) {
-				words.add(word);
-				currentLineLength += additionalLength;
-				return true;
-			}
-			else {
-				return false;
-			}
+//		additionalLength += !words.isEmpty() ? spaceSize : 0;
+		if (currentLineLength + additionalLength <= maxLength) {
+			words.add(word);
+			currentLineLength += additionalLength;
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 	/**

@@ -29,7 +29,7 @@ public class TextInputComponent extends GUIComponent {
 
 	private final Vector4f cursorColor = new Vector4f();
 
-	private Timer cursorTimer;
+	private final Timer cursorTimer;
 	private boolean showCursor = true;
 
 	// font size
@@ -428,10 +428,9 @@ public class TextInputComponent extends GUIComponent {
 		cursorPos.mul(2);
 		cursorPos.sub(1, 1);
 
-		Vector3f cursorPixelPos = DisplayManager.convertToPixelPosition(cursorPos, getLayer() + 1);
+		Vector3f cursorPixelPos = DisplayManager.convertToPixelPosition(cursorPos, getLayer() + 2);
 		cursorPixelPos.setComponent(1, getY());
 		cursorElement.setPosition(cursorPixelPos);
-		cursorElement.setLayer(getLayer() + 1);
 
 		// ********** resize the elements **********
 		text.setFontSize(defaultTextSize * getScale());

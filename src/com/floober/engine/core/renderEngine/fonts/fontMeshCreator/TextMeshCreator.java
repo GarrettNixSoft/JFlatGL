@@ -135,9 +135,11 @@ public class TextMeshCreator {
 			for (Word word : line.getWords()) {
 				cursorX += word.getSpacesBefore() * metaData.getSpaceWidth() * text.getFontSize();
 				for (Character letter : word.getCharacters()) {
-					addVerticesForCharacter(cursorX, cursorY, text.getPosition().z, letter, text.getFontSize(), vertices);
-					addTexCoords(textureCoords, letter.xTextureCoord(), letter.yTextureCoord(),
-							letter.xMaxTextureCoord(), letter.yMaxTextureCoord());
+					if (letter.c() != ' ' && letter.c() != '\n') { // space and newline characters need no vertices
+						addVerticesForCharacter(cursorX, cursorY, text.getPosition().z, letter, text.getFontSize(), vertices);
+						addTexCoords(textureCoords, letter.xTextureCoord(), letter.yTextureCoord(),
+								letter.xMaxTextureCoord(), letter.yMaxTextureCoord());
+					}
 					cursorX += letter.xAdvance() * text.getFontSize();
 				}
 			}
