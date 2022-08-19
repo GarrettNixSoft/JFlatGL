@@ -244,7 +244,7 @@ public class TextInputComponent extends GUIComponent {
 				cursorIndex--;
 				// but not past 0
 				if (cursorIndex < 0) cursorIndex = 0;
-				else Logger.log("Cursor left 1");
+//				else Logger.log("Cursor left 1");
 			}
 
 		}
@@ -270,7 +270,7 @@ public class TextInputComponent extends GUIComponent {
 				cursorIndex++;
 				// but not past the end
 				if (cursorIndex > textStr.length()) cursorIndex = textStr.length();
-				else Logger.log("Cursor right 1");
+//				else Logger.log("Cursor right 1");
 			}
 
 		}
@@ -346,7 +346,7 @@ public class TextInputComponent extends GUIComponent {
 
 						textCenterOffset = -text.getLineWidth() / 2f;
 
-						Logger.log("Overflow! Offsetting text.");
+//						Logger.log("Overflow! Offsetting text.");
 
 					}
 
@@ -360,7 +360,7 @@ public class TextInputComponent extends GUIComponent {
 						text.setLineMaxSize(textScreenSpace);
 						textCenterOffset = 0;
 
-						Logger.log("Fits! Restricting line width");
+//						Logger.log("Fits! Restricting line width");
 
 					}
 

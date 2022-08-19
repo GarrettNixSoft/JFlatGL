@@ -386,7 +386,7 @@ public class GUIText {
 					index += currentWord.getSpacesBefore();
 					x += currentWord.getSpacesBefore() * spaceWidth;
 
-					Logger.log("Spaces before: " + currentWord.getSpacesBefore());
+//					Logger.log("Spaces before: " + currentWord.getSpacesBefore());
 
 					if (currentWord.isEmpty()) { // there was a trailing space, we've reached the end
 						return new Vector2f((float) x, (float) y).add(getPosition2());
