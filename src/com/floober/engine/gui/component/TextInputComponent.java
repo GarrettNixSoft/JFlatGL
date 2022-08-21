@@ -12,6 +12,7 @@ import com.floober.engine.core.util.data.Queue;
 import com.floober.engine.core.input.KeyInput;
 import com.floober.engine.core.util.time.Timer;
 import com.floober.engine.gui.GUI;
+import com.floober.engine.gui.GUIAction;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -50,6 +51,10 @@ public class TextInputComponent extends GUIComponent {
 	// control cursor position
 	private int cursorIndex;
 
+	// reacting to inputs
+	private GUIAction onTextChange;
+	private boolean textChanged;
+
 	// overflow mode
 	public enum OverflowMode {
 		WRAP, SCROLL
@@ -68,6 +73,34 @@ public class TextInputComponent extends GUIComponent {
 		overflowMode = OverflowMode.WRAP;
 		cursorTimer = new Timer(0.5f);
 		cursorTimer.start();
+		// default left click behavior is to focus this component
+		onLeftClick(() -> parent.focusComponent(this));
+		// default focus action is to show the cursor and restart the cursor timer
+		onFocus(() -> {
+			showCursor = true;
+			cursorTimer.restart();
+		});
+	}
+
+	/**
+	 * Assign a GUIAction to be executed when the user changes the text
+	 * in this input field.
+	 * @param action the action to take when the text is changed
+	 * @return this
+	 */
+	public TextInputComponent onTextChange(GUIAction action) {
+		onTextChange = action;
+		return this;
+	}
+
+	// REACTING TO INPUT
+	@Override
+	public void checkInput() {
+		super.checkInput();
+		if (textChanged) {
+			onTextChange.onTrigger();
+			textChanged = false;
+		}
 	}
 
 	// ******************************** BUILDING ********************************
@@ -210,6 +243,22 @@ public class TextInputComponent extends GUIComponent {
 		return temp.toString();
 	}
 
+	public void setInputString(String inputString) {
+		int prevSize = inputText.size();
+		inputText.clear();
+		for (char c : inputString.toCharArray()) {
+			inputText.add(c);
+		}
+		cursorIndex = inputString.length();
+
+		// update the text
+		text.replaceText(getInputString());
+		text.update();
+
+		// handle the resize
+		handleTextResize(prevSize);
+	}
+
 	// UTILITY
 	public void clear() {
 		inputText.clear();
@@ -319,6 +368,8 @@ public class TextInputComponent extends GUIComponent {
 					cursorIndex++;
 				}
 
+				textChanged = true;
+
 			}
 
 		}
@@ -337,43 +388,47 @@ public class TextInputComponent extends GUIComponent {
 		if (inputText.size() != prevSize) {
 
 			// HANDLE RESIZE
-			if (overflowMode == OverflowMode.SCROLL) {
+			handleTextResize(prevSize);
 
-				if (inputText.size() > prevSize) { // TEXT GREW
+		}
 
-					// if the text spilled over onto the next line, right-justify
-					if (text.getTextMeshData().textLines().size() > 1) {
+	}
 
-						text.setTextJustify(GUIText.Justify.RIGHT);
-						text.setLineMaxSize(100);
+	private void handleTextResize(int prevSize) {
+		// HANDLE RESIZE
+		if (overflowMode == OverflowMode.SCROLL) {
 
-						textCenterOffset = -text.getLineWidth() / 2f;
+			if (inputText.size() > prevSize) { // TEXT GREW
+
+				// if the text spilled over onto the next line, right-justify
+				if (text.getTextMeshData().textLines().size() > 1) {
+
+					text.setTextJustify(GUIText.Justify.RIGHT);
+					text.setLineMaxSize(100);
+
+					textCenterOffset = -text.getLineWidth() / 2f;
 
 //						Logger.log("Overflow! Offsetting text.");
-
-					}
-
-				}
-				else { // TEXT SHRANK
-
-					// if the text now fits in a single line, left-justify
-					if (text.getTextMeshData().textLines().get(0).getLineLength() < textScreenSpace) {
-
-						text.setTextJustify(GUIText.Justify.LEFT);
-						text.setLineMaxSize(textScreenSpace);
-						textCenterOffset = 0;
-
-//						Logger.log("Fits! Restricting line width");
-
-					}
 
 				}
 
 			}
+			else { // TEXT SHRANK
+
+				// if the text now fits in a single line, left-justify
+				if (text.getTextMeshData().textLines().get(0).getLineLength() < textScreenSpace) {
+
+					text.setTextJustify(GUIText.Justify.LEFT);
+					text.setLineMaxSize(textScreenSpace);
+					textCenterOffset = 0;
+
+//						Logger.log("Fits! Restricting line width");
+
+				}
+
+			}
+
 		}
-
-
-
 	}
 
 	@Override
@@ -467,7 +522,7 @@ public class TextInputComponent extends GUIComponent {
 		if (text.isHidden()) text.show();
 		borderElement.render();
 		baseElement.render();
-		if (showCursor) cursorElement.render();
+		if (showCursor && isFocused()) cursorElement.render();
 	}
 
 	@Override

@@ -132,7 +132,10 @@ public abstract class GUIComponent {
 	}
 
 	public GUIComponent onOpen(GUIAction action) {
-		actions[ON_OPEN] = () -> queueEvent(new ReadyEvent(this));
+		actions[ON_OPEN] = () -> {
+			queueEvent(new ReadyEvent(this));
+			action.onTrigger();
+		};
 		return this;
 	}
 
@@ -489,11 +492,13 @@ public abstract class GUIComponent {
 		if (clickEvent.button() == MouseInput.LEFT && mouseHover()) {
 			trigger(ON_LEFT_CLICK);
 			Logger.logGUIInteraction("Component " + componentID + " consumed the Left Click event!");
+			parent.focusComponent(this); // FOCUS COMPONENT ON CLICK
 			return true;
 		}
 		else if (clickEvent.button() == MouseInput.RIGHT && mouseHover()) {
 			trigger(ON_RIGHT_CLICK);
 			Logger.logGUIInteraction("Component " + componentID + " consumed the Right Click event!");
+			parent.focusComponent(this); // FOCUS COMPONENT ON CLICK
 			return true;
 		}
 		else {
