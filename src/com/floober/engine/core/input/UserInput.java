@@ -51,4 +51,11 @@ public class UserInput {
 		frame.dispose();
 	}
 
+	public static boolean askToConfirm(String message, String title) {
+		JFrame frame = buildParent();
+		int response = JOptionPane.showConfirmDialog(frame, message, title, JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+		frame.dispose();
+		return response == JOptionPane.YES_OPTION;
+	}
+
 }
