@@ -27,6 +27,7 @@ public class TextInputComponent extends GUIComponent {
 	private final RectElement baseElement;
 	private final RectElement cursorElement;
 
+	private final Vector4f textBorderColor = new Vector4f();
 	private final Vector4f cursorColor = new Vector4f();
 
 	private final Timer cursorTimer;
@@ -180,6 +181,8 @@ public class TextInputComponent extends GUIComponent {
 	public void setTextEdge(float edge) {
 		text.setEdge(edge);
 	}
+
+	public void setTextBorderColor(Vector4f color) { textBorderColor.set(color); }
 
 	public void setTextBorderWidth(float borderWidth) {
 		text.setBorderWidth(borderWidth);
@@ -442,6 +445,8 @@ public class TextInputComponent extends GUIComponent {
 
 		// ********** color the elements **********
 		text.setColor(getPrimaryColor().mul(getOpacity()));
+		text.setOutlineColor(textBorderColor.mul(getOpacity()));
+
 		borderElement.setColor(getSecondaryColor().mul(getOpacity()));
 		baseElement.setColor(getTertiaryColor().mul(getOpacity()));
 		cursorElement.setColor(getCursorColor().mul(getOpacity()));

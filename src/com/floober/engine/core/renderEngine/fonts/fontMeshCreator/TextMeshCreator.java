@@ -38,7 +38,7 @@ public class TextMeshCreator {
 	private List<Line> createStructure(GUIText text) {
 		char[] chars = text.getTextString().toCharArray();
 		List<Line> lines = new ArrayList<>();
-		Line currentLine = new Line(metaData.getSpaceWidth(), text.getFontSize(), text.getMaxLineSize());
+		Line currentLine = new Line(metaData.getSpaceWidth(), text.getFontSize(), text.getLineMaxSize());
 		Word currentWord = new Word(text.getFontSize());
 
 		int spaceCount = 0;
@@ -52,7 +52,7 @@ public class TextMeshCreator {
 					boolean added = currentLine.attemptToAddWord(currentWord);
 					if (!added) {
 						lines.add(currentLine);
-						currentLine = new Line(metaData.getSpaceWidth(), text.getFontSize(), text.getMaxLineSize());
+						currentLine = new Line(metaData.getSpaceWidth(), text.getFontSize(), text.getLineMaxSize());
 						currentLine.attemptToAddWord(currentWord);
 					}
 					currentWord = new Word(text.getFontSize());
@@ -65,7 +65,7 @@ public class TextMeshCreator {
 					spaceCount = 0;
 					boolean added = currentLine.attemptToAddWord(currentWord);
 					lines.add(currentLine);
-					currentLine = new Line(metaData.getSpaceWidth(), text.getFontSize(), text.getMaxLineSize());
+					currentLine = new Line(metaData.getSpaceWidth(), text.getFontSize(), text.getLineMaxSize());
 					if (!added) currentLine.attemptToAddWord(currentWord);
 					currentWord = new Word(text.getFontSize());
 				}
@@ -86,18 +86,18 @@ public class TextMeshCreator {
 		boolean added = currentLine.attemptToAddWord(currentWord);
 		if (!added) {
 			if (currentLine.getLineLength() > 0) lines.add(currentLine);
-			currentLine = new Line(metaData.getSpaceWidth(), text.getFontSize(), text.getMaxLineSize());
+			currentLine = new Line(metaData.getSpaceWidth(), text.getFontSize(), text.getLineMaxSize());
 			added = currentLine.attemptToAddWord(currentWord);
 			if (!added) { // if the word is too long, break it up!
 				// get the line size for convenience
-				float lineSize = text.getMaxLineSize();
+				float lineSize = text.getLineMaxSize();
 				// get the largest subword we can fit on one line, and add it
 				Pair<Word, Word> subwords = currentWord.getMaxLengthSubword(lineSize);
 				currentLine.attemptToAddWord(subwords.data1());
 				lines.add(currentLine);
 				// then, for the remainder of this word, repeat the process until it all fits
 				while (subwords.data2().getWordWidth() > 0) {
-					currentLine = new Line(metaData.getSpaceWidth(), text.getFontSize(), text.getMaxLineSize());
+					currentLine = new Line(metaData.getSpaceWidth(), text.getFontSize(), text.getLineMaxSize());
 					subwords = subwords.data2().getMaxLengthSubword(lineSize);
 					currentLine.attemptToAddWord(subwords.data1());
 					if (subwords.data2().getWordWidth() > 0) lines.add(currentLine);

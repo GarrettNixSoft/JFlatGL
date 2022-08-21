@@ -308,7 +308,7 @@ public class GUIText {
 	/**
 	 * @return The maximum length of a line of this text.
 	 */
-	protected float getMaxLineSize() {
+	public float getLineMaxSize() {
 		return lineMaxSize;
 	}
 
@@ -568,6 +568,8 @@ public class GUIText {
 	}
 
 	public void setLineMaxSize(float lineMaxSize) {
+		// validate // TODO improve this based on font size and current font (minimum should be the size of the largest character in the font at the current font size)
+		if (lineMaxSize == 0) return;
 		// reload if the new line size setting is different
 		if (this.lineMaxSize != lineMaxSize) needsReload = true;
 		this.lineMaxSize = lineMaxSize;

@@ -11,6 +11,7 @@ import org.joml.Vector4f;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class GUIPanel extends GUIComponent {
 
@@ -55,6 +56,24 @@ public class GUIPanel extends GUIComponent {
 
 	public List<GUIComponent> getComponents() {
 		return components;
+	}
+
+	public Optional<GUIComponent> getSubcomponent(String componentID) {
+		Optional<GUIComponent> result = Optional.empty();
+		for (GUIComponent component : components) {
+			if (component.getComponentID().equals(componentID)) {
+				result = Optional.of(component);
+				break;
+			}
+			else if (component instanceof GUIPanel panel) {
+				result = panel.getSubcomponent(componentID);
+				if (result.isEmpty())
+					result = Optional.empty();
+				else break;
+			}
+		}
+
+		return result;
 	}
 
 	public void addComponent(GUIComponent component) {

@@ -102,6 +102,12 @@ public class ImageButton extends Button {
 		this.labelScale = labelScale;
 	}
 
+	public void setImageRotation(float rotation) {
+		image.setRotation(rotation);
+		hoverImage.setRotation(rotation);
+		labelImage.setRotation(rotation);
+	}
+
 	@Override
 	public void doTransform() {
 		image.setSize(getScaledSize());

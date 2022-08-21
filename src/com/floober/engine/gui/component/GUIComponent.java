@@ -63,6 +63,9 @@ public abstract class GUIComponent {
 	// focus components
 	private boolean focused;
 
+	// enable/disable click interactions
+	private boolean clickable = true;
+
 	/**
 	 * Construct a GUIComponent. All GUIComponents must
 	 * have an ID.
@@ -344,6 +347,10 @@ public abstract class GUIComponent {
 	}
 
 	// SETTERS
+	public void setClickable(boolean clickable) {
+		this.clickable = clickable;
+	}
+
 	public void setActive(boolean active) {
 		this.active = active;
 		if (active) {
@@ -478,6 +485,7 @@ public abstract class GUIComponent {
 	}
 
 	public boolean consumeClick(MouseClickEvent clickEvent) {
+		if (!clickable) return false;
 		if (clickEvent.button() == MouseInput.LEFT && mouseHover()) {
 			trigger(ON_LEFT_CLICK);
 			Logger.logGUIInteraction("Component " + componentID + " consumed the Left Click event!");

@@ -12,12 +12,15 @@ public class TextComponent extends GUIComponent {
 
 	private final GUIText text;
 	private float defaultTextSize = 1;
+	private boolean enforceTextWidth;
 
 	public TextComponent(String componentID, GUI parent) {
 		super(componentID, parent);
 		text = new GUIText("Text", defaultTextSize, Game.getFont("default"), new Vector3f(0,0,10), 1, GUIText.Justify.CENTER);
 		text.setWidth(0.5f);
 		text.setEdge(0.2f);
+		//text components are not clickable by default, but this can be changed with a setter call
+		setClickable(false);
 	}
 
 	public TextComponent text(String textStr) {
@@ -63,6 +66,10 @@ public class TextComponent extends GUIComponent {
 		text.setCenteredVertical(centeredVertical);
 	}
 
+	public void setEnforceTextWidth(boolean enforceTextWidth) {
+		this.enforceTextWidth = enforceTextWidth;
+	}
+
 	public GUIText getText() {
 		return text;
 	}
@@ -79,6 +86,13 @@ public class TextComponent extends GUIComponent {
 		text.setFontSize(defaultTextSize * getScale());
 		text.setColor(getPrimaryColor().mul(getOpacity()));
 		text.setOutlineColor(getSecondaryColor().mul(getOpacity()));
+		// wrap text?
+		if (enforceTextWidth) {
+			float textWidth = DisplayManager.convertToScreenSize(getScaledWidth(), false);
+			if (text.getLineMaxSize() != textWidth) {
+				text.setLineMaxSize(textWidth);
+			}
+		}
 	}
 
 	@Override
