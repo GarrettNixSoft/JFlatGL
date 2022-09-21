@@ -34,8 +34,8 @@ C  [glfw.dll+0x6f00]
 Java frames: (J=compiled Java code, j=interpreted, Vv=VM code)
 J 1450  org.lwjgl.system.JNI.invokePV(JJ)V (0 bytes) @ 0x00000299ea1306ec [0x00000299ea1306a0+0x000000000000004c]
 j  org.lwjgl.glfw.GLFW.glfwDestroyWindow(J)V+6
-j  com.floober.engine.core.renderEngine.display.DisplayManager.destroyWindows()V+52
-j  com.floober.engine.core.renderEngine.display.DisplayManager.cleanUp()V+3
+j  com.gnix.jflatgl.core.renderEngine.display.DisplayManager.destroyWindows()V+52
+j  com.gnix.jflatgl.core.renderEngine.display.DisplayManager.cleanUp()V+3
 j  com.floober.engine.test.tests.MultiWindowTest.main([Ljava/lang/String;)V+419
 v  ~StubRoutines::call_stub
 
@@ -427,7 +427,7 @@ CodeHeap 'non-nmethods': size=7488Kb used=1679Kb max_used=3394Kb free=5808Kb
 Compilation events (20 events):
 Event: 86.376 Thread 0x00000299886f9160 1977       3       java.lang.ref.ReferenceQueue::reallyPoll (65 bytes)
 Event: 86.376 Thread 0x00000299886f9160 nmethod 1977 0x00000299e2f9ca90 code [0x00000299e2f9cc60, 0x00000299e2f9d1b8]
-Event: 99.885 Thread 0x00000299886f7ea0 1978       4       com.floober.engine.core.renderEngine.display.DisplayManager::updateDisplay (121 bytes)
+Event: 99.885 Thread 0x00000299886f7ea0 1978       4       com.gnix.jflatgl.core.renderEngine.display.DisplayManager::updateDisplay (121 bytes)
 Event: 99.889 Thread 0x00000299886f7ea0 nmethod 1978 0x00000299ea1af690 code [0x00000299ea1af8c0, 0x00000299ea1afe00]
 Event: 102.156 Thread 0x00000299886f9160 1979       3       java.lang.invoke.LambdaFormEditor$TransformKey::<init> (15 bytes)
 Event: 102.156 Thread 0x00000299886f9160 nmethod 1979 0x00000299e2f9d290 code [0x00000299e2f9d420, 0x00000299e2f9d5b8]

@@ -37,8 +37,8 @@ j  org.lwjgl.system.jni.JNINativeInterface.nDeleteGlobalRef(J)V+0
 j  org.lwjgl.system.jni.JNINativeInterface.DeleteGlobalRef(J)V+12
 j  org.lwjgl.system.Callback.free(J)V+25
 j  org.lwjgl.glfw.Callbacks.glfwFreeCallbacks(J)V+165
-j  com.floober.engine.core.renderEngine.display.DisplayManager.freeCallbacks()V+52
-j  com.floober.engine.core.renderEngine.display.DisplayManager.cleanUp()V+0
+j  com.gnix.jflatgl.core.renderEngine.display.DisplayManager.freeCallbacks()V+52
+j  com.gnix.jflatgl.core.renderEngine.display.DisplayManager.cleanUp()V+0
 j  com.floober.engine.test.tests.MultiWindowTest.main([Ljava/lang/String;)V+413
 v  ~StubRoutines::call_stub
 
@@ -491,15 +491,15 @@ CodeHeap 'non-nmethods': size=7488Kb used=1676Kb max_used=3392Kb free=5811Kb
  full_count=0
 
 Compilation events (20 events):
-Event: 8.669 Thread 0x000001c262cbd550 1838       4       com.floober.engine.core.renderEngine.fonts.fontRendering.TextMaster::render (16 bytes)
+Event: 8.669 Thread 0x000001c262cbd550 1838       4       com.gnix.jflatgl.core.renderEngine.fonts.fontRendering.TextMaster::render (16 bytes)
 Event: 8.676 Thread 0x000001c262cbd550 nmethod 1838 0x000001c244599d90 code [0x000001c244599fc0, 0x000001c24459a860]
-Event: 8.909 Thread 0x000001c262cbd550 1839       4       com.floober.engine.core.renderEngine.elements.RenderElement::transform (52 bytes)
+Event: 8.909 Thread 0x000001c262cbd550 1839       4       com.gnix.jflatgl.core.renderEngine.elements.RenderElement::transform (52 bytes)
 Event: 8.914 Thread 0x000001c262cbd550 nmethod 1839 0x000001c24459b210 code [0x000001c24459b440, 0x000001c24459be78]
 Event: 10.467 Thread 0x000001c262cbdff0 1840       3       java.lang.Class::cast (27 bytes)
 Event: 10.467 Thread 0x000001c262cbdff0 nmethod 1840 0x000001c23d382a90 code [0x000001c23d382c40, 0x000001c23d382ef8]
 Event: 10.523 Thread 0x000001c262cbd550 1841       4       java.lang.ref.Reference::<init> (25 bytes)
 Event: 10.524 Thread 0x000001c262cbd550 nmethod 1841 0x000001c24459c410 code [0x000001c24459c580, 0x000001c24459c7d8]
-Event: 10.634 Thread 0x000001c262cbd550 1842       4       com.floober.engine.core.renderEngine.ppfx.effects.ToScreen::init (1 bytes)
+Event: 10.634 Thread 0x000001c262cbd550 1842       4       com.gnix.jflatgl.core.renderEngine.ppfx.effects.ToScreen::init (1 bytes)
 Event: 10.634 Thread 0x000001c262cbd550 nmethod 1842 0x000001c24459c890 code [0x000001c24459ca00, 0x000001c24459ca78]
 Event: 10.725 Thread 0x000001c262cbd550 1843       4       org.lwjgl.glfw.GLFW::glfwMakeContextCurrent (10 bytes)
 Event: 10.725 Thread 0x000001c262cbd550 nmethod 1843 0x000001c24459cb90 code [0x000001c24459cd20, 0x000001c24459cda8]

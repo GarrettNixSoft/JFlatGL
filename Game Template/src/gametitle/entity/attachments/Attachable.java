@@ -1,6 +1,6 @@
 package gametitle.entity.attachments;
 
-import com.floober.engine.core.entity.Entity;
+import com.gnix.jflatgl.core.entity.Entity;
 
 public interface Attachable {
 
