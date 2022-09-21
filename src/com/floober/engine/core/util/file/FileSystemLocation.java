@@ -9,7 +9,7 @@ import java.net.URL;
 /*
 	Copied from the Slick2D library.
 
-	Only change: made ita Record.
+	Only change: made it a Record.
 	IntelliJ warned me. I dislike warnings.
  */
 public record FileSystemLocation(File root) implements ResourceLocation {
