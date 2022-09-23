@@ -65,7 +65,7 @@ public class AudioMaster {
 			long elapsed = (System.nanoTime() - start) / 1_000_000;
 			Logger.logLoad("Loaded sound file in " + elapsed + "ms");
 			return sound;
-		} catch (IOException e) {
+		} catch (IOException | NullPointerException e) {
 			Logger.logError("Error loading " + file + ": " + e.getMessage(), Logger.CRITICAL);
 			return null;
 		}
