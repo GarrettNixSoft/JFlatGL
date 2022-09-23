@@ -1,8 +1,8 @@
 package gametitle.entity.attachments;
 
-import com.floober.engine.core.entity.Entity;
-import com.floober.engine.core.entity.util.EntityHandler;
-import com.floober.engine.core.util.Logger;
+import com.gnix.jflatgl.core.entity.Entity;
+import com.gnix.jflatgl.core.entity.util.EntityHandler;
+import com.gnix.jflatgl.core.util.Logger;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,5 +1,5 @@
 ![GitHub Logo](/res/icon/repo_image_new.png)
-# FlooberEngine
+# JFlatGL
 A basic 2D game engine in Java, built using LWJGL 3. I use this engine for my personal projects.
 
 Current features:

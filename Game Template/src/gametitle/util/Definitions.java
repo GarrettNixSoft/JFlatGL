@@ -1,6 +1,6 @@
 package gametitle.util;
 
-import com.floober.engine.core.util.color.ColorConverter;
+import com.gnix.jflatgl.core.util.color.ColorConverter;
 import org.joml.Vector4f;
 
 public class Definitions {

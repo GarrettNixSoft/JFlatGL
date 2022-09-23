@@ -1,8 +1,8 @@
 package gametitle.gameState.states;
 
-import com.floober.engine.core.Game;
-import com.floober.engine.core.gameState.GameState;
-import com.floober.engine.core.gameState.GameStateManager;
+import com.gnix.jflatgl.core.Game;
+import com.gnix.jflatgl.core.gameState.GameState;
+import com.gnix.jflatgl.core.gameState.GameStateManager;
 
 public class SettingsState extends GameState {
 
