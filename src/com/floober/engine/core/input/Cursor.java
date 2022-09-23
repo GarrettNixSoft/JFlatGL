@@ -187,6 +187,12 @@ public class Cursor {
 			DY = (float) yPos - prevLocation.y;
 		}
 
+		// IF THE WINDOW IS NOT VISIBLE, NO CURSOR MOTION INPUT IS PRESENT
+		if (glfwGetWindowAttrib(primaryWindowID, GLFW_ICONIFIED) == GLFW_TRUE) {
+			DX = prevDX = x = 0;
+			DY = prevDY = y = 0;
+		}
+
 	}
 
 	public static boolean gamepadMovedCursor() {
