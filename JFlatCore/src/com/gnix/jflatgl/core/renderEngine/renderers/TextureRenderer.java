@@ -51,7 +51,7 @@ public class TextureRenderer {
 		outlineShader = new TextureOutlineShader();
 		outlineGrowShader = new TextureOutlineGrowShader();
 		initShader();
-		glitchNoise = ImageLoader.loadTexture("textures/noise/glitch_noise.png", GL_REPEAT);
+		glitchNoise = ImageLoader.loadEngineTexture("/core-res/glitch_noise.png", GL_REPEAT);
 	}
 
 	private void initShader() {

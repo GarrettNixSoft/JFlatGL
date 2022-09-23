@@ -221,6 +221,71 @@ public class ImageLoader {
 	}
 
 	/**
+	 * Load a texture, and send it to the GPU. Set the wrapping mode.
+	 * @param path The path to the texture file.
+	 * @return A Texture to reference the loaded image.
+	 */
+	public static TextureComponent loadEngineTexture(String path, int wrapMode) {
+		// report load
+		Logger.logLoad("Loading texture: " + path);
+		// init OpenGL texture
+		int textureID = glGenTextures();
+		glBindTexture(GL_TEXTURE_2D, textureID);
+		// load from file
+		try (MemoryStack stack = MemoryStack.stackPush()) {
+			IntBuffer w = stack.mallocInt(1);
+			IntBuffer h = stack.mallocInt(1);
+			IntBuffer comp = stack.mallocInt(1);
+			ByteBuffer buffer = loadFromEngine(path, w, h, comp);
+			int width = w.get();
+			int height = h.get();
+			// check for transparency
+			// set OpenGL texture settings for this texture
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapMode);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapMode);
+			// load the texture for OpenGL
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+			// unbind the texture
+			glBindTexture(GL_TEXTURE_2D, 0);
+			// add to list to clean up
+			textures.add(textureID);
+			// create the Texture object and return it
+			return new TextureComponent(textureID, width, height);
+		}
+	}
+
+	private static ByteBuffer loadFromEngine(String path, IntBuffer w, IntBuffer h, IntBuffer comp) {
+		// declare the input stream
+		try (InputStream in = ImageLoader.class.getResourceAsStream(path)) {
+			// get the bytes from the input stream
+			byte[] imageBytes = {};
+			try {
+				imageBytes = in.readAllBytes();
+			} catch (Exception e) {
+				Logger.logError("Could not load " + path, Logger.CRITICAL);
+				e.printStackTrace();
+			}
+
+			ByteBuffer imageBuffer = BufferUtils.createByteBuffer(imageBytes.length);
+			imageBuffer.put(imageBytes);
+			imageBuffer.flip();
+
+			ByteBuffer result = stbi_load_from_memory(imageBuffer, w, h, comp, 4);
+
+			if (result == null) {
+				throw new RuntimeException("Failed to load an image file!"
+						+ System.lineSeparator() + stbi_failure_reason() + " ... (Path was " + path + ")");
+			}
+
+			return result;
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/**
 	 * Delete all textures on shutdown.
 	 */
 	public static void cleanUp() {
