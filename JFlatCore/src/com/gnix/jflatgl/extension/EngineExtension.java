@@ -18,13 +18,17 @@ import java.util.Optional;
  */
 public abstract class EngineExtension {
 
+	private final Optional<InitExtension> initExtension;
 	private final Optional<UpdateExtension> updateExtension;
 	private final Optional<RenderExtension> renderExtension;
 
-	public EngineExtension(UpdateExtension updateExtension, RenderExtension renderExtension) {
+	public EngineExtension(InitExtension initExtension, UpdateExtension updateExtension, RenderExtension renderExtension) {
+		this.initExtension = Optional.of(initExtension);
 		this.updateExtension = Optional.of(updateExtension);
 		this.renderExtension = Optional.of(renderExtension);
 	}
+
+	public void init() { initExtension.ifPresent(InitExtension::init); }
 
 	public void update() {
 		updateExtension.ifPresent(UpdateExtension::update);
