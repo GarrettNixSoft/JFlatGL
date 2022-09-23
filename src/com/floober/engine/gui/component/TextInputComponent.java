@@ -52,7 +52,7 @@ public class TextInputComponent extends GUIComponent {
 	private int cursorIndex;
 
 	// reacting to inputs
-	private GUIAction onTextChange;
+	private GUIAction onTextChange = () -> {};
 	private boolean textChanged;
 
 	// overflow mode
