@@ -28,10 +28,12 @@ import com.gnix.jflatgl.core.renderEngine.textures.TextureComponent;
 import com.gnix.jflatgl.core.renderEngine.textures.TextureSet;
 import com.gnix.jflatgl.core.util.Logger;
 import com.gnix.jflatgl.core.util.Session;
-import com.gnix.jflatgl.gui.GUIManager;
+import com.gnix.jflatgl.extension.EngineExtension;
 import org.joml.Vector3f;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 import static com.gnix.jflatgl.core.renderEngine.display.DisplayManager.primaryWindowID;
@@ -47,6 +49,9 @@ public class Game {
 
 	// global access to the game
 	public static Game instance;
+
+	// engine extensions
+	private final List<EngineExtension> engineExtensions = new ArrayList<>();
 
 	// game components
 	private final GameLoader loader;
@@ -91,6 +96,10 @@ public class Game {
 	 */
 	public static void addCustomAssetLoader(AssetLoader assetLoader) {
 		instance.loader.addCustomAssetLoader(assetLoader);
+	}
+
+	public static void addEngineExtension(EngineExtension extension) {
+		instance.engineExtensions.add(extension);
 	}
 
 	public static void loadConfig() {
@@ -224,8 +233,11 @@ public class Game {
 		instance.gsm.update();
 		instance.music.update();
 		instance.sfx.update();
-		// GUI components
-		GUIManager.update();
+
+		// Engine extensions
+		for (EngineExtension extension : instance.engineExtensions) {
+			extension.update();
+		}
 
 		// clear the key flag
 		KeyInput.KEY_PRESSED = false;
@@ -247,8 +259,12 @@ public class Game {
 	 * appears on screen.
 	 */
 	public static void render() {
+		// core engine render call
 		instance.gsm.render();
-		GUIManager.render();
+		// Engine extensions
+		for (EngineExtension extension : instance.engineExtensions) {
+			extension.update();
+		}
 	}
 
 	// request game exit

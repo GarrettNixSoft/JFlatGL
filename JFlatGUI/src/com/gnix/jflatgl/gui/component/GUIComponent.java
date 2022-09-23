@@ -1,7 +1,7 @@
 package com.gnix.jflatgl.gui.component;
 
 import com.gnix.jflatgl.core.input.Cursor;
-import com.gnix.jflatgl.event.MultiEventQueue;
+import com.gnix.jflatgl.gui.event.MultiEventQueue;
 import com.gnix.jflatgl.gui.GUI;
 import com.gnix.jflatgl.gui.GUIAction;
 import com.gnix.jflatgl.core.util.Logger;

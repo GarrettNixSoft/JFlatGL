@@ -1,6 +1,7 @@
-package com.gnix.jflatgl.event;
+package com.gnix.jflatgl.gui.event;
 
-import com.gnix.jflatgl.gui.event.ClosedEvent;
+import com.gnix.jflatgl.event.EventQueue;
+import com.gnix.jflatgl.event.QueuedEvent;
 import com.gnix.jflatgl.core.util.data.Queue;
 
 import java.util.ArrayList;
