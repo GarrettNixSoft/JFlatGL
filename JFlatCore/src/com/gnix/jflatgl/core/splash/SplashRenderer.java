@@ -1,7 +1,8 @@
 package com.gnix.jflatgl.core.splash;
 
 /**
- * Define what should be rendered
+ * A SplashRenderer handles all drawing on the Splash Screen
+ * while the game is loading.
  */
 public abstract class SplashRenderer {
 
