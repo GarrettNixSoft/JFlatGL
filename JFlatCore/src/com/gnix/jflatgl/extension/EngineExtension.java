@@ -23,9 +23,9 @@ public abstract class EngineExtension {
 	private final Optional<RenderExtension> renderExtension;
 
 	public EngineExtension(InitExtension initExtension, UpdateExtension updateExtension, RenderExtension renderExtension) {
-		this.initExtension = Optional.of(initExtension);
-		this.updateExtension = Optional.of(updateExtension);
-		this.renderExtension = Optional.of(renderExtension);
+		this.initExtension = Optional.ofNullable(initExtension);
+		this.updateExtension = Optional.ofNullable(updateExtension);
+		this.renderExtension = Optional.ofNullable(renderExtension);
 	}
 
 	public void init() { initExtension.ifPresent(InitExtension::init); }
