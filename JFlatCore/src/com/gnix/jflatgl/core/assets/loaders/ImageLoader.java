@@ -164,6 +164,7 @@ public class ImageLoader {
 			try {
 				imageBytes = in.readAllBytes();
 			} catch (Exception e) {
+				Logger.logError("Could not load " + path, Logger.CRITICAL);
 				e.printStackTrace();
 			}
 
