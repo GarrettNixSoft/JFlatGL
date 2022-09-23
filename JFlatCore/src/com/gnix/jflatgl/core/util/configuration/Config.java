@@ -28,6 +28,7 @@ public class Config {
 	public static String DEFAULT_CONTROLS_DIR;
 	public static String CONTROLS_PATH;
 
+	public static boolean ENABLE_GAMEPAD_CURSOR;
 	public static String GAMEPAD_CURSOR_PATH;
 
 	public static boolean DEBUG_MODE; // development use
@@ -74,7 +75,8 @@ public class Config {
 		DEFAULT_CONTROLS_DIR = configJSON.getString("default_controls");
 		CONTROLS_PATH = configJSON.getString("controls_path");
 
-		GAMEPAD_CURSOR_PATH = configJSON.getString("gamepad_cursor");
+		ENABLE_GAMEPAD_CURSOR = configJSON.optBoolean("enable_gamepad_cursor", false);
+		GAMEPAD_CURSOR_PATH = configJSON.optString("gamepad_cursor", "");
 
 		WINDOW_TITLE = configJSON.getString("window_title");
 

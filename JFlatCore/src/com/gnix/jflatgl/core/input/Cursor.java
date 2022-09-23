@@ -35,17 +35,20 @@ public class Cursor {
 	private static long cursorObj;
 
 	public static void init() {
-		GLFWImage cursorImage = GLFWImage.malloc();
-		RawTextureData cursorImageData = ImageLoader.loadImageRaw(Config.GAMEPAD_CURSOR_PATH);
-		cursorImage.set(cursorImageData.width, cursorImageData.height, cursorImageData.buffer);
-		cursorObj = glfwCreateCursor(cursorImage, cursorImageData.width / 2, cursorImageData.height / 2);
-//		cursorObj = glfwCreateCursor(cursorImage, 0, 0);
 
-		if (cursorObj == MemoryUtil.NULL) {
-			PointerBuffer pointerBuffer = PointerBuffer.allocateDirect(4096);
-			glfwGetError(pointerBuffer);
-			String errorMessage = pointerBuffer.getStringUTF8();
-			throw new RuntimeException("Failed to create cursor! Error: " + errorMessage);
+		if (Config.ENABLE_GAMEPAD_CURSOR) {
+			GLFWImage cursorImage = GLFWImage.malloc();
+			RawTextureData cursorImageData = ImageLoader.loadImageRaw(Config.GAMEPAD_CURSOR_PATH);
+			cursorImage.set(cursorImageData.width, cursorImageData.height, cursorImageData.buffer);
+			cursorObj = glfwCreateCursor(cursorImage, cursorImageData.width / 2, cursorImageData.height / 2);
+//			cursorObj = glfwCreateCursor(cursorImage, 0, 0);
+
+			if (cursorObj == MemoryUtil.NULL) {
+				PointerBuffer pointerBuffer = PointerBuffer.allocateDirect(4096);
+				glfwGetError(pointerBuffer);
+				String errorMessage = pointerBuffer.getStringUTF8();
+				throw new RuntimeException("Failed to create cursor! Error: " + errorMessage);
+			}
 		}
 	}
 
@@ -55,7 +58,7 @@ public class Cursor {
 		CURSOR_MODE = mode;
 
 		// handle GLFW cursor settings
-		if (CURSOR_MODE == CursorMode.GAMEPAD) {
+		if (CURSOR_MODE == CursorMode.GAMEPAD && Config.ENABLE_GAMEPAD_CURSOR) {
 
 			// hide the mouse when over this window
 //			glfwSetInputMode(DisplayManager.primaryWindowID, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
