@@ -6,7 +6,6 @@
 /lib/
 /lib/lwjgl-release-3.3.0-custom/
 /javadoc/
-/Engine/src/com/gnix/jflatgl/test/
 /src/META-INF/
 /META-INF/
 /controls/
@@ -14,3 +13,4 @@
 /resourceData/
 /com/
 /gametitle/
+/JFlatGLTest/
