@@ -263,7 +263,7 @@ public class Game {
 		instance.gsm.render();
 		// Engine extensions
 		for (EngineExtension extension : instance.engineExtensions) {
-			extension.update();
+			extension.render();
 		}
 	}
 
