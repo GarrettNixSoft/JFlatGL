@@ -7,7 +7,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="JFlatGL" />
-    <orderEntry type="module" module-name="JFlatCore" />
+    <orderEntry type="library" name="json" level="project" />
+    <orderEntry type="library" name="LWJGL-3.3.1" level="project" />
   </component>
 </module>
