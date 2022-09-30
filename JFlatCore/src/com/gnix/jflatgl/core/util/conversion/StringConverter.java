@@ -157,6 +157,19 @@ public class StringConverter {
 		return result.toString();
 	}
 
+	public static String stringArrayToString(String[] arr) {
+		if (arr.length == 0) return "{}";
+		StringBuilder result = new StringBuilder();
+		result.append('{');
+		for (String str : arr) {
+			result.append(str);
+			result.append(", ");
+		}
+		result.setLength(result.length() - 2);
+		result.append('}');
+		return result.toString();
+	}
+
 	/**
 	 * Get a pair of floats representing a range of values.
 	 * @param rangeStr The range, formatted as "value1->value2" where value1 and value2 are float values.
