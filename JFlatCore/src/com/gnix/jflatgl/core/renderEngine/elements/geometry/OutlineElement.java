@@ -1,5 +1,6 @@
 package com.gnix.jflatgl.core.renderEngine.elements.geometry;
 
+import com.gnix.jflatgl.core.util.color.Colors;
 import org.joml.Vector4f;
 
 public class OutlineElement extends GeometryElement {
@@ -12,6 +13,10 @@ public class OutlineElement extends GeometryElement {
 	private float lineWidth;
 
 	// CONSTRUCTORS
+	public OutlineElement() {
+		super(Colors.INVISIBLE, 0, 0, 0, false);
+	}
+
 	public OutlineElement(Vector4f color, float x, float y, int layer, float width, float height, float lineWidth, boolean centered) {
 		super(color, x, y, layer, centered);
 		this.width = width;
