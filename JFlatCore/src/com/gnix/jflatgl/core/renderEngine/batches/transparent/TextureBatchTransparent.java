@@ -23,7 +23,7 @@ public class TextureBatchTransparent extends TransparentBatch {
 			elements.add(element);
 		}
 		else {
-			Logger.logError("Tried to add opaque texture element to transparent batch!", Logger.MEDIUM);
+			Logger.logError(Logger.MEDIUM, "Tried to add opaque texture element to transparent batch!");
 		}
 	}
 

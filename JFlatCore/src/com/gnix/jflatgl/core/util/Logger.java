@@ -136,7 +136,7 @@ public class Logger {
 
 	/**
 	 * Log an error.
-	 * @param error The error message.
+	 *
 	 * @param severity The severity level of the error.
 	 *                 <br>
 	 *                 <br>
@@ -147,8 +147,9 @@ public class Logger {
 	 *                 HIGH - Should be dealt with immediately.
 	 *                 <br>
 	 *                 CRITICAL - The highest severity errors that prevent the game from running. Raising a Critical Error message will terminate the game immediately.
+	 * @param error    The error message.
 	 */
-	public static void logError(String error, int severity) {
+	public static void logError(int severity, String error) {
 		if (!logErrors && severity != CRITICAL) return;
 		String message = "*** [ERROR] (Severity: ";
 		switch (severity) {

@@ -475,7 +475,7 @@ public class Game {
 	// Animations
 	public static Animation getAnimation(String key) {
 		Animation result = instance.animations.getAnimation(key);
-		if (result == null) Logger.logError("Animation requested does not exist: " + key, Logger.HIGH);
+		if (result == null) Logger.logError(Logger.HIGH, "Animation requested does not exist: " + key);
 		return result;
 	}
 

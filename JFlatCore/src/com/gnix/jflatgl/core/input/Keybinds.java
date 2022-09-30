@@ -82,7 +82,7 @@ public class Keybinds {
 		}
 		// otherwise, calling this was an error
 		else {
-			Logger.logError("Attempted to force a keybind for a non-colliding change!", Logger.LOW);
+			Logger.logError(Logger.LOW, "Attempted to force a keybind for a non-colliding change!");
 			return null;
 		}
 	}

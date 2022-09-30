@@ -66,7 +66,7 @@ public class AudioMaster {
 			Logger.logLoad("Loaded sound file in " + elapsed + "ms");
 			return sound;
 		} catch (IOException | NullPointerException e) {
-			Logger.logError("Error loading " + file + ": " + e.getMessage(), Logger.CRITICAL);
+			Logger.logError(Logger.CRITICAL, "Error loading " + file + ": " + e.getMessage());
 			return null;
 		}
 //		file = file.replace("/", "\\");

@@ -109,6 +109,14 @@ public class ImageButton extends Button {
 	}
 
 	@Override
+	public void update() {
+		super.update();
+		// update opacity
+		image.setAlpha(getOpacity());
+		hoverImage.setAlpha(getOpacity());
+	}
+
+	@Override
 	public void doTransform() {
 		image.setSize(getScaledSize());
 		image.transform();
