@@ -11,6 +11,7 @@ import com.gnix.jflatgl.core.renderEngine.util.Layers;
 import com.gnix.jflatgl.core.splash.SplashScreen;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 public abstract class RenderElement implements Comparable<RenderElement> {
 
@@ -183,5 +184,9 @@ public abstract class RenderElement implements Comparable<RenderElement> {
 	public int compareTo(RenderElement other) {
 		return Integer.compare(other.layer, layer);
 	}
+
+	// ******************************** ABSTRACT ********************************
+	public abstract void setColor(Vector4f color);
+	public abstract void setAlpha(float alpha);
 
 }
