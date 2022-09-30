@@ -1,5 +1,6 @@
 package com.gnix.jflatgl.core.renderEngine.elements.geometry;
 
+import com.gnix.jflatgl.core.util.color.Colors;
 import org.joml.Vector4f;
 
 import java.awt.*;
@@ -11,6 +12,10 @@ public class RectElement extends GeometryElement {
 	private int roundingMode = HORIZONTAL;
 
 	private float round = 0;
+
+	public RectElement() {
+		super(Colors.INVISIBLE, 0, 0, 0, false);
+	}
 
 	public RectElement(Vector4f color, float x, float y, int layer, float width, float height, boolean centered) {
 		super(color, x, y, layer, centered);

@@ -1,5 +1,6 @@
 package com.gnix.jflatgl.core.renderEngine.elements.geometry;
 
+import com.gnix.jflatgl.core.util.color.Colors;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
 
@@ -10,6 +11,12 @@ public class CircleElement extends GeometryElement {
 	private final Vector2f center;
 	private final Vector2f portion;
 	private float smoothness;
+
+	public CircleElement() {
+		super(Colors.INVISIBLE, 0, 0, 0, true);
+		center = new Vector2f();
+		portion = new Vector2f();
+	}
 
 	public CircleElement(Vector4f color, float x, float y, int layer, float outerRadius) {
 		super(color, x, y, layer, true);
