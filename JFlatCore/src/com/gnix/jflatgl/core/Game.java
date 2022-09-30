@@ -168,6 +168,7 @@ public class Game {
 		gameLoader.finish();
 
 		// Re-initialize the TextMaster on the proper context
+		TextMaster.clear();
 		TextMaster.init();
 
 		// Next, prepare the GSM
