@@ -46,6 +46,7 @@ public class TextMaster {
 		FontType fontType = text.getFont();
 		TextMeshData data = fontType.loadText(text);
 		int vao = ModelLoader.loadToVAO(data.vertexPositions(), data.textureCoords(), text);
+		if (textVAOs.contains(vao)) throw new RuntimeException();
 		textVAOs.add(vao);
 //		Logger.log("Text got VAO: " + vao);
 		text.setMeshInfo(vao, data.vertexPositions().length / 3); // there are (length / 3) vertices, since each vertex is 3 floats (x,y,z)
@@ -63,6 +64,7 @@ public class TextMaster {
 	public static void removeText(GUIText text) {
 //		Logger.log("REMOVING: " + text.getTextString());
 		text.delete();
+		textVAOs.remove((Integer) text.getVAO());
 		int layer = text.getLayer();
 		Set<GUIText> textBatch = texts[layer].get(text.getFont());
 		if (textBatch != null) {
@@ -77,6 +79,7 @@ public class TextMaster {
 	public static void removeText(GUIText text, FontType oldFont) {
 //		Logger.log("REMOVING: " + text.getTextString());
 		text.delete();
+		textVAOs.remove(text.getVAO());
 		int layer = text.getLayer();
 		Set<GUIText> textBatch = texts[layer].get(oldFont);
 		if (textBatch != null) {
@@ -136,6 +139,7 @@ public class TextMaster {
 	}
 
 	public static void cleanUp() {
+		clear();
 		renderer.cleanUp();
 	}
 

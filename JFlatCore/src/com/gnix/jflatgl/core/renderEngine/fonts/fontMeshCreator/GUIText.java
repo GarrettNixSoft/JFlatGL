@@ -656,6 +656,10 @@ public class GUIText {
 		textMeshVbos.clear();
 	}
 
+	public int getVAO() {
+		return textMeshVao;
+	}
+
 	/**
 	 * This should be called each frame, after any modifications are made.
 	 * If this GUIText has been modified in a way that requires rebuilding
