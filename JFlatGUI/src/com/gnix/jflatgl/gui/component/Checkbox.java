@@ -3,6 +3,7 @@ package com.gnix.jflatgl.gui.component;
 import com.gnix.jflatgl.core.renderEngine.elements.RenderElement;
 import com.gnix.jflatgl.core.renderEngine.elements.TextureElement;
 import com.gnix.jflatgl.core.renderEngine.elements.geometry.CircleElement;
+import com.gnix.jflatgl.core.renderEngine.elements.geometry.OutlineElement;
 import com.gnix.jflatgl.core.renderEngine.elements.geometry.RectElement;
 import com.gnix.jflatgl.core.renderEngine.fonts.fontMeshCreator.FontType;
 import com.gnix.jflatgl.core.renderEngine.fonts.fontMeshCreator.GUIText;
@@ -79,7 +80,10 @@ public class Checkbox extends GUIComponent {
 		switch (shape) {
 			case SQUARE -> {
 				baseElement = new RectElement();
-				outlineElement = new RectElement();
+				outlineElement = new OutlineElement();
+				// rects and outlines aren't centered by default
+				baseElement.setCentered(true);
+				outlineElement.setCentered(true);
 			}
 			case CIRCLE -> {
 				baseElement = new CircleElement();
@@ -96,7 +100,7 @@ public class Checkbox extends GUIComponent {
 	public void setRounding(int mode, float round) {
 		try {
 			RectElement base = (RectElement) baseElement;
-			RectElement outline = (RectElement) outlineElement;
+			OutlineElement outline = (OutlineElement) outlineElement;
 			base.setRoundingMode(mode);
 			outline.setRoundingMode(mode);
 			base.setRoundRadius(round);
@@ -107,14 +111,28 @@ public class Checkbox extends GUIComponent {
 		}
 	}
 
+	public void setOutlineWidth(float width) {
+		switch (outlineElement) {
+			case OutlineElement o -> {
+				o.setLineWidth(width);
+			}
+			case CircleElement c -> {
+				float ratio = (c.getWidth() - width) / c.getWidth();
+				c.setInnerRadius(ratio);
+			}
+			default -> Logger.logError(Logger.MEDIUM, "Tried to set the outline width of a checkbox with outline type " + outlineElement.getClass().getName());
+		}
+	}
+
 	// ******************************** CHECK CONFIG ********************************
 	public void setCheckType(int checkType) {
 		switch (checkType) {
-			case SQUARE -> checkElement = new RectElement();
+			case SQUARE -> checkElement = new OutlineElement();
 			case CIRCLE -> checkElement = new CircleElement();
 			case IMAGE -> checkElement = new TextureElement();
 			default -> throw new IllegalArgumentException();
 		}
+		checkElement.setCentered(true);
 	}
 
 	public void setCheckScale(float checkScale) {
