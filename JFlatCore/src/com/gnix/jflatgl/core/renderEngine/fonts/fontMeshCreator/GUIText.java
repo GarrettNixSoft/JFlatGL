@@ -3,7 +3,6 @@ package com.gnix.jflatgl.core.renderEngine.fonts.fontMeshCreator;
 import com.gnix.jflatgl.core.Game;
 import com.gnix.jflatgl.core.renderEngine.fonts.fontRendering.TextMaster;
 import com.gnix.jflatgl.core.renderEngine.models.ModelLoader;
-import com.gnix.jflatgl.core.util.Logger;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -583,10 +582,10 @@ public class GUIText {
 		this.lineMaxSize = lineMaxSize;
 	}
 
-	public void setTextJustify(Alignment textJustify) {
+	public void setTextAlignment(Alignment textAlignment) {
 		// reload if the new justify setting is different
-		if (this.textAlignment != textJustify) needsReload = true;
-		this.textAlignment = textJustify;
+		if (this.textAlignment != textAlignment) needsReload = true;
+		this.textAlignment = textAlignment;
 	}
 
 	public void setAnchorPoint(AnchorPoint anchorPoint) {

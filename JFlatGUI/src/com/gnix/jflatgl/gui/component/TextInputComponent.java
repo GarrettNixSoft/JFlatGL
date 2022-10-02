@@ -163,7 +163,7 @@ public class TextInputComponent extends GUIComponent {
 	}
 
 	public void setTextJustify(GUIText.Alignment alignment) {
-		text.setTextJustify(alignment);
+		text.setTextAlignment(alignment);
 	}
 
 	public void setTextAnchorPoint(GUIText.AnchorPoint anchorPoint) {
@@ -402,7 +402,7 @@ public class TextInputComponent extends GUIComponent {
 				// if the text spilled over onto the next line, right-justify
 				if (text.getTextMeshData().textLines().size() > 1) {
 
-					text.setTextJustify(GUIText.Alignment.RIGHT);
+					text.setTextAlignment(GUIText.Alignment.RIGHT);
 					text.setLineMaxSize(100);
 
 					textCenterOffset = -text.getLineWidth() / 2f;
@@ -417,7 +417,7 @@ public class TextInputComponent extends GUIComponent {
 				// if the text now fits in a single line, left-justify
 				if (text.getTextMeshData().textLines().get(0).getLineLength() < textScreenSpace) {
 
-					text.setTextJustify(GUIText.Alignment.LEFT);
+					text.setTextAlignment(GUIText.Alignment.LEFT);
 					text.setLineMaxSize(textScreenSpace);
 					textCenterOffset = 0;
 

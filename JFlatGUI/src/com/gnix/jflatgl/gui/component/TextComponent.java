@@ -59,7 +59,7 @@ public class TextComponent extends GUIComponent {
 	}
 
 	public void setTextJustify(GUIText.Alignment alignment) {
-		text.setTextJustify(alignment);
+		text.setTextAlignment(alignment);
 	}
 
 	public void setTextAnchorPoint(GUIText.AnchorPoint anchorPoint) {
