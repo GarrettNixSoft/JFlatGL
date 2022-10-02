@@ -4,6 +4,7 @@ import com.gnix.jflatgl.core.renderEngine.textures.RawTextureData;
 import com.gnix.jflatgl.core.renderEngine.textures.Texture;
 import com.gnix.jflatgl.core.renderEngine.textures.TextureComponent;
 import com.gnix.jflatgl.core.util.Logger;
+import com.gnix.jflatgl.core.util.file.ResourceLoader;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.system.MemoryStack;
 
@@ -263,9 +264,12 @@ public class ImageLoader {
 			byte[] imageBytes = {};
 			try {
 				imageBytes = in.readAllBytes();
-			} catch (Exception e) {
-				Logger.logError(Logger.CRITICAL, "Could not load " + path);
+			} catch (IOException e) {
 				e.printStackTrace();
+				Logger.logError(Logger.CRITICAL, "Could not load " + path);
+			} catch (NullPointerException e) {
+				InputStream in2 = ResourceLoader.getResourceAsStream(path);
+				imageBytes = in2.readAllBytes();
 			}
 
 			ByteBuffer imageBuffer = BufferUtils.createByteBuffer(imageBytes.length);
