@@ -44,14 +44,18 @@ public class GUIText {
 	private float lineMaxSize;
 	private int numberOfLines;
 
-	// controlling the alignment of text
-	private boolean centeredVertical = true;
-
-	// text justification
-	public enum Justify {
+	// text alignment
+	public enum Alignment {
 		LEFT, CENTER, RIGHT
 	}
-	private Justify textJustify;
+	private Alignment textAlignment;
+
+	public enum AnchorPoint {
+		TOP_LEFT, TOP_CENTER, TOP_RIGHT,
+		CENTER_LEFT, CENTER, CENTER_RIGHT,
+		BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT
+	}
+	private AnchorPoint anchorPoint;
 
 	// shader settings
 	private float width;
@@ -77,7 +81,8 @@ public class GUIText {
 		this.font = Game.getFont("default");
 		this.position = new Vector3f();
 		this.lineMaxSize = 1;
-		this.textJustify = Justify.LEFT;
+		this.textAlignment = Alignment.LEFT;
+		this.anchorPoint = AnchorPoint.CENTER;
 		this.firstCharVisible = 0;
 		this.lastCharVisible = textString.length();
 		// default values
@@ -98,7 +103,8 @@ public class GUIText {
 		this.font = Game.getFont("default");
 		this.position = new Vector3f();
 		this.lineMaxSize = 1;
-		this.textJustify = Justify.LEFT;
+		this.textAlignment = Alignment.LEFT;
+		this.anchorPoint = AnchorPoint.CENTER;
 		this.firstCharVisible = 0;
 		this.lastCharVisible = textString.length();
 		// default values
@@ -119,7 +125,8 @@ public class GUIText {
 		this.font = font;
 		this.position = position;
 		this.lineMaxSize = maxLineLength;
-		this.textJustify = Justify.LEFT;
+		this.textAlignment = Alignment.LEFT;
+		this.anchorPoint = AnchorPoint.CENTER;
 		this.firstCharVisible = 0;
 		this.lastCharVisible = textString.length();
 		// default values
@@ -151,15 +158,16 @@ public class GUIText {
 	 *            the text is longer than this length it will go onto the next
 	 *            line. When text is centered it is centered into the middle of
 	 *            the line, based on this line length value.
-	 * @param textJustify The text justify setting: LEFT, CENTER, or RIGHT
+	 * @param textAlignment The text justify setting: LEFT, CENTER, or RIGHT
 	 */
-	public GUIText(String text, float fontSize, FontType font, Vector3f position, float maxLineLength, Justify textJustify) {
+	public GUIText(String text, float fontSize, FontType font, Vector3f position, float maxLineLength, Alignment textAlignment) {
 		this.textString = text;
 		this.fontSize = fontSize;
 		this.font = font;
 		this.position = position;
 		this.lineMaxSize = maxLineLength;
-		this.textJustify = textJustify;
+		this.textAlignment = textAlignment;
+		this.anchorPoint = AnchorPoint.CENTER;
 		this.firstCharVisible = 0;
 		this.lastCharVisible = textString.length();
 		// default values
@@ -186,7 +194,7 @@ public class GUIText {
 		this.font = other.font;
 		this.position = other.position;
 		this.lineMaxSize = other.lineMaxSize;
-		this.textJustify = other.textJustify;
+		this.textAlignment = other.textAlignment;
 		this.firstCharVisible = 0;
 		this.lastCharVisible = newTextString.length();
 		// text display values
@@ -238,9 +246,6 @@ public class GUIText {
 	public int getLastCharVisible() {
 		return lastCharVisible;
 	}
-	public boolean isCenteredVertical() {
-		return centeredVertical;
-	}
 	public int getNumVisibleChars() {
 		return lastCharVisible - firstCharVisible;
 	}
@@ -257,8 +262,16 @@ public class GUIText {
 		return (charIndex < getTextString().length() && getTextString().charAt(charIndex) != ' ') || charIndex == getTextString().length();
 	}
 
-	public Justify getTextJustify() {
-		return textJustify;
+	public Alignment getTextAlignment() {
+		return textAlignment;
+	}
+
+	public AnchorPoint getAnchorPoint() {
+		return anchorPoint;
+	}
+
+	public boolean isCenteredVertical() {
+		return anchorPoint == AnchorPoint.CENTER_LEFT || anchorPoint == AnchorPoint.CENTER || anchorPoint == AnchorPoint.CENTER_RIGHT;
 	}
 
 	public int getVertexCount() {
@@ -302,7 +315,7 @@ public class GUIText {
 	 * @return {@code true} if the text should be centered.
 	 */
 	public boolean isCentered() {
-		return textJustify == Justify.CENTER;
+		return textAlignment == Alignment.CENTER;
 	}
 
 	/**
@@ -357,11 +370,11 @@ public class GUIText {
 		Character currentCharacter;
 
 		// adjust starting position
-		if (!centeredVertical) {
+		if (!isCenteredVertical()) {
 			double totalHeight = lines.size() * lineHeight;
 			y -= totalHeight / 2;
 		}
-		if (textJustify == Justify.RIGHT) {
+		if (textAlignment == Alignment.RIGHT) {
 			x = lineMaxSize - currentLine.getLineLength();
 		}
 
@@ -408,7 +421,7 @@ public class GUIText {
 						wordIndex = 0;
 
 						// wrap x back around
-						if (textJustify == Justify.RIGHT)
+						if (textAlignment == Alignment.RIGHT)
 							x = lineMaxSize - currentLine.getLineLength();
 						else
 							x = 0;
@@ -471,7 +484,7 @@ public class GUIText {
 			TextMaster.moveLayers(this, oldLayer, newLayer);
 		}
 		// move to center the text properly
-		center();
+		align();
 	}
 
 	public void setColor(float r, float g, float b, float a) {
@@ -540,11 +553,6 @@ public class GUIText {
 		needsReload = true;
 	}
 
-	public void setCenteredVertical(boolean centeredVertical) {
-		this.centeredVertical = centeredVertical;
-		needsReload = true;
-	}
-
 	public void setFont(FontType font) {
 		FontType oldFont = this.font;
 		this.font = font;
@@ -575,10 +583,14 @@ public class GUIText {
 		this.lineMaxSize = lineMaxSize;
 	}
 
-	public void setTextJustify(Justify textJustify) {
+	public void setTextJustify(Alignment textJustify) {
 		// reload if the new justify setting is different
-		if (this.textJustify != textJustify) needsReload = true;
-		this.textJustify = textJustify;
+		if (this.textAlignment != textJustify) needsReload = true;
+		this.textAlignment = textJustify;
+	}
+
+	public void setAnchorPoint(AnchorPoint anchorPoint) {
+		this.anchorPoint = anchorPoint;
 	}
 
 	/**
@@ -695,28 +707,55 @@ public class GUIText {
 	}
 
 	/**
-	 * Center the text horizontally on its current position.
-	 * Should only be called once per position change.
+	 * Align the text on its current position.
+	 * Applies both the alignment and the anchor position.
 	 */
-	private void center() {
+	private void align() {
 
-		// HORIZONTAL
-		// x is easy
+		// Default alignment requirement
 		position.x -= lineMaxSize / 2;
-		// mark for reloading
-//		needsReload = true;
+		position.y -= textMeshData.textHeight() / 2;
 
-		// VERTICAL
-		if (centeredVertical) {
-			// y is also easy, now
-			try {
-				float textHeight = textMeshData.textHeight();
-				position.y -= textHeight / 2;
-			} catch (Exception e) {
-				// guess we're not ready for that yet
-				Logger.logWarning("Maybe don't center this text yet, if you can help it");
+
+		// Apply anchor to the horizontal
+		switch (anchorPoint) {
+			case TOP_LEFT, CENTER_LEFT, BOTTOM_LEFT -> {
+				position.x += lineMaxSize / 2;
+			}
+			case TOP_RIGHT, CENTER_RIGHT, BOTTOM_RIGHT -> {
+				position.x -= lineMaxSize / 2;
 			}
 		}
+
+		// apply anchor to the vertical
+		switch (anchorPoint) {
+			case TOP_LEFT, TOP_CENTER, TOP_RIGHT -> {
+				float textHeight = textMeshData.textHeight();
+				position.y += textHeight / 2;
+			}
+			case BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT -> {
+				float textHeight = textMeshData.textHeight();
+				position.y -= textHeight / 2;
+			}
+		}
+
+//		// HORIZONTAL
+//		// x is easy
+//		position.x -= lineMaxSize / 2;
+//		// mark for reloading
+////		needsReload = true;
+//
+//		// VERTICAL
+//		if (centeredVertical) {
+//			// y is also easy, now
+//			try {
+//				float textHeight = textMeshData.textHeight();
+//				position.y -= textHeight / 2;
+//			} catch (Exception e) {
+//				// guess we're not ready for that yet
+//				Logger.logWarning("Maybe don't center this text yet, if you can help it");
+//			}
+//		}
 	}
 
 	/**

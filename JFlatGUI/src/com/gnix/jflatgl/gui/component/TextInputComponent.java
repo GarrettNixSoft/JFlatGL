@@ -162,12 +162,12 @@ public class TextInputComponent extends GUIComponent {
 		this.borderWidth = borderWidth;
 	}
 
-	public void setTextJustify(GUIText.Justify justify) {
-		text.setTextJustify(justify);
+	public void setTextJustify(GUIText.Alignment alignment) {
+		text.setTextJustify(alignment);
 	}
 
-	public void setTextCenteredVertical(boolean centeredVertical) {
-		text.setCenteredVertical(centeredVertical);
+	public void setTextAnchorPoint(GUIText.AnchorPoint anchorPoint) {
+		text.setAnchorPoint(anchorPoint);
 	}
 
 	public void setTextPaddingPixels(float textPaddingPixels) {
@@ -402,7 +402,7 @@ public class TextInputComponent extends GUIComponent {
 				// if the text spilled over onto the next line, right-justify
 				if (text.getTextMeshData().textLines().size() > 1) {
 
-					text.setTextJustify(GUIText.Justify.RIGHT);
+					text.setTextJustify(GUIText.Alignment.RIGHT);
 					text.setLineMaxSize(100);
 
 					textCenterOffset = -text.getLineWidth() / 2f;
@@ -417,7 +417,7 @@ public class TextInputComponent extends GUIComponent {
 				// if the text now fits in a single line, left-justify
 				if (text.getTextMeshData().textLines().get(0).getLineLength() < textScreenSpace) {
 
-					text.setTextJustify(GUIText.Justify.LEFT);
+					text.setTextJustify(GUIText.Alignment.LEFT);
 					text.setLineMaxSize(textScreenSpace);
 					textCenterOffset = 0;
 
@@ -455,7 +455,7 @@ public class TextInputComponent extends GUIComponent {
 		float textPosX = getX();
 		float textPosY = getY();
 
-		if (text.getTextJustify() == GUIText.Justify.RIGHT) {
+		if (text.getTextAlignment() == GUIText.Alignment.RIGHT) {
 			textPosX = getRight() - borderWidth * getScale() - textPaddingPixels * getScale();
 		}
 		else {
