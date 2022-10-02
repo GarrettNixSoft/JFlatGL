@@ -58,7 +58,7 @@ public class TextComponent extends GUIComponent {
 		text.setBorderEdge(borderEdge);
 	}
 
-	public void setTextJustify(GUIText.Alignment alignment) {
+	public void setTextAlignment(GUIText.Alignment alignment) {
 		text.setTextAlignment(alignment);
 	}
 
