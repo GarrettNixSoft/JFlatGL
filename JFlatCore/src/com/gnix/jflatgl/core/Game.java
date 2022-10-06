@@ -29,6 +29,7 @@ import com.gnix.jflatgl.core.renderEngine.textures.TextureSet;
 import com.gnix.jflatgl.core.util.Logger;
 import com.gnix.jflatgl.core.util.Session;
 import com.gnix.jflatgl.extension.EngineExtension;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
@@ -419,6 +420,10 @@ public class Game {
 
 	public static int height() {
 		return Config.INTERNAL_HEIGHT;
+	}
+
+	public static Vector2f screenSize() {
+		return new Vector2f(width(), height());
 	}
 
 	public static float getFrameTime() {
