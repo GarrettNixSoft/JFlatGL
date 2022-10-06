@@ -1,8 +1,10 @@
 package com.gnix.jflatgl.core.renderEngine.fonts.fontMeshCreator;
 
 import com.gnix.jflatgl.core.Game;
+import com.gnix.jflatgl.core.renderEngine.display.DisplayManager;
 import com.gnix.jflatgl.core.renderEngine.fonts.fontRendering.TextMaster;
 import com.gnix.jflatgl.core.renderEngine.models.ModelLoader;
+import com.gnix.jflatgl.core.util.configuration.Config;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -257,6 +259,14 @@ public class GUIText {
 		return new Vector2f(stencilRegion.z, stencilRegion.w);
 	}
 
+	public float getPixelWidth() {
+		return lineMaxSize * Config.INTERNAL_WIDTH;
+	}
+
+	public float getPixelHeight() {
+		return textMeshData.textHeight() * Config.INTERNAL_HEIGHT;
+	}
+
 	public boolean nextCharNotWhitespace(int charIndex) {
 		return (charIndex < getTextString().length() && getTextString().charAt(charIndex) != ' ') || charIndex == getTextString().length();
 	}
@@ -484,6 +494,10 @@ public class GUIText {
 		}
 		// move to center the text properly
 		align();
+	}
+
+	public void setPixelPosition(float x, float y, int layer) {
+		setPosition(new Vector3f(DisplayManager.convertToTextScreenPos(new Vector2f(x, y)), layer));
 	}
 
 	public void setColor(float r, float g, float b, float a) {
