@@ -10,9 +10,15 @@ import com.gnix.jflatgl.core.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.gnix.jflatgl.core.renderEngine.textures.TextureComponent;
 import com.gnix.jflatgl.core.util.Logger;
 import com.gnix.jflatgl.gui.GUI;
+import com.gnix.jflatgl.gui.GUIAction;
 import org.joml.Vector4f;
 
 public class Checkbox extends GUIComponent {
+
+	// value changes and behavior
+	private boolean checked;
+
+	private GUIAction onValueChanged;
 
 	// constants
 	public static final int SQUARE = 0;
@@ -24,14 +30,55 @@ public class Checkbox extends GUIComponent {
 	private RenderElement outlineElement;
 	private RenderElement checkElement;
 	private float baseOpacity;
-	private float checkScale;
+	private float checkScale = 0.9f;
 
 	private final GUIText label;
 	private float fontSize;
+	private float labelPadding;
 
 	public Checkbox(String componentID, GUI parent) {
 		super(componentID, parent);
 		label = new GUIText();
+	}
+
+	// ******************************** VALUE CHANGES ********************************
+	public Checkbox onValueChanged(GUIAction action) {
+		this.onValueChanged = action;
+		return this;
+	}
+
+	/**
+	 * Configure the left click action for this Checkbox.
+	 * The checkbox will always toggle its value first before
+	 * executing the provided code.
+	 * @param action the action to take after toggling the value
+	 * @return this
+	 */
+	@Override
+	public Checkbox onLeftClick(GUIAction action) {
+		super.onLeftClick(() -> {
+			toggleChecked();
+			action.onTrigger();
+		});
+		return this;
+	}
+
+	private void toggleChecked() {
+		setChecked(!checked, true);
+	}
+
+	/**
+	 * Manually set the value of this Checkbox.
+	 * @param checked whether this Checkbox should be checked
+	 * @param trigger whether this call should trigger the onValueChanged action for this Checkbox
+	 */
+	public void setChecked(boolean checked, boolean trigger) {
+		this.checked = checked;
+		if (trigger) this.onValueChanged.onTrigger();
+	}
+
+	public boolean isChecked() {
+		return checked;
 	}
 
 	// ******************************** LABEL CONFIG ********************************
@@ -73,6 +120,18 @@ public class Checkbox extends GUIComponent {
 
 	public void setLabelBorderColor(Vector4f color) {
 		label.setOutlineColor(color);
+	}
+
+	public void setLabelAlignment(GUIText.Alignment alignment) {
+		label.setTextAlignment(alignment);
+	}
+
+	public void setLabelAnchorPoint(GUIText.AnchorPoint anchorPoint) {
+		label.setAnchorPoint(anchorPoint);
+	}
+
+	public void setLabelPadding(float labelPadding) {
+		this.labelPadding = labelPadding;
 	}
 
 	// ******************************** SHAPE CONFIG ********************************
@@ -117,8 +176,10 @@ public class Checkbox extends GUIComponent {
 				o.setLineWidth(width);
 			}
 			case CircleElement c -> {
-				float ratio = (c.getWidth() - width) / c.getWidth();
-				c.setInnerRadius(ratio);
+				float ratio = (getWidth() - width) / getWidth();
+				c.setInnerRadius(ratio * 0.97f);
+				Logger.log("Width was " + getWidth());
+				Logger.log("Set inner radius to " + ratio * 0.97f);
 			}
 			default -> Logger.logError(Logger.MEDIUM, "Tried to set the outline width of a checkbox with outline type " + outlineElement.getClass().getName());
 		}
@@ -163,8 +224,9 @@ public class Checkbox extends GUIComponent {
 	@Override
 	public void update() {
 		// update colors
-		baseElement.setColor(getSecondaryColor());
 		outlineElement.setColor(getPrimaryColor());
+		checkElement.setColor(getSecondaryColor());
+		baseElement.setColor(getTertiaryColor());
 		// update opacity
 		baseElement.setAlpha(getOpacity() * baseOpacity);
 		outlineElement.setAlpha(getOpacity());
@@ -180,22 +242,76 @@ public class Checkbox extends GUIComponent {
 		checkElement.setSize(getScaledSize().mul(checkScale));
 		label.setFontSize(fontSize * getScale());
 		// update position
-		// TODO
+		baseElement.setPosition(getX(), getY(), getLayer());
+		outlineElement.setPosition(getX(), getY(), getLayer());
+		checkElement.setPosition(getX(), getY(), getLayer());
+		// transform components
+		baseElement.transform();
+		outlineElement.transform();
+		checkElement.transform();
+		// position the label based on its anchor point
+		switch (label.getAnchorPoint()) {
+			case TOP_LEFT -> {
+				float labelX = getRight() + labelPadding;
+				float labelY = getTop();
+				label.setPixelPosition(labelX, labelY, getLayer());
+			}
+			case TOP_RIGHT -> {
+				float labelX = getLeft() - labelPadding - label.getPixelWidth();
+				float labelY = getTop();
+				label.setPixelPosition(labelX, labelY, getLayer());
+			}
+			case TOP_CENTER -> {
+				float labelX = getX();
+				float labelY = getBottom() + labelPadding;
+				label.setPixelPosition(labelX, labelY, getLayer());
+			}
+			case CENTER_LEFT -> {
+				float labelX = getRight() + labelPadding;
+				float labelY = getY();
+				label.setPixelPosition(labelX, labelY, getLayer());
+			}
+			case CENTER_RIGHT -> {
+				float labelX = getLeft() - labelPadding - label.getPixelWidth();
+				float labelY = getY();
+				label.setPixelPosition(labelX, labelY, getLayer());
+			}
+			case CENTER -> {
+				label.setPixelPosition(getX(), getY(), getLayer());
+			}
+			case BOTTOM_LEFT -> {
+				float labelX = getRight() + labelPadding;
+				float labelY = getBottom() - label.getPixelHeight();
+				label.setPixelPosition(labelX, labelY, getLayer());
+			}
+			case BOTTOM_RIGHT -> {
+				float labelX = getLeft() - labelPadding - label.getPixelWidth();
+				float labelY = getBottom() - label.getPixelHeight();
+				label.setPixelPosition(labelX, labelY, getLayer());
+			}
+			case BOTTOM_CENTER -> {
+				float labelX = getX();
+				float labelY = getTop() - labelPadding - label.getPixelHeight();
+				label.setPixelPosition(labelX, labelY, getLayer());
+			}
+		}
 	}
 
 	@Override
 	public void render() {
-		// TODO
+		if (label.isHidden()) label.show();
+		baseElement.render();
+		outlineElement.render();
+		if (checked) checkElement.render();
 	}
 
 	@Override
 	public void remove() {
-		// TODO
+		label.remove();
 	}
 
 	@Override
 	public void restore() {
-		// TODO
-
+		label.show();
 	}
 }
