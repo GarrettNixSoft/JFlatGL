@@ -1,5 +1,7 @@
 package com.gnix.jflatgl.core.renderEngine.elements;
 
+import com.gnix.jflatgl.core.Game;
+import com.gnix.jflatgl.core.camera.Camera;
 import com.gnix.jflatgl.core.renderEngine.Render;
 import com.gnix.jflatgl.core.renderEngine.display.DisplayManager;
 import com.gnix.jflatgl.core.renderEngine.display.Window;
@@ -9,6 +11,7 @@ import com.gnix.jflatgl.core.renderEngine.framebuffers.FrameBuffers;
 import com.gnix.jflatgl.core.renderEngine.renderers.MasterRenderer;
 import com.gnix.jflatgl.core.renderEngine.util.Layers;
 import com.gnix.jflatgl.core.splash.SplashScreen;
+import com.gnix.jflatgl.core.util.Logger;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -65,6 +68,32 @@ public abstract class RenderElement implements Comparable<RenderElement> {
 		}
 	}
 
+	public void render(Camera camera) {
+
+		if (onScreen(camera)) {
+			// hold on to the starting position and size
+			float startX = x;
+			float startY = y;
+			float startWidth = getWidth();
+			float startHeight = getHeight();
+
+			// move and scale to the camera position and zoom level
+			setPosition(camera.worldXToScreenX(x), camera.worldYToScreenY(y), getLayer());
+			setSize(width * camera.getScale(), height * camera.getScale());
+			transform();
+
+			// render
+			render();
+
+			// restore the original position and size
+			x = startX;
+			y = startY;
+			width = startWidth;
+			height = startHeight;
+		}
+
+	}
+
 	/**
 	 * Call transform() and then render this element.
 	 */
@@ -94,6 +123,29 @@ public abstract class RenderElement implements Comparable<RenderElement> {
 		position = FrameBuffers.convertToFramebufferPosition(x, y, layer, width, height, centered, buffer);
 		scale = FrameBuffers.convertToFramebufferScale(width, height, buffer);
 //		scale = new Vector2f(width, height); // TODO ?
+	}
+
+	// screen bounds
+	public boolean notOnScreen(Camera camera) {
+
+		float screenX = camera.worldXToScreenX(x);
+		float screenY = camera.worldYToScreenY(y);
+		float screenWidth = width * camera.getScale();
+		float screenHeight = height * camera.getScale();
+
+		if (!centered) {
+			screenX += screenWidth / 2;
+			screenY += screenHeight / 2;
+		}
+
+		return screenX + screenWidth / 2 < 0 ||
+				screenX - screenWidth / 2 > Game.width() ||
+				screenY + screenHeight / 2 < 0 ||
+				screenY - screenHeight / 2 > Game.height();
+	}
+
+	public boolean onScreen(Camera camera) { // for ease of reading
+		return !notOnScreen(camera);
 	}
 
 	// GETTERS
@@ -131,7 +183,7 @@ public abstract class RenderElement implements Comparable<RenderElement> {
 	}
 
 	public Vector3f getRenderPosition() {
-		return new Vector3f(position).setComponent(2, MasterRenderer.primaryWindowRenderer.getScreenZ(layer));
+		return new Vector3f(position).setComponent(2, MasterRenderer.getScreenZ(layer));
 	}
 
 	// SETTERS

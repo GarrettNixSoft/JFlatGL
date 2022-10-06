@@ -233,15 +233,21 @@ public abstract class Entity {
 	}
 
 	// screen bounds
-	public boolean notOnScreen() {
-		return x + width / 2 < 0 ||
-				x - width / 2 > DisplayManager.getPrimaryGameWindow().getWidth() ||
-				y + height / 2 < 0 ||
-				y - height / 2 > DisplayManager.getPrimaryGameWindow().getHeight();
+	public boolean notOnScreen(Camera camera) {
+
+		float screenX = camera.worldXToScreenX(x);
+		float screenY = camera.worldYToScreenY(y);
+		float screenWidth = width * camera.getScale();
+		float screenHeight = height * camera.getScale();
+
+		return screenX + screenWidth / 2 < 0 ||
+				screenX - screenWidth / 2 > Game.width() ||
+				screenY + screenHeight / 2 < 0 ||
+				screenY - screenHeight / 2 > Game.height();
 	}
 
-	public boolean onScreen() { // for ease of reading
-		return !notOnScreen();
+	public boolean onScreen(Camera camera) { // for ease of reading
+		return !notOnScreen(camera);
 	}
 
 }
