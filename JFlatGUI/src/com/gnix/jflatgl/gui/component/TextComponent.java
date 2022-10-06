@@ -24,12 +24,12 @@ public class TextComponent extends GUIComponent {
 	}
 
 	public TextComponent text(String textStr) {
-		text.replaceText(textStr);
+		setText(textStr);
 		return this;
 	}
 
 	public TextComponent font(FontType font) {
-		text.setFont(font);
+		setFont(font);
 		return this;
 	}
 
@@ -38,15 +38,23 @@ public class TextComponent extends GUIComponent {
 		return this;
 	}
 
+	public void setText(String textStr) {
+		text.replaceText(textStr);
+	}
+
+	public void setFont(FontType font) {
+		text.setFont(font);
+	}
+
 	public void setFontSize(float fontSize) {
 		defaultTextSize = fontSize;
 	}
 
-	public void setWidth(float width) {
+	public void setTextWidth(float width) {
 		text.setWidth(width);
 	}
 
-	public void setEdge(float edge) {
+	public void setTextEdge(float edge) {
 		text.setEdge(edge);
 	}
 
