@@ -15,7 +15,9 @@ public class CircleElement extends GeometryElement {
 	public CircleElement() {
 		super(Colors.INVISIBLE, 0, 0, 0, true);
 		center = new Vector2f();
-		portion = new Vector2f();
+		this.innerRadius = 0;
+		this.outerRadius = 0.97f;
+		portion = new Vector2f(1, 0);
 	}
 
 	public CircleElement(Vector4f color, float x, float y, int layer, float outerRadius) {
