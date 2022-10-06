@@ -505,6 +505,7 @@ public class Game {
 		TextMaster.cleanUp();
 		AudioMaster.cleanUp();
 		TextureOutliner.cleanUp();
+		ModelLoader.cleanUp();
 
 		// Clean up GLFW
 		DisplayManager.cleanUp();
@@ -515,6 +516,9 @@ public class Game {
 
 		// save user settings/preferences and game flags
 		Settings.save();
+
+		// undo load flags
+		GameLoader.LOAD_FINALIZED = false;
 	}
 
 }
