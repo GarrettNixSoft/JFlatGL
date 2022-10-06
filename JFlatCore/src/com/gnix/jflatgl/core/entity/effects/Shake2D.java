@@ -1,14 +1,14 @@
 package com.gnix.jflatgl.core.entity.effects;
 
-import com.gnix.jflatgl.core.entity.Entity;
+import com.gnix.jflatgl.core.camera.Camera;
 import org.joml.Vector2f;
 
-public class CameraShake extends EntityEffect {
+public class Shake2D extends Effect {
 
 	private final ShakeEffect xShake, yShake;
+	private boolean active;
 
-	public CameraShake(Entity parent) {
-		super(parent);
+	public Shake2D() {
 		xShake = new ShakeEffect();
 		yShake = new ShakeEffect();
 		yShake.synchronize(xShake);
@@ -30,10 +30,9 @@ public class CameraShake extends EntityEffect {
 	}
 
 	public Vector2f getOffset() {
-//		if (!active) return new Vector2f(0, 0);
-//		else
+		if (!active) return new Vector2f(0, 0);
 //		Logger.log(xShake.getOffset() + "," + yShake.getOffset());
-			return new Vector2f(xShake.getOffset(), yShake.getOffset());
+		return new Vector2f(xShake.getOffset(), yShake.getOffset());
 	}
 
 	@Override
