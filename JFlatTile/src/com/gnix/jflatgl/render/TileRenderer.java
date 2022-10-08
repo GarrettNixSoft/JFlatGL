@@ -22,12 +22,11 @@ import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class TileRenderer extends ElementRenderer {
 
 	private static final float[] positions = {-1, 1, -1, -1, 1, 1, 1, -1};
-	private static final int MAX_INSTANCES = 10000; // Up to 10000 tiles on screen at once
+	private static final int MAX_INSTANCES = 64 * 1000; // Up to this many tiles on screen at once
 	private static final int INSTANCE_DATA_LENGTH = 55;
 	// TRANSFORMATION_MATRIX (16), TEX COORDS (4), OVERLAY_TRANSFORMATION_MATRIX (16),
 	// DO_COLOR_SWAP (1), R_CHANNEL_COLOR (4), G_CHANNEL_COLOR (4), B_CHANNEL_COLOR (4),
