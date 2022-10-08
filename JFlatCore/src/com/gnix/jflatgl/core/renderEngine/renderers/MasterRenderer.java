@@ -6,9 +6,9 @@ import com.gnix.jflatgl.core.renderEngine.display.Window;
 import com.gnix.jflatgl.core.renderEngine.RenderLayer;
 import com.gnix.jflatgl.core.renderEngine.batches.opaque.*;
 import com.gnix.jflatgl.core.renderEngine.batches.transparent.*;
+import com.gnix.jflatgl.core.renderEngine.elements.RenderElement;
 import com.gnix.jflatgl.core.renderEngine.elements.TextureElement;
 import com.gnix.jflatgl.core.renderEngine.elements.geometry.*;
-import com.gnix.jflatgl.core.renderEngine.elements.tile.TileElement;
 import com.gnix.jflatgl.core.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.gnix.jflatgl.core.renderEngine.fonts.fontRendering.FontRenderer;
 import com.gnix.jflatgl.core.renderEngine.fonts.fontRendering.TextMaster;
@@ -20,7 +20,9 @@ import com.gnix.jflatgl.core.renderEngine.ppfx.PostProcessing;
 import com.gnix.jflatgl.core.renderEngine.util.Layers;
 import com.gnix.jflatgl.core.splash.SplashScreen;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
@@ -45,7 +47,6 @@ public class MasterRenderer {
 	// element renderers
 	private final TextureRenderer textureRenderer;
 	private final GeometryRenderer geometryRenderer;
-	private final TileRenderer tileRenderer;
 
 	private final ParticleMaster particleMaster;
 
@@ -56,18 +57,12 @@ public class MasterRenderer {
 	// Render batches; mapped by layer index
 	private final Map<Integer, TextureBatchOpaque> opaqueTextureBatches = new HashMap<>();
 	private final Map<Integer, TextureBatchTransparent> transparentTextureBatches = new HashMap<>();
-	private final Map<Integer, TileBatchOpaque> opaqueTileBatches = new HashMap<>();
-	private final Map<Integer, TileBatchTransparent> transparentTileBatches = new HashMap<>();
-	private final Map<Integer, RectBatchOpaque> opaqueRectBatches = new HashMap<>();
-	private final Map<Integer, RectBatchTransparent> transparentRectBatches = new HashMap<>();
-	private final Map<Integer, CircleBatchOpaque> opaqueCircleBatches = new HashMap<>();
-	private final Map<Integer, CircleBatchTransparent> transparentCircleBatches = new HashMap<>();
-	private final Map<Integer, LineBatchOpaque> opaqueLineBatches = new HashMap<>();
-	private final Map<Integer, LineBatchTransparent> transparentLineBatches = new HashMap<>();
-	private final Map<Integer, OutlineBatchOpaque> opaqueOutlineBatches = new HashMap<>();
-	private final Map<Integer, OutlineBatchTransparent> transparentOutlineBatches = new HashMap<>();
+	private final Map<Integer, GeometryBatchOpaque> opaqueGeometryBatches = new HashMap<>();
+	private final Map<Integer, GeometryBatchTransparent> transparentGeometryBatches = new HashMap<>();
 
-	private final Map<Integer, RectLightBatchTransparent> rectLightBatches = new HashMap<>();
+	// RENDER EXTENSIONS
+	private final Map<Class<? extends RenderElement>, RenderExtension> renderExtensions = new HashMap<>();
+
 
 	// Post-processing stage
 	private PostProcessing postProcessor;
@@ -89,7 +84,6 @@ public class MasterRenderer {
 		// create the renderers
 		textureRenderer = new TextureRenderer();
 		geometryRenderer = new GeometryRenderer();
-		tileRenderer = new TileRenderer();
 		particleMaster = new ParticleMaster(RENDER_LAYERS);
 		particleMaster.init();
 		layers = new RenderLayer[Layers.NUM_LAYERS];
@@ -112,7 +106,6 @@ public class MasterRenderer {
 		// create the renderers
 		textureRenderer = new TextureRenderer();
 		geometryRenderer = new GeometryRenderer();
-		tileRenderer = new TileRenderer();
 		particleMaster = new ParticleMaster(RENDER_LAYERS);
 		particleMaster.init();
 		layers = new RenderLayer[Layers.NUM_LAYERS];
@@ -120,6 +113,10 @@ public class MasterRenderer {
 		// add to instance list
 		instances.put(window.getWindowID(), this);
 		this.windowTarget = window.getWindowID();
+	}
+
+	public static void addRenderExtension(RenderExtension renderExtension) {
+		currentRenderTarget.renderExtensions.put(renderExtension.getType(), renderExtension);
 	}
 
 	public void generateUnregisteredSceneBuffer(Window window) {
@@ -174,18 +171,8 @@ public class MasterRenderer {
 			// create the batches that will be used to populate the layer
 			opaqueTextureBatches.put(i, new TextureBatchOpaque(i, textureRenderer));
 			transparentTextureBatches.put(i, new TextureBatchTransparent(i, textureRenderer));
-			opaqueTileBatches.put(i, new TileBatchOpaque(i, tileRenderer));
-			transparentTileBatches.put(i, new TileBatchTransparent(i, tileRenderer));
-			opaqueRectBatches.put(i, new RectBatchOpaque(i, geometryRenderer));
-			transparentRectBatches.put(i, new RectBatchTransparent(i, geometryRenderer));
-			opaqueCircleBatches.put(i, new CircleBatchOpaque(i, geometryRenderer));
-			transparentCircleBatches.put(i, new CircleBatchTransparent(i, geometryRenderer));
-			opaqueLineBatches.put(i, new LineBatchOpaque(i, geometryRenderer));
-			transparentLineBatches.put(i, new LineBatchTransparent(i, geometryRenderer));
-			opaqueOutlineBatches.put(i, new OutlineBatchOpaque(i, geometryRenderer));
-			transparentOutlineBatches.put(i, new OutlineBatchTransparent(i, geometryRenderer));
-
-			rectLightBatches.put(i, new RectLightBatchTransparent(i, geometryRenderer));
+			opaqueGeometryBatches.put(i, new GeometryBatchOpaque(i, geometryRenderer));
+			transparentGeometryBatches.put(i, new GeometryBatchTransparent(i, geometryRenderer));
 		}
 	}
 
@@ -210,37 +197,21 @@ public class MasterRenderer {
 			opaqueTextureBatches.get(layer).addElement(element);
 	}
 
-	public void addTileElement(TileElement element) {
-		// get the layer this element will be rendered in
-		int layer = element.getLayer();
-		// add this element to the appropriate batch
-		if (element.hasTransparency())
-			transparentTileBatches.get(layer).addElement(element);
-		else
-			opaqueTileBatches.get(layer).addElement(element);
-	}
-
-	public void addTextElement(GUIText text) {
-		// get the layer this element will be rendered in
-		int layer = (int) text.getPosition().z();
-//		TextMaster.
-	}
-
 	public void addRectElement(RectElement element) {
 		// get the layer this element will be rendered in
 		int layer = element.getLayer();
 		// add this element to the appropriate batch
 		if (element.hasTransparency())
-			transparentRectBatches.get(layer).addElement(element);
+			transparentGeometryBatches.get(layer).addElement(element);
 		else
-			opaqueRectBatches.get(layer).addElement(element);
+			opaqueGeometryBatches.get(layer).addElement(element);
 	}
 
 	public void addRectLightElement(RectElementLight element) {
 		// get the layer this element will be rendered in
 		int layer = element.getLayer();
 		// add this element to the appropriate batch
-		rectLightBatches.get(layer).addElement(element);
+		transparentGeometryBatches.get(layer).addElement(element);
 	}
 
 	public void addCircleElement(CircleElement element) {
@@ -248,9 +219,9 @@ public class MasterRenderer {
 		int layer = element.getLayer();
 		// add this element to the appropriate batch
 		if (element.hasTransparency())
-			transparentCircleBatches.get(layer).addElement(element);
+			transparentGeometryBatches.get(layer).addElement(element);
 		else
-			opaqueCircleBatches.get(layer).addElement(element);
+			opaqueGeometryBatches.get(layer).addElement(element);
 	}
 
 	public void addLineElement(LineElement element) {
@@ -258,9 +229,9 @@ public class MasterRenderer {
 		int layer = element.getLayer();
 		// add this element to the appropriate batch
 		if (element.hasTransparency())
-			transparentLineBatches.get(layer).addElement(element);
+			transparentGeometryBatches.get(layer).addElement(element);
 		else
-			opaqueLineBatches.get(layer).addElement(element);
+			opaqueGeometryBatches.get(layer).addElement(element);
 	}
 
 	public void addOutlineElement(OutlineElement element) {
@@ -268,9 +239,16 @@ public class MasterRenderer {
 		int layer = element.getLayer();
 		// add this element to the appropriate batch
 		if (element.hasTransparency())
-			transparentOutlineBatches.get(layer).addElement(element);
+			transparentGeometryBatches.get(layer).addElement(element);
 		else
-			opaqueOutlineBatches.get(layer).addElement(element);
+			opaqueGeometryBatches.get(layer).addElement(element);
+	}
+
+	public void tryAddExtensionElement(RenderElement element) {
+		if (renderExtensions.containsKey(element.getClass())) {
+			RenderExtension extension = renderExtensions.get(element.getClass());
+			extension.addElement(element);
+		}
 	}
 
 	public void addParticleInternal(Particle p) {
@@ -348,18 +326,13 @@ public class MasterRenderer {
 		for (int i = 0; i < RENDER_LAYERS; ++i) {
 			RenderLayer layer = layers[i];
 			layer.addOpaqueBatch(opaqueTextureBatches.get(i));
-			layer.addOpaqueBatch(opaqueTileBatches.get(i));
-			layer.addOpaqueBatch(opaqueRectBatches.get(i));
-			layer.addOpaqueBatch(opaqueCircleBatches.get(i));
-			layer.addOpaqueBatch(opaqueLineBatches.get(i));
-			layer.addOpaqueBatch(opaqueOutlineBatches.get(i));
+			layer.addOpaqueBatch(opaqueGeometryBatches.get(i));
 			layer.addTransparentBatch(transparentTextureBatches.get(i));
-			layer.addTransparentBatch(transparentTileBatches.get(i));
-			layer.addTransparentBatch(transparentRectBatches.get(i));
-			layer.addTransparentBatch(transparentCircleBatches.get(i));
-			layer.addTransparentBatch(transparentLineBatches.get(i));
-			layer.addTransparentBatch(transparentOutlineBatches.get(i));
-			layer.addTransparentBatch(rectLightBatches.get(i));
+			layer.addTransparentBatch(transparentGeometryBatches.get(i));
+			for (RenderExtension extension : renderExtensions.values()) {
+				layer.addOpaqueBatch(extension.getOpaqueBatches().get(i));
+				layer.addTransparentBatch(extension.getTransparentBatches().get(i));
+			}
 		}
 	}
 
@@ -367,17 +340,12 @@ public class MasterRenderer {
 		for (int i = 0; i < RENDER_LAYERS; ++i) {
 			opaqueTextureBatches.get(i).clear();
 			transparentTextureBatches.get(i).clear();
-			opaqueTileBatches.get(i).clear();
-			transparentTileBatches.get(i).clear();
-			opaqueRectBatches.get(i).clear();
-			transparentRectBatches.get(i).clear();
-			opaqueCircleBatches.get(i).clear();
-			transparentCircleBatches.get(i).clear();
-			opaqueLineBatches.get(i).clear();
-			transparentLineBatches.get(i).clear();
-			opaqueOutlineBatches.get(i).clear();
-			transparentOutlineBatches.get(i).clear();
-			rectLightBatches.get(i).clear();
+			opaqueGeometryBatches.get(i).clear();
+			transparentGeometryBatches.get(i).clear();
+			for (RenderExtension extension : renderExtensions.values()) {
+				extension.getOpaqueBatches().get(i).clear();
+				extension.getTransparentBatches().get(i).clear();
+			}
 		}
 	}
 
@@ -392,7 +360,6 @@ public class MasterRenderer {
 		sceneBuffer.cleanUp();
 		textureRenderer.cleanUp();
 		geometryRenderer.cleanUp();
-		tileRenderer.cleanUp();
 		particleMaster.cleanUp();
 	}
 

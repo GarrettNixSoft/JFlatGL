@@ -7,6 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/JFlatGL.iml" filepath="$PROJECT_DIR$/JFlatGL.iml" />
       <module fileurl="file://$PROJECT_DIR$/JFlatGLTest/JFlatGLTest.iml" filepath="$PROJECT_DIR$/JFlatGLTest/JFlatGLTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/JFlatGUI/JFlatGUI.iml" filepath="$PROJECT_DIR$/JFlatGUI/JFlatGUI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JFlatTile/JFlatTile.iml" filepath="$PROJECT_DIR$/JFlatTile/JFlatTile.iml" />
     </modules>
   </component>
 </project>

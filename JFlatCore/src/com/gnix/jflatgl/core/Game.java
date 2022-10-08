@@ -14,6 +14,7 @@ import com.gnix.jflatgl.core.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.gnix.jflatgl.core.renderEngine.models.ModelLoader;
 import com.gnix.jflatgl.core.renderEngine.renderers.MasterRenderer;
 import com.gnix.jflatgl.core.renderEngine.textures.TextureOutliner;
+import com.gnix.jflatgl.core.renderEngine.util.Layers;
 import com.gnix.jflatgl.core.splash.SplashRenderer;
 import com.gnix.jflatgl.core.splash.SplashScreen;
 import com.gnix.jflatgl.core.util.color.Colors;
@@ -180,6 +181,7 @@ public class Game {
 
 		// Init FPS display
 		instance.fpsDisplay = new GUIText("FPS: ", 0.5f, Game.getFont("default"), new Vector3f(0, 0, 0), 1);
+		instance.fpsDisplay.setLayer(Layers.TOP_LAYER);
 		instance.fpsDisplay.setColor(Colors.GREEN);
 		instance.fpsDisplay.setWidth(0.5f);
 		instance.fpsDisplay.setEdge(0.2f);

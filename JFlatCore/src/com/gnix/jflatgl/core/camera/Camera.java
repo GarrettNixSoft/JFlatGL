@@ -1,15 +1,9 @@
 package com.gnix.jflatgl.core.camera;
 
 import com.gnix.jflatgl.core.Game;
-import com.gnix.jflatgl.core.entity.Entity;
-import com.gnix.jflatgl.core.renderEngine.display.DisplayManager;
 import com.gnix.jflatgl.core.entity.effects.Shake2D;
 import com.gnix.jflatgl.core.util.Logger;
-import com.gnix.jflatgl.core.util.interpolators.FadeFloat;
-import com.gnix.jflatgl.core.util.interpolators.FadeInFloat;
-import com.gnix.jflatgl.core.util.interpolators.FloatInterpolator;
 import com.gnix.jflatgl.core.util.interpolators.TransitionFloat;
-import com.gnix.jflatgl.core.util.math.MathUtil;
 import com.gnix.jflatgl.core.util.time.Timer;
 import org.joml.Vector2f;
 
@@ -21,7 +15,7 @@ public class Camera {
 	// camera controls world offsets and scaling (zoom)
 	private float xOffset, yOffset;
 	private float scale = 1;
-	private final float minScale = 0.3f, maxScale = 3f;
+	private final float minScale = 0.1f, maxScale = 3f;
 
 	private TransitionFloat zoomInterpolator;
 
@@ -29,6 +23,9 @@ public class Camera {
 	private int worldWidth, worldHeight;
 	private int xmin, xmax;
 	private int ymin, ymax;
+
+	// viewport
+	private int viewportWidth, viewportHeight;
 
 	// movement mode(s)
 	private int currentMode;
@@ -154,11 +151,13 @@ public class Camera {
 			// apply the new scale
 			float oldScale = scale;
 			scale = zoomInterpolator.getValue();
+			setDimensions();
 			// adjust the offset to keep the center in the same spot
 			float centerXAfterScale = screenXToWorldX(Game.centerX());
 			float centerYAfterScale = screenYToWorldY(Game.centerY());
 			xOffset += (centerXBeforeScale - centerXAfterScale);
 			yOffset += (centerYBeforeScale - centerYAfterScale);
+			fixBounds();
 			// log call
 			Logger.log("Scale: " + scale + " (Delta: " + (scale - oldScale) + ")");
 			Logger.log("Offsets: %.2f, %.2f", xOffset, yOffset);
@@ -166,18 +165,26 @@ public class Camera {
 	}
 
 	// ******************************** INTERNAL METHODS ********************************
-	public void updateBounds(int worldWidth, int worldHeight) {
+	public void setWorldSize(int worldWidth, int worldHeight) {
 		this.worldWidth = worldWidth;
 		this.worldHeight = worldHeight;
+		setDimensions();
+	}
+
+	public void setViewportSize(int viewportWidth, int viewportHeight) {
+		this.viewportWidth = viewportWidth;
+		this.viewportHeight = viewportHeight;
 		setDimensions();
 	}
 
 	private void setDimensions() {
 
 		xmin = 0;
-		xmax = (int) (worldWidth / scale);
+		xmax = (int) ((worldWidth * scale - viewportWidth) / scale);
+//		xmax = (int) (worldWidth / scale - viewportWidth);
 		ymin = 0;
-		ymax = (int) (worldHeight / scale);
+		ymax = (int) ((worldHeight * scale - viewportHeight) / scale);
+//		ymax = (int) (worldHeight / scale - viewportHeight);
 
 		Logger.log("Max offsets: " + xmax + ", " + ymax);
 

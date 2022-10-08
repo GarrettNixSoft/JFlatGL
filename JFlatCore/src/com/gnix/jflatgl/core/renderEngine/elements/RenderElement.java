@@ -9,6 +9,7 @@ import com.gnix.jflatgl.core.renderEngine.elements.geometry.*;
 import com.gnix.jflatgl.core.renderEngine.framebuffers.FrameBuffer;
 import com.gnix.jflatgl.core.renderEngine.framebuffers.FrameBuffers;
 import com.gnix.jflatgl.core.renderEngine.renderers.MasterRenderer;
+import com.gnix.jflatgl.core.renderEngine.renderers.TextureRenderer;
 import com.gnix.jflatgl.core.renderEngine.util.Layers;
 import com.gnix.jflatgl.core.splash.SplashScreen;
 import com.gnix.jflatgl.core.util.Logger;
@@ -63,8 +64,14 @@ public abstract class RenderElement implements Comparable<RenderElement> {
 			case OutlineElement o -> Render.drawOutline(o);
 			case RectElementLight rl -> Render.drawLightRect(rl);
 			case RectElement r -> Render.drawRect(r);
-			case TextureElement tex -> Render.drawImage(tex);
-			default -> throw new IllegalStateException("Unexpected value: " + this);
+			case TextureElement tex -> {
+				if (tex.getClass() == TextureElement.class)
+					Render.drawImage(tex);
+				else {
+					Render.drawElement(tex);
+				}
+			}
+			default -> Render.drawElement(this);
 		}
 	}
 
@@ -185,6 +192,8 @@ public abstract class RenderElement implements Comparable<RenderElement> {
 	public Vector3f getRenderPosition() {
 		return new Vector3f(position).setComponent(2, MasterRenderer.getScreenZ(layer));
 	}
+
+	public abstract boolean hasTransparency();
 
 	// SETTERS
 	public void setX(float x) {

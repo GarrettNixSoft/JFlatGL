@@ -1,18 +1,22 @@
-package com.gnix.jflatgl.core.renderEngine.renderers;
+package com.gnix.jflatgl.render;
 
-import com.gnix.jflatgl.core.renderEngine.elements.tile.TileElement;
+import com.gnix.jflatgl.core.renderEngine.elements.RenderElement;
 import com.gnix.jflatgl.core.renderEngine.lights.LightMaster;
 import com.gnix.jflatgl.core.renderEngine.models.ModelLoader;
 import com.gnix.jflatgl.core.renderEngine.models.QuadModel;
-import com.gnix.jflatgl.core.renderEngine.shaders.textures.TileShader;
+import com.gnix.jflatgl.core.renderEngine.renderers.ElementRenderer;
+import com.gnix.jflatgl.core.renderEngine.renderers.MasterRenderer;
 import com.gnix.jflatgl.core.renderEngine.textures.TextureAtlas;
 import com.gnix.jflatgl.core.renderEngine.textures.TextureComponent;
+import com.gnix.jflatgl.core.util.Logger;
 import com.gnix.jflatgl.core.util.conversion.Converter;
 import com.gnix.jflatgl.core.util.math.MathUtil;
 import com.gnix.jflatgl.core.util.math.MatrixUtils;
+import com.gnix.jflatgl.element.TileElement;
 import org.joml.Matrix4f;
 import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.*;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
@@ -20,14 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL13.*;
-import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL31.glDrawArraysInstanced;
-
-public class TileRenderer {
+public class TileRenderer extends ElementRenderer {
 
 	private static final float[] positions = {-1, 1, -1, -1, 1, 1, 1, -1};
 	private static final int MAX_INSTANCES = 10000; // Up to 10000 tiles on screen at once
@@ -70,33 +67,29 @@ public class TileRenderer {
 		shader = new TileShader();
 	}
 
-	/**
-	 * Render all Tile Elements in the HashMap in batches using instanced rendering.
-	 * @param tileElements A HashMap containing lists of tile elements that all use one texture per list.
-	 */
-	public void render(Map<TextureAtlas, List<TileElement>> tileElements, boolean depthWritingEnabled) {
+	@Override
+	public void renderAllElements(List<? extends RenderElement> elements, boolean depthWritingEnabled) {
+
+		// don't attempt to render nothing
+		if (elements.isEmpty()) return;
 
 		prepare(depthWritingEnabled);
 
-		for (TextureAtlas textureAtlas : tileElements.keySet()) {
+		// fetch the texture atlas
+		TextureAtlas textureAtlas = ((TileElement) elements.get(0)).getTextureAtlas();
 
-			// bind the texture used for this batch
-			bindTexture(textureAtlas);
+		// bind the texture used for this batch
+		bindTexture(textureAtlas);
 
-			// get this batch of texture elements
-			List<TileElement> elementList = tileElements.get(textureAtlas);
-
-			// render this list
-			render(elementList);
-
-		}
+		// render this list
+		render(elements);
 
 		finishRendering();
 
 	}
 
-	private void render(List<TileElement> elementList) {
-		// known: all elements in elementList have the same texture atlas
+	private void render(List<? extends RenderElement> elementList) {
+		// known: all elements in elementList have the same texture atlas (NO LONGER KNOWN 10/7/2022)
 
 		// hashmap to store lists elements with unique overlay textures
 		HashMap<TextureComponent, List<TileElement>> overlayTileElements = new HashMap<>();
@@ -107,22 +100,25 @@ public class TileRenderer {
 		pointer = 0;
 
 		// for each element in this batch, add its data to the vbo array
-		for (TileElement element : elementList) {
-			if (element.doOverlay()) {
-				List<TileElement> overlayList = overlayTileElements.computeIfAbsent(element.getOverlayTexture(), k -> new ArrayList<>());
-				overlayList.add(element);
-				numOverlayElements++;
+		for (RenderElement element : elementList) {
+			if (element instanceof TileElement tileElement) {
+				if (tileElement.doOverlay()) {
+					List<TileElement> overlayList = overlayTileElements.computeIfAbsent(tileElement.getOverlayTexture(), k -> new ArrayList<>());
+					overlayList.add(tileElement);
+					numOverlayElements++;
+				}
+				else {
+					updateElementData(tileElement, vboData);
+				}
 			}
-			else {
-				updateElementData(element, vboData);
-			}
+
 		}
 
 		// send all the vbo data to the GPU
 		ModelLoader.updateVBO(vbo, vboData, buffer);
 
 		// render all particles in this batch in one go!
-		glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, quad.vertexCount(), elementList.size() - numOverlayElements);
+		GL31.glDrawArraysInstanced(GL11.GL_TRIANGLE_STRIP, 0, quad.vertexCount(), elementList.size() - numOverlayElements);
 
 		// render all overlay tile elements
 		renderOverlayElements(overlayTileElements);
@@ -154,7 +150,7 @@ public class TileRenderer {
 			ModelLoader.updateVBO(vbo, vboData, buffer);
 
 			// render all particles in this batch in one go!
-			glDrawArraysInstanced(GL_TRIANGLE_STRIP, 0, quad.vertexCount(), tileElementList.size());
+			GL31.glDrawArraysInstanced(GL11.GL_TRIANGLE_STRIP, 0, quad.vertexCount(), tileElementList.size());
 
 		}
 
@@ -169,14 +165,14 @@ public class TileRenderer {
 	 * @param textureAtlas The TextureAtlas to bind for the shaders.
 	 */
 	private void bindTexture(TextureAtlas textureAtlas) {
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, textureAtlas.texture().id());
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GL13.glActiveTexture(GL13.GL_TEXTURE0);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureAtlas.texture().id());
 	}
 
 	private void bindOverlayTexture(TextureComponent texture) {
-		glActiveTexture(GL_TEXTURE1);
-		glBindTexture(GL_TEXTURE_2D, texture.id());
+		GL13.glActiveTexture(GL13.GL_TEXTURE1);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.id());
 	}
 
 	/**
@@ -240,12 +236,12 @@ public class TileRenderer {
 	 */
 	private void prepare(boolean depthWritingEnabled) {
 		shader.start();
-		glBindVertexArray(quad.vaoID());
+		GL30.glBindVertexArray(quad.vaoID());
 		for (int i = 0; i <= 15; i++)
-			glEnableVertexAttribArray(i);
-		glEnable(GL_BLEND);
-		glEnable(GL_DEPTH_TEST);
-		glDepthMask(depthWritingEnabled);
+			GL20.glEnableVertexAttribArray(i);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+		GL11.glDepthMask(depthWritingEnabled);
 		// send the light information to the shaders
 		shader.loadScreenRatio(MasterRenderer.getTargetWindow().getScreenRatio());
 		shader.loadAmbientLight(LightMaster.getAmbientLight());
@@ -257,14 +253,14 @@ public class TileRenderer {
 	 */
 	private void finishRendering() {
 		// unbind any overlay textures
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, 0);
+		GL13.glActiveTexture(GL13.GL_TEXTURE0);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 		// disable all the stuff
-		glDisable(GL_DEPTH_TEST);
-		glDisable(GL_BLEND);
+		GL11.glDisable(GL11.GL_DEPTH_TEST);
+		GL11.glDisable(GL11.GL_BLEND);
 		for (int i = 0; i <= 15; i++)
-			glDisableVertexAttribArray(i);
-		glBindVertexArray(0);
+			GL20.glDisableVertexAttribArray(i);
+		GL30.glBindVertexArray(0);
 		shader.stop();
 	}
 

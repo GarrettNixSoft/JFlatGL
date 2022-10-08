@@ -1,5 +1,7 @@
-package com.gnix.jflatgl.core.renderEngine.elements.tile;
+package com.gnix.jflatgl.element;
 
+import com.gnix.jflatgl.core.camera.Camera;
+import com.gnix.jflatgl.core.renderEngine.Render;
 import com.gnix.jflatgl.core.renderEngine.elements.TextureElement;
 import com.gnix.jflatgl.core.renderEngine.textures.TextureAtlas;
 import com.gnix.jflatgl.core.renderEngine.textures.TextureComponent;
@@ -55,21 +57,26 @@ public class TileElement extends TextureElement {
 		setTextureOffset(atlasIndex);
 	}
 
+	// ******************************** RENDERING ********************************
+	public void render(Camera camera) {
+//		Render.drawElement(this);
+		super.render(camera);
+	}
+
+	// ******************************** SELECTING TILE TEXTURE ********************************
 	public void setTextureOffset(int index) {
-		// TODO rewrite this to calculate new coordinates
 		this.atlasIndex = index;
 		int column = index % textureAtlas.numRows();
 		int row = index / textureAtlas.numRows();
 		int tileOffsetPixels = (int) (width * 0.05);
-		float tileOffsetCoords = (float) tileOffsetPixels / textureAtlas.width(); // curse you, past me, for not explaining what this does
+		float tileOffsetCoords = (float) tileOffsetPixels / textureAtlas.width(); // curse you, past me, for not explaining what this does		// you idiot, it divides pixels by width to get the [0..1] the shader expects
 		texOffsets.x = (float) column / textureAtlas.numRows() + tileOffsetCoords;
 		texOffsets.y = (float) row / textureAtlas.numRows() + tileOffsetCoords;
 		texOffsets.z = texOffsets.x + 1f / textureAtlas.numRows() - tileOffsetCoords * 2;
 		texOffsets.w = texOffsets.y + 1f / textureAtlas.numRows() - tileOffsetCoords * 2;
-//		Logger.log("Offsets for index " + index + " computed: " + offset);
 	}
 
-	// GETTERS
+	// ******************************** GETTERS ********************************
 	public TextureAtlas getTextureAtlas() {
 		if (atlasIndex < 0) return alternateAtlas;
 		else return textureAtlas;
@@ -84,7 +91,7 @@ public class TileElement extends TextureElement {
 	public float getOverlayAlpha() { return overlayAlpha; }
 	public float getOverlayRotation() { return overlayRotation; }
 
-	// SETTERS
+	// ******************************** SETTERS ********************************
 	public void setTileSize(float tileSize) {
 		setSize(tileSize, tileSize);
 	}

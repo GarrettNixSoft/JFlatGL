@@ -1,4 +1,4 @@
-package com.gnix.jflatgl.core.renderEngine.elements.tile;
+package com.gnix.jflatgl.element;
 
 import com.gnix.jflatgl.core.entity.EntityActor;
 

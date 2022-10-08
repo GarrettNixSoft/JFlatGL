@@ -1,4 +1,4 @@
-package com.gnix.jflatgl.core.renderEngine.shaders.textures;
+package com.gnix.jflatgl.render;
 
 import com.gnix.jflatgl.core.renderEngine.lights.Light;
 import com.gnix.jflatgl.core.renderEngine.lights.LightMaster;
@@ -10,8 +10,8 @@ import java.util.List;
 
 public class TileShader extends ShaderProgram {
 
-	private static final String VERTEX_FILE = SHADER_PATH + "tileVertex.glsl";
-	private static final String FRAGMENT_FILE = SHADER_PATH + "tileFragment.glsl";
+	private static final String VERTEX_FILE = "/com/gnix/jflatgl/render/shader/tileVertex.glsl";
+	private static final String FRAGMENT_FILE = "/com/gnix/jflatgl/render/shader/tileFragment.glsl";
 
 	// lights!
 	private int location_screenRatio;
