@@ -12,7 +12,7 @@ import java.util.Map;
 public abstract class RenderExtension {
 
 	// the type of elements to render
-	private Class<? extends RenderElement> type;
+	private final Class<? extends RenderElement> type;
 
 	// batches for the element(s)
 	private final Map<Integer, OpaqueBatch> opaqueBatches;
