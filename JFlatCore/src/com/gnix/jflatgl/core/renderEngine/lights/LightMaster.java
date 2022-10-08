@@ -14,6 +14,7 @@ public class LightMaster {
 	public static float getAmbientLight() {
 		return ambientLight;
 	}
+
 	public static List<Light> getSceneLights() {
 		return sceneLights;
 	}
