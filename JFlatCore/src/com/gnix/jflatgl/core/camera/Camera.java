@@ -2,6 +2,7 @@ package com.gnix.jflatgl.core.camera;
 
 import com.gnix.jflatgl.core.Game;
 import com.gnix.jflatgl.core.entity.effects.Shake2D;
+import com.gnix.jflatgl.core.input.Cursor;
 import com.gnix.jflatgl.core.util.Logger;
 import com.gnix.jflatgl.core.util.interpolators.TransitionFloat;
 import com.gnix.jflatgl.core.util.time.Timer;
@@ -70,6 +71,14 @@ public class Camera {
 		return screenY / scale + yOffset;
 	}
 
+	public Vector2f screenPosToWorldPos(Vector2f screenPos) {
+		return new Vector2f(screenXToWorldX(screenPos.x), screenYToWorldY(screenPos.y));
+	}
+
+	public Vector2f worldPosToScreenPos(Vector2f worldPos) {
+		return new Vector2f(worldXToScreenX(worldPos.x), worldYToScreenY(worldPos.y));
+	}
+
 	// ******************************** GETTERS ********************************
 	public float getOffsetX() {
 		return xOffset + shakeEffect.getX();
@@ -83,6 +92,22 @@ public class Camera {
 		return scale;
 	}
 
+	public int getWorldWidth() {
+		return worldWidth;
+	}
+
+	public int getWorldHeight() {
+		return worldHeight;
+	}
+
+	public int getViewportWidth() {
+		return viewportWidth;
+	}
+
+	public int getViewportHeight() {
+		return viewportHeight;
+	}
+
 	public Vector2f getPositionVec() {
 		return getFinalPosition();
 	}
@@ -93,6 +118,37 @@ public class Camera {
 
 	public int getCurrentMode() {
 		return currentMode;
+	}
+
+	public float worldMouseX() {
+		return screenXToWorldX(Cursor.getX());
+	}
+
+	public float worldMouseY() {
+		return screenYToWorldY(Cursor.getY());
+	}
+
+	public boolean notOnScreen(float x, float y, float width, float height, boolean centered) {
+
+		float screenX = worldXToScreenX(x);
+		float screenY = worldYToScreenY(y);
+		float screenWidth = width * getScale();
+		float screenHeight = height * getScale();
+
+		if (!centered) {
+			screenX += screenWidth / 2;
+			screenY += screenHeight / 2;
+		}
+
+		return screenX + screenWidth / 2 < 0 ||
+				screenX - screenWidth / 2 > viewportWidth ||
+				screenY + screenHeight / 2 < 0 ||
+				screenY - screenHeight / 2 > viewportHeight;
+
+	}
+
+	public boolean onScreen(float x, float y, float width, float height, boolean centered) {
+		return !notOnScreen(x, y, width, height, centered);
 	}
 
 	// ******************************** SETTERS ********************************
@@ -123,45 +179,66 @@ public class Camera {
 		fixBounds();
 	}
 
+	public void translate(float x, float y) {
+		move(x, y);
+	}
+
 	// ******************************** SCALING/ZOOMING ********************************
 	public void zoom(float targetScale, float time) {
 		if (targetScale < minScale || targetScale > maxScale) return;
-		zoomInterpolator.transitionTo(scale, targetScale, time);
+		if (time == 0) {
+			adjustForNewScale(targetScale);
+		}
+		else {
+			zoomInterpolator.transitionTo(scale, targetScale, time);
+		}
 	}
 
 	public void zoomIn(float amount, float time) {
 		float targetScale = scale + amount;
 		if (targetScale < minScale || targetScale > maxScale) return;
-		zoomInterpolator.transitionTo(scale, targetScale, time);
+		if (time == 0) {
+			adjustForNewScale(targetScale);
+		}
+		else {
+			zoomInterpolator.transitionTo(scale, targetScale, time);
+		}
 	}
 
 	public void zoomOut(float amount, float time) {
 		float targetScale = scale - amount;
 		if (targetScale < minScale || targetScale > maxScale) return;
-		zoomInterpolator.transitionTo(scale, targetScale, time);
+		if (time == 0) {
+			adjustForNewScale(targetScale);
+		}
+		else {
+			zoomInterpolator.transitionTo(scale, targetScale, time);
+		}
 	}
 
 	private void doZoom() {
 		if (zoomInterpolator.isRunning()) {
 			// update the interpolator to get the next scale value
 			zoomInterpolator.update();
-			// save the current center position
-			float centerXBeforeScale = screenXToWorldX(Game.centerX());
-			float centerYBeforeScale = screenYToWorldY(Game.centerY());
-			// apply the new scale
-			float oldScale = scale;
-			scale = zoomInterpolator.getValue();
-			setDimensions();
-			// adjust the offset to keep the center in the same spot
-			float centerXAfterScale = screenXToWorldX(Game.centerX());
-			float centerYAfterScale = screenYToWorldY(Game.centerY());
-			xOffset += (centerXBeforeScale - centerXAfterScale);
-			yOffset += (centerYBeforeScale - centerYAfterScale);
-			fixBounds();
-			// log call
-			Logger.log("Scale: " + scale + " (Delta: " + (scale - oldScale) + ")");
-			Logger.log("Offsets: %.2f, %.2f", xOffset, yOffset);
+			// apply the new scale and adjust for it
+			adjustForNewScale(zoomInterpolator.getValue());
 		}
+	}
+
+	private void adjustForNewScale(float newScale) {
+		// save the current center position
+		float centerXBeforeScale = screenXToWorldX(Game.centerX());
+		float centerYBeforeScale = screenYToWorldY(Game.centerY());
+		// apply the new scale
+		scale = newScale;
+		setDimensions();
+		// adjust the offset to keep the center in the same spot
+		float centerXAfterScale = screenXToWorldX(Game.centerX());
+		float centerYAfterScale = screenYToWorldY(Game.centerY());
+		xOffset += (centerXBeforeScale - centerXAfterScale);
+		yOffset += (centerYBeforeScale - centerYAfterScale);
+		// keep everything in bounds
+		fixBounds();
 	}
 
 	// ******************************** INTERNAL METHODS ********************************
