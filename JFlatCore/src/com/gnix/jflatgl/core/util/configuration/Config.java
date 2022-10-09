@@ -5,6 +5,7 @@ import com.gnix.jflatgl.core.util.Logger;
 import com.gnix.jflatgl.core.util.conversion.DisplayScale;
 import com.gnix.jflatgl.core.util.data.Pair;
 import com.gnix.jflatgl.core.util.file.FileUtil;
+import org.joml.Vector2f;
 import org.joml.Vector4f;
 import org.json.JSONObject;
 
@@ -45,6 +46,8 @@ public class Config {
 	// for game logic purposes, these are the bounds of the window
 	public static int INTERNAL_WIDTH;
 	public static int INTERNAL_HEIGHT;
+
+	public static final Vector2f SCREEN_RATIO = new Vector2f();
 
 	// The default size of the game window.
 	// The game will be stretched to this size.

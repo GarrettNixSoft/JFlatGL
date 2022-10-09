@@ -14,6 +14,7 @@ public final class Light {
 	private final float innerRadius;
 	private final float outerRadius;
 	private final float maxRadius;
+	private float scale = 1;
 
 	public Light(Vector2f position, Vector4f color, float intensity, float innerRadius, float outerRadius, float maxRadius) {
 		this.position = position;
@@ -31,7 +32,12 @@ public final class Light {
 	 *                    converted to screen-space coordinates.
 	 */
 	public void setPosition(Vector2f newPosition) {
-		position.set(DisplayManager.convertToDisplayPosition2D(newPosition));
+		position.set(newPosition);
+		position.mul(DisplayManager.getPrimaryGameWindow().getScreenRatio());
+	}
+
+	public void setScale(float scale) {
+		this.scale = scale;
 	}
 
 	public Vector2f position() {
@@ -47,15 +53,15 @@ public final class Light {
 	}
 
 	public float innerRadius() {
-		return innerRadius;
+		return innerRadius * scale;
 	}
 
 	public float outerRadius() {
-		return outerRadius;
+		return outerRadius * scale;
 	}
 
 	public float maxRadius() {
-		return maxRadius;
+		return maxRadius * scale;
 	}
 
 	@Override
@@ -68,7 +74,8 @@ public final class Light {
 				Float.floatToIntBits(this.intensity) == Float.floatToIntBits(that.intensity) &&
 				Float.floatToIntBits(this.innerRadius) == Float.floatToIntBits(that.innerRadius) &&
 				Float.floatToIntBits(this.outerRadius) == Float.floatToIntBits(that.outerRadius) &&
-				Float.floatToIntBits(this.maxRadius) == Float.floatToIntBits(that.maxRadius);
+				Float.floatToIntBits(this.maxRadius) == Float.floatToIntBits(that.maxRadius) &&
+				Float.floatToIntBits(this.scale) == Float.floatToIntBits(that.scale);
 	}
 
 	@Override

@@ -1,6 +1,7 @@
 package com.gnix.jflatgl.render;
 
 import com.gnix.jflatgl.core.camera.Camera;
+import com.gnix.jflatgl.core.renderEngine.display.DisplayManager;
 import com.gnix.jflatgl.core.renderEngine.lights.Light;
 import com.gnix.jflatgl.core.renderEngine.lights.LightMaster;
 import com.gnix.jflatgl.core.renderEngine.shaders.ShaderProgram;
@@ -69,18 +70,15 @@ public class TileShader extends ShaderProgram {
 	public void loadAmbientLight(float ambientLight) { super.loadFloat(location_ambientLight, ambientLight); }
 
 	public void loadLights(List<Light> lights) {
-
-		Camera camera = Camera.getInstance();
-
 		int size = lights.size();
 		for (int i = 0; i < LightMaster.MAX_LIGHTS; ++i) {
 			if (i < size) {
 				super.loadVector(location_lightPositions[i], lights.get(i).position());
 				super.loadVector(location_lightColors[i], lights.get(i).color());
 				super.loadFloat(location_lightIntensities[i], lights.get(i).intensity());
-				super.loadFloat(location_lightInnerRadii[i], lights.get(i).innerRadius() * camera.getScale());
-				super.loadFloat(location_lightOuterRadii[i], lights.get(i).outerRadius() * camera.getScale());
-				super.loadFloat(location_lightMaxRadii[i], lights.get(i).maxRadius() * camera.getScale());
+				super.loadFloat(location_lightInnerRadii[i], lights.get(i).innerRadius());
+				super.loadFloat(location_lightOuterRadii[i], lights.get(i).outerRadius());
+				super.loadFloat(location_lightMaxRadii[i], lights.get(i).maxRadius());
 			}
 			else {
 				super.loadVector(location_lightPositions[i], new Vector2f(0));
