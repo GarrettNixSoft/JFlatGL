@@ -41,7 +41,4 @@ public abstract class EntityEffect extends Effect {
 			timer = System.nanoTime();
 		}
 	}
-
-	public abstract void update();
-	public abstract void render();
 }

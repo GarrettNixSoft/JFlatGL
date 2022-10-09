@@ -1,5 +1,6 @@
 package gametitle.entity.misc;
 
+import com.gnix.jflatgl.core.camera.Camera;
 import com.gnix.jflatgl.core.entity.Entity;
 import com.gnix.jflatgl.core.renderEngine.particles.emitters.ParticleEmitter;
 import org.joml.Vector3f;
@@ -25,7 +26,7 @@ public class ParticleEmitterEntity extends Entity {
 	}
 
 	@Override
-	public void render() {
+	public void render(Camera camera) {
 		//
 	}
 }

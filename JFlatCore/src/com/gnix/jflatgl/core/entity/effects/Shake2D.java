@@ -42,7 +42,7 @@ public class Shake2D extends Effect {
 	}
 
 	@Override
-	public void render() {
+	public void render(Camera camera) {
 		// nothing
 	}
 

@@ -1,5 +1,7 @@
 package com.gnix.jflatgl.core.entity.effects;
 
+import com.gnix.jflatgl.core.camera.Camera;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +40,8 @@ public class EffectsHandler {
 	
 	// render queue
 	public void render() {
-		for (Effect e : effects) e.render();
+		Camera camera = Camera.getInstance();
+		for (Effect e : effects) e.render(camera);
 	}
 	
 }

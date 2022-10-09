@@ -3,8 +3,6 @@ package com.gnix.jflatgl.core.entity;
 import com.gnix.jflatgl.animation.Animation;
 import com.gnix.jflatgl.core.Game;
 import com.gnix.jflatgl.core.camera.Camera;
-import com.gnix.jflatgl.core.renderEngine.display.DisplayManager;
-import com.gnix.jflatgl.core.entity.projectile.Projectile;
 import com.gnix.jflatgl.core.renderEngine.elements.TextureElement;
 import com.gnix.jflatgl.core.renderEngine.util.Layers;
 import com.gnix.jflatgl.core.util.Logger;
@@ -198,14 +196,7 @@ public abstract class Entity {
 	// ******************************** SIMULATION ********************************
 	public abstract void update();
 
-	public abstract void render();
-
-	// optional implementation
-	public void render(Camera camera) {
-		// default action: call the normal render method
-		render();
-		// override this when necessary
-	}
+	public abstract void render(Camera camera);
 
 	protected void handleAttachments() {}
 
@@ -218,8 +209,6 @@ public abstract class Entity {
 
 	// ******************************** INTERACTION ********************************
 	public void damage(float damage) {}
-
-	public void damage(Projectile projectile) {}
 
 	public void kill() {
 		Logger.log("ENTITY " + entityID + " KILLED");
