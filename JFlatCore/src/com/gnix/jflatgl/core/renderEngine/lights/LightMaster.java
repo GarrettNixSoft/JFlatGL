@@ -31,11 +31,11 @@ public class LightMaster {
 			sceneLights.add(light);
 	}
 
-	public void removeLight(Light light) {
+	public static void removeLight(Light light) {
 		sceneLights.remove(light);
 	}
 
-	public void clearLights() {
+	public static void clearLights() {
 		sceneLights.clear();
 	}
 
