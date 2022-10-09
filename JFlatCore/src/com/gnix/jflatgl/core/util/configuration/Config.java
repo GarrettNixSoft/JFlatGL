@@ -47,8 +47,6 @@ public class Config {
 	public static int INTERNAL_WIDTH;
 	public static int INTERNAL_HEIGHT;
 
-	public static final Vector2f SCREEN_RATIO = new Vector2f();
-
 	// The default size of the game window.
 	// The game will be stretched to this size.
 	public static int DEFAULT_WIDTH;
