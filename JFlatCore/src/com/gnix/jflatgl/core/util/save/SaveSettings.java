@@ -1,6 +1,6 @@
 package com.gnix.jflatgl.core.util.save;
 
-import com.gnix.jflatgl.core.util.Globals;
+import com.gnix.jflatgl.core.util.configuration.Config;
 import com.gnix.jflatgl.core.util.conversion.StringConverter;
 import com.gnix.jflatgl.core.util.file.FileUtil;
 import org.json.JSONObject;
@@ -23,7 +23,7 @@ public class SaveSettings {
 	 */
 	public static void init() {
 		// Determine path to use for save file
-		String filePath = System.getProperty("user.home") + SEP + Globals.GAME_TITLE;
+		String filePath = System.getProperty("user.home") + SEP + Config.GAME_TITLE_ON_DISK;
 		String filePathAndName = filePath + "settings.json";
 		// Create a hook to the file
 		settingsFile = new File(filePathAndName);

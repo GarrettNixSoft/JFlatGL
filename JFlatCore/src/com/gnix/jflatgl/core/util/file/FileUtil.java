@@ -1,8 +1,8 @@
 package com.gnix.jflatgl.core.util.file;
 
-import com.gnix.jflatgl.core.util.Globals;
 import com.gnix.jflatgl.core.util.Logger;
 import com.gnix.jflatgl.core.util.StringUtils;
+import com.gnix.jflatgl.core.util.configuration.Config;
 import com.gnix.jflatgl.core.util.conversion.StringConverter;
 import org.json.JSONObject;
 
@@ -21,7 +21,7 @@ public class FileUtil {
 		String sep = System.getProperty("file.separator");
 		System.out.println("Separator = " + sep);
 		SEPARATOR = "/";
-		GAME_DIR = System.getProperty("user.home") + SEPARATOR + "Games" + FileUtil.SEPARATOR + Globals.GAME_TITLE_ON_DISK;
+		GAME_DIR = System.getProperty("user.home") + SEPARATOR + "Games" + FileUtil.SEPARATOR + Config.GAME_TITLE_ON_DISK;
 	}
 
 	public static String generateFilePath(String... directories) {

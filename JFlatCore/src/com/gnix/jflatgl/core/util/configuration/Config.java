@@ -19,6 +19,7 @@ import java.awt.image.BufferedImage;
 public class Config {
 
 	public static String WINDOW_TITLE;
+	public static String GAME_TITLE_ON_DISK;
 
 	// preferences nodes
 	public static String CONFIG_NODE;
@@ -80,6 +81,7 @@ public class Config {
 		GAMEPAD_CURSOR_PATH = configJSON.optString("gamepad_cursor", "");
 
 		WINDOW_TITLE = configJSON.getString("window_title");
+		GAME_TITLE_ON_DISK = configJSON.optString("game_title_on_disk", "A JFlatGL Game");
 
 		DEBUG_MODE = configJSON.getBoolean("debug_mode");
 
