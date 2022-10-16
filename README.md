@@ -1,6 +1,6 @@
 ![GitHub Logo](/res/icon/repo_image_new.png)
 # JFlatGL
-A basic 2D game engine in Java, built using LWJGL 3. I use this engine for my personal projects.
+A library implementing a basic 2D game engine in Java, built using LWJGL 3. I use this library for my personal projects.
 
 # Structure
 JFlatGL is separated into modules. The core functionality is provided in JFlatCore. The additional modules are optional ones which provide additional features.
