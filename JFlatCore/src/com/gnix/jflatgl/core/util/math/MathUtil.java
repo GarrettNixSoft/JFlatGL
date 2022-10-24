@@ -327,4 +327,20 @@ public class MathUtil {
 		return !vec4Equal(a, b);
 	}
 
+	// ******************************** PERFECT SQUARES ********************************
+	public static boolean isPerfectSquare(double num) {
+		return Math.pow(Math.floor(Math.sqrt(num)), 2) == num;
+	}
+
+	public static int getNextPerfectSquare(double num) {
+		if (isPerfectSquare(num)) return (int) num;
+		else {
+			return (int) Math.pow(Math.ceil(Math.sqrt(num)), 2);
+		}
+	}
+
+	public static int getNextSquare(double num) {
+		return (int) Math.ceil(Math.sqrt(num));
+	}
+
 }

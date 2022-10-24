@@ -126,9 +126,9 @@ public class TextMeshCreator {
 		for (Line line : lines) {
 
 			// if it's center or right justified, adapt
-			if (text.getTextJustify() == GUIText.Justify.CENTER)
+			if (text.getTextAlignment() == GUIText.Alignment.CENTER)
 				cursorX = (line.getMaxLength() - line.getLineLength()) / 2;
-			else if (text.getTextJustify() == GUIText.Justify.RIGHT)
+			else if (text.getTextAlignment() == GUIText.Alignment.RIGHT)
 				cursorX = line.getMaxLength() - line.getLineLength();
 
 			// add all the words

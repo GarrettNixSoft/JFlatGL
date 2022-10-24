@@ -1,9 +1,8 @@
 package com.gnix.jflatgl.core.renderEngine;
 
+import com.gnix.jflatgl.core.renderEngine.elements.RenderElement;
 import com.gnix.jflatgl.core.renderEngine.elements.TextureElement;
 import com.gnix.jflatgl.core.renderEngine.elements.geometry.*;
-import com.gnix.jflatgl.core.renderEngine.elements.tile.TileElement;
-import com.gnix.jflatgl.core.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.gnix.jflatgl.core.renderEngine.renderers.MasterRenderer;
 import com.gnix.jflatgl.core.renderEngine.util.Layers;
 import com.gnix.jflatgl.core.util.configuration.Config;
@@ -23,8 +22,6 @@ public class Render {
 		MasterRenderer.currentRenderTarget.addTextureElement(textureElement);
 	}
 
-	public static void drawText(GUIText text) { MasterRenderer.currentRenderTarget.addTextElement(text); }
-
 	public static void drawRect(RectElement rectElement) {
 		MasterRenderer.currentRenderTarget.addRectElement(rectElement);
 	}
@@ -43,8 +40,21 @@ public class Render {
 		MasterRenderer.currentRenderTarget.addOutlineElement(outlineElement);
 	}
 
-	public static void drawTile(TileElement tileElement) {
-		MasterRenderer.currentRenderTarget.addTileElement(tileElement);
+	public static void drawElement(RenderElement element) {
+		switch (element) {
+			case TextureElement textureElement -> {
+				if (element.getClass() == TextureElement.class)
+					drawImage(textureElement);
+				else
+					MasterRenderer.currentRenderTarget.tryAddExtensionElement(element);
+			}
+			case RectElementLight rectElementLight -> drawLightRect(rectElementLight);
+			case RectElement rectElement -> drawRect(rectElement);
+			case CircleElement circleElement -> drawCircle(circleElement);
+			case LineElement lineElement -> drawLine(lineElement);
+			case OutlineElement outlineElement -> drawOutline(outlineElement);
+			default -> MasterRenderer.currentRenderTarget.tryAddExtensionElement(element);
+		}
 	}
 
 

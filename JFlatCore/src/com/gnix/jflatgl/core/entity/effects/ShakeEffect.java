@@ -1,5 +1,6 @@
 package com.gnix.jflatgl.core.entity.effects;
 
+import com.gnix.jflatgl.core.camera.Camera;
 import com.gnix.jflatgl.core.util.math.RandomUtil;
 
 public class ShakeEffect extends EntityEffect {
@@ -42,7 +43,7 @@ public class ShakeEffect extends EntityEffect {
 	}
 
 	@Override
-	public void render() {
+	public void render(Camera camera) {
 		// nothing
 	}
 

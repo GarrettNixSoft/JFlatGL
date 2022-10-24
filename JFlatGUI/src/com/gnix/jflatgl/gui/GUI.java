@@ -72,7 +72,7 @@ public class GUI {
 		}
 		// preemptively fail if the ID has not been registered
 		if (!componentIDs.contains(componentID)) {
-			Logger.logError("No GUI component with ID " + componentID + " found!", Logger.MEDIUM);
+			Logger.logError(Logger.MEDIUM, "No GUI component with ID " + componentID + " found!");
 			return null;
 		}
 		for (GUILayer layer : layerStore.values()) {
@@ -80,7 +80,7 @@ public class GUI {
 				if (component.getComponentID().equals(componentID)) return component;
 			}
 		}
-		Logger.logError("(Fallthrough) No GUI component with ID " + componentID + " found!", Logger.MEDIUM);
+		Logger.logError(Logger.MEDIUM, "(Fallthrough) No GUI component with ID " + componentID + " found!");
 		return null;
 	}
 

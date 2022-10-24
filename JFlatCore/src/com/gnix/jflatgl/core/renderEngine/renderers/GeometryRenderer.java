@@ -1,5 +1,6 @@
 package com.gnix.jflatgl.core.renderEngine.renderers;
 
+import com.gnix.jflatgl.core.renderEngine.elements.RenderElement;
 import com.gnix.jflatgl.core.renderEngine.elements.geometry.*;
 import com.gnix.jflatgl.core.renderEngine.models.ModelLoader;
 import com.gnix.jflatgl.core.renderEngine.models.QuadModel;
@@ -13,6 +14,7 @@ import com.gnix.jflatgl.core.util.math.MathUtil;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -24,7 +26,7 @@ import static org.lwjgl.opengl.GL30.glBindVertexArray;
  * The GeometryRenderer handles rendering of geometric elements such as
  * rectangles, circles and lines.
  */
-public class GeometryRenderer {
+public class GeometryRenderer extends ElementRenderer {
 
 	// quad model
 	private static final float[] positions = {-1, 1, -1, -1, 1, 1, 1, -1};
@@ -52,6 +54,33 @@ public class GeometryRenderer {
 	}
 
 	// RENDER METHODS
+	@Override
+	public void renderAllElements(List<? extends RenderElement> elements, boolean depthWritingEnabled) {
+		// create lists for sorting elements
+		List<RectElement> rectElements = new ArrayList<>();
+		List<RectElementLight> rectLightElements = new ArrayList<>();
+		List<CircleElement> circleElements = new ArrayList<>();
+		List<LineElement> lineElements = new ArrayList<>();
+		List<OutlineElement> outlineElements = new ArrayList<>();
+		// sort elements into the lists
+		for (RenderElement element : elements) {
+			switch (element) {
+				case RectElementLight rectLight -> rectLightElements.add(rectLight);
+				case RectElement rect -> rectElements.add(rect);
+				case CircleElement circle -> circleElements.add(circle);
+				case LineElement line -> lineElements.add(line);
+				case OutlineElement outline -> outlineElements.add(outline);
+				default -> {}
+			}
+		}
+		// render everything!
+		renderRectangles(rectElements, depthWritingEnabled);
+		if (!depthWritingEnabled) renderLightRectangles(rectLightElements);
+		renderCircles(circleElements, depthWritingEnabled);
+		renderLines(lineElements, depthWritingEnabled);
+		renderOutlines(outlineElements, depthWritingEnabled);
+	}
+
 	public void renderRectangles(List<RectElement> rectangles, boolean depthWritingEnabled) {
 
 		ELEMENT_COUNT += rectangles.size();

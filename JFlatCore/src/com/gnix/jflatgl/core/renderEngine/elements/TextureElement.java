@@ -239,6 +239,12 @@ public class TextureElement extends RenderElement {
 	public void setaChannelColor(Vector4f aChannelColor) { if (aChannelColor != null) this.aChannelColor.set(aChannelColor); }
 
 	public void setAlpha(float alpha) { this.alpha = alpha; }
+
+	@Override
+	public boolean hasTransparency() {
+		return textureComponentHasTransparency();
+	}
+
 	public void setColor(Vector4f color) { this.color.set(color); }
 	public void setMix(float mix) { this.mix = mix; }
 

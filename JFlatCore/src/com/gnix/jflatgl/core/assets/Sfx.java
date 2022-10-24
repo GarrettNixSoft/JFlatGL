@@ -21,13 +21,17 @@ public class Sfx {
 	public Sfx() {
 		int NUM_CHANNELS = 64;
 		CHANNELS = new AudioChannel[NUM_CHANNELS];
+	}
+
+	// INITIALIZATION
+	public void init() {
 		for (int i = 0; i < CHANNELS.length; ++i) {
 			CHANNELS[i] = new AudioChannel(AudioMaster.generateSource());
 			CHANNELS[i].setVolume(Settings.getSettingFloat("sfx_volume"));
 		}
 	}
 
-	// INITIALIZATION
+
 	public void addSfx(String key, Sound sound) {
 		sfx.put(key, sound);
 	}

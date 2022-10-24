@@ -15,11 +15,25 @@ public abstract class FloatInterpolator {
 	// auto reset feature
 	protected boolean autoReset;
 	
-	public float getValue() { return value; }
+	public float getValue() {
+		return value;
+	}
 
-	public void setAutoReset(boolean autoReset) { this.autoReset = autoReset; }
-	public boolean isAutoReset() { return autoReset; }
-	public boolean started() { return timer.started(); }
+	public void setAutoReset(boolean autoReset) {
+		this.autoReset = autoReset;
+	}
+
+	public boolean isAutoReset() {
+		return autoReset;
+	}
+
+	public boolean isRunning() {
+		return running;
+	}
+
+	public boolean started() {
+		return timer.started();
+	}
 
 	public void start() {
 		running = true;

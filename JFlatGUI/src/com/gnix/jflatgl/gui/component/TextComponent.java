@@ -16,7 +16,7 @@ public class TextComponent extends GUIComponent {
 
 	public TextComponent(String componentID, GUI parent) {
 		super(componentID, parent);
-		text = new GUIText("Text", defaultTextSize, Game.getFont("default"), new Vector3f(0,0,10), 1, GUIText.Justify.CENTER);
+		text = new GUIText("Text", defaultTextSize, Game.getFont("default"), new Vector3f(0,0,10), 1, GUIText.Alignment.CENTER);
 		text.setWidth(0.5f);
 		text.setEdge(0.2f);
 		//text components are not clickable by default, but this can be changed with a setter call
@@ -24,12 +24,12 @@ public class TextComponent extends GUIComponent {
 	}
 
 	public TextComponent text(String textStr) {
-		text.replaceText(textStr);
+		setText(textStr);
 		return this;
 	}
 
 	public TextComponent font(FontType font) {
-		text.setFont(font);
+		setFont(font);
 		return this;
 	}
 
@@ -38,15 +38,23 @@ public class TextComponent extends GUIComponent {
 		return this;
 	}
 
+	public void setText(String textStr) {
+		text.replaceText(textStr);
+	}
+
+	public void setFont(FontType font) {
+		text.setFont(font);
+	}
+
 	public void setFontSize(float fontSize) {
 		defaultTextSize = fontSize;
 	}
 
-	public void setWidth(float width) {
+	public void setTextWidth(float width) {
 		text.setWidth(width);
 	}
 
-	public void setEdge(float edge) {
+	public void setTextEdge(float edge) {
 		text.setEdge(edge);
 	}
 
@@ -58,12 +66,12 @@ public class TextComponent extends GUIComponent {
 		text.setBorderEdge(borderEdge);
 	}
 
-	public void setTextJustify(GUIText.Justify justify) {
-		text.setTextJustify(justify);
+	public void setTextAlignment(GUIText.Alignment alignment) {
+		text.setTextAlignment(alignment);
 	}
 
-	public void setTextCenteredVertical(boolean centeredVertical) {
-		text.setCenteredVertical(centeredVertical);
+	public void setTextAnchorPoint(GUIText.AnchorPoint anchorPoint) {
+		text.setAnchorPoint(anchorPoint);
 	}
 
 	public void setEnforceTextWidth(boolean enforceTextWidth) {

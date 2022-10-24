@@ -14,6 +14,7 @@ import com.gnix.jflatgl.core.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.gnix.jflatgl.core.renderEngine.models.ModelLoader;
 import com.gnix.jflatgl.core.renderEngine.renderers.MasterRenderer;
 import com.gnix.jflatgl.core.renderEngine.textures.TextureOutliner;
+import com.gnix.jflatgl.core.renderEngine.util.Layers;
 import com.gnix.jflatgl.core.splash.SplashRenderer;
 import com.gnix.jflatgl.core.splash.SplashScreen;
 import com.gnix.jflatgl.core.util.color.Colors;
@@ -29,6 +30,7 @@ import com.gnix.jflatgl.core.renderEngine.textures.TextureSet;
 import com.gnix.jflatgl.core.util.Logger;
 import com.gnix.jflatgl.core.util.Session;
 import com.gnix.jflatgl.extension.EngineExtension;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
@@ -61,6 +63,9 @@ public class Game {
 	private final Fonts fonts;
 	private final Animations animations;
 
+	// miscellaneous assets
+	private final Assets miscAssets;
+
 	private final Session session;
 
 	// handling game states
@@ -76,13 +81,14 @@ public class Game {
 	 * Create the game. This will initialize all
 	 * asset containers.
 	 */
-	public Game() {
+	private Game() {
 		loader = new GameLoader();
 		textures = new Textures();
 		music = new Music();
 		sfx = new Sfx();
 		fonts = new Fonts();
 		animations = new Animations();
+		miscAssets = new Assets();
 		session = new Session();
 	}
 
@@ -95,11 +101,11 @@ public class Game {
 	 * @param assetLoader a custom loader to run when loading the game
 	 */
 	public static void addCustomAssetLoader(AssetLoader assetLoader) {
-		instance.loader.addCustomAssetLoader(assetLoader);
+		getInstance().loader.addCustomAssetLoader(assetLoader);
 	}
 
 	public static void addEngineExtension(EngineExtension extension) {
-		instance.engineExtensions.add(extension);
+		getInstance().engineExtensions.add(extension);
 	}
 
 	public static void loadConfig() {
@@ -108,6 +114,16 @@ public class Game {
 		Settings.load();
 		// Load control mappings
 		Controls.init();
+	}
+
+	public static Game getInstance() {
+		if (instance == null)
+			instance = new Game();
+		return instance;
+	}
+
+	public static GameLoader getLoader() {
+		return getInstance().loader;
 	}
 
 	/**
@@ -142,8 +158,7 @@ public class Game {
 		Cursor.init();
 
 		// initialize the instance
-		instance = new Game();
-		instance.gsm = gsm;
+		getInstance().gsm = gsm;
 
 		// the game itself (load assets)
 		GameLoader gameLoader = new GameLoader();
@@ -167,7 +182,12 @@ public class Game {
 		// finish loading (after creating the main game window! this ensures OpenGL assets are properly loaded)
 		gameLoader.finish();
 
+		// initialize audio asset managers
+		getMusic().init();
+		getSfx().init();
+
 		// Re-initialize the TextMaster on the proper context
+		TextMaster.clear();
 		TextMaster.init();
 
 		// Next, prepare the GSM
@@ -178,6 +198,7 @@ public class Game {
 
 		// Init FPS display
 		instance.fpsDisplay = new GUIText("FPS: ", 0.5f, Game.getFont("default"), new Vector3f(0, 0, 0), 1);
+		instance.fpsDisplay.setLayer(Layers.TOP_LAYER);
 		instance.fpsDisplay.setColor(Colors.GREEN);
 		instance.fpsDisplay.setWidth(0.5f);
 		instance.fpsDisplay.setEdge(0.2f);
@@ -273,7 +294,7 @@ public class Game {
 	 * game loop to exit on the next iteration.
 	 */
 	public static void quit() {
-		instance.closeRequest = true;
+		getInstance().closeRequest = true;
 	}
 
 	/**
@@ -319,7 +340,7 @@ public class Game {
 	 */
 	public static void playSfx(String sfxID) {
 		try {
-			instance.sfx.playSfx(sfxID);
+			getInstance().sfx.playSfx(sfxID);
 		}
 		catch (Exception e) {
 			Logger.logError("An error occurred while attempting to play Sound Effect [id=\"" + sfxID + "\"]: " + e.getClass() + "; " + e.getMessage());
@@ -332,7 +353,7 @@ public class Game {
 	 * @param channel the index of the desired channel
 	 */
 	public static void playSfx(String sfxID, int channel) {
-		instance.sfx.playSfx(channel, sfxID);
+		getInstance().sfx.playSfx(channel, sfxID);
 	}
 
 	/**
@@ -341,7 +362,7 @@ public class Game {
 	 * @param startTime the time in seconds to begin playing from
 	 */
 	public static void playSfxFrom(String sfxID, float startTime) {
-		instance.sfx.playSfxFrom(sfxID, startTime);
+		getInstance().sfx.playSfxFrom(sfxID, startTime);
 	}
 
 	/**
@@ -349,7 +370,7 @@ public class Game {
 	 * @param musicID the ID of the audio file in music_directory.json
 	 */
 	public static void playMusic(String musicID) {
-		instance.music.playMusic(musicID);
+		getInstance().music.playMusic(musicID);
 	}
 
 	/**
@@ -357,7 +378,7 @@ public class Game {
 	 * @param musicID the ID of the audio file in music_directory.json
 	 */
 	public static void loopMusic(String musicID) {
-		instance.music.loopMusic(musicID);
+		getInstance().music.loopMusic(musicID);
 	}
 
 	/**
@@ -366,7 +387,7 @@ public class Game {
 	 * @param startTime the time in seconds to begin playing from
 	 */
 	public static void playMusicFrom(String musicID, float startTime) {
-		int channel = instance.music.playMusicFrom(musicID, startTime);
+		int channel = getInstance().music.playMusicFrom(musicID, startTime);
 		Logger.log("Now playing music \"" + musicID + "\" on channel #" + channel);
 	}
 
@@ -379,29 +400,30 @@ public class Game {
 	 * @param time the duration during which to perform the transition
 	 */
 	public static void fadeMusic(int channel, float target, float time) {
-		instance.music.fadeMusic(channel, target, time);
+		getInstance().music.fadeMusic(channel, target, time);
 	}
 
 	// GET GAME COMPONENTS
 	// assets
-	public static Textures getTextures() { return instance.textures; }
-	public static Music getMusic() { return instance.music; }
-	public static Sfx getSfx() { return instance.sfx; }
-	public static Fonts getFonts() { return instance.fonts; }
-	public static Animations getAnimations() { return instance.animations; }
-	public static Session getSession() { return instance.session; }
+	public static Textures getTextures() { return getInstance().textures; }
+	public static Music getMusic() { return getInstance().music; }
+	public static Sfx getSfx() { return getInstance().sfx; }
+	public static Fonts getFonts() { return getInstance().fonts; }
+	public static Animations getAnimations() { return getInstance().animations; }
+	public static Assets getAssets() { return getInstance().miscAssets; }
+	public static Session getSession() { return getInstance().session; }
 
 	/**
 	 * Check if some game element has requested that the game close.
 	 * @return true if the {@code quit()} method has been called
 	 */
 	public static boolean closeRequested() {
-		return instance.closeRequest;
+		return getInstance().closeRequest;
 	}
 
 	// SHORTCUTS
 	public static GUIText getFPSDisplay() {
-		return instance.fpsDisplay;
+		return getInstance().fpsDisplay;
 	}
 
 	public static int centerX() {
@@ -420,6 +442,10 @@ public class Game {
 		return Config.INTERNAL_HEIGHT;
 	}
 
+	public static Vector2f screenSize() {
+		return new Vector2f(width(), height());
+	}
+
 	public static float getFrameTime() {
 		return DisplayManager.getFrameTimeSeconds();
 	}
@@ -431,7 +457,7 @@ public class Game {
 	 * @return the corresponding {@code TextureComponent}, or {@code null} if it does not exist.
 	 */
 	public static TextureComponent getTexture(String key) {
-		return instance.textures.getTexture(key);
+		return getInstance().textures.getTexture(key);
 	}
 
 	/**
@@ -448,7 +474,7 @@ public class Game {
 	}
 
 	public static TextureSet getTextureSet(String key) {
-		return instance.textures.getTextureSet(key);
+		return getInstance().textures.getTextureSet(key);
 	}
 
 	/**
@@ -464,28 +490,28 @@ public class Game {
 	}
 
 	public static TextureComponent[] getTextureArray(String key) {
-		return instance.textures.getTextureArray(key);
+		return getInstance().textures.getTextureArray(key);
 	}
 
 	public static TextureAtlas getTextureAtlas(String key) {
-		return instance.textures.getTextureAtlas(key);
+		return getInstance().textures.getTextureAtlas(key);
 	}
 
 	// Animations
 	public static Animation getAnimation(String key) {
-		Animation result = instance.animations.getAnimation(key);
-		if (result == null) Logger.logError("Animation requested does not exist: " + key, Logger.HIGH);
+		Animation result = getInstance().animations.getAnimation(key);
+		if (result == null) Logger.logError(Logger.HIGH, "Animation requested does not exist: " + key);
 		return result;
 	}
 
-	public static HashMap<String, Animation> getAnimationSet(String key) { return instance.animations.getAnimationSet(key); }
+	public static HashMap<String, Animation> getAnimationSet(String key) { return getInstance().animations.getAnimationSet(key); }
 
 	// Audio
-	public static Sound getMusicTrack(String key) { return instance.music.getMusic("key"); }
-	public static Sound getSoundEffect(String key) { return instance.sfx.getSfx("key"); }
+	public static Sound getMusicTrack(String key) { return getInstance().music.getMusic("key"); }
+	public static Sound getSoundEffect(String key) { return getInstance().sfx.getSfx("key"); }
 
 	// Fonts
-	public static FontType getFont(String key) { return instance.fonts.getFont(key); }
+	public static FontType getFont(String key) { return getInstance().fonts.getFont(key); }
 
 
 	/**
@@ -499,6 +525,7 @@ public class Game {
 		TextMaster.cleanUp();
 		AudioMaster.cleanUp();
 		TextureOutliner.cleanUp();
+		ModelLoader.cleanUp();
 
 		// Clean up GLFW
 		DisplayManager.cleanUp();
@@ -509,6 +536,9 @@ public class Game {
 
 		// save user settings/preferences and game flags
 		Settings.save();
+
+		// undo load flags
+		GameLoader.LOAD_FINALIZED = false;
 	}
 
 }

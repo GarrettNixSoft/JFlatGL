@@ -2,6 +2,7 @@ package com.gnix.jflatgl.core.renderEngine.renderers;
 
 import com.gnix.jflatgl.core.assets.loaders.ImageLoader;
 import com.gnix.jflatgl.core.renderEngine.display.DisplayManager;
+import com.gnix.jflatgl.core.renderEngine.elements.RenderElement;
 import com.gnix.jflatgl.core.renderEngine.elements.TextureElement;
 import com.gnix.jflatgl.core.renderEngine.framebuffers.FrameBuffer;
 import com.gnix.jflatgl.core.renderEngine.lights.LightMaster;
@@ -29,7 +30,7 @@ import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 
-public class TextureRenderer {
+public class TextureRenderer extends ElementRenderer {
 
 	private static final float[] positions = {-1, 1, -1, -1, 1, 1, 1, -1};
 
@@ -64,46 +65,51 @@ public class TextureRenderer {
 	 * Render all TextureElements to the scene.
 	 * @param textureElements A list containing lists of texture elements that all use one texture per list.
 	 */
-	public void render(List<TextureElement> textureElements, boolean depthWritingEnabled) {
+	@Override
+	public void renderAllElements(List<? extends RenderElement> textureElements, boolean depthWritingEnabled) {
 
 		ELEMENT_COUNT += textureElements.size();
 
 		prepare(depthWritingEnabled);
 
-		for (TextureElement element : textureElements) {
+		for (RenderElement element : textureElements) {
 
-			// bind this element's data
-			loadTextureUniforms(element);
+			if (element instanceof TextureElement textureElement) {
+				// bind this element's data
+				loadTextureUniforms(textureElement);
 
-//			Logger.log("Element position: " + element.getPosition());
+//				Logger.log("Element position: " + element.getPosition());
 
-//			Matrix4f mat = MathUtil.createTransformationMatrix(element.getPosition(), element.getScale(), element.getRotation());
+//				Matrix4f mat = MathUtil.createTransformationMatrix(element.getPosition(), element.getScale(), element.getRotation());
 
-			// if outline is on, render it under the element
-			if (element.doOutline()) {
-				bindTexture(element.getOutlineTexture());
-				Matrix4f matrix = SplashScreen.SPLASH_RENDER ?
-						MathUtil.createTransformationMatrix(SplashScreen.splashWindow, element.getRenderPosition(), element.getScale(), element.getRotation()) :
-						MathUtil.createTransformationMatrix(element.getRenderPosition(), element.getScale(), element.getRotation());
-				shader.loadTransformationMatrix(matrix);
+				// if outline is on, render it under the element
+				if (textureElement.doOutline()) {
+					bindTexture(textureElement.getOutlineTexture());
+					Matrix4f matrix = SplashScreen.SPLASH_RENDER ?
+							MathUtil.createTransformationMatrix(SplashScreen.splashWindow, element.getRenderPosition(), element.getScale(), element.getRotation()) :
+							MathUtil.createTransformationMatrix(element.getRenderPosition(), element.getScale(), element.getRotation());
+					shader.loadTransformationMatrix(matrix);
+					glDrawArrays(GL_TRIANGLE_STRIP, 0, quad.vertexCount());
+				}
+
+//				shader.loadTransformationMatrix(mat);
+
+				// bind the current texture
+				bindTexture(textureElement.getRawTexture());
+
+				// draw the element
 				glDrawArrays(GL_TRIANGLE_STRIP, 0, quad.vertexCount());
+
+				// if outline is on, do another call
+//				if (element.doOutline()) {
+//					bindTexture(element.getOutlineTexture());
+//					Matrix4f matrix = MathUtil.createTransformationMatrix(element.getPosition(), element.getOutlineScale(), element.getRotation());
+//					shader.loadTransformationMatrix(matrix);
+//					glDrawArrays(GL_TRIANGLE_STRIP, 0, quad.getVertexCount());
+//				}
 			}
 
-//			shader.loadTransformationMatrix(mat);
 
-			// bind the current texture
-			bindTexture(element.getRawTexture());
-
-			// draw the element
-			glDrawArrays(GL_TRIANGLE_STRIP, 0, quad.vertexCount());
-
-			// if outline is on, do another call
-//			if (element.doOutline()) {
-//				bindTexture(element.getOutlineTexture());
-//				Matrix4f matrix = MathUtil.createTransformationMatrix(element.getPosition(), element.getOutlineScale(), element.getRotation());
-//				shader.loadTransformationMatrix(matrix);
-//				glDrawArrays(GL_TRIANGLE_STRIP, 0, quad.getVertexCount());
-//			}
 
 		}
 

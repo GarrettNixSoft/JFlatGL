@@ -23,6 +23,10 @@ public class Music {
 	// Constructor initializes channel sources
 	public Music() {
 		CHANNELS = new AudioChannel[NUM_CHANNELS];
+	}
+
+	// INITIALIZATION
+	public void init() {
 		for (int i = 0; i < CHANNELS.length; ++i) {
 			CHANNELS[i] = new AudioChannel(AudioMaster.generateSource());
 			CHANNELS[i].setVolume(Settings.getSettingFloat("music_volume"));

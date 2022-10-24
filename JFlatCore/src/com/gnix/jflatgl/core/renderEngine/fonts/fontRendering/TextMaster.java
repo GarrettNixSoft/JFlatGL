@@ -46,6 +46,10 @@ public class TextMaster {
 		FontType fontType = text.getFont();
 		TextMeshData data = fontType.loadText(text);
 		int vao = ModelLoader.loadToVAO(data.vertexPositions(), data.textureCoords(), text);
+		if (textVAOs.contains(vao)) {
+			if (findText(vao)) throw new RuntimeException();
+			else textVAOs.remove((Integer) vao);
+		}
 		textVAOs.add(vao);
 //		Logger.log("Text got VAO: " + vao);
 		text.setMeshInfo(vao, data.vertexPositions().length / 3); // there are (length / 3) vertices, since each vertex is 3 floats (x,y,z)
@@ -63,6 +67,7 @@ public class TextMaster {
 	public static void removeText(GUIText text) {
 //		Logger.log("REMOVING: " + text.getTextString());
 		text.delete();
+		textVAOs.remove((Integer) text.getVAO());
 		int layer = text.getLayer();
 		Set<GUIText> textBatch = texts[layer].get(text.getFont());
 		if (textBatch != null) {
@@ -77,6 +82,7 @@ public class TextMaster {
 	public static void removeText(GUIText text, FontType oldFont) {
 //		Logger.log("REMOVING: " + text.getTextString());
 		text.delete();
+		textVAOs.remove(text.getVAO());
 		int layer = text.getLayer();
 		Set<GUIText> textBatch = texts[layer].get(oldFont);
 		if (textBatch != null) {
@@ -136,7 +142,30 @@ public class TextMaster {
 	}
 
 	public static void cleanUp() {
+		clear();
 		renderer.cleanUp();
+	}
+
+
+
+
+	private static boolean findText(int vao) {
+		boolean found = false;
+		for (Map<FontType, Set<GUIText>> map : texts) {
+			// delete every GUIText's data
+			for (FontType fontType : map.keySet()) {
+				for (GUIText guiText : map.get(fontType)) {
+					if (guiText.getVAO() == vao) {
+						Logger.logError(Logger.HIGH, "Found duplicate VAO for text: " + guiText.getTextString());
+						found = true;
+						break;
+					}
+				}
+				if (found) break;
+			}
+			if (found) break;
+		}
+		return found;
 	}
 
 }

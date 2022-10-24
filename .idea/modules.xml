@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Game Template/Game Template.iml" filepath="$PROJECT_DIR$/Game Template/Game Template.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JFlatCore/JFlatCore.iml" filepath="$PROJECT_DIR$/JFlatCore/JFlatCore.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JFlatGL.iml" filepath="$PROJECT_DIR$/JFlatGL.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JFlatGLTest/JFlatGLTest.iml" filepath="$PROJECT_DIR$/JFlatGLTest/JFlatGLTest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JFlatGUI/JFlatGUI.iml" filepath="$PROJECT_DIR$/JFlatGUI/JFlatGUI.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JFlatTile/JFlatTile.iml" filepath="$PROJECT_DIR$/JFlatTile/JFlatTile.iml" />
+    </modules>
+  </component>
+</project>

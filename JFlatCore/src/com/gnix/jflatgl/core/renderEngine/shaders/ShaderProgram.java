@@ -75,7 +75,7 @@ public abstract class ShaderProgram {
 			if (Config.CRASH_ON_MISSING_SHADER_UNIFORM)
 				throw new RuntimeException("Uniform " + uniformName + " does not exist!");
 			else
-				Logger.logError("Uniform " + uniformName + " does not exist!", Logger.MEDIUM);
+				Logger.logError(Logger.MEDIUM, "Uniform " + uniformName + " does not exist!");
 		}
 		return location;
 	}

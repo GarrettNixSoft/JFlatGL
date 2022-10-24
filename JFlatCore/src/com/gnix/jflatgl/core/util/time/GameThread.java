@@ -8,7 +8,7 @@ public class GameThread {
 		try {
 			Thread.sleep(milliseconds);
 		} catch (Exception e) {
-			Logger.logError("Sleep error.", Logger.MEDIUM);
+			Logger.logError(Logger.MEDIUM, "Sleep error.");
 		}
 	}
 

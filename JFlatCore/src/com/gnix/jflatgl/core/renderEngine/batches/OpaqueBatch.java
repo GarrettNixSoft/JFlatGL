@@ -1,9 +1,12 @@
 package com.gnix.jflatgl.core.renderEngine.batches;
 
-public abstract class OpaqueBatch extends RenderBatch implements Comparable<OpaqueBatch> {
+import com.gnix.jflatgl.core.renderEngine.elements.RenderElement;
+import com.gnix.jflatgl.core.renderEngine.renderers.ElementRenderer;
 
-	public OpaqueBatch(int layer) {
-		super(layer);
+public abstract class OpaqueBatch extends RenderBatch<RenderElement> implements Comparable<OpaqueBatch> {
+
+	public OpaqueBatch(int layer, ElementRenderer renderer) {
+		super(layer, renderer);
 	}
 
 	@Override

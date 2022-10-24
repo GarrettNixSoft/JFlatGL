@@ -1,5 +1,6 @@
 package com.gnix.jflatgl.core.entity.effects;
 
+import com.gnix.jflatgl.core.camera.Camera;
 import com.gnix.jflatgl.core.entity.Entity;
 import com.gnix.jflatgl.core.renderEngine.elements.TextureElement;
 import com.gnix.jflatgl.core.util.interpolators.FadeFloat;
@@ -36,7 +37,7 @@ public class FlashEffect extends EntityEffect {
 	}
 
 	@Override
-	public void render() {
+	public void render(Camera camera) {
 		if (fade.started()) {
 			TextureElement targetElement = parent.getTextureElement();
 			float value = fade.getValue();

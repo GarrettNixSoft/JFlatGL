@@ -130,6 +130,19 @@ public class Timer {
 		else return TimeScale.getRawTime(start) > time * 1000;
 	}
 
+	public void ifFinished(TimerAction action) {
+		if (finished()) action.execute();
+	}
+
+	public void ifFinishedOrElse(TimerAction finishedAction, TimerProgressAction elseAction) {
+		if (finished()) {
+			finishedAction.execute();
+		}
+		else {
+			elseAction.execute(getProgress());
+		}
+	}
+
 	// SETTERS
 
 	/**

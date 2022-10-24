@@ -2,8 +2,7 @@ package com.gnix.jflatgl.core.entity;
 
 import com.gnix.jflatgl.animation.Animation;
 import com.gnix.jflatgl.core.Game;
-import com.gnix.jflatgl.core.renderEngine.display.DisplayManager;
-import com.gnix.jflatgl.core.entity.projectile.Projectile;
+import com.gnix.jflatgl.core.camera.Camera;
 import com.gnix.jflatgl.core.renderEngine.elements.TextureElement;
 import com.gnix.jflatgl.core.renderEngine.util.Layers;
 import com.gnix.jflatgl.core.util.Logger;
@@ -48,6 +47,7 @@ public abstract class Entity {
 	// attaching this entity to another
 //	protected EntityAttachableTo entityAttachedTo;
 
+	// ******************************** CONSTRUCTORS ********************************
 	public Entity() {
 		this.x = 0;
 		this.y = 0;
@@ -72,25 +72,55 @@ public abstract class Entity {
 		textureElement = new TextureElement(Game.getTexture("default"), 0, 0, 0, 0, 0, true);
 	}
 
-	// GETTERS
-	public String getId() { return entityID; }
-	public TextureElement getTextureElement() { return textureElement; }
-	public float getX() { return x; }
-	public float getY() { return y; }
-	public int getLayer() { return layer; }
-	public float getDX() { return dx; }
-	public float getDY() { return dy; }
-	public Vector2f getPosition() { return new Vector2f(x, y); }
-	public Vector3f getPosition3() { return new Vector3f(x, y, layer); }
-	public float getMoveSpeed() { return moveSpeed; }
-	public float getMaxSpeed() { return maxSpeed; }
-	public float getWidth() { return width; }
-	public float getHeight() { return height; }
+	// ******************************** GETTERS ********************************
+	public String getId() {
+		return entityID;
+	}
+	public TextureElement getTextureElement() {
+		return textureElement;
+	}
+	public float getX() {
+		return x;
+	}
+	public float getY() {
+		return y;
+	}
+	public int getLayer() {
+		return layer;
+	}
+	public float getDX() {
+		return dx;
+	}
+	public float getDY() {
+		return dy;
+	}
+	public Vector2f getPosition() {
+		return new Vector2f(x, y);
+	}
+	public Vector3f getPosition3() {
+		return new Vector3f(x, y, layer);
+	}
+	public float getMoveSpeed() {
+		return moveSpeed;
+	}
+	public float getMaxSpeed() {
+		return maxSpeed;
+	}
+	public float getWidth() {
+		return width;
+	}
+	public float getHeight() {
+		return height;
+	}
 	public float getHealth() {
 		return health;
 	}
-	public float getCWidth() { return cwidth; }
-	public float getCHeight() { return cheight; }
+	public float getCWidth() {
+		return cwidth;
+	}
+	public float getCHeight() {
+		return cheight;
+	}
 	public float getMaxHealth() {
 		return maxHealth;
 	}
@@ -98,55 +128,19 @@ public abstract class Entity {
 		return dead;
 	}
 
-	public boolean remove() { return remove; }
+	public boolean remove() {
+		return remove;
+	}
 
 	public Vector4f getHitbox() {
 		return Collisions.createCollisionBox(getPosition(), new Vector2f(cwidth, cheight));
 	}
 
-	// SETTERS
-	public void setId(String entityID) { this.entityID = entityID; }
-
-	// simulating the entity
-	public abstract void update();
-	public abstract void render();
-	protected void handleAttachments() {}
-
-	protected void updateTextureElement() {
-		textureElement.setTexture(animation.getCurrentFrame());
-		textureElement.setPosition(x, y, layer);
-		textureElement.setSize(width, height);
-		textureElement.transform();
+	// ******************************** SETTERS ********************************
+	public void setId(String entityID) {
+		this.entityID = entityID;
 	}
 
-	// interacting with the entity
-	public void damage(float damage) {}
-
-	public void damage(Projectile projectile) {}
-
-	public void kill() {
-		Logger.log("ENTITY " + entityID + " KILLED");
-		damage(maxHealth);
-	}
-
-	protected void fixBounds() {
-		if (x < 0) x = 0;
-		if (y < 0) y = 0;
-	}
-
-	// screen bounds
-	public boolean notOnScreen() {
-		return x + width / 2 < 0 ||
-				x - width / 2 > DisplayManager.getPrimaryGameWindow().getWidth() ||
-				y + height / 2 < 0 ||
-				y - height / 2 > DisplayManager.getPrimaryGameWindow().getHeight();
-	}
-
-	public boolean onScreen() { // for ease of reading
-		return !notOnScreen();
-	}
-
-	// moving the entity
 	public void setPosition(float x, float y) {
 		this.x = x;
 		this.y = y;
@@ -197,6 +191,52 @@ public abstract class Entity {
 	public void move(float dx, float dy) {
 		x += dx;
 		y += dy;
+	}
+
+	// ******************************** SIMULATION ********************************
+	public abstract void update();
+
+	public abstract void render(Camera camera);
+
+	protected void handleAttachments() {}
+
+	protected void updateTextureElement() {
+		textureElement.setTexture(animation.getCurrentFrame());
+		textureElement.setPosition(x, y, layer);
+		textureElement.setSize(width, height);
+		textureElement.transform();
+	}
+
+	// ******************************** INTERACTION ********************************
+	public void damage(float damage) {}
+
+	public void kill() {
+		Logger.log("ENTITY " + entityID + " KILLED");
+		damage(maxHealth);
+	}
+
+	// ******************************** WORLD BOUNDS ********************************
+	protected void fixBounds() {
+		if (x < 0) x = 0;
+		if (y < 0) y = 0;
+	}
+
+	// screen bounds
+	public boolean notOnScreen(Camera camera) {
+
+		float screenX = camera.worldXToScreenX(x);
+		float screenY = camera.worldYToScreenY(y);
+		float screenWidth = width * camera.getScale();
+		float screenHeight = height * camera.getScale();
+
+		return screenX + screenWidth / 2 < 0 ||
+				screenX - screenWidth / 2 > Game.width() ||
+				screenY + screenHeight / 2 < 0 ||
+				screenY - screenHeight / 2 > Game.height();
+	}
+
+	public boolean onScreen(Camera camera) { // for ease of reading
+		return !notOnScreen(camera);
 	}
 
 }
