@@ -11,6 +11,7 @@ import com.gnix.jflatgl.core.renderEngine.textures.TextureComponent;
 import com.gnix.jflatgl.core.util.Logger;
 import com.gnix.jflatgl.gui.GUI;
 import com.gnix.jflatgl.gui.GUIAction;
+import com.gnix.jflatgl.gui.ValueAction;
 import org.joml.Vector4f;
 
 public class Checkbox extends GUIComponent {
@@ -18,7 +19,7 @@ public class Checkbox extends GUIComponent {
 	// value changes and behavior
 	private boolean checked;
 
-	private GUIAction onValueChanged;
+	private ValueAction onValueChanged;
 
 	// constants
 	public static final int SQUARE = 0;
@@ -42,7 +43,7 @@ public class Checkbox extends GUIComponent {
 	}
 
 	// ******************************** VALUE CHANGES ********************************
-	public Checkbox onValueChanged(GUIAction action) {
+	public Checkbox onValueChanged(ValueAction action) {
 		this.onValueChanged = action;
 		return this;
 	}
@@ -74,7 +75,7 @@ public class Checkbox extends GUIComponent {
 	 */
 	public void setChecked(boolean checked, boolean trigger) {
 		this.checked = checked;
-		if (trigger) this.onValueChanged.onTrigger();
+		if (trigger) this.onValueChanged.onTrigger(this.checked);
 	}
 
 	public boolean isChecked() {
