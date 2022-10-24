@@ -8,6 +8,7 @@ import com.gnix.jflatgl.core.renderEngine.elements.geometry.RectElement;
 import com.gnix.jflatgl.core.renderEngine.fonts.fontMeshCreator.FontType;
 import com.gnix.jflatgl.core.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.gnix.jflatgl.core.renderEngine.textures.TextureComponent;
+import com.gnix.jflatgl.core.renderEngine.util.AnchorPoint;
 import com.gnix.jflatgl.core.util.Logger;
 import com.gnix.jflatgl.gui.GUI;
 import com.gnix.jflatgl.gui.GUIAction;
@@ -127,7 +128,7 @@ public class Checkbox extends GUIComponent {
 		label.setTextAlignment(alignment);
 	}
 
-	public void setLabelAnchorPoint(GUIText.AnchorPoint anchorPoint) {
+	public void setLabelAnchorPoint(AnchorPoint anchorPoint) {
 		label.setAnchorPoint(anchorPoint);
 	}
 

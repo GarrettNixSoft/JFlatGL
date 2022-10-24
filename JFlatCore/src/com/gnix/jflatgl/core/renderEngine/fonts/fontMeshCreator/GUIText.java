@@ -4,6 +4,7 @@ import com.gnix.jflatgl.core.Game;
 import com.gnix.jflatgl.core.renderEngine.display.DisplayManager;
 import com.gnix.jflatgl.core.renderEngine.fonts.fontRendering.TextMaster;
 import com.gnix.jflatgl.core.renderEngine.models.ModelLoader;
+import com.gnix.jflatgl.core.renderEngine.util.AnchorPoint;
 import com.gnix.jflatgl.core.util.configuration.Config;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -51,11 +52,6 @@ public class GUIText {
 	}
 	private Alignment textAlignment;
 
-	public enum AnchorPoint {
-		TOP_LEFT, TOP_CENTER, TOP_RIGHT,
-		CENTER_LEFT, CENTER, CENTER_RIGHT,
-		BOTTOM_LEFT, BOTTOM_CENTER, BOTTOM_RIGHT
-	}
 	private AnchorPoint anchorPoint;
 
 	// shader settings

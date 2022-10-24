@@ -6,6 +6,7 @@ import com.gnix.jflatgl.core.renderEngine.elements.geometry.OutlineElement;
 import com.gnix.jflatgl.core.renderEngine.elements.geometry.RectElement;
 import com.gnix.jflatgl.core.renderEngine.fonts.fontMeshCreator.FontType;
 import com.gnix.jflatgl.core.renderEngine.fonts.fontMeshCreator.GUIText;
+import com.gnix.jflatgl.core.renderEngine.util.AnchorPoint;
 import com.gnix.jflatgl.gui.GUI;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -22,7 +23,7 @@ public class Button extends GUIComponent {
 	public Button(String componentID, GUI parent) {
 		super(componentID, parent);
 		label = new GUIText("Button", defaultTextSize, Game.getFont("default"), new Vector3f(0,0,10), 1, GUIText.Alignment.CENTER);
-		label.setAnchorPoint(GUIText.AnchorPoint.CENTER);
+		label.setAnchorPoint(AnchorPoint.CENTER);
 		label.setWidth(0.5f);
 		label.setEdge(0.2f);
 		baseElement = new RectElement(getPrimaryColor(), 0, 0, 0, 0, 0, true);

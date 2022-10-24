@@ -4,6 +4,7 @@ import com.gnix.jflatgl.core.Game;
 import com.gnix.jflatgl.core.renderEngine.display.DisplayManager;
 import com.gnix.jflatgl.core.renderEngine.fonts.fontMeshCreator.FontType;
 import com.gnix.jflatgl.core.renderEngine.fonts.fontMeshCreator.GUIText;
+import com.gnix.jflatgl.core.renderEngine.util.AnchorPoint;
 import com.gnix.jflatgl.gui.GUI;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -70,7 +71,7 @@ public class TextComponent extends GUIComponent {
 		text.setTextAlignment(alignment);
 	}
 
-	public void setTextAnchorPoint(GUIText.AnchorPoint anchorPoint) {
+	public void setTextAnchorPoint(AnchorPoint anchorPoint) {
 		text.setAnchorPoint(anchorPoint);
 	}
 
