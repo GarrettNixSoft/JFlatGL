@@ -22,6 +22,7 @@ public abstract class Entity {
 
 	// size in pixels
 	protected float width, height;
+	protected boolean facingRight;
 
 	// collision box
 	protected float cwidth, cheight;
@@ -40,9 +41,6 @@ public abstract class Entity {
 	// appearance
 	protected Animation animation;
 	protected TextureElement textureElement;
-
-	// sync time for update methods
-	protected float time;
 
 	// attaching this entity to another
 //	protected EntityAttachableTo entityAttachedTo;

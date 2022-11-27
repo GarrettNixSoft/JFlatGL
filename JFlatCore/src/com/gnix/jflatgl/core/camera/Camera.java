@@ -1,12 +1,16 @@
 package com.gnix.jflatgl.core.camera;
 
 import com.gnix.jflatgl.core.Game;
+import com.gnix.jflatgl.core.entity.Entity;
 import com.gnix.jflatgl.core.entity.effects.Shake2D;
 import com.gnix.jflatgl.core.input.Cursor;
+import com.gnix.jflatgl.core.renderEngine.display.DisplayManager;
 import com.gnix.jflatgl.core.util.Logger;
 import com.gnix.jflatgl.core.util.interpolators.TransitionFloat;
 import com.gnix.jflatgl.core.util.time.Timer;
 import org.joml.Vector2f;
+
+import java.util.Optional;
 
 public class Camera {
 
@@ -28,9 +32,14 @@ public class Camera {
 	// viewport
 	private int viewportWidth, viewportHeight;
 
-	// movement mode(s)
+	// ******************************** MOVEMENT MODE(s) ********************************
 	private int currentMode;
 	public static final int INIT = -1, FOLLOW = 0, TARGET = 1, FREE = 2;
+
+	private Optional<Entity> targetEntity = Optional.empty();
+	private Optional<Vector2f> targetPoint = Optional.empty();
+
+	private float followStrength = 0.07f; // TODO implement a setting system
 
 	// ******************************** EFFECTS ********************************
 	// SHAKE
@@ -183,6 +192,49 @@ public class Camera {
 		move(x, y);
 	}
 
+	// ******************************** TARGETING ********************************
+	public void setFollowStrength(float followStrength) {
+		this.followStrength = followStrength;
+	}
+
+	public void follow(Entity entity) {
+		targetEntity = Optional.of(entity);
+		currentMode = FOLLOW;
+	}
+
+	public void target(Vector2f point) {
+		targetPoint = Optional.of(point);
+		currentMode = TARGET;
+	}
+
+	public void freeCam() {
+		currentMode = FREE;
+	}
+
+	public void snapToTarget() {
+		if (currentMode == FOLLOW) {
+			targetEntity.ifPresent(entity -> {
+				// figure out where the center of the is in the world
+				float x = screenXToWorldX(Game.centerX());
+				float y = screenYToWorldY(Game.centerY());
+				// figure out where the entity is relative to the visible center
+				float xWalk = entity.getX() - x;
+				float yWalk = entity.getY() - y;
+				// figure out how far to move to cover the difference
+				float dx = xWalk * 1;
+				float dy = yWalk * 1;
+				// move that distance
+				xOffset += dx;
+				yOffset += dy;
+			});
+		}
+		else if (currentMode == TARGET) {
+			targetPoint.ifPresent(point -> {
+				// TODO
+			});
+		}
+	}
+
 	// ******************************** SCALING/ZOOMING ********************************
 	public void zoom(float targetScale, float time) {
 		if (targetScale < minScale || targetScale > maxScale) return;
@@ -314,13 +366,28 @@ public class Camera {
 	// ******************************** UPDATE METHODS ********************************
 	private void doMovement() {
 		switch (currentMode) {
-			case FOLLOW -> {
-				// TODO
-			}
+			case FOLLOW -> targetEntity.ifPresent(entity -> {
+				// figure out how much to scale the ease factor, based on the current framerate relative to 60 FPS
+				float frameRate = 1 / DisplayManager.getFrameTimeRaw();
+				float timeRatio = 60.0f / frameRate;
+				float ease = Math.max(followStrength * timeRatio, 0.0001f);
+				// figure out where the center of the is in the world
+				float x = screenXToWorldX(Game.centerX());
+				float y = screenYToWorldY(Game.centerY());
+				// figure out where the entity is relative to the visible center
+				float xWalk = entity.getX() - x;
+				float yWalk = entity.getY() - y;
+				// figure out how far to move to cover the difference
+				float dx = xWalk * ease;
+				float dy = yWalk * ease;
+				// move that distance
+				xOffset += dx;
+				yOffset += dy;
+			});
 			case TARGET -> {
 				// TODO
 			}
-			case FREE -> {} // don't move
+			case FREE -> {} // don't move on my own (something else is controlling the camera position)
 		}
 	}
 
