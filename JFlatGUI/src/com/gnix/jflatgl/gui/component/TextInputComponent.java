@@ -6,6 +6,7 @@ import com.gnix.jflatgl.core.renderEngine.elements.geometry.OutlineElement;
 import com.gnix.jflatgl.core.renderEngine.elements.geometry.RectElement;
 import com.gnix.jflatgl.core.renderEngine.fonts.fontMeshCreator.FontType;
 import com.gnix.jflatgl.core.renderEngine.fonts.fontMeshCreator.GUIText;
+import com.gnix.jflatgl.core.renderEngine.util.AnchorPoint;
 import com.gnix.jflatgl.core.util.color.Colors;
 import com.gnix.jflatgl.core.util.data.Queue;
 import com.gnix.jflatgl.core.input.KeyInput;
@@ -66,7 +67,7 @@ public class TextInputComponent extends GUIComponent {
 		inputText = new ArrayList<>();
 		text = new GUIText("", 1, Game.getFont("default"), new Vector3f(), 1);
 		text.setUseStencil(true);
-		text.setAnchorPoint(GUIText.AnchorPoint.CENTER);
+		text.setAnchorPoint(AnchorPoint.CENTER);
 		borderElement = new OutlineElement(Colors.INVISIBLE, 0, 0, 0, 0, 0, 0, true);
 		baseElement = new RectElement(Colors.INVISIBLE, 0, 0, 0, 0, 0, true);
 		cursorElement = new RectElement(Colors.INVISIBLE, 0, 0, 0, 0, 0, true);
@@ -167,7 +168,7 @@ public class TextInputComponent extends GUIComponent {
 		text.setTextAlignment(alignment);
 	}
 
-	public void setTextAnchorPoint(GUIText.AnchorPoint anchorPoint) {
+	public void setTextAnchorPoint(AnchorPoint anchorPoint) {
 		text.setAnchorPoint(anchorPoint);
 	}
 

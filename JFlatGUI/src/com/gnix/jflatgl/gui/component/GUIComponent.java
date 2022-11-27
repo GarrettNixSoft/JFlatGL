@@ -28,6 +28,7 @@ public abstract class GUIComponent {
 	private final Vector2f size = new Vector2f();
 	private float rotation;
 	private float scale = 1;
+	private boolean scaleChange = false;
 
 	// appearance
 	private final Vector4f primaryColor = new Vector4f(0);
@@ -296,6 +297,19 @@ public abstract class GUIComponent {
 		return scale;
 	}
 
+	/**
+	 * Check whether this component's scale value has changed since
+	 * this method was last called. Will only return {@code true} once
+	 * per scale change -- calling it resets the change flag.
+	 * @return {@code true} if this component's scale value has been changed
+	 * since this method was last called
+	 */
+	public boolean scaleChanged() {
+		boolean change = scaleChange;
+		scaleChange = false;
+		return change;
+	}
+
 	public float getScaledWidth() {
 		return size.x * scale;
 	}
@@ -423,6 +437,7 @@ public abstract class GUIComponent {
 	public void setSize(float width, float height) { this.size.set(width, height); }
 
 	public void setScale(float scale) {
+		if (scaleChange) scaleChange = this.scale != scale;
 		this.scale = scale;
 	}
 

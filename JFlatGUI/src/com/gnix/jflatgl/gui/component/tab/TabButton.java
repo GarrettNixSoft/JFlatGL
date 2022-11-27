@@ -7,6 +7,7 @@ import com.gnix.jflatgl.core.renderEngine.elements.TextureElement;
 import com.gnix.jflatgl.core.renderEngine.fonts.fontMeshCreator.FontType;
 import com.gnix.jflatgl.core.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.gnix.jflatgl.core.renderEngine.textures.TextureComponent;
+import com.gnix.jflatgl.core.renderEngine.util.AnchorPoint;
 import com.gnix.jflatgl.gui.GUI;
 import com.gnix.jflatgl.gui.component.GUIComponent;
 import org.joml.Vector2f;
@@ -22,7 +23,7 @@ public class TabButton extends GUIComponent {
 	public TabButton(String componentID, GUI parent, TextureComponent icon) {
 		super(componentID, parent);
 		label = new GUIText("Tab", defaultTextSize, Game.getFont("default"), new Vector3f(0,0,10), 1, GUIText.Alignment.CENTER);
-		label.setAnchorPoint(GUIText.AnchorPoint.CENTER);
+		label.setAnchorPoint(AnchorPoint.CENTER);
 		iconTexture = new TextureElement();
 		iconTexture.setTexture(icon);
 	}
