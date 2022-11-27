@@ -157,7 +157,7 @@ public class Game {
 		// initialize the cursor
 		Cursor.init();
 
-		// initialize the instance
+		// initialize the instance and its GSM
 		getInstance().gsm = gsm;
 
 		// the game itself (load assets)
