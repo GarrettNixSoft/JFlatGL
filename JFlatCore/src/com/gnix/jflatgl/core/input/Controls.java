@@ -76,6 +76,10 @@ public class Controls {
 	}
 
 	// ******************************** CHECKING INPUTS ********************************
+	public static boolean inputPresent(String control) {
+		return inputPresent(control, 0);
+	}
+
 	public static boolean inputPresent(String control, int player) {
 
 		// fetch the current context
