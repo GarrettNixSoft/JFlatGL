@@ -6,16 +6,24 @@ import java.awt.*;
 
 public class DisplayScale {
 
+	public enum AspectRatio {
+		D_16_9, D_16_10, D_4_3,
+		NONE
+	}
+
 	public static int DISPLAY_WIDTH;
 	public static int DISPLAY_HEIGHT;
 	public static double SCALE_W;
 	public static double SCALE_H;
 
 	static {
+
+		// fetch the display dimensions
 		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
 		DISPLAY_WIDTH = gd.getDisplayMode().getWidth();
 		DISPLAY_HEIGHT = gd.getDisplayMode().getHeight();
 
+		// get 1080p scaling values
 		SCALE_W = DISPLAY_WIDTH / 1920.0;
 		SCALE_H = DISPLAY_HEIGHT / 1080.0;
 	}
@@ -37,6 +45,34 @@ public class DisplayScale {
 
 		int w = (int) (width * SCALE_W);
 		int h = (int) (height * SCALE_H);
+
+		return new Pair<>(w, h);
+
+	}
+
+	public static Pair<Integer, Integer> getDimensionsScaledForResolution(int width, int height, double resolutionWidth, double resolutionHeight) {
+
+		double scaleX = DISPLAY_WIDTH / resolutionWidth;
+		double scaleY = DISPLAY_HEIGHT / resolutionHeight;
+
+		int w = (int) (width * scaleX);
+		int h = (int) (height * scaleY);
+
+		return new Pair<>(w, h);
+
+	}
+
+	public static Pair<Integer, Integer> getDimensionsScaledToMonitor(double width, AspectRatio aspectRatio) {
+
+		int w = (int) (width * SCALE_W);
+
+		int h = switch (aspectRatio) {
+			case D_16_9 -> w * 9 / 16;
+			case D_16_10 -> w * 10 / 16;
+			case D_4_3 -> w * 3 / 4;
+			case NONE -> w;
+			case null -> throw new RuntimeException();
+		};
 
 		return new Pair<>(w, h);
 

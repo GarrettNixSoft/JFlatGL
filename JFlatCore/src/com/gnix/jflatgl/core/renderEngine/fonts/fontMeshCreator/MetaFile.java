@@ -27,8 +27,6 @@ public class MetaFile {
 	private static final String SPLITTER = " ";
 	private static final String NUMBER_SEPARATOR = ",";
 
-	private final double aspectRatio;
-
 	private double verticalPerPixelSize;
 	private double horizontalPerPixelSize;
 	private double spaceWidth;
@@ -41,6 +39,8 @@ public class MetaFile {
 	private BufferedReader reader;
 	private final Map<String, String> values = new HashMap<>();
 
+	public double aspectRatio;
+
 	/**
 	 * Opens a font file in preparation for reading.
 	 * 
@@ -48,7 +48,19 @@ public class MetaFile {
 	 *            - the font file, stored as a string.
 	 */
 	protected MetaFile(String fileString) {
-		this.aspectRatio = (double) Config.INTERNAL_WIDTH / (double) Config.INTERNAL_HEIGHT;
+		aspectRatio = (double) Config.INTERNAL_WIDTH / (double) Config.INTERNAL_HEIGHT;
+		openFile(fileString);
+		loadPaddingData();
+		loadLineSizes();
+		int imageWidth = getValueOfVariable("scaleW");
+		loadCharacterData(imageWidth);
+		// ENSURE THAT SPACES ARE ALWAYS INCLUDED
+		validateSpace();
+		close();
+	}
+
+	protected MetaFile(String fileString, double aspectRatio) {
+		this.aspectRatio = aspectRatio;
 		openFile(fileString);
 		loadPaddingData();
 		loadLineSizes();

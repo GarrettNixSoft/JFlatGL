@@ -5,7 +5,6 @@ import com.gnix.jflatgl.core.util.Logger;
 import com.gnix.jflatgl.core.util.conversion.DisplayScale;
 import com.gnix.jflatgl.core.util.data.Pair;
 import com.gnix.jflatgl.core.util.file.FileUtil;
-import org.joml.Vector2f;
 import org.joml.Vector4f;
 import org.json.JSONObject;
 
@@ -47,11 +46,13 @@ public class Config {
 	// for game logic purposes, these are the bounds of the window
 	public static int INTERNAL_WIDTH;
 	public static int INTERNAL_HEIGHT;
+	public static DisplayScale.AspectRatio ASPECT_RATIO;
 
 	// The default size of the game window.
 	// The game will be stretched to this size.
 	public static int DEFAULT_WIDTH;
 	public static int DEFAULT_HEIGHT;
+	public static boolean SCALE_TO_MONITOR;
 
 	// Splash screen settings
 	public static int SPLASH_WIDTH;
@@ -96,8 +97,16 @@ public class Config {
 		INTERNAL_WIDTH = configJSON.getInt("internal_width");
 		INTERNAL_HEIGHT = configJSON.getInt("internal_height");
 
+		ASPECT_RATIO = switch (configJSON.optString("aspect_ratio", "none")) {
+			case "16:9" -> DisplayScale.AspectRatio.D_16_9;
+			case "16:10", "8:5" -> DisplayScale.AspectRatio.D_16_10;
+			case "4:3" -> DisplayScale.AspectRatio.D_4_3;
+			default -> DisplayScale.AspectRatio.NONE;
+		};
+
 		DEFAULT_WIDTH = configJSON.getInt("default_width");
 		DEFAULT_HEIGHT = configJSON.getInt("default_height");
+		SCALE_TO_MONITOR = configJSON.optBoolean("scale_to_monitor", false);
 
 		SCALE_SPLASH_SCREEN = configJSON.getBoolean("scale_splash_screen");
 		SPLASH_WIDTH = configJSON.getInt("splash_width");

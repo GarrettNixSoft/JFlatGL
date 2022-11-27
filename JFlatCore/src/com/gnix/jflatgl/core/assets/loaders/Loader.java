@@ -7,6 +7,7 @@ import com.gnix.jflatgl.core.audio.Sound;
 import com.gnix.jflatgl.core.renderEngine.fonts.fontMeshCreator.FontType;
 import com.gnix.jflatgl.core.renderEngine.textures.TextureComponent;
 import com.gnix.jflatgl.core.util.Logger;
+import com.gnix.jflatgl.core.util.configuration.Config;
 import com.gnix.jflatgl.core.util.conversion.ImageConverter;
 import com.gnix.jflatgl.core.util.conversion.StringConverter;
 import com.gnix.jflatgl.core.util.file.FileUtil;
@@ -56,13 +57,26 @@ public class Loader {
 		return loadFont(font, "").convert();
 	}
 
+	public static FontType loadFontConverted(String font, double aspectRatio) {
+		return loadFont(font, "", aspectRatio).convert();
+	}
+
 	public static RawFontType loadFont(String font, String key) {
 		String path = "fonts" + SEPARATOR + font + SEPARATOR + font;
 		RawTexture rawTexture = ImageLoader.loadTexture(path + ".png");
 //		Logger.log("Loaded raw texture: " + path + ".png");
 		RawTextureAtlas fontAtlas = new RawTextureAtlas(key, rawTexture, 1, true);
 		String fontFile = loadFontFile(SEPARATOR + path + ".fnt");
-		return new RawFontType(key, fontAtlas, fontFile);
+		return new RawFontType(key, fontAtlas, fontFile, (double) Config.INTERNAL_WIDTH / Config.INTERNAL_HEIGHT);
+	}
+
+	public static RawFontType loadFont(String font, String key, double aspectRatio) {
+		String path = "fonts" + SEPARATOR + font + SEPARATOR + font;
+		RawTexture rawTexture = ImageLoader.loadTexture(path + ".png");
+//		Logger.log("Loaded raw texture: " + path + ".png");
+		RawTextureAtlas fontAtlas = new RawTextureAtlas(key, rawTexture, 1, true);
+		String fontFile = loadFontFile(SEPARATOR + path + ".fnt");
+		return new RawFontType(key, fontAtlas, fontFile, aspectRatio);
 	}
 
 	private static String loadFontFile(String path) {

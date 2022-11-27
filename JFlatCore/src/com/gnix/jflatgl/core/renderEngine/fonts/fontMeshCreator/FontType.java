@@ -27,6 +27,11 @@ public class FontType {
 		this.loader = new TextMeshCreator(fontFile);
 	}
 
+	public FontType(int textureAtlas, String fontFile, double aspectRatio) {
+		this.textureAtlas = textureAtlas;
+		this.loader = new TextMeshCreator(fontFile, aspectRatio);
+	}
+
 	/**
 	 * @return The font texture atlas.
 	 */

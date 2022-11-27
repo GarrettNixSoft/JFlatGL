@@ -13,6 +13,8 @@ import com.gnix.jflatgl.core.util.configuration.Config;
 import com.gnix.jflatgl.core.util.configuration.Settings;
 import com.gnix.jflatgl.core.input.KeyInput;
 import com.gnix.jflatgl.core.input.MouseInput;
+import com.gnix.jflatgl.core.util.conversion.DisplayScale;
+import com.gnix.jflatgl.core.util.data.Pair;
 import com.gnix.jflatgl.core.util.math.MathUtil;
 import com.gnix.jflatgl.core.util.time.TimeScale;
 import org.joml.Vector2f;
@@ -278,6 +280,34 @@ public class DisplayManager {
 		// set the icons
 		glfwSetWindowIcon(primaryWindowID, iconBuffer);
 
+
+		// Step 7: Tell GLFW what to do when a window is resized or closed.
+		initResizeCallback();
+		initCloseCallback();
+
+		// The primary window only reacts to resize events; the close callback is for auxiliary windows.
+		glfwSetWindowSizeCallback(primaryWindowID, windowResizeCallback);
+
+		// CREATE THE WINDOW OBJECT AND STORE IT
+		Window mainGameWindow = new Window(primaryWindowID, null, Config.DEFAULT_WIDTH, Config.DEFAULT_HEIGHT, 0, 0, 0, 0);
+		addWindow(mainGameWindow);
+
+		mainGameWindow.setWindowRenderer(new MasterRenderer(mainGameWindow));
+
+		// Step 9: Manually resize to size specified in Config.
+		int width = Config.DEFAULT_WIDTH;
+		int height = Config.DEFAULT_HEIGHT;
+
+		if (Config.SCALE_TO_MONITOR) {
+			Pair<Integer, Integer> scaled = DisplayScale.getDimensionsScaledToMonitor(width, Config.ASPECT_RATIO);
+			width = scaled.data1();
+			height = scaled.data2();
+		}
+
+		glfwSetWindowSize(primaryWindowID, width, height);
+		windowResizeCallback.invoke(primaryWindowID, width, height);
+		centerWindow(primaryWindowID);
+
 		// Step 6: Size and position the window.
 		try (MemoryStack stack = MemoryStack.stackPush()) {
 			IntBuffer pWidth = stack.mallocInt(1);
@@ -294,13 +324,6 @@ public class DisplayManager {
 			glfwSwapInterval(0);
 		}
 
-		// Step 7: Tell GLFW what to do when a window is resized or closed.
-		initResizeCallback();
-		initCloseCallback();
-
-		// The primary window only reacts to resize events; the close callback is for auxiliary windows.
-		glfwSetWindowSizeCallback(primaryWindowID, windowResizeCallback);
-
 		glDepthFunc(GL_LEQUAL);
 		glDepthRange(0, 1);
 
@@ -315,20 +338,9 @@ public class DisplayManager {
 
 		Stencil.disableStencilWrite();
 
-		// CREATE THE WINDOW OBJECT AND STORE IT
-		Window mainGameWindow = new Window(primaryWindowID, null, Config.DEFAULT_WIDTH, Config.DEFAULT_HEIGHT, 0, 0, 0, 0);
-		addWindow(mainGameWindow);
-
-		mainGameWindow.setWindowRenderer(new MasterRenderer(mainGameWindow));
-
 		// Init master renderer to allow the window creation process to finish
 //		MasterRenderer.init(primaryWindowID);
 //		mainGameWindow.setWindowRenderer(MasterRenderer.primaryWindowRenderer);
-
-		// Step 9: Manually resize to size specified in Config.
-		glfwSetWindowSize(primaryWindowID, Config.DEFAULT_WIDTH, Config.DEFAULT_HEIGHT);
-		windowResizeCallback.invoke(primaryWindowID, Config.DEFAULT_WIDTH, Config.DEFAULT_HEIGHT);
-		centerWindow(primaryWindowID);
 
 		mainGameWindow.setReady(true);
 

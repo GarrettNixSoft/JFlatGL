@@ -170,8 +170,16 @@ public class FileUtil {
 
 	// LOAD METHODS
 	public static byte[] getFileBytes(String filePath) {
-		File file = new File(filePath);
-		return getFileBytes(file);
+		try {
+			InputStream in = FileUtil.class.getResourceAsStream(filePath);
+			if (in == null)
+				in = ResourceLoader.getResourceAsStream(filePath);
+			return in.readAllBytes();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return new byte[0];
+		}
 	}
 
 	public static byte[] getFileBytes(File file) {

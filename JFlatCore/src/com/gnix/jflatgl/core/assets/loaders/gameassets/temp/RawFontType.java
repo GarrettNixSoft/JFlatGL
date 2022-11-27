@@ -4,7 +4,7 @@ import com.gnix.jflatgl.core.Game;
 import com.gnix.jflatgl.core.renderEngine.fonts.fontMeshCreator.FontType;
 import com.gnix.jflatgl.core.renderEngine.textures.TextureAtlas;
 
-public record RawFontType(String key, RawTextureAtlas rawAtlas, String fontFile) {
+public record RawFontType(String key, RawTextureAtlas rawAtlas, String fontFile, double aspectRatio) {
 
 	public void addToGame() {
 		FontType font = convert();
@@ -14,7 +14,7 @@ public record RawFontType(String key, RawTextureAtlas rawAtlas, String fontFile)
 
 	public FontType convert() {
 		TextureAtlas fontAtlas = rawAtlas.convert();
-		return new FontType(fontAtlas.texture().id(), fontFile);
+		return new FontType(fontAtlas.texture().id(), fontFile, aspectRatio);
 	}
 
 }

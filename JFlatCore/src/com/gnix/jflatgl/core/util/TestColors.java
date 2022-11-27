@@ -12,7 +12,7 @@ public class TestColors {
 	public static final String TEXT_YELLOW = "\u001B[33m";
 	public static final String TEXT_WHITE = "\u001B[37m";
 
-	public static final String ANSI_RED_BACKGROUND = "\u001B[40m";
+	public static final String ANSI_RED_BACKGROUND = "\u001B[41m";
 	public static final String ANSI_YELLOW_BACKGROUND = "\u001B[43m";
 	public static final String ANSI_BLUE_BACKGROUND = "\u001B[44m";
 	public static final String ANSI_BLACK_BACKGROUND = "\u001B[40m";

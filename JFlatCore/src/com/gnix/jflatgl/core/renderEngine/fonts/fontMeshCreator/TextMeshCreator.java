@@ -19,6 +19,10 @@ public class TextMeshCreator {
 		metaData = new MetaFile(metaFile);
 	}
 
+	protected TextMeshCreator(String metaFile, double aspectRatio) {
+		metaData = new MetaFile(metaFile, aspectRatio);
+	}
+
 	protected TextMeshData createTextMesh(GUIText text) {
 		List<Line> lines = createStructure(text);
 
