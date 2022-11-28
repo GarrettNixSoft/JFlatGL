@@ -34,7 +34,7 @@ public class RadioButtonSet extends GUIComponent {
 
 	/**
 	 * Add a new option to this RadioButtonSet. Generates another
-	 * RadioButton, which are stored and will be displayed in the
+	 * RadioButton, which all are stored and will be displayed in the
 	 * order that they are created.
 	 * <br>
 	 * All RadioButtons in the set should be added before calling any
