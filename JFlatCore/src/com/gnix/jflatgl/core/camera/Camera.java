@@ -9,6 +9,7 @@ import com.gnix.jflatgl.core.util.Logger;
 import com.gnix.jflatgl.core.util.interpolators.TransitionFloat;
 import com.gnix.jflatgl.core.util.time.Timer;
 import org.joml.Vector2f;
+import org.joml.Vector4f;
 
 import java.util.Optional;
 
@@ -109,6 +110,8 @@ public class Camera {
 	public int getWorldHeight() {
 		return worldHeight;
 	}
+
+	public Vector4f getWorldHitbox() { return new Vector4f(0, 0, worldWidth, worldHeight); }
 
 	public int getViewportWidth() {
 		return viewportWidth;
