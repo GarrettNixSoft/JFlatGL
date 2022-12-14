@@ -39,7 +39,8 @@ public class Camera {
 	private Optional<Entity> targetEntity = Optional.empty();
 	private Optional<Vector2f> targetPoint = Optional.empty();
 
-	private float followStrength = 0.07f; // TODO implement a setting system
+	private float followStrengthHorizontal = 0.07f;
+	private float followStrengthVertical = 0.3f;
 
 	// ******************************** EFFECTS ********************************
 	// SHAKE
@@ -193,8 +194,12 @@ public class Camera {
 	}
 
 	// ******************************** TARGETING ********************************
-	public void setFollowStrength(float followStrength) {
-		this.followStrength = followStrength;
+	public void setFollowStrengthHorizontal(float followStrengthHorizontal) {
+		this.followStrengthHorizontal = followStrengthHorizontal;
+	}
+
+	public void setFollowStrengthVertical(float followStrengthVertical) {
+		this.followStrengthVertical = followStrengthVertical;
 	}
 
 	public void follow(Entity entity) {
@@ -370,7 +375,8 @@ public class Camera {
 				// figure out how much to scale the ease factor, based on the current framerate relative to 60 FPS
 				float frameRate = 1 / DisplayManager.getFrameTimeRaw();
 				float timeRatio = 60.0f / frameRate;
-				float ease = Math.max(followStrength * timeRatio, 0.0001f);
+				float easeX = Math.max(followStrengthHorizontal * timeRatio, 0.0001f);
+				float easeY = Math.max(followStrengthVertical * timeRatio, 0.0001f);
 				// figure out where the center of the is in the world
 				float x = screenXToWorldX(Game.centerX());
 				float y = screenYToWorldY(Game.centerY());
@@ -378,8 +384,8 @@ public class Camera {
 				float xWalk = entity.getX() - x;
 				float yWalk = entity.getY() - y;
 				// figure out how far to move to cover the difference
-				float dx = xWalk * ease;
-				float dy = yWalk * ease;
+				float dx = xWalk * easeX;
+				float dy = yWalk * easeY;
 				// move that distance
 				xOffset += dx;
 				yOffset += dy;
