@@ -25,4 +25,8 @@ public record Pair<T1, T2>(T1 data1, T2 data2) {
 
 	}
 
+	@Override
+	public String toString() {
+		return String.format("Pair<%s, %s>(%s, %s)", data1.getClass().getName(), data2.getClass().getName(), data1, data2);
+	}
 }

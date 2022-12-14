@@ -1,5 +1,6 @@
 package com.gnix.jflatgl.core.util.math;
 
+import com.gnix.jflatgl.core.entity.Collider;
 import com.gnix.jflatgl.core.entity.Entity;
 import com.gnix.jflatgl.core.util.configuration.Config;
 import org.joml.Vector2f;
@@ -200,22 +201,22 @@ public class Collisions {
 	}
 
 	/**
-	 * Check for a collision between an Entity and an arbitrary rectangle.
-	 * @param entity The Entity
+	 * Check for a collision between a Collider and an arbitrary rectangle.
+	 * @param collider The Entity
 	 * @param bounds The Rectangle
-	 * @return True if the entity's hitbox intersects with the rectangle.
+	 * @return True if the collider's hitbox intersects with the rectangle.
 	 */
-	public static boolean collision(Entity entity, Vector4f bounds) {
-		return intersects(entity.getHitbox(), bounds);
+	public static boolean collision(Collider collider, Vector4f bounds) {
+		return intersects(collider.getHitbox(), bounds);
 	}
 
 	/**
-	 * Check for a collision between two Entities.
+	 * Check for a collision between two Colliders.
 	 * @param a Entity A
 	 * @param b Entity B
-	 * @return True if the entities are unique and their hitboxes intersect.
+	 * @return True if the colliders are unique and their hitboxes intersect.
 	 */
-	public static boolean collision(Entity a, Entity b) {
+	public static boolean collision(Collider a, Collider b) {
 		// the results of this check appear to be dependent on parameter order;
 		// in order to ensure collisions are detected regardless of order,
 		// collisions are checked using both arrangements of parameters
