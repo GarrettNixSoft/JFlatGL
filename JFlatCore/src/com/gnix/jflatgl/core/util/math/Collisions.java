@@ -11,7 +11,7 @@ import org.joml.Vector4f;
 public class Collisions {
 
 	/**
-	 * Create a Vector4f representation of an entity collision box, in absolute coordinates.
+	 * Create a Vector4f representation of an entity collision box, centered on the given position, in absolute coordinates.
 	 * @param x the x position (center)
 	 * @param y the y position (center)
 	 * @param width the width of the box
@@ -23,7 +23,7 @@ public class Collisions {
 	}
 
 	/**
-	 * Create a Vector4f representation of an entity collision box, in absolute coordinates.
+	 * Create a Vector4f representation of an entity collision box, centered on the given position, in absolute coordinates.
 	 * @param position the entity position
 	 * @param size the entity size
 	 * @return a Vector4f representing {x1,y1,x2,y2} (NOT {x,y,w,h})
@@ -33,7 +33,7 @@ public class Collisions {
 	}
 
 	/**
-	 * Create a Vector4f representation of an entity collision box, in absolute coordinates.
+	 * Create a Vector4f representation of an entity collision box, centered on the given position, in absolute coordinates.
 	 * @param position the entity position (center)
 	 * @param size the entity size
 	 * @return a Vector4f representing {x1,y1,x2,y2} (NOT {x,y,w,h})
@@ -44,7 +44,7 @@ public class Collisions {
 	}
 
 	/**
-	 * Create a Vector4f representation of an entity collision box, in absolute coordinates.
+	 * Create a Vector4f representation of an entity collision box, centered on the given position, in absolute coordinates.
 	 * @param position the entity position
 	 * @param size the entity size
 	 * @return a Vector4f representing {x1,y1,x2,y2} (NOT {x,y,w,h})
