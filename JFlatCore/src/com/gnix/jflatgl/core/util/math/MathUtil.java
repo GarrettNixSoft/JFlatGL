@@ -133,6 +133,19 @@ public class MathUtil {
 	}
 
 	/**
+	 * Get a position between two points.
+	 * @param point1 the start point
+	 * @param point2 the end point
+	 * @param between how far along the line between the two points to move
+	 * @return the point interpolated between the start and end
+	 */
+	public static Vector2f interpolate(Vector2f point1, Vector2f point2, float between) {
+		float xDelta = point2.x - point1.x;
+		float yDelta = point2.y - point1.y;
+		return new Vector2f(point1.x + xDelta * between, point1.y + yDelta * between);
+	}
+
+	/**
 	 * Round a float value to the nearest {@code interval}.
 	 * @param value the value to round
 	 * @param interval the rounding interval

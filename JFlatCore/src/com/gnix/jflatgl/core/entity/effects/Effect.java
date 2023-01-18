@@ -1,12 +1,14 @@
 package com.gnix.jflatgl.core.entity.effects;
 
-import com.gnix.jflatgl.core.entity.Entity;
+import com.gnix.jflatgl.core.camera.Camera;
+import com.gnix.jflatgl.core.util.time.Timer;
 
-public abstract class Effect extends Entity {
+public abstract class Effect {
 
-	public Effect() {
-		super(0, 0);
-	}
+	protected Timer timer;
+
+	public abstract void update();
+	public abstract void render(Camera camera);
 	
 	// getters
 	public abstract boolean remove();

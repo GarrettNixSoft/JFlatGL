@@ -1,6 +1,7 @@
 package com.gnix.jflatgl.core.entity.effects;
 
 import com.gnix.jflatgl.core.camera.Camera;
+import com.gnix.jflatgl.core.util.Logger;
 import org.joml.Vector2f;
 
 public class Shake2D extends Effect {
@@ -14,19 +15,28 @@ public class Shake2D extends Effect {
 		yShake.synchronize(xShake);
 	}
 
-	public void setSeverity(int xSeverity, int ySeverity) {
-		xShake.setShakeSeverity(xSeverity);
-		yShake.setShakeSeverity(ySeverity);
+	public void setSeverityInitial(int xSeverity, int ySeverity) {
+		xShake.setShakeSeverityInitial(xSeverity);
+		yShake.setShakeSeverityInitial(ySeverity);
 	}
 
-	public void activate() {
+	public void setSeverityFinal(int xSeverity, int ySeverity) {
+		xShake.setShakeSeverityFinal(xSeverity);
+		yShake.setShakeSeverityFinal(ySeverity);
+	}
+
+	public void activate(float time) {
 		active = true;
-		xShake.activate();
+		xShake.activate(time);
 	}
 
 	public void deactivate() {
 		active = false;
 		xShake.deactivate();
+	}
+
+	public boolean isActive() {
+		return xShake.isActive();
 	}
 
 	public Vector2f getOffset() {

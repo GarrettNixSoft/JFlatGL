@@ -2,6 +2,7 @@ package com.gnix.jflatgl.core.entity.effects;
 
 import com.gnix.jflatgl.animation.Animation;
 import com.gnix.jflatgl.core.entity.Entity;
+import com.gnix.jflatgl.core.util.time.Timer;
 
 public abstract class EntityEffect extends Effect {
 
@@ -11,15 +12,19 @@ public abstract class EntityEffect extends Effect {
 	public EntityEffect(Entity parent) {
 		this.parent = parent;
 		animation = new Animation();
+		timer = new Timer(1);
 	}
 
-	protected long timer;
 	protected boolean active;
 
 	protected EntityEffect syncEffect;
 	protected boolean synchronize;
 
-	public void activate() { active = true; }
+	public void activate(float time) {
+		timer.restart(time);
+		active = true;
+	}
+
 	public void deactivate() { active = false; }
 	public boolean isActive() { return active; }
 
@@ -35,10 +40,13 @@ public abstract class EntityEffect extends Effect {
 
 	protected void checkSync() {
 		if (active && !syncEffect.active)
-			active = false;
+			deactivate();
 		else if (!active && syncEffect.active) {
-			active = true;
-			timer = System.nanoTime();
+			activate(syncEffect.timer.getTime());
 		}
+	}
+
+	public boolean finished() {
+		return timer.finished();
 	}
 }

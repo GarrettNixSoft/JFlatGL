@@ -6,6 +6,7 @@ import com.gnix.jflatgl.core.entity.effects.Shake2D;
 import com.gnix.jflatgl.core.input.Cursor;
 import com.gnix.jflatgl.core.renderEngine.display.DisplayManager;
 import com.gnix.jflatgl.core.util.Logger;
+import com.gnix.jflatgl.core.util.conversion.StringConverter;
 import com.gnix.jflatgl.core.util.interpolators.TransitionFloat;
 import com.gnix.jflatgl.core.util.time.Timer;
 import org.joml.Vector2f;
@@ -46,8 +47,6 @@ public class Camera {
 	// ******************************** EFFECTS ********************************
 	// SHAKE
 	private final Shake2D shakeEffect;
-	private Timer shakeTimer;
-	private boolean shake;
 
 	// ******************************** CONSTRUCTOR ********************************
 	private Camera() {
@@ -67,19 +66,19 @@ public class Camera {
 
 	// ******************************** POSITION CONVERSIONS ********************************
 	public float worldXToScreenX(float worldX) {
-		return (worldX - xOffset) * scale;
+		return (worldX - xOffset + shakeEffect.getOffset().x()) * scale;
 	}
 
 	public float worldYToScreenY(float worldY) {
-		return (worldY - yOffset) * scale;
+		return (worldY - yOffset + shakeEffect.getOffset().y()) * scale;
 	}
 
 	public float screenXToWorldX(float screenX) {
-		return screenX / scale + xOffset;
+		return screenX / scale + xOffset + shakeEffect.getOffset().x();
 	}
 
 	public float screenYToWorldY(float screenY) {
-		return screenY / scale + yOffset;
+		return screenY / scale + yOffset + shakeEffect.getOffset().y();
 	}
 
 	public Vector2f screenPosToWorldPos(Vector2f screenPos) {
@@ -92,11 +91,11 @@ public class Camera {
 
 	// ******************************** GETTERS ********************************
 	public float getOffsetX() {
-		return xOffset + shakeEffect.getX();
+		return xOffset + shakeEffect.getOffset().x();
 	}
 
 	public float getOffsetY() {
-		return yOffset + shakeEffect.getY();
+		return yOffset + shakeEffect.getOffset().y();
 	}
 
 	public float getScale() {
@@ -140,6 +139,8 @@ public class Camera {
 	public float worldMouseY() {
 		return screenYToWorldY(Cursor.getY());
 	}
+
+	public Vector2f worldMousePos() {return new Vector2f(worldMouseX(), worldMouseY()); }
 
 	public boolean notOnScreen(float x, float y, float width, float height, boolean centered) {
 
@@ -350,24 +351,30 @@ public class Camera {
 
 	// ******************************** ACTIONS ********************************
 	public void shake(float time, int xSeverity, int ySeverity) {
-		shake = true;
-		shakeEffect.setSeverity(xSeverity, ySeverity);
-		shakeEffect.activate();
-		shakeTimer = new Timer(time);
-		shakeTimer.start();
+		shakeEffect.setSeverityInitial(xSeverity, ySeverity);
+		shakeEffect.activate(time);
+//		shakeTimer = new Timer(time);
+//		shakeTimer.start();
+
+		Logger.log("Shake started!");
+	}
+
+	public void shakeFade(float time, int xSeverityInitial, int ySeverityInitial) {
+		shakeEffect.setSeverityInitial(xSeverityInitial, ySeverityInitial);
+		shakeEffect.setSeverityFinal(0, 0);
+		shakeEffect.activate(time);
 	}
 
 	// shake indefinitely
 	public void shakeToggle(int xSeverity, int ySeverity) {
-		if (shake) {
-			shake = false;
+		if (shakeEffect.isActive()) {
+			shakeEffect.deactivate();
 		}
 		else {
-			shake = true;
-			shakeEffect.setSeverity(xSeverity, ySeverity);
-			shakeEffect.activate();
-			shakeTimer = new Timer(Float.MAX_VALUE); // 3.40282347 x 10^38 seconds, or 1.07831272 × 10^31 years
-			shakeTimer.start();
+			shakeEffect.setSeverityInitial(xSeverity, ySeverity);
+			shakeEffect.activate(Float.MAX_VALUE);
+//			shakeTimer = new Timer(Float.MAX_VALUE); // 3.40282347 x 10^38 seconds, or 1.07831272 × 10^31 years
+//			shakeTimer.start();
 		}
 	}
 
@@ -409,7 +416,7 @@ public class Camera {
 	private Vector2f getFinalPosition() {
 		Vector2f position;
 		Vector2f rawPosition = getPositionVector();
-		if (shake)
+		if (shakeEffect.isActive())
 			position = rawPosition.add(shakeEffect.getOffset());
 		else position = rawPosition;
 		// return final vector
@@ -417,12 +424,13 @@ public class Camera {
 	}
 
 	private void doEffects() {
-		if (shake) {
+		if (shakeEffect.isActive()) {
 			shakeEffect.update();
-			if (shakeTimer.finished()) {
-				shakeEffect.deactivate();
-				shake = false;
-			}
+			Logger.log("Shake offset: " + StringConverter.vec2fToString(shakeEffect.getOffset()));
+//			if (shakeTimer.finished()) {
+//				shakeEffect.deactivate();
+//				shake = false;
+//			}
 		}
 	}
 
