@@ -649,6 +649,15 @@ public class DisplayManager {
 		return new Vector2f(displayX, displayY);
 	}
 
+	public static float convertToScreenPos(float pos, boolean xAxis) {
+
+		if (xAxis)
+			return -1 + (2f / Config.INTERNAL_WIDTH) * pos;
+		else
+			return -1 + (2f / Config.INTERNAL_HEIGHT) * (Config.INTERNAL_HEIGHT - pos);
+
+	}
+
 	public static Vector2f convertToScreenPos(float x, float y) {
 //		Logger.log("Position " + position);
 		// invert y axis

@@ -6,6 +6,7 @@ import com.gnix.jflatgl.core.renderEngine.elements.geometry.*;
 import com.gnix.jflatgl.core.renderEngine.renderers.MasterRenderer;
 import com.gnix.jflatgl.core.renderEngine.util.Layers;
 import com.gnix.jflatgl.core.util.configuration.Config;
+import org.joml.Vector2f;
 import org.joml.Vector4f;
 
 /**
@@ -87,6 +88,10 @@ public class Render {
 		MasterRenderer.currentRenderTarget.addRectElement(element);
 	}
 
+	public static void drawRect(Vector4f color, Vector2f pos, Vector2f size, int layer, boolean centered) {
+		drawRect(color, pos.x, pos.y, layer, size.x, size.y, centered);
+	}
+
 	/**
 	 * Cover the screen with the specified color, placed at the back of the scene.
 	 * @param color The color to fill.
@@ -155,21 +160,7 @@ public class Render {
 	 * @param layer The z coordinate of the line.
 	 */
 	public static void drawLine(Vector4f color, float x1, float y1, float x2, float y2, int layer) {
-		MasterRenderer.currentRenderTarget.addLineElement(new LineElement(color, x1, y1, x2, y2, layer, 1));
-	}
-
-	/**
-	 * Draw a horizontal or vertical line with the given start and end positions, and with the given width.
-	 * @param color The color of the line.
-	 * @param x1 The starting x coordinate of the line.
-	 * @param y1 The starting y coordinate of the line.
-	 * @param x2 The ending x coordinate of the line.
-	 * @param y2 The ending y coordinate of the line.
-	 * @param layer The z coordinate of the line.
-	 * @param lineWidth The width of the line.
-	 */
-	public static void drawLine(Vector4f color, float x1, float y1, float x2, float y2, int layer, float lineWidth) {
-		MasterRenderer.currentRenderTarget.addLineElement(new LineElement(color, x1, y1, x2, y2, layer, lineWidth));
+		MasterRenderer.currentRenderTarget.addLineElement(new LineElement(color, x1, y1, x2, y2, layer));
 	}
 
 	/**

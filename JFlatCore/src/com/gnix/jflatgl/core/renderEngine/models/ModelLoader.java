@@ -51,6 +51,13 @@ public class ModelLoader {
 		return vaoID;
 	}
 
+	public static int loadToLineVAO(float[] positions, int coordinateSize) {
+		int vaoID = createVAO();
+		storeDataInAttributeList(0, coordinateSize, positions);
+		unbindVAO();
+		return vaoID;
+	}
+
 	// Special method specifically for GUIText instances, allowing them to delete all their old vertex data when they generate new data.
 	// THANK YOU PAST ME FOR MAKING THIS EASY (I needed to add z positions to text coords without affecting other types of coordinate data) - 9.28.20 Me
 	public static int loadToVAO(float[] positions, float[] textureCoords, GUIText guiText) {
@@ -86,7 +93,7 @@ public class ModelLoader {
 		int vbo = glGenBuffers();
 		vbos.add(vbo);
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glBufferData(GL_ARRAY_BUFFER, 4 * 4, GL_DYNAMIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, 6 * 4, GL_STREAM_DRAW);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		return vbo;
 	}

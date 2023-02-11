@@ -47,9 +47,9 @@ public class ParticleInfluenceField {
 		Render.drawOutline(outline);
 		// Crosshairs to center
 		LineElement horizCross = new LineElement(Colors.GREEN, bounds.x, bounds.y + (bounds.w - bounds.y) / 2,
-				bounds.z, bounds.y + (bounds.w - bounds.y) / 2, 0, 2);
+				bounds.z, bounds.y + (bounds.w - bounds.y) / 2, 0);
 		LineElement vertiCross = new LineElement(Colors.GREEN, bounds.x + (bounds.z - bounds.x) / 2,
-				bounds.y, bounds.x + (bounds.z - bounds.x) / 2, bounds.w, 0, 2);
+				bounds.y, bounds.x + (bounds.z - bounds.x) / 2, bounds.w, 0);
 		Render.drawLine(horizCross);
 		Render.drawLine(vertiCross);
 		// show the influence direction

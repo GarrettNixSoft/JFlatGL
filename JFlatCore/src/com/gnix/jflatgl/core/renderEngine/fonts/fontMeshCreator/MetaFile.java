@@ -74,7 +74,7 @@ public class MetaFile {
 	private void validateSpace() {
 
 		if (!metaData.containsKey(32)) {
-			Logger.log("NO SPACE DATA FOUND!");
+//			Logger.log("NO SPACE DATA FOUND!");
 
 			// get the character(s) to base the space data off of
 			Character base1 = metaData.containsKey(10) ? metaData.get(10) : metaData.get(13);
