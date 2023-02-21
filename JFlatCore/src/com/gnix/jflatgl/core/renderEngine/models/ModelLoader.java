@@ -3,6 +3,7 @@ package com.gnix.jflatgl.core.renderEngine.models;
 import com.gnix.jflatgl.core.renderEngine.fonts.fontMeshCreator.GUIText;
 import com.gnix.jflatgl.core.util.Logger;
 import com.gnix.jflatgl.core.util.conversion.StringConverter;
+import com.gnix.jflatgl.core.util.data.Pair;
 import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;
@@ -51,11 +52,11 @@ public class ModelLoader {
 		return vaoID;
 	}
 
-	public static int loadToLineVAO(float[] positions, int coordinateSize) {
+	public static Pair<Integer, Integer> loadToLineVAO(float[] positions, int coordinateSize) {
 		int vaoID = createVAO();
-		storeDataInAttributeList(0, coordinateSize, positions);
+		int vbo = storeDataInAttributeList(0, coordinateSize, positions);
 		unbindVAO();
-		return vaoID;
+		return new Pair<>(vaoID, vbo);
 	}
 
 	// Special method specifically for GUIText instances, allowing them to delete all their old vertex data when they generate new data.

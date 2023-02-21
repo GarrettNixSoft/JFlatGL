@@ -160,7 +160,11 @@ public class Render {
 	 * @param layer The z coordinate of the line.
 	 */
 	public static void drawLine(Vector4f color, float x1, float y1, float x2, float y2, int layer) {
-		MasterRenderer.currentRenderTarget.addLineElement(new LineElement(color, x1, y1, x2, y2, layer));
+		MasterRenderer.currentRenderTarget.addLineElement(new LineElement(color, x1, y1, x2, y2, layer, true));
+	}
+
+	public static void drawLine(Vector4f color, Vector2f startPoint, Vector2f endPoint, int layer) {
+		drawLine(color, startPoint.x, startPoint.y, endPoint.x, endPoint.y, layer);
 	}
 
 	/**

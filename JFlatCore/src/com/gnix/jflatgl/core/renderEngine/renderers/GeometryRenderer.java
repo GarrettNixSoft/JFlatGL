@@ -178,6 +178,8 @@ public class GeometryRenderer extends ElementRenderer {
 
 		for (LineElement lineElement : lines) {
 			renderLineElement(lineElement);
+			if (lineElement.isTemp())
+				lineElement.delete();
 		}
 
 		finishLines();
