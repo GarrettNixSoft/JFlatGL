@@ -212,6 +212,11 @@ public class RadioButtonSet extends GUIComponent {
 	}
 
 	// ******************************** POSITIONING BUTTONS ********************************
+	public RadioButtonSet arrange() {
+		positionButtons();
+		return this;
+	}
+
 	public void positionButtons() {
 		// TODO
 	}
