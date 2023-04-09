@@ -219,8 +219,6 @@ public class GeometryRenderer extends ElementRenderer {
 	// LINE UTILITY METHOD
 	private void renderLineElement(LineElement lineElement) {
 //		Matrix4f transformationMatrix = MathUtil.createTransformationMatrix(lineElement.getPosition(), lineElement.getScale(), lineElement.getRotation());
-		Matrix4f transformationMatrix = new Matrix4f(1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1);
-		lineShader.loadTransformationMatrix(transformationMatrix);
 		lineShader.loadColor(lineElement.getColor());
 		glBindVertexArray(lineElement.getVao());
 		glEnableVertexAttribArray(0);
