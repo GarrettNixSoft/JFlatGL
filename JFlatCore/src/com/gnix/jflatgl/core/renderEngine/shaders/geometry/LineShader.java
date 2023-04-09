@@ -10,7 +10,6 @@ public class LineShader extends ShaderProgram {
 	private static final String FRAGMENT_FILE = SHADER_PATH + "geometry/lineFragment.glsl";
 
 	private int location_color;
-	private int location_transformationMatrix;
 
 	public LineShader() {
 		super(VERTEX_FILE, FRAGMENT_FILE);
@@ -19,7 +18,6 @@ public class LineShader extends ShaderProgram {
 	@Override
 	protected void getAllUniformLocations() {
 		location_color = super.getUniformLocation("color");
-		location_transformationMatrix = super.getUniformLocation("transformationMatrix");
 	}
 
 	@Override
@@ -30,7 +28,5 @@ public class LineShader extends ShaderProgram {
 	public void loadColor(Vector4f color) {
 		super.loadVector(location_color, color);
 	}
-	public void loadTransformationMatrix(Matrix4f transformationMatrix) {
-		super.loadMatrix(location_transformationMatrix, transformationMatrix);
-	}
+
 }
