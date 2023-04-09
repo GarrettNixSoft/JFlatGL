@@ -241,6 +241,18 @@ public class FileUtil {
 		return new JSONObject(combined);
 	}
 
+	public static JSONObject getResourceDataJSONOrDefault(String path, JSONObject defaultJSON) {
+		try {
+			ArrayList<String> fileData = getResourceDataFile(path);
+			String combined = StringConverter.combineAll(fileData);
+			return new JSONObject(combined);
+		}
+		catch (Exception e) {
+			System.err.println(e.getMessage());
+			return defaultJSON;
+		}
+	}
+
 	public static String[] getFileRaw(String path) {
 		try {
 			InputStream in = ResourceLoader.getResourceAsStream(path);

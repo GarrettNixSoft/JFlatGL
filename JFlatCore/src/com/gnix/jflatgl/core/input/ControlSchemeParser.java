@@ -70,7 +70,7 @@ public class ControlSchemeParser {
 			Logger.log("No context list found; loading single control list");
 
 			// get the single controls file
-			JSONObject controlsJSON = FileUtil.getResourceDataJSON(templateLocation + "/controls.json");
+			JSONObject controlsJSON = FileUtil.getResourceDataJSONOrDefault(templateLocation + "/controls.json", new JSONObject());
 			result.put("controls", parseControlsFile("controls", controlsJSON));
 
 		}
