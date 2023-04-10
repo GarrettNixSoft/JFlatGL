@@ -2,7 +2,7 @@
 
 out vec4 out_color;
 
-in vec2 blurTexCoords[11];
+in vec2 blurTextureCoords[11];
 
 uniform sampler2D originalTexture;
 
@@ -13,7 +13,7 @@ void main() {
 	out_color = vec4(0.0);
 
 	for (int i = 0; i < 11; i++) {
-		out_color += texture(originalTexture, blurTexCoords[i]) * weights[i];
+		out_color += texture(originalTexture, blurTextureCoords[i]) * weights[i];
 	}
 
 	// brighten it by 50%
