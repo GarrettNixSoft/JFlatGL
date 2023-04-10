@@ -75,18 +75,18 @@ public class Config {
 		SETTINGS_NODE = configJSON.getString("settings_node");
 		FLAGS_NODE = configJSON.getString("flags_node");
 
-		DEFAULT_CONTROLS_DIR = configJSON.getString("default_controls");
-		CONTROLS_PATH = configJSON.getString("controls_path");
+		DEFAULT_CONTROLS_DIR = configJSON.optString("default_controls", "config/controls");
+		CONTROLS_PATH = configJSON.optString("controls_path", "/controls");
 
 		ENABLE_GAMEPAD_CURSOR = configJSON.optBoolean("enable_gamepad_cursor", false);
 		GAMEPAD_CURSOR_PATH = configJSON.optString("gamepad_cursor", "");
 
-		WINDOW_TITLE = configJSON.getString("window_title");
+		WINDOW_TITLE = configJSON.optString("window_title", "A JFlatGL Game");
 		GAME_TITLE_ON_DISK = configJSON.optString("game_title_on_disk", "A JFlatGL Game");
 
-		DEBUG_MODE = configJSON.getBoolean("debug_mode");
+		DEBUG_MODE = configJSON.optBoolean("debug_mode", false);
 
-		CRASH_ON_MISSING_SHADER_UNIFORM = configJSON.getBoolean("crash_on_missing_shader_uniform");
+		CRASH_ON_MISSING_SHADER_UNIFORM = configJSON.optBoolean("crash_on_missing_shader_uniform", false);
 
 		ICON_PATH_64 = configJSON.getString("icon_path_64");
 		ICON_PATH_48 = configJSON.getString("icon_path_48");
@@ -94,8 +94,8 @@ public class Config {
 
 		ICON_IMAGE = ImageLoader.loadBufferedImage(ICON_PATH_64);
 
-		INTERNAL_WIDTH = configJSON.getInt("internal_width");
-		INTERNAL_HEIGHT = configJSON.getInt("internal_height");
+		INTERNAL_WIDTH = configJSON.optInt("internal_width", 1920);
+		INTERNAL_HEIGHT = configJSON.optInt("internal_height", 1080);
 
 		ASPECT_RATIO = switch (configJSON.optString("aspect_ratio", "none")) {
 			case "16:9" -> DisplayScale.AspectRatio.D_16_9;
@@ -104,13 +104,13 @@ public class Config {
 			default -> DisplayScale.AspectRatio.NONE;
 		};
 
-		DEFAULT_WIDTH = configJSON.getInt("default_width");
-		DEFAULT_HEIGHT = configJSON.getInt("default_height");
+		DEFAULT_WIDTH = configJSON.optInt("default_width", 1920);
+		DEFAULT_HEIGHT = configJSON.optInt("default_height", 1080);
 		SCALE_TO_MONITOR = configJSON.optBoolean("scale_to_monitor", false);
 
-		SCALE_SPLASH_SCREEN = configJSON.getBoolean("scale_splash_screen");
-		SPLASH_WIDTH = configJSON.getInt("splash_width");
-		SPLASH_HEIGHT = configJSON.getInt("splash_height");
+		SCALE_SPLASH_SCREEN = configJSON.optBoolean("scale_splash_screen", true);
+		SPLASH_WIDTH = configJSON.optInt("splash_width", 500);
+		SPLASH_HEIGHT = configJSON.optInt("splash_height", 300);
 
 		if (SCALE_SPLASH_SCREEN) {
 			Pair<Integer, Integer> dimensions = DisplayScale.getDimensionsScaledFor1080p(SPLASH_WIDTH, SPLASH_HEIGHT);
@@ -118,13 +118,14 @@ public class Config {
 			SPLASH_HEIGHT = dimensions.data2();
 		}
 
-		SPLASH_TRANSPARENT = configJSON.getBoolean("splash_transparent");
-		SPLASH_FAKE_LATENCY = configJSON.getFloat("splash_screen_fake_latency");
-		USE_SPLASH_SCREEN = configJSON.getBoolean("use_splash_screen");
+		SPLASH_TRANSPARENT = configJSON.optBoolean("splash_transparent", false);
+		SPLASH_FAKE_LATENCY = configJSON.optFloat("splash_screen_fake_latency", 0);
+		USE_SPLASH_SCREEN = configJSON.optBoolean("use_splash_screen", false);
 
 		SUPPORT_INPUT_SWITCHING = configJSON.optBoolean("support_input_switching", false);
 
-		LOGGER_SETTINGS = configJSON.getJSONObject("logger_settings");
+		LOGGER_SETTINGS = configJSON.optJSONObject("logger_settings");
+		if (LOGGER_SETTINGS == null) LOGGER_SETTINGS = new JSONObject();
 
 		Logger.setLoggerConfig();
 	}

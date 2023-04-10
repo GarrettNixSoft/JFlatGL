@@ -49,30 +49,30 @@ public class Logger {
 
 	public static void setLoggerConfig() {
 		// main
-		logAnything = Config.LOGGER_SETTINGS.getBoolean("log_anything");
-		logWarnings = Config.LOGGER_SETTINGS.getBoolean("log_warnings");
-		logErrors = Config.LOGGER_SETTINGS.getBoolean("log_errors");
+		logAnything = Config.LOGGER_SETTINGS.optBoolean("log_anything", true);
+		logWarnings = Config.LOGGER_SETTINGS.optBoolean("log_warnings", false);
+		logErrors = Config.LOGGER_SETTINGS.optBoolean("log_errors", true);
 		// startup
-		logLoaders = Config.LOGGER_SETTINGS.getBoolean("log_loaders");
-		logLoadSuccess = Config.LOGGER_SETTINGS.getBoolean("log_load_success");
-		logLoadErrors = Config.LOGGER_SETTINGS.getBoolean("log_load_errors");
-		logLoadGeneral = Config.LOGGER_SETTINGS.getBoolean("log_load_general");
+		logLoaders = Config.LOGGER_SETTINGS.optBoolean("log_loaders", false);
+		logLoadSuccess = Config.LOGGER_SETTINGS.optBoolean("log_load_success", false);
+		logLoadErrors = Config.LOGGER_SETTINGS.optBoolean("log_load_errors", true);
+		logLoadGeneral = Config.LOGGER_SETTINGS.optBoolean("log_load_general", false);
 		logLoadControls = Config.LOGGER_SETTINGS.optBoolean("log_load_controls", false);
 		// hardware
 		logGamepad = Config.LOGGER_SETTINGS.optBoolean("log_gamepad", false);
 		logGamepadConnections = Config.LOGGER_SETTINGS.optBoolean("log_gamepad_connections", true);
 		// in-game
-		logEntityDebug = Config.LOGGER_SETTINGS.getBoolean("log_entity_debug");
-		logEnemyDebug = Config.LOGGER_SETTINGS.getBoolean("log_enemy_debug");
-		logPlayerDebug = Config.LOGGER_SETTINGS.getBoolean("log_player_debug");
+		logEntityDebug = Config.LOGGER_SETTINGS.optBoolean("log_entity_debug", false);
+		logEnemyDebug = Config.LOGGER_SETTINGS.optBoolean("log_enemy_debug", false);
+		logPlayerDebug = Config.LOGGER_SETTINGS.optBoolean("log_player_debug", false);
 		// event
-		logEvents = Config.LOGGER_SETTINGS.getBoolean("log_events");
-		logCutscenes = Config.LOGGER_SETTINGS.getBoolean("log_cutscenes");
+		logEvents = Config.LOGGER_SETTINGS.optBoolean("log_events", false);
+		logCutscenes = Config.LOGGER_SETTINGS.optBoolean("log_cutscenes", false);
 		// UI
-		logGUIEvents = Config.LOGGER_SETTINGS.getBoolean("log_gui_events");
-		logGUIInteractions = Config.LOGGER_SETTINGS.getBoolean("log_gui_interactions");
+		logGUIEvents = Config.LOGGER_SETTINGS.optBoolean("log_gui_events",false);
+		logGUIInteractions = Config.LOGGER_SETTINGS.optBoolean("log_gui_interactions", false);
 		// audio
-		logAudioStart = Config.LOGGER_SETTINGS.getBoolean("log_audio_start");
+		logAudioStart = Config.LOGGER_SETTINGS.optBoolean("log_audio_start", false);
 		// set all to false if log anything is disabled
 		init();
 	}
