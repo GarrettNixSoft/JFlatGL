@@ -129,7 +129,6 @@ public class TextMaster {
 	 * Clear all GUIText objects from the screen.
 	 */
 	public static void clear() {
-		// this can happen if the splash screen never uses text
 		if (texts == null) return;
 		for (Map<FontType, Set<GUIText>> map : texts) {
 			// delete every GUIText's data

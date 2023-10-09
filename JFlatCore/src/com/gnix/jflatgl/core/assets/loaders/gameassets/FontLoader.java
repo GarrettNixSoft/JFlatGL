@@ -6,6 +6,7 @@ import com.gnix.jflatgl.core.assets.loaders.Loader;
 import com.gnix.jflatgl.core.assets.loaders.gameassets.temp.RawFontType;
 import com.gnix.jflatgl.core.util.Logger;
 import com.gnix.jflatgl.core.util.file.FileUtil;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +16,7 @@ public class FontLoader extends AssetLoader {
 	private final List<RawFontType> rawFontTypes;
 
 	public FontLoader() {
-		directory = FileUtil.getJSON("/assets/fonts_directory.json");
+		directory = FileUtil.getOrCreateResourceDataJSON("/assets/fonts_directory.json", new JSONObject());
 		rawFontTypes = new ArrayList<>();
 	}
 

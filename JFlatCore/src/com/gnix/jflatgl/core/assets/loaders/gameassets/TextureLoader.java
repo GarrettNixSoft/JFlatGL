@@ -9,6 +9,7 @@ import com.gnix.jflatgl.core.assets.loaders.gameassets.temp.RawTextureComponent;
 import com.gnix.jflatgl.core.assets.loaders.gameassets.temp.RawTextureSet;
 import com.gnix.jflatgl.core.util.Logger;
 import com.gnix.jflatgl.core.util.file.FileUtil;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -23,7 +24,7 @@ public class TextureLoader extends AssetLoader {
 	private final List<RawTextureAtlas> rawTextureAtlases;
 
 	public TextureLoader() {
-		directory = FileUtil.getJSON("/assets/texture_directory.json");
+		directory = FileUtil.getOrCreateResourceDataJSON("/assets/texture_directory.json", getEmptyTextureDirectory());
 		rawTextureComponents = new ArrayList<>();
 		rawTextureSets = new ArrayList<>();
 		rawTextureArrays = new ArrayList<>();
@@ -261,6 +262,15 @@ public class TextureLoader extends AssetLoader {
 	@Override
 	public void finish() {
 		convertAndAddAll();
+	}
+
+	private static JSONObject getEmptyTextureDirectory() {
+		JSONObject emptyDirectory = new JSONObject();
+		emptyDirectory.put("textures", new JSONObject());
+		emptyDirectory.put("texture_sets", new JSONObject());
+		emptyDirectory.put("texture_arrays", new JSONObject());
+		emptyDirectory.put("texture_atlases", new JSONObject());
+		return emptyDirectory;
 	}
 
 }

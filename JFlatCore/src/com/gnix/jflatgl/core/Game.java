@@ -196,15 +196,17 @@ public class Game {
 		// load particles AFTER textures are loaded (some particles need to load textures from the game's pool)
 		ParticleMaster.initGlobals();
 
-		// Init FPS display
-		instance.fpsDisplay = new GUIText("FPS: ", 0.5f, Game.getFont("default"), new Vector3f(0, 0, 0), 1);
-		instance.fpsDisplay.setLayer(Layers.TOP_LAYER);
-		instance.fpsDisplay.setColor(Colors.GREEN);
-		instance.fpsDisplay.setWidth(0.5f);
-		instance.fpsDisplay.setEdge(0.2f);
+		// Init FPS display, assuming a default font has been provided
+		if (Game.getFonts().getFont("default") != null) {
+			instance.fpsDisplay = new GUIText("FPS: ", 0.5f, Game.getFont("default"), new Vector3f(0, 0, 0), 1);
+			instance.fpsDisplay.setLayer(Layers.TOP_LAYER);
+			instance.fpsDisplay.setColor(Colors.GREEN);
+			instance.fpsDisplay.setWidth(0.5f);
+			instance.fpsDisplay.setEdge(0.2f);
 
-		if (Settings.getSettingBoolean("show_fps")) {
-			instance.fpsDisplay.show();
+			if (Settings.getSettingBoolean("show_fps")) {
+				instance.fpsDisplay.show();
+			}
 		}
 
 	}

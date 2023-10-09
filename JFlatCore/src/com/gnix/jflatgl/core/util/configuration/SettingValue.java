@@ -7,25 +7,17 @@ package com.gnix.jflatgl.core.util.configuration;
  */
 public class SettingValue {
 
-	public enum DataType {
-		BOOLEAN, INT, LONG, FLOAT, DOUBLE, STRING
-	}
-
-	private DataType dataType;
 	private Object value;
 
-	public SettingValue(DataType dataType, Object value) {
-		this.dataType = dataType;
+	public SettingValue(Object value) {
 		this.value = value;
-	}
-
-	public DataType getDataType() {
-		return dataType;
 	}
 
 	public int getAsInt() {
 		return (Integer) value;
 	}
+
+	public short getAsShort() { return (Short) value; }
 
 	public long getAsLong() {
 		return (Long) value;
@@ -50,5 +42,4 @@ public class SettingValue {
 	public void setValue(Object value) {
 		this.value = value;
 	}
-
 }

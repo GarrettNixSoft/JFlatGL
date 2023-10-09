@@ -4,18 +4,19 @@ import com.gnix.jflatgl.core.renderEngine.textures.RawTextureData;
 import com.gnix.jflatgl.core.renderEngine.textures.Texture;
 import com.gnix.jflatgl.core.renderEngine.textures.TextureComponent;
 import com.gnix.jflatgl.core.util.Logger;
+import com.gnix.jflatgl.core.util.array.ArrayBuilder;
+import com.gnix.jflatgl.core.util.file.FileUtil;
 import com.gnix.jflatgl.core.util.file.ResourceLoader;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.system.MemoryStack;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -141,6 +142,35 @@ public class ImageLoader {
 			int height = h.get();
 			return new RawTextureData(width, height, buffer);
 		}
+		catch (Exception e) {
+			int width = 64, height = 64, components = 4;
+			int size = width * height * components;
+			ByteBuffer buffer = BufferUtils.createByteBuffer(size);
+			buffer.put(ArrayBuilder.buildByteArray(size, (byte) 0));
+			return new RawTextureData(width, height, buffer);
+		}
+	}
+
+	public static RawTextureData loadOrCreateImageRaw(String path, int width, int height, int value) {
+		// report load
+		Logger.logLoad("Loading optional raw image: " + path);
+		// check for the existence of the file
+		File targetFile = Paths.get("res/" + path).toFile();
+		if (!targetFile.exists()) {
+			if (!targetFile.getParentFile().exists()) targetFile.getParentFile().mkdirs();
+			BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+			Graphics2D g = image.createGraphics();
+			g.setColor(new Color(value, value, value));
+			g.fillRect(0, 0, width, height);
+			try {
+				ImageIO.write(image, "png", targetFile);
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+		return loadImageRaw(path);
 	}
 
 	public static BufferedImage loadBufferedImage(String path) {
@@ -154,6 +184,29 @@ public class ImageLoader {
 		} catch (Exception e) {
 			Logger.logError("Failed to read InputStream to BufferedImage. Path: " + path);
 			throw new RuntimeException("Failed to read InputStream to BufferedImage. Path: " + path);
+		}
+	}
+
+	public static BufferedImage loadBufferedImageOptional(String path, int width, int height) {
+		// report load
+		Logger.logLoad("Loading optional image: " + path);
+		// get input stream
+		InputStream inputStream = Loader.tryGetInputStream(path);
+		// load buffered image
+		try {
+			return ImageIO.read(inputStream);
+		} catch (Exception e) {
+			Logger.log("Optional image missing Loading default image. Path: " + path);
+			BufferedImage result = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
+			Graphics2D g = result.createGraphics();
+			g.setColor(Color.CYAN);
+			g.drawRoundRect(0, 0, width, height, width / 2, height / 2);
+			g.setColor(Color.BLACK);
+			g.drawRoundRect(2, 2, width - 4, height - 4, (width - 4) / 2, (height - 4) / 2);
+			g.setColor(Color.CYAN);
+			g.drawString("JF", 4, 4);
+			g.dispose();
+			return result;
 		}
 	}
 

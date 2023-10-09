@@ -29,6 +29,7 @@ public abstract class AssetLoader {
 
 	// call to execute load procedure during game init phase
 	public void load() {
+
 		if (mode == null) {
 			throw new IllegalStateException("Load mode not set");
 		}

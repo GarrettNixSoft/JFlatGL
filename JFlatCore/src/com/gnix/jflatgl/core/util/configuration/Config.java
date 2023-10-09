@@ -69,11 +69,11 @@ public class Config {
 	public static JSONObject LOGGER_SETTINGS;
 
 	public static void load() {
-		JSONObject configJSON = FileUtil.getResourceDataJSON("/config/config.json");
+		JSONObject configJSON = FileUtil.getOrCreateResourceDataJSON("/config/config.json", getDefaultConfig());
 
-		CONFIG_NODE = configJSON.getString("config_node");
-		SETTINGS_NODE = configJSON.getString("settings_node");
-		FLAGS_NODE = configJSON.getString("flags_node");
+		CONFIG_NODE = configJSON.optString("config_node", "my_game/config");
+		SETTINGS_NODE = configJSON.optString("settings_node", "my_game/settings");
+		FLAGS_NODE = configJSON.optString("flags_node", "my_game/flags");
 
 		DEFAULT_CONTROLS_DIR = configJSON.optString("default_controls", "config/controls");
 		CONTROLS_PATH = configJSON.optString("controls_path", "/controls");
@@ -84,15 +84,15 @@ public class Config {
 		WINDOW_TITLE = configJSON.optString("window_title", "A JFlatGL Game");
 		GAME_TITLE_ON_DISK = configJSON.optString("game_title_on_disk", "A JFlatGL Game");
 
-		DEBUG_MODE = configJSON.optBoolean("debug_mode", false);
+		DEBUG_MODE = configJSON.optBoolean("debug_mode", true);
 
-		CRASH_ON_MISSING_SHADER_UNIFORM = configJSON.optBoolean("crash_on_missing_shader_uniform", false);
+		CRASH_ON_MISSING_SHADER_UNIFORM = configJSON.optBoolean("crash_on_missing_shader_uniform", true);
 
-		ICON_PATH_64 = configJSON.getString("icon_path_64");
-		ICON_PATH_48 = configJSON.getString("icon_path_48");
-		ICON_PATH_32 = configJSON.getString("icon_path_32");
+		ICON_PATH_64 = configJSON.optString("icon_path_64", "icon/icon64.png");
+		ICON_PATH_48 = configJSON.optString("icon_path_48", "icon/icon48.png");
+		ICON_PATH_32 = configJSON.optString("icon_path_32", "icon/icon32.png");
 
-		ICON_IMAGE = ImageLoader.loadBufferedImage(ICON_PATH_64);
+		ICON_IMAGE = ImageLoader.loadBufferedImageOptional(ICON_PATH_64, 64, 64);
 
 		INTERNAL_WIDTH = configJSON.optInt("internal_width", 1920);
 		INTERNAL_HEIGHT = configJSON.optInt("internal_height", 1080);
@@ -104,9 +104,11 @@ public class Config {
 			default -> DisplayScale.AspectRatio.NONE;
 		};
 
-		DEFAULT_WIDTH = configJSON.optInt("default_width", 1920);
-		DEFAULT_HEIGHT = configJSON.optInt("default_height", 1080);
+		DEFAULT_WIDTH = configJSON.optInt("default_width", 1280);
+		DEFAULT_HEIGHT = configJSON.optInt("default_height", 720);
 		SCALE_TO_MONITOR = configJSON.optBoolean("scale_to_monitor", false);
+
+		USE_SPLASH_SCREEN = configJSON.optBoolean("use_splash_screen", false);
 
 		SCALE_SPLASH_SCREEN = configJSON.optBoolean("scale_splash_screen", true);
 		SPLASH_WIDTH = configJSON.optInt("splash_width", 500);
@@ -120,18 +122,84 @@ public class Config {
 
 		SPLASH_TRANSPARENT = configJSON.optBoolean("splash_transparent", false);
 		SPLASH_FAKE_LATENCY = configJSON.optFloat("splash_screen_fake_latency", 0);
-		USE_SPLASH_SCREEN = configJSON.optBoolean("use_splash_screen", false);
 
 		SUPPORT_INPUT_SWITCHING = configJSON.optBoolean("support_input_switching", false);
 
 		LOGGER_SETTINGS = configJSON.optJSONObject("logger_settings");
-		if (LOGGER_SETTINGS == null) LOGGER_SETTINGS = new JSONObject();
+		if (LOGGER_SETTINGS == null) LOGGER_SETTINGS = getDefaultLoggerSettings();
 
 		Logger.setLoggerConfig();
 	}
 
 	public static Vector4f getScreenBounds() {
 		return new Vector4f(0, 0, INTERNAL_WIDTH, INTERNAL_HEIGHT);
+	}
+
+	private static JSONObject getDefaultLoggerSettings() {
+		JSONObject logger = new JSONObject();
+
+		logger.put("log_anything", true);
+		logger.put("log_warnings", true);
+		logger.put("log_errors", true);
+		logger.put("log_loaders", true);
+		logger.put("log_load_success", true);
+		logger.put("log_load_errors", true);
+		logger.put("log_load_general", true);
+		logger.put("log_entity_debug", true);
+		logger.put("log_enemy_debug", true);
+		logger.put("log_player_debug", true);
+		logger.put("log_events", true);
+		logger.put("log_cutscenes", true);
+		logger.put("log_gui_events", true);
+		logger.put("log_gui_interactions", true);
+		logger.put("log_audio_start", true);
+
+		return logger;
+	}
+
+	private static JSONObject getDefaultConfig() {
+		JSONObject config = new JSONObject();
+
+		config.put("config_node", "my_game/config");
+		config.put("settings_node", "my_game/settings");
+		config.put("flags_node", "my_game/flags");
+
+		config.put("default_controls", "config/controls");
+		config.put("controls_path", "/controls");
+
+		config.put("enable_gamepad_cursor", false);
+		config.put("gamepad_cursor", "");
+
+		config.put("window_title", "A JFlatGL Game");
+		config.put("game_title_on_disk", "A JFlatGL Game");
+
+		config.put("debug_mode", true);
+		config.put("crash_on_missing_shader_uniform", true);
+
+		config.put("icon_path_64", "icon/icon64.png");
+		config.put("icon_path_48", "icon/icon48.png");
+		config.put("icon_path_32", "icon/icon32.png");
+
+		config.put("internal_width", 1920);
+		config.put("internal_height", 1080);
+		config.put("aspect_ratio", "16:9");
+
+		config.put("default_width", 1280);
+		config.put("default_height", 720);
+		config.put("scale_to_monitor", false);
+
+		config.put("use_splash_screen", false);
+		config.put("scale_splash_screen", true);
+		config.put("splash_width", 500);
+		config.put("splash_height", 300);
+		config.put("splash_transparent", false);
+		config.put("splash_screen_fake_latency", 0);
+
+		config.put("support_input_switching", false);
+
+		config.put("logger_settings", getDefaultLoggerSettings());
+
+		return config;
 	}
 
 }

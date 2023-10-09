@@ -95,6 +95,37 @@ public class FileUtil {
 		}
 	}
 
+	public static ArrayList<String> getOrCreateResourceDataFile(String path, JSONObject defaultData) {
+		path = path.replace("\\", "/");
+		File file = new File("resourceData/" + path);
+		if (file.exists()) {
+			try {
+				ArrayList<String> data = getFileData(file);
+				if (data.isEmpty() || (data.size() == 1 && data.get(0).isEmpty())) throw new RuntimeException();
+				else return data;
+			} catch (Exception e) {
+				file = new File("/resourceData/" + path);
+				return getFileData(file);
+			}
+		}
+		else {
+			file.getParentFile().mkdirs();
+			if (!(file.getParentFile().exists() && file.getParentFile().isDirectory())) throw new RuntimeException("Failed to create directory tree for " + path);
+			else Logger.logWarning("Created directory " + file.getParent());
+			try {
+				if (!file.createNewFile()) throw new RuntimeException("Could not create " + path);
+				else Logger.logWarning("Created " + path);
+				writeJSON(defaultData, file.getPath());
+				Logger.logWarning("Wrote default data to disk: " + defaultData.toString(4));
+				return getResourceDataFile(path);
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+				return new ArrayList<>();
+			}
+		}
+	}
+
 	public static ArrayList<String> getResDataFile(String path) {
 		path = path.replace("\\", "/");
 		File file = new File("res/" + path);
@@ -241,16 +272,11 @@ public class FileUtil {
 		return new JSONObject(combined);
 	}
 
-	public static JSONObject getResourceDataJSONOrDefault(String path, JSONObject defaultJSON) {
-		try {
-			ArrayList<String> fileData = getResourceDataFile(path);
-			String combined = StringConverter.combineAll(fileData);
-			return new JSONObject(combined);
-		}
-		catch (Exception e) {
-			System.err.println(e.getMessage());
-			return defaultJSON;
-		}
+	public static JSONObject getOrCreateResourceDataJSON(String path, JSONObject defaultData) {
+		ArrayList<String> fileData = getOrCreateResourceDataFile(path, defaultData);
+		String combined = StringConverter.combineAll(fileData);
+		if (combined.isEmpty()) return new JSONObject();
+		else return new JSONObject(combined);
 	}
 
 	public static String[] getFileRaw(String path) {

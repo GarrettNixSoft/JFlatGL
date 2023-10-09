@@ -21,7 +21,7 @@ public class AnimationLoader extends AssetLoader {
 
 	// create loader
 	public AnimationLoader() {
-		directory = FileUtil.getJSON("/assets/animations_directory.json");
+		directory = FileUtil.getOrCreateResourceDataJSON("/assets/animations_directory.json", getEmptyAnimationDirectory());
 		rawAnimations = new HashMap<>();
 		rawAnimationSets = new HashMap<>();
 	}
@@ -130,5 +130,12 @@ public class AnimationLoader extends AssetLoader {
 
 		}
 
+	}
+
+	private static JSONObject getEmptyAnimationDirectory() {
+		JSONObject emptyDirectory = new JSONObject();
+		emptyDirectory.put("animations", new JSONObject());
+		emptyDirectory.put("animation_sets", new JSONObject());
+		return emptyDirectory;
 	}
 }
