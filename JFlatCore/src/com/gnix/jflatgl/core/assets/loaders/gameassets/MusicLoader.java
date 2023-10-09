@@ -7,13 +7,14 @@ import com.gnix.jflatgl.core.audio.Sound;
 import com.gnix.jflatgl.core.Game;
 import com.gnix.jflatgl.core.util.Logger;
 import com.gnix.jflatgl.core.util.file.FileUtil;
+import org.json.JSONObject;
 
 import java.io.File;
 
 public class MusicLoader extends AssetLoader {
 
 	public MusicLoader() {
-		directory = FileUtil.getJSON("/assets/music_directory.json");
+		directory = FileUtil.getOrCreateResourceDataJSON("/assets/music_directory.json", new JSONObject());
 	}
 
 	@Override

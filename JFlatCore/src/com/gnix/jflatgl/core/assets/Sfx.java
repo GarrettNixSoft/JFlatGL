@@ -27,7 +27,7 @@ public class Sfx {
 	public void init() {
 		for (int i = 0; i < CHANNELS.length; ++i) {
 			CHANNELS[i] = new AudioChannel(AudioMaster.generateSource());
-			CHANNELS[i].setVolume(Settings.getSettingFloat("sfx_volume"));
+			CHANNELS[i].setVolume(Settings.getSettingInt("sfx_volume") / 100.0f); // TODO apply master volume
 		}
 	}
 

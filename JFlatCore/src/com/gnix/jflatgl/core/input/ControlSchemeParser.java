@@ -53,7 +53,7 @@ public class ControlSchemeParser {
 		// check whether a "contexts" entry exists
 		try {
 
-			JSONObject contextsJSON = FileUtil.getResourceDataJSON(templateLocation + "/contexts.json");
+			JSONObject contextsJSON = FileUtil.getOrCreateResourceDataJSON(templateLocation + "/contexts.json", new JSONObject());
 			List<String> contexts = parseContextsFile(contextsJSON);
 
 			for (String context : contexts) {
@@ -70,7 +70,7 @@ public class ControlSchemeParser {
 			Logger.log("No context list found; loading single control list");
 
 			// get the single controls file
-			JSONObject controlsJSON = FileUtil.getResourceDataJSON(templateLocation + "/controls.json");
+			JSONObject controlsJSON = FileUtil.getOrCreateResourceDataJSON(templateLocation + "/controls.json", new JSONObject());
 			result.put("controls", parseControlsFile("controls", controlsJSON));
 
 		}

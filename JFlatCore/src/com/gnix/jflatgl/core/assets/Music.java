@@ -29,7 +29,7 @@ public class Music {
 	public void init() {
 		for (int i = 0; i < CHANNELS.length; ++i) {
 			CHANNELS[i] = new AudioChannel(AudioMaster.generateSource());
-			CHANNELS[i].setVolume(Settings.getSettingFloat("music_volume"));
+			CHANNELS[i].setVolume(Settings.getSettingInt("music_volume") / 100.0f); // TODO apply master volume
 		}
 	}
 

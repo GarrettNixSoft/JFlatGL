@@ -129,6 +129,7 @@ public class TextMaster {
 	 * Clear all GUIText objects from the screen.
 	 */
 	public static void clear() {
+		if (texts == null) return;
 		for (Map<FontType, Set<GUIText>> map : texts) {
 			// delete every GUIText's data
 			for (FontType fontType : map.keySet()) {

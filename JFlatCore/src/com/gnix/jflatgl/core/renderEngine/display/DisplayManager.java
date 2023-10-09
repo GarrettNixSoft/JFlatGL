@@ -94,9 +94,9 @@ public class DisplayManager {
 		// allocate buffer
 		iconBuffer = GLFWImage.malloc(3);
 		// load the primary and secondary icons
-		RawTextureData imageData1 = ImageLoader.loadImageRaw(Config.ICON_PATH_64);
-		RawTextureData imageData2 = ImageLoader.loadImageRaw(Config.ICON_PATH_48);
-		RawTextureData imageData3 = ImageLoader.loadImageRaw(Config.ICON_PATH_32);
+		RawTextureData imageData1 = ImageLoader.loadOrCreateImageRaw(Config.ICON_PATH_64, 64, 64, 255);
+		RawTextureData imageData2 = ImageLoader.loadOrCreateImageRaw(Config.ICON_PATH_48, 48, 48, 255);
+		RawTextureData imageData3 = ImageLoader.loadOrCreateImageRaw(Config.ICON_PATH_32, 32, 32, 255);
 		icon64.set(imageData1.width, imageData1.height, imageData1.buffer);
 		icon48.set(imageData2.width, imageData2.height, imageData2.buffer);
 		icon32.set(imageData3.width, imageData3.height, imageData3.buffer);
