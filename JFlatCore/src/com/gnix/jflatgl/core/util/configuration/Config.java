@@ -6,6 +6,7 @@ import com.gnix.jflatgl.core.util.conversion.DisplayScale;
 import com.gnix.jflatgl.core.util.data.Pair;
 import com.gnix.jflatgl.core.util.file.FileUtil;
 import org.joml.Vector4f;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.awt.image.BufferedImage;
@@ -68,6 +69,7 @@ public class Config {
 	// Advanced window settings
 	public static boolean WINDOW_DECORATION;
 	public static boolean WINDOW_TRANSPARENCY;
+	public static Vector4f WINDOW_CLEAR_COLOR;
 
 	// Debug settings
 	public static JSONObject LOGGER_SETTINGS;
@@ -131,6 +133,16 @@ public class Config {
 
 		WINDOW_DECORATION = configJSON.optBoolean("decorate_window", true);
 		WINDOW_TRANSPARENCY = configJSON.optBoolean("transparent_window", false);
+
+		JSONArray clearColorArr = configJSON.optJSONArray("clear_color");
+		if (clearColorArr != null) {
+			WINDOW_CLEAR_COLOR = new Vector4f();
+			WINDOW_CLEAR_COLOR.x = clearColorArr.getFloat(0);
+			WINDOW_CLEAR_COLOR.y = clearColorArr.getFloat(1);
+			WINDOW_CLEAR_COLOR.z = clearColorArr.getFloat(2);
+			WINDOW_CLEAR_COLOR.w = clearColorArr.getFloat(3);
+		}
+		else WINDOW_CLEAR_COLOR = new Vector4f(0, 0, 0, 1);
 
 		LOGGER_SETTINGS = configJSON.optJSONObject("logger_settings");
 		if (LOGGER_SETTINGS == null) LOGGER_SETTINGS = getDefaultLoggerSettings();

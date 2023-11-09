@@ -330,7 +330,7 @@ public class DisplayManager {
 		glDepthFunc(GL_LEQUAL);
 		glDepthRange(0, 1);
 
-		glClearColor(0, 0, 0, 1);
+		glClearColor(Config.WINDOW_CLEAR_COLOR.x, Config.WINDOW_CLEAR_COLOR.y, Config.WINDOW_CLEAR_COLOR.z, Config.WINDOW_CLEAR_COLOR.w);
 		glClearDepth(1);
 
 		// STENCIL SETTINGS
