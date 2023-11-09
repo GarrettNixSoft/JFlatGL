@@ -28,6 +28,8 @@ public abstract class RenderElement implements Comparable<RenderElement> {
 	protected boolean centered;
 	protected boolean stencilWrite;
 
+	private boolean transformed = false;
+
 	public RenderElement(float x, float y, int layer, boolean centered) {
 		assert layer <= Layers.TOP_LAYER && layer >= Layers.BOTTOM_LAYER;
 		this.x = x;
@@ -46,11 +48,15 @@ public abstract class RenderElement implements Comparable<RenderElement> {
 //		if (centered) Logger.log("Position converted from (" + x + ", " + y + ") to " + position);
 //		else Logger.log("Position converted from (" + (x+width/2) + ", " + (y+height/2) + ") to " + position);
 		scale = new Vector2f(width, height);
+
+		transformed = true;
 	}
 
 	public void transform(Window window) {
 		position = DisplayManager.convertToDisplayPosition(window, x, y, layer, width, height, centered);
 		scale = new Vector2f(width, height);
+
+		transformed = true;
 	}
 
 	/**
@@ -58,6 +64,8 @@ public abstract class RenderElement implements Comparable<RenderElement> {
 	 * to call the appropriate Render method for whatever type this RenderElement is.
 	 */
 	public void render() {
+		if (!transformed) transform();
+
 		switch (this) {
 			case LineElement l -> Render.drawLine(l);
 			case CircleElement c -> Render.drawCircle(c);
@@ -73,9 +81,13 @@ public abstract class RenderElement implements Comparable<RenderElement> {
 			}
 			default -> Render.drawElement(this);
 		}
+
+		transformed = false;
 	}
 
 	public void render(Camera camera) {
+
+		if (!transformed) transform();
 
 		if (onScreen(camera)) {
 			// hold on to the starting position and size
@@ -98,6 +110,8 @@ public abstract class RenderElement implements Comparable<RenderElement> {
 			width = startWidth;
 			height = startHeight;
 		}
+
+		transformed = false;
 
 	}
 
@@ -130,6 +144,8 @@ public abstract class RenderElement implements Comparable<RenderElement> {
 		position = FrameBuffers.convertToFramebufferPosition(x, y, layer, width, height, centered, buffer);
 		scale = FrameBuffers.convertToFramebufferScale(width, height, buffer);
 //		scale = new Vector2f(width, height); // TODO ?
+
+		transformed = true;
 	}
 
 	// screen bounds
