@@ -65,6 +65,10 @@ public class Config {
 	// Control scheme settings
 	public static boolean SUPPORT_INPUT_SWITCHING;
 
+	// Advanced window settings
+	public static boolean WINDOW_DECORATION;
+	public static boolean WINDOW_TRANSPARENCY;
+
 	// Debug settings
 	public static JSONObject LOGGER_SETTINGS;
 
@@ -124,6 +128,9 @@ public class Config {
 		SPLASH_FAKE_LATENCY = configJSON.optFloat("splash_screen_fake_latency", 0);
 
 		SUPPORT_INPUT_SWITCHING = configJSON.optBoolean("support_input_switching", false);
+
+		WINDOW_DECORATION = configJSON.optBoolean("decorate_window", true);
+		WINDOW_TRANSPARENCY = configJSON.optBoolean("transparent_window", false);
 
 		LOGGER_SETTINGS = configJSON.optJSONObject("logger_settings");
 		if (LOGGER_SETTINGS == null) LOGGER_SETTINGS = getDefaultLoggerSettings();

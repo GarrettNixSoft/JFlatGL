@@ -213,9 +213,12 @@ public class DisplayManager {
 		// Step 2: Set the window hints (settings).
 		glfwDefaultWindowHints();
 		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRANSPARENT_FRAMEBUFFER);
+		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 		glfwWindowHint(GLFW_AUTO_ICONIFY, GL_FALSE);
 		glfwWindowHint(GLFW_STENCIL_BITS, 8);
+
+		glfwWindowHint(GLFW_DECORATED, Config.WINDOW_DECORATION ? GLFW_TRUE : GLFW_FALSE);
+		glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, Config.WINDOW_TRANSPARENCY ? GLFW_TRUE : GLFW_FALSE);
 
 //		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 //		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
