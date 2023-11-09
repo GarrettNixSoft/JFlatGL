@@ -58,4 +58,8 @@ public abstract class GameStateManager {
 		return gameStates[currentState];
 	}
 
+	public void cleanUp() {
+		gameStates[currentState].cleanUp();
+	}
+
 }
