@@ -452,6 +452,10 @@ public class Game {
 		return DisplayManager.getFrameTimeSeconds();
 	}
 
+	public static void setWindowPos(int x, int y) {
+		DisplayManager.getPrimaryGameWindow().setPosition(x, y);
+	}
+
 	// Textures
 	/**
 	 * Get a textureComponent from the stored Textures.
@@ -521,6 +525,10 @@ public class Game {
 	 * Clears all loaded assets and terminates GLFW.
 	 */
 	public static void cleanUp() {
+
+		// Clean up the current game state
+		instance.gsm.cleanUp();
+
 		// Clean up when done.
 		Loader.cleanUp();
 		MasterRenderer.cleanUp();

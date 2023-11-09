@@ -227,6 +227,10 @@ public class Window {
 		glViewport(xOffset, yOffset, viewportWidth, viewportHeight);
 	}
 
+	public void setPosition(int x, int y) {
+		glfwSetWindowPos(windowID, x, y);
+	}
+
 	public static Vector2f mainCenter() { return DisplayManager.getPrimaryGameWindow().center(); }
 
 	public static float mainCenterX() { return DisplayManager.getPrimaryGameWindow().centerX(); }
