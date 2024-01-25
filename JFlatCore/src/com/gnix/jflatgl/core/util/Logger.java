@@ -19,6 +19,8 @@ public class Logger {
 	public static final int MEDIUM = 1;
 	public static final int HIGH = 2;
 	public static final int CRITICAL = 3;
+
+	// TODO: Allow registration of custom log tags
 	
 	// SETTINGS
 	// main

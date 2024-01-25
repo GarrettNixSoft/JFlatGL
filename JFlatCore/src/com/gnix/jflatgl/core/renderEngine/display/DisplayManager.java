@@ -219,13 +219,14 @@ public class DisplayManager {
 
 		glfwWindowHint(GLFW_DECORATED, Config.WINDOW_DECORATION ? GLFW_TRUE : GLFW_FALSE);
 		glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, Config.WINDOW_TRANSPARENCY ? GLFW_TRUE : GLFW_FALSE);
+		glfwWindowHint(GLFW_FLOATING, Config.WINDOW_ON_TOP ? GLFW_TRUE : GLFW_FALSE);
 
 //		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 //		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 
 		// Step 3: Create the window. The process depends on whether we're creating a fullscreen window or not.
 		primaryMonitorVideoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-		if (Settings.getSettingBoolean("fullscreen")) {
+		if (Settings.getSettingString("display").equals("fullscreen")) { // TODO support windowed fullscreen
 			assert primaryMonitorVideoMode != null;
 			glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 			glfwWindowHint(GLFW_RED_BITS, primaryMonitorVideoMode.redBits());

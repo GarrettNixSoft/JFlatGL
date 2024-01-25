@@ -72,6 +72,7 @@ public class GUIText {
 	// stencil region for controlling what portion of the text is visible
 	private final Vector4f stencilRegion = new Vector4f();
 
+	// TODO fix bug where text created with this Constructor doesn't appear
 	public GUIText() {
 		this.textString = "";
 		this.fontSize = 1;

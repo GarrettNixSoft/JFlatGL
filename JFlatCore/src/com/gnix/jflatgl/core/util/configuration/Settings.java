@@ -71,6 +71,7 @@ public class Settings {
 			if (rulesObj == null) rulesObj = new JSONObject();
 			SettingRules rules = new SettingRules(rulesObj, dataType);
 			SettingValue value = fetchStoredValueIfPresent(name, dataType, rules.getDefaultValue());
+			if (value == null) value = new SettingValue(rules.getDefaultValue());
 			settings.put(name, new Setting(name, displayName, dataType, value, rules));
 		}
 		// log success
@@ -78,6 +79,10 @@ public class Settings {
 	}
 
 	private static SettingValue fetchStoredValueIfPresent(String key, Class<?> dataType, Object defaultValue) {
+		// Fail fast if we don't have any setting with this key
+		if (!settings.containsKey(key))
+			return null;
+
 		if (dataType == Boolean.class)	{
 			boolean value = prefs.getBoolean(key, (Boolean) defaultValue);
 			return new SettingValue(value);
@@ -178,11 +183,27 @@ public class Settings {
 		JSONArray settings = new JSONArray();
 
 		// ================ fullscreen ================ // TODO change to display type and modify DisplayManager to check it during initGameWindow()
+		JSONObject displayMode = new JSONObject();
+		displayMode.put("name", "display");
+		displayMode.put("displayName", "Display Mode");
+		displayMode.put("type", "string");
+		JSONObject displayRulesObj = new JSONObject();
+		JSONArray displayRules = new JSONArray();
 		JSONObject fullscreen = new JSONObject();
-		fullscreen.put("name", "fullscreen");
-		fullscreen.put("displayName", "Fullscreen");
-		fullscreen.put("type", "boolean");
-		settings.put(fullscreen);
+		fullscreen.put("value", "fullscreen");
+		fullscreen.put("displayValue", "Fullscreen");
+		JSONObject windowed = new JSONObject();
+		windowed.put("value", "windowed");
+		windowed.put("displayValue", "Windowed");
+		JSONObject windowedFS = new JSONObject();
+		windowedFS.put("value", "windowed_fullscreen");
+		windowedFS.put("displayValue", "Windowed Fullscreen");
+		displayRules.put(fullscreen);
+		displayRules.put(windowed);
+		displayRules.put(windowedFS);
+		displayRulesObj.put("options", displayRules);
+		displayMode.put("rules", displayRulesObj);
+		settings.put(displayMode);
 
 		// ================ master_volume ================
 		JSONObject masterVolume = new JSONObject();

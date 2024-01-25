@@ -71,7 +71,7 @@ public class ParticleMaster {
 			lightEmittingParticles[layer].add(lp);
 		}
 		else if (particle instanceof TexturedParticle tp) {
-			List<TexturedParticle> particleList = texturedParticles[layer].computeIfAbsent(particle.getTexture(), k -> new ArrayList<>());
+			List<TexturedParticle> particleList = texturedParticles[layer].computeIfAbsent(particle.getTexture(), _ -> new ArrayList<>());
 			particleList.add(tp);
 		}
 		else {
