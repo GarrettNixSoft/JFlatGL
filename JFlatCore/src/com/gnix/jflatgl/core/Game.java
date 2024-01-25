@@ -384,6 +384,13 @@ public class Game {
 	}
 
 	/**
+	 * Stop all currently playing music on every channel.
+	 */
+	public static void stopMusic() {
+		getInstance().music.stop("ALL");
+	}
+
+	/**
 	 * Play a music track starting at a specified timestamp.
 	 * @param musicID the ID of the audio file in music_directory.json
 	 * @param startTime the time in seconds to begin playing from
