@@ -130,6 +130,14 @@ public class Timer {
 		else return TimeScale.getRawTime(start) > time * 1000;
 	}
 
+	/**
+	 * Check if the timer is currently active.
+	 * @return {@code true} if the timer has been started and has not yet finished
+	 */
+	public boolean active() {
+		return started() && !finished();
+	}
+
 	public void ifFinished(TimerAction action) {
 		if (finished()) action.execute();
 	}
