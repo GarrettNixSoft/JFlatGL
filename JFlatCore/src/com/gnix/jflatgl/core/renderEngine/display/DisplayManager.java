@@ -237,6 +237,8 @@ public class DisplayManager {
 			glfwSetInputMode(primaryWindowID, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 		} else {
 			primaryWindowID = glfwCreateWindow(Config.INTERNAL_WIDTH, Config.INTERNAL_HEIGHT, Config.WINDOW_TITLE, NULL, NULL);
+			if (Config.HIDE_CURSOR_OVER_WINDOW)
+				glfwSetInputMode(primaryWindowID, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 		}
 
 		glfwMakeContextCurrent(primaryWindowID);

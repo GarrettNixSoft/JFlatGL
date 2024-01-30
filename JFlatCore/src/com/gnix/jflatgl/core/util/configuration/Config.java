@@ -71,6 +71,7 @@ public class Config {
 	public static boolean WINDOW_TRANSPARENCY;
 	public static boolean WINDOW_ON_TOP;
 	public static Vector4f WINDOW_CLEAR_COLOR;
+	public static boolean HIDE_CURSOR_OVER_WINDOW;
 
 	// Debug settings
 	public static JSONObject LOGGER_SETTINGS;
@@ -135,6 +136,7 @@ public class Config {
 		WINDOW_DECORATION = configJSON.optBoolean("decorate_window", true);
 		WINDOW_TRANSPARENCY = configJSON.optBoolean("transparent_window", false);
 		WINDOW_ON_TOP = configJSON.optBoolean("always_on_top", false);
+		HIDE_CURSOR_OVER_WINDOW = configJSON.optBoolean("hide_cursor_over_window", false);
 
 		JSONArray clearColorArr = configJSON.optJSONArray("clear_color");
 		if (clearColorArr != null) {
