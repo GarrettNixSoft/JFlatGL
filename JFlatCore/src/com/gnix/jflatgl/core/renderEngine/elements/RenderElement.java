@@ -153,8 +153,8 @@ public abstract class RenderElement implements Comparable<RenderElement> {
 
 		float screenX = camera.worldXToScreenX(x);
 		float screenY = camera.worldYToScreenY(y);
-		float screenWidth = width * camera.getScale();
-		float screenHeight = height * camera.getScale();
+		float screenWidth = Math.abs(width) * camera.getScale();
+		float screenHeight = Math.abs(height) * camera.getScale();
 
 		if (!centered) {
 			screenX += screenWidth / 2;
